@@ -4,7 +4,6 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import { withSentry } from "@sentry/remix";
-import { Breadcrumbs } from "app/commonComponents/Breadcrumbs/Breadcrumbs";
 import {
   getPublicEnvVariables,
   getSessionTools,
@@ -27,12 +26,17 @@ import {
   useRouteLoaderData,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
+import { Breadcrumbs } from "~/commonComponents/Breadcrumbs/Breadcrumbs";
 
 import {
   AdContainer,
   LinkingProvider,
   ToastProvider,
 } from "@thunderstore/cyberstorm";
+import hubotSansRegularUrl from "@thunderstore/cyberstorm-theme/src/styles/fonts/hubot-sans/HubotSans-Regular.woff2";
+import interBoldUrl from "@thunderstore/cyberstorm-theme/src/styles/fonts/inter/Inter-Bold.woff2";
+import interMediumUrl from "@thunderstore/cyberstorm-theme/src/styles/fonts/inter/Inter-Medium.woff2";
+import interRegularUrl from "@thunderstore/cyberstorm-theme/src/styles/fonts/inter/Inter-Regular.woff2";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
@@ -52,8 +56,36 @@ import { Seo } from "./commonComponents/Seo/Seo";
 
 config.autoAddCss = false;
 
-// REMIX TODO: https://remix.run/docs/en/main/route/links
-// export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links = () => [
+  {
+    rel: "preload",
+    as: "font",
+    href: interBoldUrl,
+    type: "font/woff2",
+    crossOrigin: "anonymous" as const,
+  },
+  {
+    rel: "preload",
+    as: "font",
+    href: interMediumUrl,
+    type: "font/woff2",
+    crossOrigin: "anonymous" as const,
+  },
+  {
+    rel: "preload",
+    as: "font",
+    href: interRegularUrl,
+    type: "font/woff2",
+    crossOrigin: "anonymous" as const,
+  },
+  {
+    rel: "preload",
+    as: "font",
+    href: hubotSansRegularUrl,
+    type: "font/woff2",
+    crossOrigin: "anonymous" as const,
+  },
+];
 
 declare global {
   interface Window {
@@ -380,7 +412,7 @@ function App() {
 }
 
 export default withSentry(App);
-export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+export { RouteErrorBoundary as ErrorBoundary } from "~/commonComponents/ErrorBoundary";
 
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html

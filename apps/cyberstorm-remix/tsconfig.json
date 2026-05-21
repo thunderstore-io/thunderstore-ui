@@ -27,10 +27,12 @@
     "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["app/*", "./react-router/types/*"],
-      "react": ["./node_modules/@types/react"]
+      "~/*": ["./app/*", "./.react-router/types/*"],
+      "react": ["./node_modules/@types/react"],
+      "@thunderstore/cyberstorm": ["../../packages/cyberstorm/src"],
+      "@thunderstore/cyberstorm/*": ["../../packages/cyberstorm/src/*"],
+      "cyberstorm/*": ["./cyberstorm/*"]
     },
     "verbatimModuleSyntax": true,
     "disableSourceOfProjectReferenceRedirect": true,

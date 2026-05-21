@@ -20,7 +20,11 @@
       "./css": "./dist/cyberstorm-theme.css",
       "./fonts.css": "./dist/fonts.css",
       "./package.json": "./package.json",
-      "./src/components": "./src/components.tsx"
+      "./src/components": {
+        "import": "./dist/thunderstore-cyberstorm-theme.js",
+        "types": "./dist/components.d.ts"
+      },
+      "./src/styles/fonts/*": "./dist/fonts/*"
     }
   },
   "style": "dist/cyberstorm-theme.css",
@@ -40,6 +44,7 @@
     "./css": "./src/index.css",
     "./fonts.css": "./src/styles/fonts.css",
     "./package.json": "./package.json",
-    "./src/components": "./src/components.tsx"
+    "./src/components": "./src/components.tsx",
+    "./src/styles/fonts/*": "./src/styles/fonts/*"
   }
 }

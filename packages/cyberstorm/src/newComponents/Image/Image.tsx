@@ -1,6 +1,7 @@
 import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
+import { preload as reactPreload } from "react-dom";
 
 import { type ImageVariants } from "@thunderstore/cyberstorm-theme";
 
@@ -21,6 +22,8 @@ export interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   /** Force 1:1 aspect ratio */
   square?: boolean;
   loading?: "eager" | "lazy";
+  preload?: boolean;
+  fetchPriority?: "high" | "low" | "auto";
   csVariant?: ImageVariants;
   intrinsicWidth?: number;
   intrinsicHeight?: number;
@@ -40,9 +43,18 @@ export const Image = memo(function Image(props: ImageProps) {
     intrinsicWidth,
     intrinsicHeight,
     loading = "lazy",
+    preload = false,
+    fetchPriority = "auto",
     ...forwardedProps
   } = props;
   const fProps = forwardedProps as ImageProps;
+
+  if (preload && src) {
+    reactPreload(src, {
+      as: "image",
+      fetchPriority,
+    });
+  }
 
   return (
     <Frame
@@ -73,6 +85,7 @@ export const Image = memo(function Image(props: ImageProps) {
           <img
             src={src}
             loading={loading}
+            fetchPriority={fetchPriority}
             alt={alt}
             className="image__src"
             width={intrinsicWidth}

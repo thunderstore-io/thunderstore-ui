@@ -159,7 +159,6 @@
     min-width: 60%;
 
     > h1 {
-      line-height: 80%;
       overflow-wrap: anywhere;
     }
   }

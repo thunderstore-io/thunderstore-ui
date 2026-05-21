@@ -1,7 +1,7 @@
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type OutletContextShape } from "app/root";
 import { useOutletContext } from "react-router";
+import { type OutletContextShape } from "~/root";
 
 import {
   EmptyState,

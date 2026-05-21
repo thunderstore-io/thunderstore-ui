@@ -23,10 +23,20 @@ interface Props {
   community: Community;
   isPopular?: boolean;
   isNew?: boolean;
+  imageLoading?: "eager" | "lazy";
+  imagePreload?: boolean;
+  imageFetchPriority?: "high" | "low" | "auto";
 }
 
 export const CardCommunity = memo(function CardCommunity(props: Props) {
-  const { community, isPopular, isNew } = props;
+  const {
+    community,
+    isPopular,
+    isNew,
+    imageLoading,
+    imagePreload,
+    imageFetchPriority,
+  } = props;
 
   return (
     <div className="card-community">
@@ -63,6 +73,9 @@ export const CardCommunity = memo(function CardCommunity(props: Props) {
           rootClasses="card-community__image"
           intrinsicWidth={360}
           intrinsicHeight={480}
+          loading={imageLoading}
+          preload={imagePreload}
+          fetchPriority={imageFetchPriority}
         />
       </NewLink>
       <NewLink

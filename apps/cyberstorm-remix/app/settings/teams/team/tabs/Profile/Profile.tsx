@@ -1,4 +1,3 @@
-import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
@@ -9,6 +8,7 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import { type OutletContextShape } from "~/root";
 
 import {
   NewAlert,

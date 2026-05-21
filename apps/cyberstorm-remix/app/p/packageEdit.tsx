@@ -1,6 +1,5 @@
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getPrivateListing } from "app/p/listingUtils";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
@@ -8,6 +7,7 @@ import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useReducer } from "react";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { getPrivateListing } from "~/p/listingUtils";
 import { type OutletContextShape } from "~/root";
 
 import {
