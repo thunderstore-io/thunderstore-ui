@@ -4,6 +4,8 @@ import { useSearchParams } from "react-router";
 
 import { NotLoggedIn } from "../commonComponents/NotLoggedIn/NotLoggedIn";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 export async function loader() {
   return {
     seo: createSeo({

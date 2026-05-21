@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import {
-  ApiError,
   fetchPackageChangelog,
   fetchPackagePermissions,
   fetchPackageReadme,
@@ -11,6 +10,7 @@ import {
   fetchPackageVersions,
   fetchPackageWiki,
   fetchPackageWikiPage,
+  isApiError,
   postPackageSubmission,
 } from "@thunderstore/thunderstore-api";
 import type { PackageVersionDependenciesRequestQueryParams } from "@thunderstore/thunderstore-api";
@@ -226,7 +226,7 @@ export async function getPackagePermissions(
     return response;
   } catch (error) {
     // In case of user not being logged in or stale session
-    if (error instanceof ApiError && error.response.status === 401) {
+    if (isApiError(error) && error.response.status === 401) {
       return undefined;
     } else {
       throw error;

@@ -3,6 +3,7 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useReducer, useState } from "react";
 import {
   useLoaderData,
@@ -38,7 +39,7 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import type { Route } from "./+types/WikiPageEdit";
 import "./Wiki.css";
 
-export async function loader({ params }: Route.LoaderArgs) {
+export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   if (
     params.communityId &&
     params.namespaceId &&
@@ -57,7 +58,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     );
     const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
     if (!pageId) {
-      throw new Error("Page not found");
+      throw new Response("Page not found", { status: 404 });
     }
     const page = await dapper.getPackageWikiPage(pageId);
 
@@ -79,9 +80,11 @@ export async function loader({ params }: Route.LoaderArgs) {
       }),
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throw new Response("Namespace ID or Package ID is missing", {
+      status: 404,
+    });
   }
-}
+});
 
 export async function clientLoader({
   params,
@@ -137,7 +140,7 @@ export async function clientLoader({
     );
     const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
     if (!pageId) {
-      throw new Error("Page not found");
+      throw new Response("Page not found", { status: 404 });
     }
     const page = await dapper.getPackageWikiPage(pageId);
 
@@ -149,7 +152,9 @@ export async function clientLoader({
       seo: (await serverLoader()).seo,
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throw new Response("Namespace ID or Package ID is missing", {
+      status: 404,
+    });
   }
 }
 

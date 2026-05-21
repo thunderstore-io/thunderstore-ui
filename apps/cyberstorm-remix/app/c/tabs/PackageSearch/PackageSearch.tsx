@@ -2,6 +2,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/packageOrderOptions";
@@ -11,58 +12,60 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/PackageSearch";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  if (params.communityId) {
-    const dapper = new DapperTs(() => {
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    if (params.communityId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
+      const searchParams = new URL(request.url).searchParams;
+      const ordering =
+        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+      const page = searchParams.get("page");
+      const search = searchParams.get("search");
+      const includedCategories = searchParams.get("includedCategories");
+      const excludedCategories = searchParams.get("excludedCategories");
+      const section = searchParams.get("section");
+      const nsfw = searchParams.get("nsfw");
+      const deprecated = searchParams.get("deprecated");
+      const filters = await dapper.getCommunityFilters(params.communityId);
+      const community = await dapper.getCommunity(params.communityId);
+
+      const finalSection = getSectionDefault(section, filters.sections);
+
       return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
-      };
-    });
-    const searchParams = new URL(request.url).searchParams;
-    const ordering =
-      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
-    const search = searchParams.get("search");
-    const includedCategories = searchParams.get("includedCategories");
-    const excludedCategories = searchParams.get("excludedCategories");
-    const section = searchParams.get("section");
-    const nsfw = searchParams.get("nsfw");
-    const deprecated = searchParams.get("deprecated");
-    const filters = await dapper.getCommunityFilters(params.communityId);
-    const community = await dapper.getCommunity(params.communityId);
-
-    const finalSection = getSectionDefault(section, filters.sections);
-
-    return {
-      filters: filters,
-      listings: await dapper.getPackageListings(
-        {
-          kind: "community",
-          communityId: params.communityId,
-        },
-        ordering ?? "",
-        page === null ? undefined : Number(page),
-        search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
-        finalSection,
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      ),
-      seo: createSeo({
-        descriptors: [
-          { title: `Packages for ${community.name} | Thunderstore` },
+        filters: filters,
+        listings: await dapper.getPackageListings(
           {
-            name: "description",
-            content: `Browse packages for ${community.name}`,
+            kind: "community",
+            communityId: params.communityId,
           },
-        ],
-      }),
-    };
+          ordering ?? "",
+          page === null ? undefined : Number(page),
+          search ?? "",
+          includedCategories?.split(",") ?? undefined,
+          excludedCategories?.split(",") ?? undefined,
+          finalSection,
+          nsfw === "true" ? true : false,
+          deprecated === "true" ? true : false
+        ),
+        seo: createSeo({
+          descriptors: [
+            { title: `Packages for ${community.name} | Thunderstore` },
+            {
+              name: "description",
+              content: `Browse packages for ${community.name}`,
+            },
+          ],
+        }),
+      };
+    }
+    throw new Response("Community not found", { status: 404 });
   }
-  throw new Response("Community not found", { status: 404 });
-}
+);
 
 export async function clientLoader({
   request,

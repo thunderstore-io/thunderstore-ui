@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
 import {
   Await,
@@ -30,6 +31,8 @@ import type { Communities } from "@thunderstore/dapper/types";
 
 import type { Route } from "./+types/communities";
 import "./Communities.css";
+
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
 enum SortOptions {
   Name = "name",
@@ -56,7 +59,7 @@ const selectOptions = [
   },
 ];
 
-export async function loader({ request }: Route.LoaderArgs) {
+export const loader = ssrLoader(async ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
   const order = searchParams.get("order") ?? SortOptions.Popular;
@@ -95,7 +98,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       ],
     }),
   };
-}
+});
 
 export async function clientLoader({
   request,

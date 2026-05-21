@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import {
   Await,
@@ -28,7 +29,9 @@ import { isApiError } from "@thunderstore/thunderstore-api";
 import type { Route } from "./+types/Wiki";
 import "./Wiki.css";
 
-export async function loader({ params }: Route.LoaderArgs) {
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
+export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   if (params.communityId && params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -42,13 +45,10 @@ export async function loader({ params }: Route.LoaderArgs) {
     try {
       wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
     } catch (error) {
-      if (isApiError(error)) {
-        if (error.response.status === 404) {
-          wiki = undefined;
-        } else {
-          wiki = undefined;
-          console.error("Error fetching package wiki:", error);
-        }
+      if (isApiError(error) && error.response.status === 404) {
+        wiki = undefined;
+      } else {
+        throw error;
       }
     }
 
@@ -74,7 +74,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
-}
+});
 
 export async function clientLoader({
   params,

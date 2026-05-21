@@ -9,6 +9,8 @@ import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Settings";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 // Client loader to fetch current user for SEO titles and secure the route
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const tools = getSessionTools();

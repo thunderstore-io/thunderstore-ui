@@ -11,6 +11,7 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useLoaderData, useOutletContext } from "react-router";
 
@@ -59,7 +60,7 @@ interface CategoryOption {
   label: string;
 }
 
-export async function loader() {
+export const loader = ssrLoader(async () => {
   const dapper = new DapperTs(() => {
     return {
       apiHost: getApiHostForSsr(),
@@ -79,7 +80,7 @@ export async function loader() {
       ],
     }),
   };
-}
+});
 
 export async function clientLoader({
   request,

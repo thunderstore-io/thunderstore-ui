@@ -27,8 +27,13 @@ vi.mock("@thunderstore/thunderstore-api", () => {
     }
   }
 
+  function isApiError(e: unknown): e is InstanceType<typeof ApiError> {
+    return e instanceof ApiError;
+  }
+
   return {
     ApiError,
+    isApiError,
     fetchCurrentUser: vi.fn(),
     fetchCurrentUserTeamPermissions: vi.fn(),
   };

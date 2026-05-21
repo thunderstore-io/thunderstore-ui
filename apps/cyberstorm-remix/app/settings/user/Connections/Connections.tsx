@@ -15,7 +15,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import {
-  ApiError,
+  isApiError,
   userLinkedAccountDisconnect,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
@@ -81,8 +81,8 @@ export default function Connections() {
   const onSubmitError = (error: unknown) => {
     let message = "Error when disconnecting account.";
 
-    if (error instanceof ApiError) {
-      const fieldErrors = error.getFieldErrors();
+    if (isApiError(error)) {
+      const fieldErrors = error.getFieldErrors?.() ?? {};
       message =
         fieldErrors.non_field_errors?.[0] ||
         fieldErrors.detail?.[0] ||
