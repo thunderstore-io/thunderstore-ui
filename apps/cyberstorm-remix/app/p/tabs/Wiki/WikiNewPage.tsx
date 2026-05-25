@@ -14,6 +14,7 @@ import { type OutletContextShape } from "~/root";
 
 import {
   Heading,
+  NewAlert,
   NewButton,
   NewTextInput,
   SkeletonBox,
@@ -179,6 +180,10 @@ export default function Wiki() {
     InputErrors
   >({
     inputs: formInputs,
+    validators: {
+      title: { required: true, maxLength: 512 },
+      markdown_content: { required: true },
+    },
     submitor,
     onSubmitSuccess: (result) => {
       toast.addToast({
@@ -242,7 +247,13 @@ export default function Wiki() {
                 })
               }
               placeholder="Title of the page"
+              {...strongForm.getFieldComponentProps("title")}
             />
+            {strongForm.getFieldError("title") && (
+              <NewAlert csVariant="danger" csSize="small">
+                {strongForm.getFieldError("title")}
+              </NewAlert>
+            )}
             <NewTextInput
               csSize="textarea"
               value={formInputs.markdown_content}
@@ -255,7 +266,13 @@ export default function Wiki() {
               name="markdown_content"
               rootClasses="package-wiki-edit__markdown-input"
               style={{ height: "500px" }}
+              {...strongForm.getFieldComponentProps("markdown_content")}
             />
+            {strongForm.getFieldError("markdown_content") && (
+              <NewAlert csVariant="danger" csSize="small">
+                {strongForm.getFieldError("markdown_content")}
+              </NewAlert>
+            )}
           </>
         ) : (
           <Markdown input={formInputs.markdown_content} />

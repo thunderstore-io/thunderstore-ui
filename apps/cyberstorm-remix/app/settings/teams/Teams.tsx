@@ -205,11 +205,22 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     InputErrors
   >({
     inputs: formInputs,
-    validators: { name: { required: true } },
+    validators: {
+      name: {
+        required: true,
+        maxLength: 64,
+        pattern: {
+          regex: /^[a-zA-Z0-9]+([a-zA-Z0-9_]+[a-zA-Z0-9])?$/,
+          message:
+            "Only a-z, A-Z, 0-9, and _ are allowed. Cannot start or end with _",
+        },
+      },
+    },
     submitor,
     onSubmitSuccess: (fi) => {
       createTeamRevalidate();
       updateFormFieldState({ field: "name", value: "" });
+      strongForm.resetFormState();
       setOpen(false);
       toast.addToast({
         csVariant: "success",
@@ -240,7 +251,13 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
   return (
     <Modal
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen);
+        if (!nextOpen) {
+          updateFormFieldState({ field: "name", value: "" });
+          strongForm.resetFormState();
+        }
+      }}
       csSize="small"
       contentClasses="create-team-form__body"
       trigger={
@@ -274,6 +291,11 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
             id="teamName"
             {...teamNameFieldProps}
           />
+          {strongForm.getFieldError("name") && (
+            <NewAlert csVariant="danger" csSize="small">
+              {strongForm.getFieldError("name")}
+            </NewAlert>
+          )}
         </div>
         {strongForm.inputErrors?.name && (
           <NewAlert csVariant="danger" csSize="small">

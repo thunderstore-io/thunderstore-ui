@@ -101,6 +101,7 @@ function ProfileForm(props: { team: TeamDetails }) {
     validators: {
       donation_link: {
         httpsUrl: true,
+        maxLength: 1024,
       },
     },
     refiner: async (inputs: typeof formInputs) => ({
@@ -180,7 +181,7 @@ function ProfileForm(props: { team: TeamDetails }) {
         {strongForm.getFieldState("donation_link").isInvalid &&
           !strongForm.inputErrors?.donation_link?.[0] && (
             <NewAlert csVariant="danger" csSize="small">
-              Must be a valid HTTPS URL
+              {strongForm.getFieldError("donation_link")}
             </NewAlert>
           )}
         {strongForm.inputErrors?.donation_link?.[0] && (

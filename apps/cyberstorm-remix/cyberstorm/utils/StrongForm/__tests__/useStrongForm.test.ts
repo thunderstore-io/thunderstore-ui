@@ -151,17 +151,15 @@ describe("StrongForm.useStrongForm", () => {
     assert.equal(initialProps["aria-required"], true);
     assert.equal(initialProps["aria-invalid"], false);
 
+    // After submit attempt, errors show
     await act(async () => {
-      strongForm!.getFieldInteractionProps("name").onFocus();
-      strongForm!.getFieldInteractionProps("name").onFocus();
-      strongForm!.getFieldInteractionProps("name").onBlur();
-      strongForm!.getFieldInteractionProps("name").onBlur();
+      strongForm!.handleSubmit({ preventDefault: () => {} });
       await flushMicrotasks();
     });
 
-    const afterInteractionProps = strongForm.getFieldComponentProps("name");
-    assert.equal(afterInteractionProps["aria-invalid"], true);
-    assert.ok(afterInteractionProps.csModifiers?.includes("invalid"));
+    const afterSubmitProps = strongForm.getFieldComponentProps("name");
+    assert.equal(afterSubmitProps["aria-invalid"], true);
+    assert.ok(afterSubmitProps.csModifiers?.includes("invalid"));
 
     const disabledProps = strongForm.getFieldComponentProps("name", {
       disabled: true,

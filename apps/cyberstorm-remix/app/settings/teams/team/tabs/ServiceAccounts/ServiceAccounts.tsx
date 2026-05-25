@@ -139,7 +139,16 @@ function AddServiceAccountForm(props: {
     InputErrors
   >({
     inputs: formInputs,
-    validators: { nickname: { required: true } },
+    validators: {
+      nickname: {
+        required: true,
+        maxLength: 32,
+        pattern: {
+          regex: /^[A-Za-z0-9_]+$/,
+          message: "Only alphanumeric characters and underscores are allowed",
+        },
+      },
+    },
     submitor,
     onSubmitSuccess: (result) => {
       onSuccess(result);
@@ -165,6 +174,7 @@ function AddServiceAccountForm(props: {
       setAddedServiceAccountNickname("");
       setError(null);
       updateFormFieldState({ field: "nickname", value: "" });
+      strongForm.resetFormState();
     }
   };
 
@@ -219,7 +229,7 @@ function AddServiceAccountForm(props: {
                 value={formInputs.nickname}
                 onChange={(e) => {
                   const nextValue = e.target.value;
-                  if (/^[A-Za-z0-9_]*$/.test(nextValue)) {
+                  if (nextValue.length <= 32) {
                     updateFormFieldState({
                       field: "nickname",
                       value: nextValue,
@@ -235,6 +245,11 @@ function AddServiceAccountForm(props: {
                 <br />
                 Max. 32 characters
               </div>
+              {strongForm.getFieldError("nickname") && (
+                <NewAlert csVariant="danger" csSize="small">
+                  {strongForm.getFieldError("nickname")}
+                </NewAlert>
+              )}
             </div>
             {error && <NewAlert csVariant="danger">{error}</NewAlert>}
           </form>

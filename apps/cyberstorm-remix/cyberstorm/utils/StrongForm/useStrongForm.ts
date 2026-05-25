@@ -6,7 +6,7 @@ import {
   RequestQueryParamsParseError,
 } from "../../../../../packages/thunderstore-api/src";
 import type { Validator } from "./validation";
-import { isRawInvalid } from "./validation";
+import { getValidationError } from "./validation";
 
 interface UseStrongFormProps<
   Inputs,
@@ -56,17 +56,6 @@ export function useStrongForm<
   const [submitOutput, setSubmitOutput] = useState<SubmissionOutput>();
   const [submitError, setSubmitError] = useState<SubmissionError>();
   const [inputErrors, setInputErrors] = useState<InputErrors>();
-  const [fieldInteractions, setFieldInteractions] = useState<
-    Partial<
-      Record<
-        keyof Inputs,
-        {
-          hasFocused: boolean;
-          hasBlurred: boolean;
-        }
-      >
-    >
-  >({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const isReady = useMemo(() => {
@@ -74,7 +63,7 @@ export function useStrongForm<
     for (const key in props.validators) {
       const validator = props.validators[key];
       const value = props.inputs[key as keyof Inputs];
-      if (isRawInvalid(validator, value)) {
+      if (getValidationError(validator, value) !== undefined) {
         return false;
       }
     }
@@ -86,46 +75,24 @@ export function useStrongForm<
       const validator = props.validators?.[field];
       const value = props.inputs[field];
       const isRequired = Boolean(validator?.required);
-      const rawInvalid = isRawInvalid(validator, value);
-      const interactions = fieldInteractions[field];
-      const hasFinishedInteraction =
-        Boolean(interactions?.hasFocused && interactions?.hasBlurred) ||
-        hasAttemptedSubmit;
-      const isInvalid = rawInvalid && hasFinishedInteraction;
+      const validationError = getValidationError(validator, value);
+      const rawInvalid = validationError !== undefined;
+      const isInvalid = rawInvalid && hasAttemptedSubmit;
+      const errorMessage = hasAttemptedSubmit ? validationError : undefined;
       return {
         isRequired,
         isInvalid,
+        errorMessage,
       };
     },
-    [fieldInteractions, hasAttemptedSubmit, props.inputs, props.validators]
+    [hasAttemptedSubmit, props.inputs, props.validators]
   );
 
-  const markFieldInteraction = useCallback(
-    (field: keyof Inputs, type: "focus" | "blur") => {
-      setFieldInteractions((prev) => {
-        const current = prev[field] ?? { hasFocused: false, hasBlurred: false };
-        const next =
-          type === "focus"
-            ? { ...current, hasFocused: true }
-            : { ...current, hasBlurred: true };
-        if (
-          current.hasFocused === next.hasFocused &&
-          current.hasBlurred === next.hasBlurred
-        ) {
-          return prev;
-        }
-        return { ...prev, [field]: next };
-      });
+  const getFieldError = useCallback(
+    <K extends keyof Inputs>(field: K): string | undefined => {
+      return getFieldState(field).errorMessage;
     },
-    []
-  );
-
-  const getFieldInteractionProps = useCallback(
-    (field: keyof Inputs) => ({
-      onFocus: () => markFieldInteraction(field, "focus"),
-      onBlur: () => markFieldInteraction(field, "blur"),
-    }),
-    [markFieldInteraction]
+    [getFieldState]
   );
 
   const getFieldComponentProps = useCallback(
@@ -138,16 +105,14 @@ export function useStrongForm<
       if (options?.disabled) {
         modifiers.push("disabled" as const);
       }
-      const interactionProps = getFieldInteractionProps(field);
       return {
-        ...interactionProps,
         "aria-invalid": fieldState.isInvalid,
         "aria-required": fieldState.isRequired,
         csModifiers: modifiers,
         required: fieldState.isRequired,
       };
     },
-    [getFieldInteractionProps, getFieldState]
+    [getFieldState]
   );
 
   useEffect(() => {
@@ -285,6 +250,14 @@ export function useStrongForm<
     });
   };
 
+  const resetFormState = useCallback(() => {
+    setHasAttemptedSubmit(false);
+    setInputErrors(undefined);
+    setSubmitError(undefined);
+    setSubmitOutput(undefined);
+    setRefineError(undefined);
+  }, []);
+
   return {
     submit,
     handleSubmit,
@@ -297,8 +270,9 @@ export function useStrongForm<
     inputErrors,
     isReady,
     getFieldState,
-    getFieldInteractionProps,
+    getFieldError,
     getFieldComponentProps,
     setInputErrors,
+    resetFormState,
   };
 }
