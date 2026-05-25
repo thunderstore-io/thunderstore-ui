@@ -50,7 +50,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 export async function clientLoader({
   params,
   request,
-  serverLoader,
 }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
@@ -94,7 +93,6 @@ export async function clientLoader({
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      seo: (await serverLoader()).seo,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");

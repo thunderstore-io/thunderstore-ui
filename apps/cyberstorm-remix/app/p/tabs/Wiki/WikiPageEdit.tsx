@@ -90,7 +90,6 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
 export async function clientLoader({
   params,
   request,
-  serverLoader,
 }: Route.ClientLoaderArgs) {
   if (
     params.communityId &&
@@ -150,7 +149,6 @@ export async function clientLoader({
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      seo: (await serverLoader()).seo,
     };
   } else {
     throw new Response("Namespace ID or Package ID is missing", {

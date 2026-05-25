@@ -106,10 +106,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   throw new Error("Namespace ID or Package ID is missing");
 });
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -119,15 +116,12 @@ export async function clientLoader({
       };
     });
 
-    const serverData = await serverLoader();
-
     let result: ResultType = {
       wiki: undefined,
       firstPage: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      seo: serverData.seo,
     };
 
     try {
@@ -143,7 +137,6 @@ export async function clientLoader({
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          seo: serverData.seo,
         };
       } else {
         result = {
@@ -152,7 +145,6 @@ export async function clientLoader({
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          seo: serverData.seo,
         };
       }
     } catch (error) {
@@ -165,7 +157,6 @@ export async function clientLoader({
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            seo: serverData.seo,
           };
         } else {
           throw error;

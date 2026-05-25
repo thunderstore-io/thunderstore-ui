@@ -59,10 +59,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   };
 });
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -76,14 +73,12 @@ export async function clientLoader({
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
-    seo: (await serverLoader()).seo,
   };
 }
 

@@ -95,12 +95,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   throw new Response("Package not found", { status: 404 });
 }
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: LoaderFunctionArgs & {
-  serverLoader: () => ReturnType<typeof loader>;
-}) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -116,12 +111,10 @@ export async function clientLoader({
       params.packageVersion
     );
     const team = await dapper.getTeamDetails(params.namespaceId);
-    const sl = await serverLoader();
 
     return {
       version: version,
       team: team,
-      seo: sl.seo,
     };
   }
   throw new Response("Package not found", { status: 404 });

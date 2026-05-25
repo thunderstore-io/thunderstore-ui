@@ -116,10 +116,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   }
 });
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (
     params.communityId &&
     params.namespaceId &&
@@ -134,15 +131,12 @@ export async function clientLoader({
       };
     });
 
-    const serverData = await serverLoader();
-
     let result: ResultType = {
       wiki: undefined,
       page: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      seo: serverData.seo,
     };
 
     try {
@@ -158,7 +152,6 @@ export async function clientLoader({
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          seo: serverData.seo,
         };
         return result;
       }
@@ -169,7 +162,6 @@ export async function clientLoader({
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
-        seo: serverData.seo,
       };
     } catch (error) {
       if (isApiError(error)) {
@@ -181,7 +173,6 @@ export async function clientLoader({
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            seo: serverData.seo,
           };
         } else {
           throw error;

@@ -139,7 +139,6 @@ export const loader = ssrLoader(
 export async function clientLoader({
   params,
   request,
-  serverLoader,
 }: Route.ClientLoaderArgs) {
   const { communityId, namespaceId, packageId } = params;
 
@@ -178,7 +177,6 @@ export async function clientLoader({
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
-    seo: (await serverLoader()).seo,
   };
 }
 

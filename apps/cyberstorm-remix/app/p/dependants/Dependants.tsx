@@ -116,7 +116,6 @@ export const loader = ssrLoader(
 export async function clientLoader({
   request,
   params,
-  serverLoader,
 }: Route.ClientLoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {
     const tools = getSessionTools();
@@ -137,9 +136,17 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
 
-    // Leverage identical data coming from serverLoader
-    const serverData = await serverLoader();
-    const filters = serverData.filters;
+    const filters = await dapper.getCommunityFilters(params.communityId);
+    const community = dapper.getCommunity(params.communityId);
+    const listing = await dapper.getPackageListingDetails(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
+
+    if (!listing) {
+      throw new Response("Package not found", { status: 404 });
+    }
 
     const listingsPromise = (async () => {
       const finalSection = getSectionDefault(section, filters.sections);
@@ -163,11 +170,10 @@ export async function clientLoader({
     })();
 
     return {
-      community: serverData.community,
-      listing: serverData.listing,
+      community: community,
+      listing: listing,
       filters: filters,
       listings: listingsPromise,
-      seo: serverData.seo,
     };
   }
   throw new Response("Community not found", { status: 404 });

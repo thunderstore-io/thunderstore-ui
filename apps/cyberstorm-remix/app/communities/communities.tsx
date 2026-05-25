@@ -100,10 +100,7 @@ export const loader = ssrLoader(async ({ request }: Route.LoaderArgs) => {
   };
 });
 
-export async function clientLoader({
-  request,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const tools = getSessionTools();
   const dapper = new DapperTs(() => {
     return {
@@ -121,7 +118,6 @@ export async function clientLoader({
       order ?? SortOptions.Popular,
       search ?? ""
     ),
-    seo: (await serverLoader()).seo,
   };
 }
 

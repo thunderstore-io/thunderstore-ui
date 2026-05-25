@@ -56,12 +56,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: LoaderFunctionArgs & {
-  serverLoader: () => Promise<ReturnType<typeof loader>>;
-}) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -74,14 +69,12 @@ export async function clientLoader({
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
-    seo: (await serverLoader()).seo,
   };
 }
 

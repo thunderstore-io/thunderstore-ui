@@ -49,12 +49,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: LoaderFunctionArgs & {
-  serverLoader: () => Promise<ReturnType<typeof loader>>;
-}) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -69,14 +64,12 @@ export async function clientLoader({
         params.packageId,
         params.packageVersion
       ),
-      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load readme",
     readme: { html: "" },
-    seo: (await serverLoader()).seo,
   };
 }
 

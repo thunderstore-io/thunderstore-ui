@@ -100,6 +100,20 @@ export type OutletContextShape = {
   dapper: DapperTs;
 };
 
+const rootSeo = createSeo({
+  descriptors: [
+    { title: "Thunderstore" },
+    {
+      name: "description",
+      content: "A ecosystem for sharing mods for games!",
+    },
+    { name: "msapplication-TileColor", content: "#29295b" },
+    { name: "theme-color", content: "#29295b" },
+    { charSet: "utf-8" },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+  ],
+});
+
 export async function loader() {
   return {
     publicEnvVariables: getPublicEnvVariables([
@@ -116,26 +130,11 @@ export async function loader() {
       apiHost: getApiHostForSsr(),
       sessionId: undefined,
     },
-    seo: createSeo({
-      descriptors: [
-        { title: "Thunderstore" },
-        {
-          name: "description",
-          content: "A ecosystem for sharing mods for games!",
-        },
-        { name: "msapplication-TileColor", content: "#29295b" },
-        { name: "theme-color", content: "#29295b" },
-        { charSet: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
-      ],
-    }),
+    seo: rootSeo,
   };
 }
 
-export async function clientLoader({
-  request,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_SITE_URL",
     "VITE_BETA_SITE_URL",
@@ -186,7 +185,7 @@ export async function clientLoader({
     publicEnvVariables: publicEnvVariables,
     currentUser: currentUser.username ? currentUser : undefined,
     config,
-    seo: (await serverLoader()).seo,
+    seo: rootSeo,
   };
 }
 
