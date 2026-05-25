@@ -82,10 +82,7 @@ export const loader = ssrLoader(async () => {
   };
 });
 
-export async function clientLoader({
-  request,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const tools = getSessionTools();
   const currentUser = await tools?.getSessionCurrentUser(true);
 
@@ -94,7 +91,13 @@ export async function clientLoader({
     return redirectToLogin(url.pathname + url.search + url.hash);
   }
 
-  const communities = await serverLoader();
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: tools?.getConfig().apiHost,
+      sessionId: tools?.getConfig().sessionId,
+    };
+  });
+  const communities = await dapper.getCommunities();
   return communities;
 }
 

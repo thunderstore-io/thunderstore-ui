@@ -52,7 +52,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 export async function clientLoader({
   params,
   request,
-  serverLoader,
 }: Route.ClientLoaderArgs) {
   const { communityId, namespaceId, packageId } = params;
 
@@ -81,7 +80,7 @@ export async function clientLoader({
       throw new Response("Unauthorized", { status: 403 });
     }
 
-    return { listing, permissions, filters, seo: (await serverLoader()).seo };
+    return { listing, permissions, filters };
   } catch (error) {
     if (isApiError(error) && error.response.status === 404) {
       throw package404;

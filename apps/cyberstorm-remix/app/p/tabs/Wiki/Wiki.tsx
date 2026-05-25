@@ -76,10 +76,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   }
 });
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -111,7 +108,6 @@ export async function clientLoader({
       packageId: params.packageId,
       slug: params.slug,
       permissions: permissions,
-      seo: (await serverLoader()).seo,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");

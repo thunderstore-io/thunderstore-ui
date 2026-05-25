@@ -50,10 +50,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   };
 });
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -68,14 +65,12 @@ export async function clientLoader({
         params.packageId,
         params.packageVersion
       ),
-      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load readme",
     readme: { html: "" },
-    seo: (await serverLoader()).seo,
   };
 }
 

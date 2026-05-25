@@ -73,10 +73,7 @@ export const loader = ssrLoader(
   }
 );
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -88,7 +85,6 @@ export async function clientLoader({
     const community = dapper.getCommunity(params.communityId);
     return {
       community: community,
-      seo: (await serverLoader()).seo,
     };
   }
   throw new Response("Community not found", { status: 404 });

@@ -55,10 +55,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   };
 });
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (!params.namespaceId || !params.packageId) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -71,7 +68,6 @@ export async function clientLoader({
 
   return {
     changelog: fetchChangelogSafe(dapper, params.namespaceId, params.packageId),
-    seo: (await serverLoader()).seo,
   };
 }
 

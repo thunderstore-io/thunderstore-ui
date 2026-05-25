@@ -70,7 +70,6 @@ export const loader = ssrLoader(
 export async function clientLoader({
   request,
   params,
-  serverLoader,
 }: Route.ClientLoaderArgs) {
   if (params.communityId) {
     const tools = getSessionTools();
@@ -91,10 +90,7 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
 
-    // Use the filters already fetched by the server so that React Router
-    // doesn't send an extra data request during client-side hydration
-    const serverData = await serverLoader();
-    const filters = serverData.filters;
+    const filters = await dapper.getCommunityFilters(params.communityId);
 
     const listingsPromise = (async () => {
       const finalSection = getSectionDefault(section, filters.sections);
@@ -118,7 +114,6 @@ export async function clientLoader({
     return {
       filters: filters,
       listings: listingsPromise,
-      seo: serverData.seo,
     };
   }
   throw new Response("Community not found", { status: 404 });

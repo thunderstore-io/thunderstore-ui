@@ -64,10 +64,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 clientLoader.hydrate = true;
 
-export async function clientLoader({
-  params,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -90,14 +87,12 @@ export async function clientLoader({
         status: null,
         source: source,
         message: undefined,
-        seo: (await serverLoader()).seo,
       };
     } catch (error) {
       result = {
         status: "error",
         source: undefined,
         message: "Analysis not available",
-        seo: (await serverLoader()).seo,
       };
       throw error;
     }
@@ -107,7 +102,6 @@ export async function clientLoader({
     status: "error",
     message: "Analysis not available",
     source: undefined,
-    seo: (await serverLoader()).seo,
   };
 }
 
