@@ -411,7 +411,7 @@ export function DesktopUserDropdown(props: {
           linkId="Settings"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary" csWidth="1em">
             <FontAwesomeIcon icon={faCog} />
           </NewIcon>
           Settings
@@ -420,7 +420,12 @@ export function DesktopUserDropdown(props: {
       {communityId ? (
         <NewDropDownSub>
           <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+            <NewIcon
+              csMode="inline"
+              noWrapper
+              csVariant="tertiary"
+              csWidth="1em"
+            >
               <FontAwesomeIcon icon={faUsers} />
             </NewIcon>
             Teams
@@ -432,7 +437,12 @@ export function DesktopUserDropdown(props: {
                 linkId="Teams"
                 rootClasses="dropdown__item navigation-header__dropdown-item"
               >
-                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                <NewIcon
+                  csMode="inline"
+                  noWrapper
+                  csVariant="tertiary"
+                  csWidth="1em"
+                >
                   <FontAwesomeIcon icon={faUsers} />
                 </NewIcon>
                 All Teams
@@ -446,7 +456,12 @@ export function DesktopUserDropdown(props: {
                   href={`/c/${communityId}/p/${teamName}/`}
                   rootClasses="dropdown__item navigation-header__dropdown-item"
                 >
-                  <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                  <NewIcon
+                    csMode="inline"
+                    noWrapper
+                    csVariant="tertiary"
+                    csWidth="1em"
+                  >
                     <FontAwesomeIcon icon={faUsers} />
                   </NewIcon>
                   {teamName}
@@ -462,7 +477,12 @@ export function DesktopUserDropdown(props: {
             linkId="Teams"
             rootClasses="dropdown__item navigation-header__dropdown-item"
           >
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+            <NewIcon
+              csMode="inline"
+              noWrapper
+              csVariant="tertiary"
+              csWidth="1em"
+            >
               <FontAwesomeIcon icon={faUsers} />
             </NewIcon>
             Teams
@@ -475,7 +495,7 @@ export function DesktopUserDropdown(props: {
           href={buildLogoutUrl(domain)}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary" csWidth="1em">
             <FontAwesomeIcon icon={faSignOut} />
           </NewIcon>
           Log Out
