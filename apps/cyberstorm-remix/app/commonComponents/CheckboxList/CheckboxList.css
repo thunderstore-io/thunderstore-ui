@@ -23,6 +23,14 @@
         padding: var(--space-8) 0 var(--space-8) var(--space-16);
       }
 
+      /* On hover-capable devices, hide exclude button by default */
+      @media (hover: hover) {
+        .checkbox-list__exclude-button {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+
       &.checkbox-list__label--off {
         color: var(--color-text-secondary);
 
@@ -44,13 +52,21 @@
         }
 
         .checkbox-list__exclude-button svg {
-          --icon-color: transparent;
+          --icon-color: var(--color-surface-a8);
         }
       }
 
       &.checkbox-list__label--exclude {
         color: var(--color-accent-red-7);
         font-weight: var(--font-weight-bold);
+
+        /* Always show exclude button when the category is excluded */
+        @media (hover: hover) {
+          .checkbox-list__exclude-button {
+            opacity: 1;
+            pointer-events: auto;
+          }
+        }
 
         .checkbox-list__exclude-button svg {
           --icon-color: var(--color-accent-red-7);
@@ -65,10 +81,22 @@
         color: var(--color-text-primary);
         background-color: var(--color-surface-a5);
 
+        /* Show exclude button on label hover */
+        @media (hover: hover) {
+          .checkbox-list__exclude-button {
+            opacity: 1;
+            pointer-events: auto;
+          }
+        }
+
         &.checkbox-list__label--off {
           color: var(--color-text-primary);
 
           svg {
+            --icon-color: var(--color-surface-a10);
+          }
+
+          .checkbox-list__exclude-button svg {
             --icon-color: var(--color-surface-a10);
           }
         }
@@ -96,6 +124,11 @@
             --icon-color: var(--color-accent-red-8);
           }
         }
+
+        /* Must be last — wins over state-specific rules above by source order */
+        .checkbox-list__exclude-button:hover svg {
+          --icon-color: var(--color-accent-red-7);
+        }
       }
     }
 
@@ -117,10 +150,6 @@
         width: calc(var(--space-20) + calc(var(--space-16) * 2));
         height: calc(var(--space-20) + calc(var(--space-8) * 2));
         padding: var(--space-8) var(--space-16);
-
-        &:hover {
-          --icon-color: var(--color-accent-red-8);
-        }
       }
     }
   }
