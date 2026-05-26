@@ -20,6 +20,7 @@
   }
 
   .toast__icon {
+    flex-shrink: 0;
     width: var(--toast-icon-width);
     height: var(--toast-icon-height);
 
@@ -47,11 +48,14 @@
   }
 
   .toast__content {
+    flex: 1;
     min-width: 0;
+    padding-inline-end: calc(var(--toast-close-width) + var(--toast-gap));
     color: var(--toast-color);
     font-weight: var(--toast-font-weight);
     font-size: var(--toast-font-size);
     line-height: var(--toast-line-height);
+    overflow-wrap: break-word;
   }
 
   .toast__viewport {
