@@ -1,3 +1,4 @@
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -47,6 +48,7 @@ import { getPackageVersionDetails } from "@thunderstore/dapper-ts";
 
 import { PackageActions } from "./components/PackageListing/PackageActions";
 // import type { Route } from "./+types/packageVersionWithoutCommunity";
+import { isGithubUrl } from "./listingUtils";
 import "./packageListing.css";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -217,10 +219,16 @@ export default function PackageVersion() {
                               csVariant="cyber"
                               rootClasses="page-header__meta-item"
                             >
-                              {resolvedValue.website_url}
                               <NewIcon csMode="inline" noWrapper>
-                                <FontAwesomeIcon icon={faArrowUpRight} />
+                                <FontAwesomeIcon
+                                  icon={
+                                    isGithubUrl(resolvedValue.website_url)
+                                      ? faGithub
+                                      : faArrowUpRight
+                                  }
+                                />
                               </NewIcon>
+                              {resolvedValue.website_url}
                             </NewLink>
                           ) : null}
                         </>

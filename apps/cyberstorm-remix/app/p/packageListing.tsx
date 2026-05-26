@@ -1,3 +1,4 @@
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faCaretRight,
   faUsers,
@@ -60,6 +61,7 @@ import {
   getPrivateListing,
   getPublicListing,
   getUserPermissions,
+  isGithubUrl,
 } from "./listingUtils";
 import "./packageListing.css";
 
@@ -329,10 +331,16 @@ export default function PackageListing() {
                         csVariant="cyber"
                         rootClasses="page-header__meta-item"
                       >
-                        {listing.website_url}
                         <NewIcon csMode="inline" noWrapper>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
+                          <FontAwesomeIcon
+                            icon={
+                              isGithubUrl(listing.website_url)
+                                ? faGithub
+                                : faArrowUpRight
+                            }
+                          />
                         </NewIcon>
+                        {listing.website_url}
                       </NewLink>
                     ) : null}
                   </>

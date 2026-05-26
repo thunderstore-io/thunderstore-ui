@@ -3,6 +3,20 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
+/**
+ * Returns true only when the URL's hostname is exactly github.com or
+ * www.github.com, preventing both false positives (e.g. github.com.evil.com)
+ * and false negatives (http:// or www. variants).
+ */
+export function isGithubUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return hostname === "github.com" || hostname === "www.github.com";
+  } catch {
+    return false;
+  }
+}
+
 export interface ListingIdentifiers {
   communityId: string;
   namespaceId: string;
