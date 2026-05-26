@@ -7,65 +7,18 @@
     overflow: auto;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
-    line-height: var(--line-height-auto);
+    line-height: 1;
 
-    > span {
-      > span {
-        display: inline-flex;
-        gap: 0.5rem;
-      }
-    }
-
-    > a {
-      > span {
-        display: inline-flex;
-        gap: 0.5rem;
-      }
-    }
-
-    .breadcrumbs__homelink > span {
-      display: inline-block;
-      width: 0.875rem;
-      height: 0.875rem;
-      font-size: var(--font-size-body-md);
-    }
-
-    img {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 1rem;
-      height: 1rem;
-      aspect-ratio: 1/1;
-    }
-
-    .breadcrumbs__community-icon {
-      width: 1rem;
-      height: 1rem;
-      border-radius: 0;
-    }
-
-    .breadcrumbs__community-icon .image__src,
-    .breadcrumbs__community-icon .image__icon {
-      width: 1rem;
-      height: 1rem;
-    }
-
-    > * {
+    .breadcrumbs__segment {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--space-8) var(--space-16);
+      height: 2rem;
+      padding-inline: var(--space-16);
+      line-height: 1;
       background-color: var(--breadcrumb-item-bg-color--default);
-
-      /* skew the container */
       transform: skew(-30deg);
-
-      > * {
-        white-space: nowrap;
-        transform: skew(30deg);
-      }
 
       @media (hover: hover) and (pointer: fine) {
         &:hover {
@@ -74,25 +27,45 @@
       }
     }
 
-    > *:last-child {
-      padding-right: 0;
+    .breadcrumbs__item-content {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      line-height: 1rem;
+      white-space: nowrap;
+      transform: skew(30deg);
+    }
+
+    .breadcrumbs__item-label {
+      display: block;
+      padding-top: 1px;
+      line-height: 1rem;
+    }
+
+    > :last-child {
+      padding-inline-end: 0;
       background-color: var(--breadcrumb-item-bg-color--hover);
 
-      > * {
+      .breadcrumbs__item-content {
         color: var(--breadcrumb-item-text-color--current);
+      }
+
+      &::after {
+        position: absolute;
+        top: 0;
+        right: -1rem;
+        bottom: 0;
+        z-index: -1;
+        width: var(--space-32);
+        border-radius: 0 0.5rem 0.5rem 0;
+        background-color: var(--breadcrumb-item-bg-color--hover);
+        transform: skew(30deg);
+        content: "";
       }
     }
 
-    > *:first-child {
-      padding-left: 0;
-
-      > svg {
-        display: flex;
-        align-items: center;
-        width: 0.875rem;
-        height: 0.875rem;
-        text-decoration: none;
-      }
+    .breadcrumbs__homelink {
+      padding-inline-start: 0;
 
       &::before {
         position: absolute;
@@ -104,29 +77,63 @@
         border-radius: 0.5rem 0 0 0.5rem;
         background-color: var(--breadcrumb-item-bg-color--default);
         transform: skew(30deg);
-        content: "\0020";
+        content: "";
       }
 
       @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          &::before {
-            background-color: var(--breadcrumb-item-bg-color--hover);
-          }
+        &:hover::before {
+          background-color: var(--breadcrumb-item-bg-color--hover);
         }
       }
     }
 
-    > *:last-child::after {
-      position: absolute;
-      top: 0;
-      right: -1rem;
-      bottom: 0;
-      z-index: -1;
-      width: var(--space-32);
-      border-radius: 0 0.5rem 0.5rem 0;
-      background-color: var(--breadcrumb-item-bg-color--hover);
-      transform: skew(30deg);
-      content: "\0020";
+    .breadcrumbs__homelink .breadcrumbs__item-content {
+      font-size: var(--font-size-body-md);
+    }
+
+    .breadcrumbs__home {
+      display: block;
+      flex-shrink: 0;
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+
+    .breadcrumbs__item-content .icon {
+      display: block;
+      min-inline-size: 0;
+      block-size: auto;
+    }
+
+    .breadcrumbs__community-icon {
+      display: block;
+      flex-shrink: 0;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0;
+      line-height: 0;
+
+      .image__content {
+        display: block;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: unset;
+      }
+
+      .image__src,
+      .image__icon {
+        display: block;
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .image__icon svg {
+        display: block;
+        width: 1rem;
+        min-width: 0;
+        height: 1rem;
+        min-inline-size: 0;
+        block-size: auto;
+      }
     }
   }
 }
