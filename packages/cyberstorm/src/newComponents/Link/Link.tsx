@@ -33,11 +33,7 @@ export const Link = memo(function Link(props: LinkProps | CyberstormLinkProps) {
         rootClasses
       )}
     >
-      {forwardedProps.disabled ? (
-        <s className="link-strikethrough">{children}</s>
-      ) : (
-        children
-      )}
+      {children}
     </Actionable>
   );
 });
