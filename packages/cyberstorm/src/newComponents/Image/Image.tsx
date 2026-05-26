@@ -14,8 +14,8 @@ import "./Image.css";
 
 export interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null | undefined;
-  /** Icon shown when `src` is missing. */
-  fallbackIcon: IconDefinition;
+  /** Icon shown when `src` is missing. Omit to render nothing. */
+  fallbackIcon?: IconDefinition;
   /** Alt text for the image. Leave empty for decorative images. */
   alt?: string;
   /** Force 1:1 aspect ratio */
@@ -79,7 +79,7 @@ export const Image = memo(function Image(props: ImageProps) {
             height={intrinsicHeight}
           />
         </Frame>
-      ) : (
+      ) : fallbackIcon ? (
         <NewIcon
           rootClasses={classnames(
             "image__content",
@@ -96,7 +96,7 @@ export const Image = memo(function Image(props: ImageProps) {
         >
           <FontAwesomeIcon icon={fallbackIcon} />
         </NewIcon>
-      )}
+      ) : null}
     </Frame>
   );
 });

@@ -59,6 +59,7 @@ export { Avatar as NewAvatar } from "./newComponents/Avatar/Avatar";
 export {
   BreadCrumbs as NewBreadCrumbs,
   BreadCrumbsLink as NewBreadCrumbsLink,
+  BreadCrumbsItem as NewBreadCrumbsItem,
 } from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { Button as NewButton } from "./newComponents/Button/Button";
 export { CardCommunity } from "./newComponents/Card/CardCommunity/CardCommunity";
@@ -80,7 +81,7 @@ export {
 export * as EmptyState from "./newComponents/EmptyState";
 export { Heading } from "./newComponents/Heading/Heading";
 export { Icon as NewIcon } from "./newComponents/Icon/Icon";
-export { Image } from "./newComponents/Image/Image";
+export { Image, type ImageProps } from "./newComponents/Image/Image";
 export {
   Link as NewLink,
   type LinkProps as NewLinkProps,

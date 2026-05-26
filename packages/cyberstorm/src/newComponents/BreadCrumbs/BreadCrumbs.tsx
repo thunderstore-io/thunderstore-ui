@@ -1,6 +1,6 @@
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type PropsWithChildren, memo } from "react";
+import { Children, type PropsWithChildren, type ReactNode, memo } from "react";
 
 import {
   type BreadCrumbsModifiers,
@@ -46,10 +46,10 @@ export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
         linkId="Index"
         tooltipText="Home"
         aria-label="Home"
-        rootClasses={"breadcrumbs__homelink"}
+        rootClasses="breadcrumbs__homelink"
       >
         <Icon noWrapper csVariant="cyber">
-          <FontAwesomeIcon icon={faHouse} className={"breadcrumbs__home"} />
+          <FontAwesomeIcon icon={faHouse} className="breadcrumbs__home" />
         </Icon>
       </BreadCrumbsLink>
       {children}
@@ -57,14 +57,48 @@ export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
   );
 });
 
+function BreadCrumbsItemContent({ children }: PropsWithChildren) {
+  return (
+    <span className="breadcrumbs__item-content">
+      {normalizeBreadCrumbsContent(children)}
+    </span>
+  );
+}
+
+function normalizeBreadCrumbsContent(children: ReactNode) {
+  return Children.map(children, (child) => {
+    if (typeof child === "string") {
+      if (child.trim() === "") {
+        return null;
+      }
+      return <span className="breadcrumbs__item-label">{child}</span>;
+    }
+    return child;
+  });
+}
+
 export function BreadCrumbsLink(props: LinkProps | CyberstormLinkProps) {
-  const { children, ...forwardedProps } = props;
+  const { children, rootClasses, ...forwardedProps } = props;
 
   return (
-    <Link {...forwardedProps} ref={props.ref}>
-      <span>{children}</span>
+    <Link
+      {...forwardedProps}
+      ref={props.ref}
+      rootClasses={classnames("breadcrumbs__segment", rootClasses)}
+    >
+      <BreadCrumbsItemContent>{children}</BreadCrumbsItemContent>
     </Link>
   );
 }
 
 BreadCrumbsLink.displayName = "BreadCrumbsLink";
+
+export function BreadCrumbsItem({ children }: PropsWithChildren) {
+  return (
+    <span className="breadcrumbs__segment">
+      <BreadCrumbsItemContent>{children}</BreadCrumbsItemContent>
+    </span>
+  );
+}
+
+BreadCrumbsItem.displayName = "BreadCrumbsItem";
