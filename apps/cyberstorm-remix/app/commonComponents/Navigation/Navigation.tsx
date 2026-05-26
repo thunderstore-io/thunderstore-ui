@@ -137,22 +137,34 @@ export function Navigation(props: {
               }
               rootClasses="navigation-header__developers-dropdown"
             >
-              <NewDropDownItem>
+              <NewDropDownItem rootClasses="navigation-header--focus">
                 <NewLink
                   primitiveType="link"
-                  rootClasses={"dropdown__item"}
+                  rootClasses={classnames(
+                    "navigation-header__externalLink",
+                    "dropdown__item"
+                  )}
                   href={`${domain}/api/docs/`}
                 >
                   API Docs
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
                 </NewLink>
               </NewDropDownItem>
-              <NewDropDownItem>
+              <NewDropDownItem rootClasses="navigation-header--focus">
                 <NewLink
-                  rootClasses={"dropdown__item"}
-                  primitiveType="cyberstormLink"
-                  linkId="PackageFormatDocs"
+                  rootClasses={classnames(
+                    "navigation-header__externalLink",
+                    "dropdown__item"
+                  )}
+                  primitiveType="link"
+                  href="https://wiki.thunderstore.io/mods/creating-a-package"
                 >
                   Package Format Docs
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
                 </NewLink>
               </NewDropDownItem>
               <NewDropDownItem>
@@ -202,6 +214,9 @@ export function Navigation(props: {
               aria-label="Get Thunderstore Mod Manager App"
             >
               Get Manager
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </NewIcon>
             </NewButton>
           </div>
           {currentUser?.username ? (
@@ -648,6 +663,9 @@ function MobileDevelopersMenu({ domain }: { domain: string }) {
           rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
         >
           API Docs
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faArrowUpRight} />
+          </NewIcon>
         </NewLink>
         <NewLink
           primitiveType="link"
@@ -655,13 +673,19 @@ function MobileDevelopersMenu({ domain }: { domain: string }) {
           rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
         >
           GitHub
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faArrowUpRight} />
+          </NewIcon>
         </NewLink>
         <NewLink
-          primitiveType="cyberstormLink"
-          linkId="PackageFormatDocs"
+          primitiveType="link"
+          href="https://wiki.thunderstore.io/mods/creating-a-package"
           rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
         >
           Package Format Docs
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faArrowUpRight} />
+          </NewIcon>
         </NewLink>
         <NewLink
           primitiveType="cyberstormLink"
@@ -737,6 +761,9 @@ export function MobileNavigationMenu(props: {
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
           >
             Contact Us
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowUpRight} />
+            </NewIcon>
           </NewLink>
           <NewLink
             primitiveType="link"
@@ -744,6 +771,9 @@ export function MobileNavigationMenu(props: {
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
           >
             Privacy Policy
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowUpRight} />
+            </NewIcon>
           </NewLink>
           <NewLink
             primitiveType="link"
@@ -751,6 +781,9 @@ export function MobileNavigationMenu(props: {
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
           >
             News
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowUpRight} />
+            </NewIcon>
           </NewLink>
         </section>
         <div className="mobile-navigation__divider" />
@@ -766,6 +799,9 @@ export function MobileNavigationMenu(props: {
             aria-label="Get Thunderstore Mod Manager App"
           >
             Get Manager
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowUpRight} />
+            </NewIcon>
           </NewButton>
         </section>
         {currentUser?.username ? (

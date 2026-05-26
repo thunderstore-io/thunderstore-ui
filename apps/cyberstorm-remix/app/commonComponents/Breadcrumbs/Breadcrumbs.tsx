@@ -51,9 +51,6 @@ export function Breadcrumbs() {
     (m) => m.id === "p/dependants/Dependants"
   );
   const packageTeamPage = matches.find((m) => m.id === "p/team/Team");
-  const packageFormatDocsPage = matches.find(
-    (m) => m.id === "tools/package-format-docs/packageFormatDocs"
-  );
   const manifestValidatorPage = matches.find(
     (m) => m.id === "tools/manifest-validator/manifestValidator"
   );
@@ -271,11 +268,6 @@ export function Breadcrumbs() {
   const toolsBreadcrumb = useMemo(() => {
     return (
       <>
-        {packageFormatDocsPage ? (
-          <span>
-            <span>Package Format Docs</span>
-          </span>
-        ) : null}
         {manifestValidatorPage ? (
           <span>
             <span>Manifest Validator</span>
@@ -288,7 +280,7 @@ export function Breadcrumbs() {
         ) : null}
       </>
     );
-  }, [packageFormatDocsPage, manifestValidatorPage, markdownPreviewPage]);
+  }, [manifestValidatorPage, markdownPreviewPage]);
 
   const loginBreadcrumb = useMemo(() => {
     if (!loginPage) return null;

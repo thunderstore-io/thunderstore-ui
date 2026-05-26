@@ -103,8 +103,8 @@ export function Footer() {
                   </li>
                   <li>
                     <NewLink
-                      primitiveType="cyberstormLink"
-                      linkId="PackageFormatDocs"
+                      primitiveType="link"
+                      href="https://wiki.thunderstore.io/mods/creating-a-package"
                       csVariant="primary"
                     >
                       Package Format Docs
