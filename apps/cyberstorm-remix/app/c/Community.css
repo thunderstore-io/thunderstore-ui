@@ -1,7 +1,5 @@
 @layer nimbus-layout {
   .community {
-    --nimbus-layout-content-max-width: 120rem;
-
     z-index: 1;
     display: grid;
     grid-template-rows: auto 1fr;
