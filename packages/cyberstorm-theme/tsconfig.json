@@ -28,6 +28,6 @@
     "jsx": "react-jsx",
     "types": ["react", "react-dom"]
   },
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.css"],
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "env.d.ts"],
   "exclude": ["node_modules"]
 }

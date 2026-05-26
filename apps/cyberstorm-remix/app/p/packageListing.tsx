@@ -5,10 +5,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
-import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
-import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
-import { type OutletContextShape } from "app/root";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -29,6 +25,10 @@ import {
   useOutletContext,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { useReportPackage } from "~/p/components/ReportPackage/useReportPackage";
+import TeamMembers from "~/p/components/TeamMembers/TeamMembers";
+import { type OutletContextShape } from "~/root";
 
 import {
   CopyButton,

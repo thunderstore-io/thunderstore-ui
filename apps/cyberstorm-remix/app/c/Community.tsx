@@ -189,52 +189,50 @@ export default function Community() {
                   </Await>
                 </Suspense>
               </div>
-              <div className="community__header-meta">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.wiki_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.wiki_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faBook} />
-                          </NewIcon>
-                          <span>Modding Wiki</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
+
+              <Suspense fallback={<SkeletonBox />}>
+                <Await resolve={community}>
+                  {(resolvedValue) => {
+                    return resolvedValue.wiki_url ||
                       resolvedValue.discord_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.discord_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faDiscord} />
-                          </NewIcon>
-                          <span>Modding Discord</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-              </div>
+                      <div className="community__header-meta">
+                        {resolvedValue.wiki_url ? (
+                          <NewLink
+                            primitiveType="link"
+                            href={resolvedValue.wiki_url}
+                            csVariant="cyber"
+                            rootClasses="community__item"
+                          >
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faBook} />
+                            </NewIcon>
+                            <span>Modding Wiki</span>
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faArrowUpRight} />
+                            </NewIcon>
+                          </NewLink>
+                        ) : null}
+                        {resolvedValue.discord_url ? (
+                          <NewLink
+                            primitiveType="link"
+                            href={resolvedValue.discord_url}
+                            csVariant="cyber"
+                            rootClasses="community__item"
+                          >
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faDiscord} />
+                            </NewIcon>
+                            <span>Modding Discord</span>
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faArrowUpRight} />
+                            </NewIcon>
+                          </NewLink>
+                        ) : null}
+                      </div>
+                    ) : null;
+                  }}
+                </Await>
+              </Suspense>
             </div>
           </div>
           <NewButton

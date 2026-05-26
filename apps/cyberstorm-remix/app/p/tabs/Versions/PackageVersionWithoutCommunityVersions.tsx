@@ -1,4 +1,3 @@
-import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -6,6 +5,7 @@ import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
+import { TabFetchState } from "~/p/components/TabFetchState/TabFetchState";
 
 import {
   Heading,

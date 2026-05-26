@@ -1,10 +1,10 @@
-import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useEffect, useState } from "react";
 import { useLoaderData, useRouteLoaderData } from "react-router";
+import { TabFetchState } from "~/p/components/TabFetchState/TabFetchState";
 
 import {
   DapperTs,

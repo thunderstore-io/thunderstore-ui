@@ -1,6 +1,5 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
@@ -12,6 +11,7 @@ import {
   useRevalidator,
 } from "react-router";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
+import { type OutletContextShape } from "~/root";
 
 import {
   CodeBox,

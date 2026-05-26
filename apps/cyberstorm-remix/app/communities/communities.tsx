@@ -34,6 +34,11 @@ import "./Communities.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+// Cards above the fold on a wide desktop viewport — eager-load their cover images.
+const EAGER_COMMUNITY_IMAGE_COUNT = 10;
+// Cards likely visible in the initial viewport — emit a preload hint with high fetch priority.
+const PRELOAD_COMMUNITY_IMAGE_COUNT = 3;
+
 enum SortOptions {
   Name = "name",
   Latest = "-datetime_created",
@@ -225,7 +230,7 @@ const CommunitiesList = memo(function CommunitiesList(props: {
   if (communitiesData.results.length > 0) {
     return (
       <div className="communities__communities-list">
-        {communitiesData.results.map((community) => (
+        {communitiesData.results.map((community, index) => (
           <CardCommunity
             key={community.identifier}
             community={community}
@@ -233,6 +238,13 @@ const CommunitiesList = memo(function CommunitiesList(props: {
             isNew={
               new Date(community.datetime_created).getTime() >
               new Date().getTime() - 1000 * 60 * 60 * 336
+            }
+            imageLoading={
+              index < EAGER_COMMUNITY_IMAGE_COUNT ? "eager" : "lazy"
+            }
+            imagePreload={index < PRELOAD_COMMUNITY_IMAGE_COUNT}
+            imageFetchPriority={
+              index < PRELOAD_COMMUNITY_IMAGE_COUNT ? "high" : "auto"
             }
           />
         ))}

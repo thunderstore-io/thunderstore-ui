@@ -32,7 +32,9 @@
         "name": "typescript-plugin-css-modules"
       }
     ],
-    "baseUrl": "."
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]

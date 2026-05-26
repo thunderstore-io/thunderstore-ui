@@ -1,9 +1,9 @@
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type OutletContextShape } from "app/root";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { useState } from "react";
 import { useOutletContext } from "react-router";
+import { type OutletContextShape } from "~/root";
 
 import {
   Heading,

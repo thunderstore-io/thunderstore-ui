@@ -1,4 +1,3 @@
-import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense } from "react";
@@ -8,6 +7,7 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import { type OutletContextShape } from "~/root";
 
 import { MemberAddForm } from "./MemberAddForm";
 import "./Members.css";
