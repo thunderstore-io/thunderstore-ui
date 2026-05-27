@@ -57,6 +57,11 @@ import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
+import { formatBytes } from "./utils/formatBytes";
+import {
+  getSubmissionErrorMessages,
+  getSubmissionErrorsBySection,
+} from "./utils/submissionFormErrors";
 
 interface CommunityOption {
   value: string;
@@ -162,65 +167,15 @@ export default function Upload() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [pollingError, setPollingError] = useState<string | null>(null);
 
-  const submissionErrorMessages = useMemo(() => {
-    const formErrors = submissionStatus?.form_errors;
-    if (!formErrors) return [];
+  const submissionErrorMessages = useMemo(
+    () => getSubmissionErrorMessages(submissionStatus?.form_errors),
+    [submissionStatus?.form_errors]
+  );
 
-    const out: string[] = [];
-    const pushValue = (v: unknown) => {
-      if (v == null) return;
-      if (typeof v === "string") {
-        out.push(v);
-        return;
-      }
-      if (Array.isArray(v)) {
-        for (const e of v) pushValue(e);
-        return;
-      }
-      if (typeof v === "object") {
-        for (const val of Object.values(v as Record<string, unknown>)) {
-          pushValue(val);
-        }
-      }
-    };
-
-    pushValue(formErrors);
-    return Array.from(new Set(out));
-  }, [submissionStatus?.form_errors]);
-
-  const submissionErrorsBySection = useMemo(() => {
-    const normalized = submissionErrorMessages
-      .map((m) => m.trim())
-      .filter(Boolean);
-    const take = (pred: (m: string) => boolean) => normalized.filter(pred);
-
-    const uploadFile = take((m) => {
-      const s = m.toLowerCase();
-      return (
-        s.includes("manifest.json") ||
-        s.includes("icon.png") ||
-        s.includes("readme") ||
-        s.includes("changelog") ||
-        s.includes("zip") ||
-        s.includes("file")
-      );
-    });
-
-    const communities = take((m) => {
-      const s = m.toLowerCase();
-      return s.includes("community") || s.includes("communities");
-    });
-
-    const categories = take((m) => {
-      const s = m.toLowerCase();
-      return s.includes("category") || s.includes("categories");
-    });
-
-    const used = new Set([...uploadFile, ...communities, ...categories]);
-    const submit = normalized.filter((m) => !used.has(m));
-
-    return { uploadFile, communities, categories, submit };
-  }, [submissionErrorMessages]);
+  const submissionErrorsBySection = useMemo(
+    () => getSubmissionErrorsBySection(submissionErrorMessages),
+    [submissionErrorMessages]
+  );
 
   const startUpload = useCallback(async () => {
     if (!file) return;
@@ -871,28 +826,6 @@ export default function Upload() {
       </section>
     </>
   );
-}
-
-function formatBytes(bytes: number, decimals = 2) {
-  if (!+bytes) return "0 Bytes";
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = [
-    "Bytes",
-    "KiB",
-    "MiB",
-    "GiB",
-    "TiB",
-    "PiB",
-    "EiB",
-    "ZiB",
-    "YiB",
-  ];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 const SubmissionResult = (props: {
