@@ -1,10 +1,3 @@
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import {
-  faCircleXmark,
-  faFileZip,
-  faTreasureChest,
-} from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
@@ -22,17 +15,10 @@ import {
 import { useLoaderData, useOutletContext } from "react-router";
 
 import {
-  NewAlert,
-  NewIcon,
-  NewSelectSearch,
-  classnames,
-} from "@thunderstore/cyberstorm";
-import {
   DapperTs,
   postPackageSubmissionMetadata,
 } from "@thunderstore/dapper-ts";
 import { type PackageSubmissionStatus } from "@thunderstore/dapper/types";
-import { DnDFileInput } from "@thunderstore/react-dnd";
 import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 import {
   type IBaseUploadHandle,
@@ -42,7 +28,6 @@ import {
 
 import { RouteErrorBoundary } from "../commonComponents/ErrorBoundary/RouteErrorBoundary";
 import {
-  FormSection,
   FormSectionSeparator,
   FormSections,
 } from "../commonComponents/FormSection/FormSection";
@@ -50,12 +35,13 @@ import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
+import { UploadCategoriesSection } from "./components/UploadCategoriesSection";
 import { UploadCommunitiesSection } from "./components/UploadCommunitiesSection";
+import { UploadFileSection } from "./components/UploadFileSection";
 import { UploadNsfwSection } from "./components/UploadNsfwSection";
 import { UploadSubmissionStatus } from "./components/UploadSubmissionStatus";
 import { UploadSubmitSection } from "./components/UploadSubmitSection";
 import { UploadTeamSection } from "./components/UploadTeamSection";
-import { formatBytes } from "./utils/formatBytes";
 import {
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
@@ -404,6 +390,18 @@ export default function Upload() {
     strongForm.submit();
   };
 
+  const handleRemoveFile = () => {
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    handle?.abort();
+    setHandle(undefined);
+    setUsermedia(undefined);
+    setIsDone(false);
+    setUploadError(null);
+  };
+
   return (
     <>
       <PageHeader headingLevel="1" headingSize="2">
@@ -424,132 +422,16 @@ export default function Upload() {
           <FormSectionSeparator />
           {formInputs.author_name ? (
             <>
-              <FormSection
-                title="Upload file"
-                description="Upload your package as a ZIP file."
-              >
-                <DnDFileInput
-                  rootClasses={classnames(
-                    "drag-n-drop",
-                    uploadError ? "drag-n-drop--error" : null,
-                    file && !uploadError ? "drag-n-drop--success" : null
-                  )}
-                  name="file"
-                  baseState={
-                    <div className="drag-n-drop__body">
-                      {file ? (
-                        <>
-                          {uploadError ? (
-                            <>
-                              <NewIcon
-                                wrapperClasses="drag-n-drop__icon"
-                                csVariant="danger"
-                              >
-                                <FontAwesomeIcon icon={faCircleXmark} />
-                              </NewIcon>
-                              <span className="drag-n-drop__main-text">
-                                {file.name}{" "}
-                                {`(${
-                                  file.size > 0
-                                    ? formatBytes(file.size)
-                                    : "0 Bytes"
-                                })`}
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <NewIcon
-                                wrapperClasses="drag-n-drop__icon"
-                                csVariant="success"
-                              >
-                                <FontAwesomeIcon icon={faCheckCircle} />
-                              </NewIcon>
-                              <span className="drag-n-drop__main-text">
-                                {file.name}{" "}
-                                {`(${
-                                  file.size > 0
-                                    ? formatBytes(file.size)
-                                    : "0 Bytes"
-                                })`}
-                              </span>
-                            </>
-                          )}
-                          <button
-                            className="drag-n-drop__remove-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                              setFile(null);
-                              if (fileInputRef.current) {
-                                fileInputRef.current.value = "";
-                              }
-                              handle?.abort();
-                              setHandle(undefined);
-                              setUsermedia(undefined);
-                              setIsDone(false);
-                              setUploadError(null);
-                            }}
-                          >
-                            Remove
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <NewIcon
-                            wrapperClasses="drag-n-drop__icon"
-                            csVariant="accent"
-                          >
-                            <FontAwesomeIcon icon={faFileZip} />
-                          </NewIcon>
-                          <span className="drag-n-drop__main-text">
-                            Drag and drop your ZIP file here
-                          </span>
-                          <span className="drag-n-drop__sub-text">5GB max</span>
-                        </>
-                      )}
-                    </div>
-                  }
-                  dragState={
-                    <div className="drag-n-drop__body">
-                      <NewIcon
-                        wrapperClasses="drag-n-drop__icon"
-                        csVariant="accent"
-                      >
-                        <FontAwesomeIcon icon={faTreasureChest} />
-                      </NewIcon>
-                      {file ? (
-                        <span>{file.name}</span>
-                      ) : (
-                        <span className="drag-n-drop__main-text">
-                          Drag file here
-                        </span>
-                      )}
-                    </div>
-                  }
-                  onChange={(files) => {
-                    setFile(files.item(0));
-                  }}
-                  readonly={!!handle}
-                  fileInputRef={fileInputRef}
-                />
-                {uploadError ? (
-                  <NewAlert csVariant="danger" rootClasses="upload__alert">
-                    {uploadError}
-                  </NewAlert>
-                ) : null}
-                {handle && !isDone ? (
-                  <p className="upload__processing">Uploading…</p>
-                ) : null}
-                {submissionErrorsBySection.uploadFile.length > 0 ? (
-                  <NewAlert csVariant="danger" rootClasses="upload__alert">
-                    <ul>
-                      {submissionErrorsBySection.uploadFile.map((msg) => (
-                        <li key={msg}>{msg}</li>
-                      ))}
-                    </ul>
-                  </NewAlert>
-                ) : null}
-              </FormSection>
+              <UploadFileSection
+                file={file}
+                uploadError={uploadError}
+                handle={handle}
+                isDone={isDone}
+                sectionErrors={submissionErrorsBySection.uploadFile}
+                fileInputRef={fileInputRef}
+                onFileChange={setFile}
+                onRemoveFile={handleRemoveFile}
+              />
               <FormSectionSeparator />
             </>
           ) : null}
@@ -566,84 +448,21 @@ export default function Upload() {
                   });
                 }}
               />
-              {formInputs.communities &&
-                formInputs.communities.length !== 0 && (
-                  <FormSection
-                    title="Categories"
-                    description="Select descriptive categories to help people discover your package."
-                  >
-                    {submissionErrorsBySection.categories.length > 0 ? (
-                      <NewAlert csVariant="danger" rootClasses="upload__alert">
-                        <ul>
-                          {submissionErrorsBySection.categories.map((msg) => (
-                            <li key={msg}>{msg}</li>
-                          ))}
-                        </ul>
-                      </NewAlert>
-                    ) : null}
-                    {formInputs.communities.map((community) => {
-                      const communityData = uploadData.results.find(
-                        (c) => c.identifier === community
-                      );
-                      const categories =
-                        categoryOptions.find((c) => c.communityId === community)
-                          ?.categories || [];
-
-                      return (
-                        <div key={community} className="upload__category">
-                          <p className="upload__category-label">
-                            {communityData?.name}
-                          </p>
-                          <NewSelectSearch
-                            placeholder="Select categories"
-                            multiple
-                            options={categories}
-                            onChange={(val) => {
-                              if (val) {
-                                updateFormFieldState({
-                                  field: "community_categories",
-                                  value: {
-                                    ...formInputs.community_categories,
-                                    [community]: val
-                                      ? val.map((v) => v.value)
-                                      : [],
-                                  },
-                                });
-                              } else {
-                                if (
-                                  formInputs.community_categories &&
-                                  formInputs.community_categories[community]
-                                ) {
-                                  const temp = formInputs.community_categories;
-                                  delete temp[community];
-                                  updateFormFieldState({
-                                    field: "community_categories",
-                                    value: {
-                                      ...temp,
-                                    },
-                                  });
-                                }
-                              }
-                            }}
-                            value={
-                              formInputs.community_categories
-                                ? formInputs.community_categories[
-                                    community
-                                  ]?.map((categoryId) => ({
-                                    value: categoryId,
-                                    label:
-                                      categories.find(
-                                        (c) => c.value === categoryId
-                                      )?.label || "",
-                                  }))
-                                : []
-                            }
-                          />
-                        </div>
-                      );
-                    })}
-                  </FormSection>
-                )}
+              {formInputs.communities.length > 0 ? (
+                <UploadCategoriesSection
+                  communities={formInputs.communities}
+                  communityCategories={formInputs.community_categories}
+                  categoryOptions={categoryOptions}
+                  communityResults={uploadData.results}
+                  sectionErrors={submissionErrorsBySection.categories}
+                  onCommunityCategoriesChange={(communityCategories) => {
+                    updateFormFieldState({
+                      field: "community_categories",
+                      value: communityCategories,
+                    });
+                  }}
+                />
+              ) : null}
               <FormSectionSeparator />
               <UploadNsfwSection
                 hasNsfwContent={formInputs.has_nsfw_content}
