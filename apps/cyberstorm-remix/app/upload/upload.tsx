@@ -1,10 +1,8 @@
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import {
-  faArrowUpRight,
   faCircleXmark,
   faFileZip,
   faTreasureChest,
-  faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
@@ -24,26 +22,19 @@ import {
 import { useLoaderData, useOutletContext } from "react-router";
 
 import {
-  Heading,
   NewAlert,
   NewButton,
   NewIcon,
   NewLink,
   NewSelectSearch,
   NewSwitch,
-  NewTable,
-  NewTableSort,
-  NewTag,
   classnames,
 } from "@thunderstore/cyberstorm";
 import {
   DapperTs,
   postPackageSubmissionMetadata,
 } from "@thunderstore/dapper-ts";
-import {
-  type PackageSubmissionResult,
-  type PackageSubmissionStatus,
-} from "@thunderstore/dapper/types";
+import { type PackageSubmissionStatus } from "@thunderstore/dapper/types";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 import {
@@ -53,10 +44,16 @@ import {
 } from "@thunderstore/ts-uploader";
 
 import { RouteErrorBoundary } from "../commonComponents/ErrorBoundary/RouteErrorBoundary";
+import {
+  FormSection,
+  FormSectionSeparator,
+  FormSections,
+} from "../commonComponents/FormSection/FormSection";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
+import { SubmissionResult } from "./components/SubmissionResult";
 import { formatBytes } from "./utils/formatBytes";
 import {
   getSubmissionErrorMessages,
@@ -257,14 +254,6 @@ export default function Upload() {
     }
   };
 
-  // Helper function to format field names for display
-  const formatFieldName = (field: string) => {
-    return field
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
   function formFieldUpdateAction(
     state: PackageSubmissionRequestData,
     action: {
@@ -366,14 +355,11 @@ export default function Upload() {
         Upload package
       </PageHeader>
       <section className="container container--y container--full upload">
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Team</p>
-            <p className="upload__description">
-              Select the team you want your package to be associated with.
-            </p>
-          </div>
-          <div className="upload__content">
+        <FormSections rootClasses="upload">
+          <FormSection
+            title="Team"
+            description="Select the team you want your package to be associated with."
+          >
             <NewSelectSearch
               placeholder="Select team"
               options={availableTeams?.map((team) => ({
@@ -414,19 +400,14 @@ export default function Upload() {
                 <span>Create team</span>
               </NewLink>
             </span>
-          </div>
-        </div>
-        <div className="upload__divider" />
-        {formInputs.author_name ? (
-          <>
-            <div className="container container--x container--full upload__row">
-              <div className="upload__meta">
-                <p className="upload__title">Upload file</p>
-                <p className="upload__description">
-                  Upload your package as a ZIP file.
-                </p>
-              </div>
-              <div className="upload__content">
+          </FormSection>
+          <FormSectionSeparator />
+          {formInputs.author_name ? (
+            <>
+              <FormSection
+                title="Upload file"
+                description="Upload your package as a ZIP file."
+              >
                 <DnDFileInput
                   rootClasses={classnames(
                     "drag-n-drop",
@@ -548,21 +529,16 @@ export default function Upload() {
                     </ul>
                   </NewAlert>
                 ) : null}
-              </div>
-            </div>
-            <div className="upload__divider" />
-          </>
-        ) : null}
-        {isDone && usermedia?.uuid ? (
-          <>
-            <div className="container container--x container--full upload__row">
-              <div className="upload__meta">
-                <p className="upload__title">Communities</p>
-                <p className="upload__description">
-                  Select communities you want your package to be listed under.
-                </p>
-              </div>
-              <div className="upload__content">
+              </FormSection>
+              <FormSectionSeparator />
+            </>
+          ) : null}
+          {isDone && usermedia?.uuid ? (
+            <>
+              <FormSection
+                title="Communities"
+                description="Select communities you want your package to be listed under."
+              >
                 <NewSelectSearch
                   placeholder="Select communities"
                   multiple
@@ -596,126 +572,111 @@ export default function Upload() {
                     </ul>
                   </NewAlert>
                 ) : null}
-              </div>
-            </div>
-            {formInputs.communities && formInputs.communities.length !== 0 && (
-              <div className="container container--x container--full upload__row">
-                <div className="upload__meta">
-                  <p className="upload__title">Categories</p>
-                  <p className="upload__description">
-                    Select descriptive categories to help people discover your
-                    package.
-                  </p>
-                </div>
-                <div className="upload__content">
-                  {submissionErrorsBySection.categories.length > 0 ? (
-                    <NewAlert csVariant="danger" rootClasses="upload__alert">
-                      <ul>
-                        {submissionErrorsBySection.categories.map((msg) => (
-                          <li key={msg}>{msg}</li>
-                        ))}
-                      </ul>
-                    </NewAlert>
-                  ) : null}
-                  {formInputs.communities.map((community) => {
-                    const communityData = uploadData.results.find(
-                      (c) => c.identifier === community
-                    );
-                    const categories =
-                      categoryOptions.find((c) => c.communityId === community)
-                        ?.categories || [];
+              </FormSection>
+              {formInputs.communities &&
+                formInputs.communities.length !== 0 && (
+                  <FormSection
+                    title="Categories"
+                    description="Select descriptive categories to help people discover your package."
+                  >
+                    {submissionErrorsBySection.categories.length > 0 ? (
+                      <NewAlert csVariant="danger" rootClasses="upload__alert">
+                        <ul>
+                          {submissionErrorsBySection.categories.map((msg) => (
+                            <li key={msg}>{msg}</li>
+                          ))}
+                        </ul>
+                      </NewAlert>
+                    ) : null}
+                    {formInputs.communities.map((community) => {
+                      const communityData = uploadData.results.find(
+                        (c) => c.identifier === community
+                      );
+                      const categories =
+                        categoryOptions.find((c) => c.communityId === community)
+                          ?.categories || [];
 
-                    return (
-                      <div key={community} className="upload__category">
-                        <p className="upload__category-label">
-                          {communityData?.name}
-                        </p>
-                        <NewSelectSearch
-                          placeholder="Select categories"
-                          multiple
-                          options={categories}
-                          onChange={(val) => {
-                            if (val) {
-                              updateFormFieldState({
-                                field: "community_categories",
-                                value: {
-                                  ...formInputs.community_categories,
-                                  [community]: val
-                                    ? val.map((v) => v.value)
-                                    : [],
-                                },
-                              });
-                            } else {
-                              if (
-                                formInputs.community_categories &&
-                                formInputs.community_categories[community]
-                              ) {
-                                const temp = formInputs.community_categories;
-                                delete temp[community];
+                      return (
+                        <div key={community} className="upload__category">
+                          <p className="upload__category-label">
+                            {communityData?.name}
+                          </p>
+                          <NewSelectSearch
+                            placeholder="Select categories"
+                            multiple
+                            options={categories}
+                            onChange={(val) => {
+                              if (val) {
                                 updateFormFieldState({
                                   field: "community_categories",
                                   value: {
-                                    ...temp,
+                                    ...formInputs.community_categories,
+                                    [community]: val
+                                      ? val.map((v) => v.value)
+                                      : [],
                                   },
                                 });
+                              } else {
+                                if (
+                                  formInputs.community_categories &&
+                                  formInputs.community_categories[community]
+                                ) {
+                                  const temp = formInputs.community_categories;
+                                  delete temp[community];
+                                  updateFormFieldState({
+                                    field: "community_categories",
+                                    value: {
+                                      ...temp,
+                                    },
+                                  });
+                                }
                               }
-                            }
-                          }}
-                          value={
-                            formInputs.community_categories
-                              ? formInputs.community_categories[community]?.map(
-                                  (categoryId) => ({
+                            }}
+                            value={
+                              formInputs.community_categories
+                                ? formInputs.community_categories[
+                                    community
+                                  ]?.map((categoryId) => ({
                                     value: categoryId,
                                     label:
                                       categories.find(
                                         (c) => c.value === categoryId
                                       )?.label || "",
-                                  })
-                                )
-                              : []
-                          }
-                        />
-                      </div>
-                    );
-                  })}
+                                  }))
+                                : []
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+                  </FormSection>
+                )}
+              <FormSectionSeparator />
+              <FormSection
+                title="Contains NSFW content"
+                description='Select if your package contains NSFW material. An "NSFW" -tag will be applied to your package.'
+              >
+                <div className="upload__nsfw-switch">
+                  No
+                  <NewSwitch
+                    value={formInputs.has_nsfw_content}
+                    onChange={(checked) => {
+                      updateFormFieldState({
+                        field: "has_nsfw_content",
+                        value: checked,
+                      });
+                    }}
+                  />
+                  Yes
                 </div>
-              </div>
-            )}
-            <div className="upload__divider" />
-            <div className="container container--x container--full upload__row">
-              <div className="upload__meta">
-                <p className="upload__title">Contains NSFW content</p>
-                <p className="upload__description">
-                  Select if your package contains NSFW material. An
-                  &ldquo;NSFW&rdquo; -tag will be applied to your package.
-                </p>
-              </div>
-              <div className="upload__content upload__nsfw-switch">
-                No
-                <NewSwitch
-                  value={formInputs.has_nsfw_content}
-                  onChange={(checked) => {
-                    updateFormFieldState({
-                      field: "has_nsfw_content",
-                      value: checked,
-                    });
-                  }}
-                />
-                Yes
-              </div>
-            </div>
-            <div className="upload__divider" />
-          </>
-        ) : null}
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Submit</p>
-            <p className="upload__description">
-              Double-check your selections and hit &ldquo;Submit&rdquo; when
-              you&rsquo;re ready!
-            </p>
-          </div>
-          <div className="upload__content">
+              </FormSection>
+              <FormSectionSeparator />
+            </>
+          ) : null}
+          <FormSection
+            title="Submit"
+            description='Double-check your selections and hit "Submit" when you&apos;re ready!'
+          >
             {submitError ? (
               <NewAlert csVariant="danger" rootClasses="upload__alert">
                 {submitError}
@@ -796,139 +757,36 @@ export default function Upload() {
                     : "Submit"}
               </NewButton>
             </div>
-          </div>
-        </div>
-        <div className="upload__divider" />
-        {submissionStatus ? (
-          <div className="submission__status">
-            {submissionErrorsBySection.submit.length > 0 ? (
-              <NewAlert csVariant="danger" rootClasses="upload__alert">
-                <ul>
-                  {submissionErrorsBySection.submit.map((msg) => (
-                    <li key={msg}>{msg}</li>
-                  ))}
-                </ul>
-              </NewAlert>
-            ) : null}
-            {submissionStatus.result && (
-              <SubmissionResult
-                submissionStatusResult={submissionStatus.result}
-              />
-            )}
-            <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
-            {pollingError ? (
-              <NewAlert csVariant="danger" rootClasses="upload__alert">
-                {pollingError}
-              </NewAlert>
-            ) : null}
-          </div>
-        ) : null}
+          </FormSection>
+          {submissionStatus ? (
+            <>
+              <FormSectionSeparator />
+              <div className="submission__status">
+                {submissionErrorsBySection.submit.length > 0 ? (
+                  <NewAlert csVariant="danger" rootClasses="upload__alert">
+                    <ul>
+                      {submissionErrorsBySection.submit.map((msg) => (
+                        <li key={msg}>{msg}</li>
+                      ))}
+                    </ul>
+                  </NewAlert>
+                ) : null}
+                {submissionStatus.result && (
+                  <SubmissionResult
+                    submissionStatusResult={submissionStatus.result}
+                  />
+                )}
+                <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
+                {pollingError ? (
+                  <NewAlert csVariant="danger" rootClasses="upload__alert">
+                    {pollingError}
+                  </NewAlert>
+                ) : null}
+              </div>
+            </>
+          ) : null}
+        </FormSections>
       </section>
     </>
   );
 }
-
-const SubmissionResult = (props: {
-  submissionStatusResult: PackageSubmissionResult;
-}) => {
-  return (
-    <div className="container container--y container--full island">
-      <PageHeader
-        headingLevel="1"
-        headingSize="3"
-        image={props.submissionStatusResult.package_version.icon}
-        description={props.submissionStatusResult.package_version.description}
-        variant="detailed"
-        meta={
-          <>
-            <span className="page-header__meta-item">
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faUsers} />
-              </NewIcon>
-              By {props.submissionStatusResult.package_version.namespace}
-            </span>
-            {props.submissionStatusResult.package_version.website_url ? (
-              <NewLink
-                primitiveType="link"
-                href={props.submissionStatusResult.package_version.website_url}
-                csVariant="cyber"
-                rootClasses="page-header__meta-item"
-              >
-                {props.submissionStatusResult.package_version.website_url}
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewLink>
-            ) : null}
-          </>
-        }
-      >
-        {props.submissionStatusResult.package_version.name}
-      </PageHeader>
-
-      <NewTable
-        titleRowContent={
-          <>
-            <Heading csLevel="3" csSize="3">
-              Success!
-            </Heading>
-            <p>
-              The package is listed in{" "}
-              {props.submissionStatusResult.available_communities.length}{" "}
-              {props.submissionStatusResult.available_communities.length !== 1
-                ? "communities"
-                : "community"}
-              :
-            </p>
-          </>
-        }
-        headers={[
-          {
-            value: "Community",
-            disableSort: false,
-            columnClasses: "versions__version",
-          },
-          {
-            value: "Link",
-            disableSort: true,
-            columnClasses: "versions__upload-date",
-          },
-          {
-            value: "Categories",
-            disableSort: true,
-            columnClasses: "versions__downloads",
-          },
-        ]}
-        rows={props.submissionStatusResult.available_communities.map((v) => [
-          {
-            value: v.community.name,
-            sortValue: v.community.name,
-          },
-          {
-            value: (
-              <NewLink
-                primitiveType="link"
-                href={`/c/${v.community.identifier}/p/${props.submissionStatusResult.package_version.namespace}/${props.submissionStatusResult.package_version.name}/`}
-                target="_blank"
-                csVariant="cyber"
-              >
-                View listing
-              </NewLink>
-            ),
-            sortValue: v.url,
-          },
-          {
-            value: v.categories.map((c) => (
-              <NewTag key={c.slug} csSize="small">
-                {c.name}
-              </NewTag>
-            )),
-            sortValue: v.categories.map((c) => c.name).join(", "),
-          },
-        ])}
-        sortDirection={NewTableSort.ASC}
-        csModifiers={["alignLastColumnRight"]}
-      />
-    </div>
-  );
-};

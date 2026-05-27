@@ -25,7 +25,7 @@
     align-self: flex-start;
     justify-content: flex-start;
     max-width: var(--nimbus-layout-content-max-width, 120rem);
-    padding: var(--space-16);
+    padding: var(--space-16) var(--space-16) 4rem;
   }
 
   .layout__ads {
