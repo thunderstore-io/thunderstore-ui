@@ -152,8 +152,11 @@ function ProfileForm(props: { team: TeamDetails }) {
     <FormSection title="Donation Link" description="Must be a valid HTTPS URL">
       <FormSectionIsland>
         <div className="team-profile__donationLink">
-          <span className="team-profile__label">URL</span>
+          <label className="team-profile__label" htmlFor="donation_link_input">
+            URL
+          </label>
           <NewTextInput
+            id="donation_link_input"
             name={"donation_link"}
             placeholder={"https://"}
             value={formInputs.donation_link ?? ""}

@@ -130,23 +130,24 @@ export function useSubmissionStatusPolling(
   setSubmissionStatus: (status: PackageSubmissionStatus | undefined) => void
 ) {
   const [pollingError, setPollingError] = useState<string | null>(null);
-  const submissionStatusRef = useRef<PackageSubmissionStatus | undefined>(
-    submissionStatus
-  );
+  const submissionStatusRef = useRef<string | undefined>(submissionStatus?.id);
 
   useEffect(() => {
     if (
       submissionStatus &&
-      submissionStatusRef.current !== submissionStatus &&
+      submissionStatusRef.current !== submissionStatus.id &&
       submissionStatus.status === "PENDING"
     ) {
+      submissionStatusRef.current = submissionStatus.id;
       pollSubmission(dapper, submissionStatus.id)
         .then((data) => {
           setPollingError(null);
-          submissionStatusRef.current = data;
+          submissionStatusRef.current =
+            data.status === "PENDING" ? undefined : data.id;
           setSubmissionStatus(data);
         })
         .catch((error) => {
+          submissionStatusRef.current = undefined;
           setPollingError(
             `Error polling submission status: ${
               error instanceof Error ? error.message : "Unknown error"
@@ -160,12 +161,15 @@ export function useSubmissionStatusPolling(
     if (!submissionStatus?.id) return;
 
     setPollingError(null);
+    submissionStatusRef.current = submissionStatus.id;
     pollSubmission(dapper, submissionStatus.id, true)
       .then((data) => {
-        submissionStatusRef.current = data;
+        submissionStatusRef.current =
+          data.status === "PENDING" ? undefined : data.id;
         setSubmissionStatus(data);
       })
       .catch((error) => {
+        submissionStatusRef.current = undefined;
         setPollingError(
           `Error polling submission status: ${
             error instanceof Error ? error.message : "Unknown error"
@@ -187,24 +191,32 @@ export function useUploadCategoryOptions(
 
   useEffect(() => {
     for (const community of selectedCommunities) {
-      dapper.getCommunityFilters(community).then((filters) => {
-        setCategoryOptions((prev) => {
-          if (prev.some((opt) => opt.communityId === community)) {
-            return prev;
-          }
+      dapper
+        .getCommunityFilters(community)
+        .then((filters) => {
+          setCategoryOptions((prev) => {
+            if (prev.some((opt) => opt.communityId === community)) {
+              return prev;
+            }
 
-          return [
-            ...prev,
-            {
-              communityId: community,
-              categories: filters.package_categories.map((cat) => ({
-                value: cat.slug,
-                label: cat.name,
-              })),
-            },
-          ];
+            return [
+              ...prev,
+              {
+                communityId: community,
+                categories: filters.package_categories.map((cat) => ({
+                  value: cat.slug,
+                  label: cat.name,
+                })),
+              },
+            ];
+          });
+        })
+        .catch((error) => {
+          console.error(
+            `Failed to load category options for community ${community}`,
+            error
+          );
         });
-      });
     }
   }, [dapper, selectedCommunities]);
 
