@@ -121,7 +121,7 @@ export default function Upload() {
 
   const {
     file,
-    setFile,
+    selectFile,
     fileInputRef,
     handle,
     isDone,
@@ -259,7 +259,7 @@ export default function Upload() {
                 isDone={isDone}
                 sectionErrors={submissionErrorsBySection.uploadFile}
                 fileInputRef={fileInputRef}
-                onFileChange={setFile}
+                onFileChange={selectFile}
                 onRemoveFile={clearFile}
               />
               <FormSectionSeparator />

@@ -1,5 +1,34 @@
 import type { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 
+/** Value for `<input type="file" accept="...">` — MIME types plus `.zip` for file picker UX. */
+export const PACKAGE_ZIP_ACCEPT =
+  ".zip,application/zip,application/x-zip-compressed,application/x-zip,multipart/x-zip";
+
+const PACKAGE_ZIP_MIME_TYPES = new Set([
+  "application/zip",
+  "application/x-zip-compressed",
+  "application/x-zip",
+  "multipart/x-zip",
+]);
+
+export const PACKAGE_ZIP_FILE_ERROR_MESSAGE =
+  "Please upload a ZIP archive (application/zip).";
+
+export function isPackageZipFile(file: File): boolean {
+  const mime = file.type.trim().toLowerCase();
+
+  if (mime && PACKAGE_ZIP_MIME_TYPES.has(mime)) {
+    return true;
+  }
+
+  // Windows and some browsers report empty type or octet-stream for valid ZIPs.
+  if (!mime || mime === "application/octet-stream") {
+    return file.name.toLowerCase().endsWith(".zip");
+  }
+
+  return false;
+}
+
 export interface CommunityOption {
   value: string;
   label: string;

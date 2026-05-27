@@ -4,6 +4,7 @@ import { useDnDFileInput } from "./useDnDFileInput";
 
 interface DnDFileInputProps {
   name: string;
+  accept?: string;
   onChange?: (files: FileList) => void;
   readonly?: boolean;
   baseState: ReactNode;
@@ -35,6 +36,7 @@ export const DnDFileInput = (props: DnDFileInputProps) => {
       <input
         type="file"
         name={props.name}
+        accept={props.accept}
         style={{ display: "none" }}
         ref={fileInputRef}
         onChange={onChange}
