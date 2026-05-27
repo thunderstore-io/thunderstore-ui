@@ -41,6 +41,7 @@ import {
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
   initialUploadFormInputs,
+  isUploadSubmitDisabled,
   pruneCommunityCategories,
   uploadFormFieldReducer,
 } from "./uploadUtils";
@@ -214,11 +215,12 @@ export default function Upload() {
     !!submissionStatus?.form_errors &&
     Object.keys(submissionStatus.form_errors).length > 0;
 
-  const submitDisabled =
-    strongForm.submitting ||
-    submissionStatus?.status === "PENDING" ||
-    !usermedia?.uuid ||
-    formInputs.communities.length === 0;
+  const submitDisabled = isUploadSubmitDisabled({
+    submitting: strongForm.submitting,
+    submissionPending: submissionStatus?.status === "PENDING",
+    uploadUuid: usermedia?.uuid,
+    communitiesCount: formInputs.communities.length,
+  });
 
   const handleReset = () => {
     clearFile();
