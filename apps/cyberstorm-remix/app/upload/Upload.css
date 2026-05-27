@@ -178,6 +178,12 @@
     align-self: stretch;
   }
 
+  .upload__processing {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body-md);
+  }
+
   /* Mobile breakpoint */
   @media (width <= 475px) {
     .upload__row {
