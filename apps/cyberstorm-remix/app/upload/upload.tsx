@@ -13,7 +13,14 @@ import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { useLoaderData, useOutletContext } from "react-router";
 
 import {
@@ -157,6 +164,66 @@ export default function Upload() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const submissionErrorMessages = useMemo(() => {
+    const formErrors = submissionStatus?.form_errors;
+    if (!formErrors) return [];
+
+    const out: string[] = [];
+    const pushValue = (v: unknown) => {
+      if (v == null) return;
+      if (typeof v === "string") {
+        out.push(v);
+        return;
+      }
+      if (Array.isArray(v)) {
+        for (const e of v) pushValue(e);
+        return;
+      }
+      if (typeof v === "object") {
+        for (const val of Object.values(v as Record<string, unknown>)) {
+          pushValue(val);
+        }
+      }
+    };
+
+    pushValue(formErrors);
+    return Array.from(new Set(out));
+  }, [submissionStatus?.form_errors]);
+
+  const submissionErrorsBySection = useMemo(() => {
+    const normalized = submissionErrorMessages
+      .map((m) => m.trim())
+      .filter(Boolean);
+    const take = (pred: (m: string) => boolean) => normalized.filter(pred);
+
+    const uploadFile = take((m) => {
+      const s = m.toLowerCase();
+      return (
+        s.includes("manifest.json") ||
+        s.includes("icon.png") ||
+        s.includes("readme") ||
+        s.includes("changelog") ||
+        s.includes("zip") ||
+        s.includes("file")
+      );
+    });
+
+    const communities = take((m) => {
+      const s = m.toLowerCase();
+      return s.includes("community") || s.includes("communities");
+    });
+
+    const categories = take((m) => {
+      const s = m.toLowerCase();
+      return s.includes("category") || s.includes("categories");
+    });
+
+    const used = new Set([...uploadFile, ...communities, ...categories]);
+    const submit = normalized.filter((m) => !used.has(m));
+
+    return { uploadFile, communities, categories, submit };
+  }, [submissionErrorMessages]);
+
   const startUpload = useCallback(async () => {
     if (!file) return;
 
@@ -234,25 +301,7 @@ export default function Upload() {
               duration: 4000,
             });
           } else {
-            if (data.form_errors || !data.result) {
-              toast.addToast({
-                csVariant: "danger",
-                children:
-                  "Submission completed, but there were issues. Please check the form errors.",
-                duration: 8000,
-              });
-            } else {
-              toast.addToast({
-                csVariant: "success",
-                children: `Package ${data.result?.package_version
-                  .full_name} uploaded successfully! It's now available in ${
-                  data.result?.available_communities.length === 1
-                    ? data.result?.available_communities[0].community.name
-                    : `${data.result?.available_communities.length} communities`
-                }!`,
-                duration: 8000,
-              });
-            }
+            // Success is rendered inline via SubmissionResult
           }
         })
         .catch((error) => {
@@ -558,6 +607,15 @@ export default function Upload() {
                     {uploadError}
                   </NewAlert>
                 ) : null}
+                {submissionErrorsBySection.uploadFile.length > 0 ? (
+                  <NewAlert csVariant="danger" rootClasses="upload__alert">
+                    <ul>
+                      {submissionErrorsBySection.uploadFile.map((msg) => (
+                        <li key={msg}>{msg}</li>
+                      ))}
+                    </ul>
+                  </NewAlert>
+                ) : null}
               </div>
             </div>
             <div className="upload__divider" />
@@ -597,6 +655,15 @@ export default function Upload() {
                         ?.label || "",
                   }))}
                 />
+                {submissionErrorsBySection.communities.length > 0 ? (
+                  <NewAlert csVariant="danger" rootClasses="upload__alert">
+                    <ul>
+                      {submissionErrorsBySection.communities.map((msg) => (
+                        <li key={msg}>{msg}</li>
+                      ))}
+                    </ul>
+                  </NewAlert>
+                ) : null}
               </div>
             </div>
             {formInputs.communities && formInputs.communities.length !== 0 && (
@@ -609,6 +676,15 @@ export default function Upload() {
                   </p>
                 </div>
                 <div className="upload__content">
+                  {submissionErrorsBySection.categories.length > 0 ? (
+                    <NewAlert csVariant="danger" rootClasses="upload__alert">
+                      <ul>
+                        {submissionErrorsBySection.categories.map((msg) => (
+                          <li key={msg}>{msg}</li>
+                        ))}
+                      </ul>
+                    </NewAlert>
+                  ) : null}
                   {formInputs.communities.map((community) => {
                     const communityData = uploadData.results.find(
                       (c) => c.identifier === community
@@ -713,6 +789,13 @@ export default function Upload() {
                 {submitError}
               </NewAlert>
             ) : null}
+            {submissionStatus?.status !== "PENDING" &&
+            submissionStatus?.form_errors &&
+            Object.keys(submissionStatus.form_errors).length > 0 ? (
+              <NewAlert csVariant="danger" rootClasses="upload__alert">
+                Please review the form errors above and submit again.
+              </NewAlert>
+            ) : null}
             <div className="upload__buttons">
               <NewButton
                 onClick={() => {
@@ -779,26 +862,15 @@ export default function Upload() {
         <div className="upload__divider" />
         {submissionStatus ? (
           <div className="submission__status">
-            {submissionStatus.form_errors &&
-              Object.keys(submissionStatus.form_errors).length > 0 && (
-                <div className="submission__error">
-                  <p>Form Errors:</p>
-                  <ul>
-                    {Object.entries(submissionStatus.form_errors).map(
-                      ([field, error]) => (
-                        <li key={field}>
-                          {field !== "__all__" && (
-                            <strong>{formatFieldName(field)}: </strong>
-                          )}
-                          {Array.isArray(error)
-                            ? error.join(", ")
-                            : String(error)}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
+            {submissionErrorsBySection.submit.length > 0 ? (
+              <NewAlert csVariant="danger" rootClasses="upload__alert">
+                <ul>
+                  {submissionErrorsBySection.submit.map((msg) => (
+                    <li key={msg}>{msg}</li>
+                  ))}
+                </ul>
+              </NewAlert>
+            ) : null}
             {submissionStatus.result && (
               <SubmissionResult
                 submissionStatusResult={submissionStatus.result}
