@@ -155,6 +155,7 @@ export default function Upload() {
 
   const [usermedia, setUsermedia] = useState<UserMedia>();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const startUpload = useCallback(async () => {
     if (!file) return;
@@ -356,6 +357,7 @@ export default function Upload() {
     inputs: formInputs,
     submitor,
     onSubmitSuccess: () => {
+      setSubmitError(null);
       toast.addToast({
         csVariant: "info",
         children: `Package submitted, wait for processing to complete.`,
@@ -363,11 +365,7 @@ export default function Upload() {
       });
     },
     onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
+      setSubmitError(error.message || "Unknown error");
     },
   });
 
@@ -710,6 +708,11 @@ export default function Upload() {
             </p>
           </div>
           <div className="upload__content">
+            {submitError ? (
+              <NewAlert csVariant="danger" rootClasses="upload__alert">
+                {submitError}
+              </NewAlert>
+            ) : null}
             <div className="upload__buttons">
               <NewButton
                 onClick={() => {
@@ -722,6 +725,7 @@ export default function Upload() {
                   setUsermedia(undefined);
                   setIsDone(false);
                   setUploadError(null);
+                  setSubmitError(null);
                   updateFormFieldState({
                     field: "author_name",
                     value: "",
@@ -755,9 +759,14 @@ export default function Upload() {
               </NewButton>
               <NewButton
                 disabled={
-                  !usermedia?.uuid || formInputs.communities.length === 0
+                  strongForm.submitting ||
+                  !usermedia?.uuid ||
+                  formInputs.communities.length === 0
                 }
-                onClick={strongForm.submit}
+                onClick={() => {
+                  setSubmitError(null);
+                  strongForm.submit();
+                }}
                 csVariant="accent"
                 csSize="big"
                 rootClasses="upload__submit"
