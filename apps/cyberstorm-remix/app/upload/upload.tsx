@@ -23,11 +23,8 @@ import { useLoaderData, useOutletContext } from "react-router";
 
 import {
   NewAlert,
-  NewButton,
   NewIcon,
-  NewLink,
   NewSelectSearch,
-  NewSwitch,
   classnames,
 } from "@thunderstore/cyberstorm";
 import {
@@ -53,8 +50,11 @@ import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
+import { UploadCommunitiesSection } from "./components/UploadCommunitiesSection";
+import { UploadNsfwSection } from "./components/UploadNsfwSection";
 import { UploadSubmissionStatus } from "./components/UploadSubmissionStatus";
 import { UploadSubmitSection } from "./components/UploadSubmitSection";
+import { UploadTeamSection } from "./components/UploadTeamSection";
 import { formatBytes } from "./utils/formatBytes";
 import {
   getSubmissionErrorMessages,
@@ -411,51 +411,16 @@ export default function Upload() {
       </PageHeader>
       <section className="container container--y container--full upload">
         <FormSections rootClasses="upload">
-          <FormSection
-            title="Team"
-            description="Select the team you want your package to be associated with."
-          >
-            <NewSelectSearch
-              placeholder="Select team"
-              options={availableTeams?.map((team) => ({
-                value: team.name,
-                label: team.name,
-              }))}
-              onChange={(val) => {
-                if (val) {
-                  updateFormFieldState({
-                    field: "author_name",
-                    value: val.value,
-                  });
-                } else {
-                  updateFormFieldState({
-                    field: "author_name",
-                    value: "",
-                  });
-                }
-              }}
-              value={
-                formInputs.author_name
-                  ? {
-                      value: formInputs.author_name,
-                      label: formInputs.author_name,
-                    }
-                  : undefined
-              }
-            />
-            <span className="upload__no-teams">
-              <p className="upload__no-teams-text">No teams available?</p>
-              <NewLink
-                key="create-team-link"
-                primitiveType="cyberstormLink"
-                linkId="Teams"
-                csVariant="cyber"
-                rootClasses="community__item"
-              >
-                <span>Create team</span>
-              </NewLink>
-            </span>
-          </FormSection>
+          <UploadTeamSection
+            availableTeams={availableTeams}
+            authorName={formInputs.author_name}
+            onAuthorNameChange={(authorName) => {
+              updateFormFieldState({
+                field: "author_name",
+                value: authorName,
+              });
+            }}
+          />
           <FormSectionSeparator />
           {formInputs.author_name ? (
             <>
@@ -590,44 +555,17 @@ export default function Upload() {
           ) : null}
           {isDone && usermedia?.uuid ? (
             <>
-              <FormSection
-                title="Communities"
-                description="Select communities you want your package to be listed under."
-              >
-                <NewSelectSearch
-                  placeholder="Select communities"
-                  multiple
-                  options={communityOptions}
-                  onChange={(val) => {
-                    if (val) {
-                      updateFormFieldState({
-                        field: "communities",
-                        value: val.map((c) => c.value),
-                      });
-                    } else {
-                      updateFormFieldState({
-                        field: "communities",
-                        value: [],
-                      });
-                    }
-                  }}
-                  value={formInputs.communities?.map((communityId) => ({
-                    value: communityId,
-                    label:
-                      communityOptions.find((c) => c.value === communityId)
-                        ?.label || "",
-                  }))}
-                />
-                {submissionErrorsBySection.communities.length > 0 ? (
-                  <NewAlert csVariant="danger" rootClasses="upload__alert">
-                    <ul>
-                      {submissionErrorsBySection.communities.map((msg) => (
-                        <li key={msg}>{msg}</li>
-                      ))}
-                    </ul>
-                  </NewAlert>
-                ) : null}
-              </FormSection>
+              <UploadCommunitiesSection
+                communityOptions={communityOptions}
+                communities={formInputs.communities}
+                sectionErrors={submissionErrorsBySection.communities}
+                onCommunitiesChange={(communities) => {
+                  updateFormFieldState({
+                    field: "communities",
+                    value: communities,
+                  });
+                }}
+              />
               {formInputs.communities &&
                 formInputs.communities.length !== 0 && (
                   <FormSection
@@ -707,24 +645,15 @@ export default function Upload() {
                   </FormSection>
                 )}
               <FormSectionSeparator />
-              <FormSection
-                title="Contains NSFW content"
-                description='Select if your package contains NSFW material. An "NSFW" -tag will be applied to your package.'
-              >
-                <div className="upload__nsfw-switch">
-                  No
-                  <NewSwitch
-                    value={formInputs.has_nsfw_content}
-                    onChange={(checked) => {
-                      updateFormFieldState({
-                        field: "has_nsfw_content",
-                        value: checked,
-                      });
-                    }}
-                  />
-                  Yes
-                </div>
-              </FormSection>
+              <UploadNsfwSection
+                hasNsfwContent={formInputs.has_nsfw_content}
+                onHasNsfwContentChange={(hasNsfwContent) => {
+                  updateFormFieldState({
+                    field: "has_nsfw_content",
+                    value: hasNsfwContent,
+                  });
+                }}
+              />
               <FormSectionSeparator />
             </>
           ) : null}
