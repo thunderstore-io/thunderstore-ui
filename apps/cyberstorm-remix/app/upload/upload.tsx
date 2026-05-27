@@ -53,7 +53,7 @@ import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
-import { SubmissionResult } from "./components/SubmissionResult";
+import { UploadSubmissionStatus } from "./components/UploadSubmissionStatus";
 import { UploadSubmitSection } from "./components/UploadSubmitSection";
 import { formatBytes } from "./utils/formatBytes";
 import {
@@ -738,31 +738,12 @@ export default function Upload() {
             onSubmit={handleSubmit}
           />
           {submissionStatus ? (
-            <>
-              <FormSectionSeparator />
-              <div className="submission__status">
-                {submissionErrorsBySection.submit.length > 0 ? (
-                  <NewAlert csVariant="danger" rootClasses="upload__alert">
-                    <ul>
-                      {submissionErrorsBySection.submit.map((msg) => (
-                        <li key={msg}>{msg}</li>
-                      ))}
-                    </ul>
-                  </NewAlert>
-                ) : null}
-                {submissionStatus.result && (
-                  <SubmissionResult
-                    submissionStatusResult={submissionStatus.result}
-                  />
-                )}
-                <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
-                {pollingError ? (
-                  <NewAlert csVariant="danger" rootClasses="upload__alert">
-                    {pollingError}
-                  </NewAlert>
-                ) : null}
-              </div>
-            </>
+            <UploadSubmissionStatus
+              submissionStatus={submissionStatus}
+              pollingError={pollingError}
+              submitSectionErrors={submissionErrorsBySection.submit}
+              onRetryPolling={retryPolling}
+            />
           ) : null}
         </FormSections>
       </section>
