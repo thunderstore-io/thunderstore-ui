@@ -18,6 +18,9 @@ export function UploadSubmissionStatus({
   submitSectionErrors,
   onRetryPolling,
 }: UploadSubmissionStatusProps) {
+  const showRetryPolling =
+    submissionStatus.status === "PENDING" || pollingError != null;
+
   return (
     <>
       <FormSectionSeparator />
@@ -26,7 +29,9 @@ export function UploadSubmissionStatus({
         {submissionStatus.result ? (
           <SubmissionResult submissionStatusResult={submissionStatus.result} />
         ) : null}
-        <NewButton onClick={onRetryPolling}>Retry Status Check</NewButton>
+        {showRetryPolling ? (
+          <NewButton onClick={onRetryPolling}>Retry Status Check</NewButton>
+        ) : null}
         {pollingError ? (
           <NewAlert csVariant="danger" rootClasses="upload__alert">
             {pollingError}
