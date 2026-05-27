@@ -37,6 +37,7 @@ import {
   useSubmissionStatusPolling,
   useUploadCategoryOptions,
 } from "./uploadHooks";
+import UploadPreview from "./uploadPreview";
 import {
   type UploadFormFieldAction,
   buildCommunityOptions,
@@ -392,6 +393,7 @@ export default function Upload() {
             />
           ) : null}
         </FormSections>
+        <UploadPreview file={file} />
       </section>
     </>
   );
