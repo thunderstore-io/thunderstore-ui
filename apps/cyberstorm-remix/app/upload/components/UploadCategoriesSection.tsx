@@ -1,12 +1,9 @@
-import { NewAlert, NewSelectSearch } from "@thunderstore/cyberstorm";
+import { NewSelectSearch } from "@thunderstore/cyberstorm";
 import type { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
-
-export interface CategoryOption {
-  value: string;
-  label: string;
-}
+import type { CategoryOption } from "../uploadUtils";
+import { SectionErrors } from "./SectionErrors";
 
 export interface UploadCategoriesSectionProps {
   communities: string[];
@@ -32,15 +29,7 @@ export function UploadCategoriesSection({
       title="Categories"
       description="Select descriptive categories to help people discover your package."
     >
-      {sectionErrors.length > 0 ? (
-        <NewAlert csVariant="danger" rootClasses="upload__alert">
-          <ul>
-            {sectionErrors.map((msg) => (
-              <li key={msg}>{msg}</li>
-            ))}
-          </ul>
-        </NewAlert>
-      ) : null}
+      <SectionErrors errors={sectionErrors} />
       {communities.map((community) => {
         const communityData = communityResults.find(
           (c) => c.identifier === community
