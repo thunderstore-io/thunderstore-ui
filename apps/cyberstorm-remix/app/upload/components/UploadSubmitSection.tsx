@@ -22,6 +22,9 @@ export function UploadSubmitSection({
   onReset,
   onSubmit,
 }: UploadSubmitSectionProps) {
+  const resetDisabled =
+    strongFormSubmitting || submissionStatus?.status === "PENDING";
+
   return (
     <FormSection
       title="Submit"
@@ -40,7 +43,12 @@ export function UploadSubmitSection({
         </NewAlert>
       ) : null}
       <div className="upload__buttons">
-        <NewButton onClick={onReset} csVariant="secondary" csSize="big">
+        <NewButton
+          onClick={onReset}
+          disabled={resetDisabled}
+          csVariant="secondary"
+          csSize="big"
+        >
           Reset
         </NewButton>
         <NewButton

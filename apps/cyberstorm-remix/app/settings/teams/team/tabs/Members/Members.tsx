@@ -40,8 +40,8 @@ export default function Members() {
         {(resolvedMembers) => (
           <FormSections>
             <FormSection
-              title="Teams"
-              description="Manage your teams"
+              title="Members"
+              description="Manage your team members"
               metaExtra={
                 isOwner ? (
                   <MemberAddForm

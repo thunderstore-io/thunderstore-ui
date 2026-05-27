@@ -36,7 +36,7 @@ export function UploadTeamSection({
             : undefined
         }
       />
-      <span className="upload__no-teams">
+      <div className="upload__no-teams">
         <p className="upload__no-teams-text">No teams available?</p>
         <NewLink
           key="create-team-link"
@@ -47,7 +47,7 @@ export function UploadTeamSection({
         >
           <span>Create team</span>
         </NewLink>
-      </span>
+      </div>
     </FormSection>
   );
 }
