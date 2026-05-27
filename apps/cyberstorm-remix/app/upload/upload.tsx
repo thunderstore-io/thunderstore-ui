@@ -1,6 +1,7 @@
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   faArrowUpRight,
+  faCircleXmark,
   faFileZip,
   faTreasureChest,
   faUsers,
@@ -17,6 +18,7 @@ import { useLoaderData, useOutletContext } from "react-router";
 
 import {
   Heading,
+  NewAlert,
   NewButton,
   NewIcon,
   NewLink,
@@ -152,13 +154,17 @@ export default function Upload() {
   const [isDone, setIsDone] = useState<boolean>(false);
 
   const [usermedia, setUsermedia] = useState<UserMedia>();
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const startUpload = useCallback(async () => {
     if (!file) return;
 
+    setUploadError(null);
+
     const config = requestConfig();
     if (!config.apiHost) {
-      throw new Error("API host is not configured");
+      setUploadError("API host is not configured");
+      return;
     }
     const upload = new MultipartUpload(
       {
@@ -178,11 +184,7 @@ export default function Upload() {
       setUsermedia(upload.handle);
       setIsDone(true);
     } catch (error) {
-      toast.addToast({
-        csVariant: "danger",
-        children: error instanceof Error ? error.message : "Upload failed",
-        duration: 8000,
-      });
+      setUploadError(error instanceof Error ? error.message : "Upload failed");
       setHandle(undefined);
     }
   }, [file, requestConfig, toast]);
@@ -452,25 +454,49 @@ export default function Upload() {
                 <DnDFileInput
                   rootClasses={classnames(
                     "drag-n-drop",
-                    file ? "drag-n-drop--success" : null
+                    uploadError ? "drag-n-drop--error" : null,
+                    file && !uploadError ? "drag-n-drop--success" : null
                   )}
                   name="file"
                   baseState={
                     <div className="drag-n-drop__body">
                       {file ? (
                         <>
-                          <NewIcon
-                            wrapperClasses="drag-n-drop__icon"
-                            csVariant="success"
-                          >
-                            <FontAwesomeIcon icon={faCheckCircle} />
-                          </NewIcon>
-                          <span className="drag-n-drop__main-text">
-                            {file.name}{" "}
-                            {`(${
-                              file.size > 0 ? formatBytes(file.size) : "0 Bytes"
-                            })`}
-                          </span>
+                          {uploadError ? (
+                            <>
+                              <NewIcon
+                                wrapperClasses="drag-n-drop__icon"
+                                csVariant="danger"
+                              >
+                                <FontAwesomeIcon icon={faCircleXmark} />
+                              </NewIcon>
+                              <span className="drag-n-drop__main-text">
+                                {file.name}{" "}
+                                {`(${
+                                  file.size > 0
+                                    ? formatBytes(file.size)
+                                    : "0 Bytes"
+                                })`}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <NewIcon
+                                wrapperClasses="drag-n-drop__icon"
+                                csVariant="success"
+                              >
+                                <FontAwesomeIcon icon={faCheckCircle} />
+                              </NewIcon>
+                              <span className="drag-n-drop__main-text">
+                                {file.name}{" "}
+                                {`(${
+                                  file.size > 0
+                                    ? formatBytes(file.size)
+                                    : "0 Bytes"
+                                })`}
+                              </span>
+                            </>
+                          )}
                           <button
                             className="drag-n-drop__remove-button"
                             onClick={(e) => {
@@ -484,6 +510,7 @@ export default function Upload() {
                               setHandle(undefined);
                               setUsermedia(undefined);
                               setIsDone(false);
+                              setUploadError(null);
                             }}
                           >
                             Remove
@@ -528,6 +555,11 @@ export default function Upload() {
                   readonly={!!handle}
                   fileInputRef={fileInputRef}
                 />
+                {uploadError ? (
+                  <NewAlert csVariant="danger" rootClasses="upload__alert">
+                    {uploadError}
+                  </NewAlert>
+                ) : null}
               </div>
             </div>
             <div className="upload__divider" />
@@ -689,6 +721,7 @@ export default function Upload() {
                   setHandle(undefined);
                   setUsermedia(undefined);
                   setIsDone(false);
+                  setUploadError(null);
                   updateFormFieldState({
                     field: "author_name",
                     value: "",
