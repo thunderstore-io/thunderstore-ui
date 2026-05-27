@@ -102,6 +102,15 @@
     background: var(--color-surface-1);
   }
 
+  .drag-n-drop--error {
+    border: 2px solid var(--color-accent-red-7);
+    background: var(--color-surface-1);
+  }
+
+  .upload__alert {
+    align-self: stretch;
+  }
+
   .drag-n-drop__body {
     display: flex;
     flex-direction: column;
