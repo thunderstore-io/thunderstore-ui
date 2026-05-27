@@ -98,6 +98,22 @@ export function uploadFormFieldReducer(
   };
 }
 
+export function pruneCommunityCategories(
+  communityCategories: PackageSubmissionRequestData["community_categories"],
+  communities: string[]
+): PackageSubmissionRequestData["community_categories"] {
+  if (!communityCategories) return undefined;
+
+  const selected = new Set(communities);
+  const pruned = Object.fromEntries(
+    Object.entries(communityCategories).filter(([communityId]) =>
+      selected.has(communityId)
+    )
+  );
+
+  return Object.keys(pruned).length > 0 ? pruned : undefined;
+}
+
 export interface SubmissionErrorsBySection {
   uploadFile: string[];
   communities: string[];

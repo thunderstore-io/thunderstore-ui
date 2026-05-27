@@ -160,9 +160,18 @@ export function useSubmissionStatusPolling(
     if (!submissionStatus?.id) return;
 
     setPollingError(null);
-    pollSubmission(dapper, submissionStatus.id, true).then((data) => {
-      setSubmissionStatus(data);
-    });
+    pollSubmission(dapper, submissionStatus.id, true)
+      .then((data) => {
+        submissionStatusRef.current = data;
+        setSubmissionStatus(data);
+      })
+      .catch((error) => {
+        setPollingError(
+          `Error polling submission status: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      });
   };
 
   return { pollingError, setPollingError, retryPolling };

@@ -41,6 +41,7 @@ import {
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
   initialUploadFormInputs,
+  pruneCommunityCategories,
   uploadFormFieldReducer,
 } from "./uploadUtils";
 
@@ -275,6 +276,13 @@ export default function Upload() {
                   updateFormFieldState({
                     field: "communities",
                     value: communities,
+                  });
+                  updateFormFieldState({
+                    field: "community_categories",
+                    value: pruneCommunityCategories(
+                      formInputs.community_categories,
+                      communities
+                    ),
                   });
                 }}
               />
