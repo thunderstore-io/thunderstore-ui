@@ -49,6 +49,7 @@ import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
+import UploadPreview from "./uploadPreview";
 
 interface CommunityOption {
   value: string;
@@ -765,6 +766,7 @@ export default function Upload() {
             <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
           </div>
         ) : null}
+        <UploadPreview file={file} />
       </section>
     </>
   );
