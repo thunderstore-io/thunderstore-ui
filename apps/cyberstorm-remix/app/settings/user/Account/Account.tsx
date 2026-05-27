@@ -4,6 +4,10 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { useNavigate, useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
+import {
+  FormSection,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 import { type OutletContextShape } from "~/root";
 
 import {
@@ -27,53 +31,48 @@ export default function Account() {
   if (!currentUser?.username) return <SkeletonBox />;
 
   return (
-    <div className="settings-items user-account">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Delete Account</p>
-          <p className="settings-items__description">
-            Delete your Thunderstore account permanently
-          </p>
-        </div>
-        <div className="settings-items__content">
-          <div className="user-account__delete-user-form">
-            <NewAlert csVariant="warning">
-              You are about to delete your account. Once deleted, it will be
-              gone forever. Please be certain.
-            </NewAlert>
-            {currentUser.teams && currentUser.teams.length > 0 && (
-              <p className="user-account__instructions">
-                You will lose access to these teams:
-                <br />
-                <span className="user-account__username">
-                  {currentUser.teams.join(", ")}
-                </span>
-              </p>
-            )}
+    <FormSections rootClasses="user-account">
+      <FormSection
+        title="Delete Account"
+        description="Delete your Thunderstore account permanently"
+      >
+        <div className="user-account__delete-user-form">
+          <NewAlert csVariant="warning">
+            You are about to delete your account. Once deleted, it will be gone
+            forever. Please be certain.
+          </NewAlert>
+          {currentUser.teams && currentUser.teams.length > 0 && (
             <p className="user-account__instructions">
-              Any content you have uploaded will remain on the site even after
-              account deletion. If you need it taken down as well, please
-              contact an administrator in the Thunderstore Discord server.
-            </p>
-            <p className="user-account__instructions">
-              <span>
-                As a precaution, to delete your account, please input{" "}
-                <span className="user-account__username">
-                  {currentUser.username}
-                </span>{" "}
-                into the field below.
+              You will lose access to these teams:
+              <br />
+              <span className="user-account__username">
+                {currentUser.teams.join(", ")}
               </span>
             </p>
-            <div className="user-account__actions">
-              <DeleteAccountForm
-                currentUser={currentUser}
-                requestConfig={outletContext.requestConfig}
-              />
-            </div>
+          )}
+          <p className="user-account__instructions">
+            Any content you have uploaded will remain on the site even after
+            account deletion. If you need it taken down as well, please contact
+            an administrator in the Thunderstore Discord server.
+          </p>
+          <p className="user-account__instructions">
+            <span>
+              As a precaution, to delete your account, please input{" "}
+              <span className="user-account__username">
+                {currentUser.username}
+              </span>{" "}
+              into the field below.
+            </span>
+          </p>
+          <div className="user-account__actions">
+            <DeleteAccountForm
+              currentUser={currentUser}
+              requestConfig={outletContext.requestConfig}
+            />
           </div>
         </div>
-      </div>
-    </div>
+      </FormSection>
+    </FormSections>
   );
 }
 

@@ -6,6 +6,10 @@ import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
+import {
+  FormSection,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
@@ -99,69 +103,66 @@ export default function Teams() {
       <PageHeader headingLevel="1" headingSize="2">
         Teams
       </PageHeader>
-      <section className="settings-items">
-        <div className="settings-items__item">
-          <div className="settings-items__meta">
-            <p className="settings-items__title">Teams</p>
-            <p className="settings-items__description">Manage your teams</p>
-            <CreateTeamForm config={outletContext.dapper.config} />
-          </div>
-          <div className="settings-items__content">
-            {currentUser?.teams_full?.length ? (
-              <NewTable
-                titleRowContent={<Heading csLevel="3">Teams</Heading>}
-                // csModifiers={["alignLastColumnRight"]}
-                headers={[
-                  { value: "Team Name", disableSort: false },
-                  { value: "Role", disableSort: false },
-                  { value: "Members", disableSort: false },
-                ]}
-                rows={currentUser.teams_full.map((team) => [
-                  {
-                    value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="TeamSettings"
-                        key={team.name}
-                        team={team.name}
-                        csVariant="primary"
-                        rootClasses="teams-table__cell teams-table__name"
-                      >
-                        {team.name}
-                      </NewLink>
-                    ),
-                    sortValue: team.name,
-                  },
-                  {
-                    value: (
-                      <p className="teams-table__cell teams-table__role">
-                        {team.role}
-                      </p>
-                    ),
-                    sortValue: team.role,
-                  },
-                  {
-                    value: (
-                      <p className="teams-table__cell">{team.member_count}</p>
-                    ),
-                    sortValue: team.member_count,
-                  },
-                ])}
-              />
-            ) : (
-              <EmptyState.Root>
-                <EmptyState.Icon>
-                  <FontAwesomeIcon icon={faPeopleGroup} />
-                </EmptyState.Icon>
-                <EmptyState.Title>No teams</EmptyState.Title>
-                <EmptyState.Message>
-                  You are not a member of any teams yet.
-                </EmptyState.Message>
-              </EmptyState.Root>
-            )}
-          </div>
-        </div>
-      </section>
+      <FormSections>
+        <FormSection
+          title="Teams"
+          description="Manage your teams"
+          metaExtra={<CreateTeamForm config={outletContext.dapper.config} />}
+        >
+          {currentUser?.teams_full?.length ? (
+            <NewTable
+              titleRowContent={<Heading csLevel="3">Teams</Heading>}
+              // csModifiers={["alignLastColumnRight"]}
+              headers={[
+                { value: "Team Name", disableSort: false },
+                { value: "Role", disableSort: false },
+                { value: "Members", disableSort: false },
+              ]}
+              rows={currentUser.teams_full.map((team) => [
+                {
+                  value: (
+                    <NewLink
+                      primitiveType="cyberstormLink"
+                      linkId="TeamSettings"
+                      key={team.name}
+                      team={team.name}
+                      csVariant="primary"
+                      rootClasses="teams-table__cell teams-table__name"
+                    >
+                      {team.name}
+                    </NewLink>
+                  ),
+                  sortValue: team.name,
+                },
+                {
+                  value: (
+                    <p className="teams-table__cell teams-table__role">
+                      {team.role}
+                    </p>
+                  ),
+                  sortValue: team.role,
+                },
+                {
+                  value: (
+                    <p className="teams-table__cell">{team.member_count}</p>
+                  ),
+                  sortValue: team.member_count,
+                },
+              ])}
+            />
+          ) : (
+            <EmptyState.Root>
+              <EmptyState.Icon>
+                <FontAwesomeIcon icon={faPeopleGroup} />
+              </EmptyState.Icon>
+              <EmptyState.Title>No teams</EmptyState.Title>
+              <EmptyState.Message>
+                You are not a member of any teams yet.
+              </EmptyState.Message>
+            </EmptyState.Root>
+          )}
+        </FormSection>
+      </FormSections>
     </>
   );
 }

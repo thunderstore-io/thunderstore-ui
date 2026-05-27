@@ -11,6 +11,11 @@ import {
   useNavigate,
   useOutletContext,
 } from "react-router";
+import {
+  FormSection,
+  FormSectionSeparator,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 
 import {
   NewAlert,
@@ -54,51 +59,38 @@ export default function Settings() {
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={permissions}>
         {(resolvedPermissions) => (
-          <div className="settings-items">
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Leave team</p>
-                <p className="settings-items__description">
-                  Resign from the team
-                </p>
-              </div>
-              <div className="settings-items__content">
-                {!resolvedPermissions.can_leave_team && <LastOwnerAlert />}
-                <LeaveTeamForm
-                  userName={outletContext.currentUser?.username ?? ""}
-                  teamName={teamName}
-                  toast={toast}
-                  config={outletContext.requestConfig}
-                  updateTrigger={moveToTeams}
-                  disabled={!resolvedPermissions.can_leave_team}
-                />
-              </div>
-            </div>
-            <div className="settings-items__separator" />
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Disband team</p>
-                <p className="settings-items__description">
-                  Remove the team completely
-                </p>
-              </div>
-              <div className="settings-items__content">
-                {!resolvedPermissions.can_disband_team &&
-                  (isTeamOwner(teamName, outletContext.currentUser) ? (
-                    <TeamHasPackagesAlert />
-                  ) : (
-                    <NotTeamOwnerAlert />
-                  ))}
-                <DisbandTeamForm
-                  teamName={teamName}
-                  updateTrigger={moveToTeams}
-                  config={outletContext.requestConfig}
-                  toast={toast}
-                  disabled={!resolvedPermissions.can_disband_team}
-                />
-              </div>
-            </div>
-          </div>
+          <FormSections>
+            <FormSection title="Leave team" description="Resign from the team">
+              {!resolvedPermissions.can_leave_team && <LastOwnerAlert />}
+              <LeaveTeamForm
+                userName={outletContext.currentUser?.username ?? ""}
+                teamName={teamName}
+                toast={toast}
+                config={outletContext.requestConfig}
+                updateTrigger={moveToTeams}
+                disabled={!resolvedPermissions.can_leave_team}
+              />
+            </FormSection>
+            <FormSectionSeparator />
+            <FormSection
+              title="Disband team"
+              description="Remove the team completely"
+            >
+              {!resolvedPermissions.can_disband_team &&
+                (isTeamOwner(teamName, outletContext.currentUser) ? (
+                  <TeamHasPackagesAlert />
+                ) : (
+                  <NotTeamOwnerAlert />
+                ))}
+              <DisbandTeamForm
+                teamName={teamName}
+                updateTrigger={moveToTeams}
+                config={outletContext.requestConfig}
+                toast={toast}
+                disabled={!resolvedPermissions.can_disband_team}
+              />
+            </FormSection>
+          </FormSections>
         )}
       </Await>
     </Suspense>
