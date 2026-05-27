@@ -35,7 +35,6 @@ import {
   NewTableSort,
   NewTag,
   classnames,
-  useToast,
 } from "@thunderstore/cyberstorm";
 import {
   DapperTs,
@@ -124,8 +123,6 @@ export default function Upload() {
   const currentUser = outletContext.currentUser;
   const dapper = outletContext.dapper;
 
-  const toast = useToast();
-
   // Category options
   const [categoryOptions, setCategoryOptions] = useState<
     { communityId: string; categories: CategoryOption[] }[]
@@ -163,6 +160,7 @@ export default function Upload() {
   const [usermedia, setUsermedia] = useState<UserMedia>();
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [pollingError, setPollingError] = useState<string | null>(null);
 
   const submissionErrorMessages = useMemo(() => {
     const formErrors = submissionStatus?.form_errors;
@@ -242,11 +240,6 @@ export default function Upload() {
     );
 
     setHandle(upload);
-    toast.addToast({
-      csVariant: "info",
-      children: "Starting upload",
-      duration: 4000,
-    });
     try {
       await upload.start();
       setUsermedia(upload.handle);
@@ -255,7 +248,7 @@ export default function Upload() {
       setUploadError(error instanceof Error ? error.message : "Upload failed");
       setHandle(undefined);
     }
-  }, [file, requestConfig, toast]);
+  }, [file, requestConfig]);
 
   useEffect(() => {
     if (file) {
@@ -271,11 +264,6 @@ export default function Upload() {
       // Wait 5 seconds before polling again
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
-    toast.addToast({
-      csVariant: "info",
-      children: "Polling submission status",
-      duration: 4000,
-    });
     return await dapper.getPackageSubmissionStatus(submissionId);
   };
 
@@ -291,32 +279,23 @@ export default function Upload() {
     ) {
       pollSubmission(submissionStatus.id)
         .then((data) => {
+          setPollingError(null);
           submissionStatusRef.current = data;
           setSubmissionStatus(data);
-          if (data.status === "PENDING") {
-            toast.addToast({
-              csVariant: "info",
-              children:
-                "Submission is still pending, polling again in 5 seconds",
-              duration: 4000,
-            });
-          } else {
+          if (data.status !== "PENDING") {
             // Success is rendered inline via SubmissionResult
           }
         })
         .catch((error) => {
           // TODO: Add sentry logging
-          toast.addToast({
-            csVariant: "danger",
-            children: `Error polling submission status: ${error.message}`,
-            duration: 8000,
-          });
+          setPollingError(`Error polling submission status: ${error.message}`);
         });
     }
   }, [submissionStatus]);
 
   const retryPolling = () => {
     if (submissionStatus?.id) {
+      setPollingError(null);
       pollSubmission(submissionStatus.id, true).then((data) => {
         setSubmissionStatus(data);
       });
@@ -407,11 +386,6 @@ export default function Upload() {
     submitor,
     onSubmitSuccess: () => {
       setSubmitError(null);
-      toast.addToast({
-        csVariant: "info",
-        children: `Package submitted, wait for processing to complete.`,
-        duration: 4000,
-      });
     },
     onSubmitError: (error) => {
       setSubmitError(error.message || "Unknown error");
@@ -607,6 +581,9 @@ export default function Upload() {
                     {uploadError}
                   </NewAlert>
                 ) : null}
+                {handle && !isDone ? (
+                  <p className="upload__processing">Uploading…</p>
+                ) : null}
                 {submissionErrorsBySection.uploadFile.length > 0 ? (
                   <NewAlert csVariant="danger" rootClasses="upload__alert">
                     <ul>
@@ -789,7 +766,8 @@ export default function Upload() {
                 {submitError}
               </NewAlert>
             ) : null}
-            {submissionStatus?.status !== "PENDING" &&
+            {!strongForm.submitting &&
+            submissionStatus?.status !== "PENDING" &&
             submissionStatus?.form_errors &&
             Object.keys(submissionStatus.form_errors).length > 0 ? (
               <NewAlert csVariant="danger" rootClasses="upload__alert">
@@ -843,18 +821,24 @@ export default function Upload() {
               <NewButton
                 disabled={
                   strongForm.submitting ||
+                  submissionStatus?.status === "PENDING" ||
                   !usermedia?.uuid ||
                   formInputs.communities.length === 0
                 }
                 onClick={() => {
                   setSubmitError(null);
+                  setPollingError(null);
                   strongForm.submit();
                 }}
                 csVariant="accent"
                 csSize="big"
                 rootClasses="upload__submit"
               >
-                Submit
+                {strongForm.submitting
+                  ? "Submitting…"
+                  : submissionStatus?.status === "PENDING"
+                    ? "Processing…"
+                    : "Submit"}
               </NewButton>
             </div>
           </div>
@@ -877,6 +861,11 @@ export default function Upload() {
               />
             )}
             <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
+            {pollingError ? (
+              <NewAlert csVariant="danger" rootClasses="upload__alert">
+                {pollingError}
+              </NewAlert>
+            ) : null}
           </div>
         ) : null}
       </section>
