@@ -8,7 +8,11 @@ import {
 } from "@thunderstore/ts-uploader";
 
 import type { OutletContextShape } from "../root";
-import type { CategoryOption } from "./uploadUtils";
+import {
+  type CategoryOption,
+  PACKAGE_ZIP_FILE_ERROR_MESSAGE,
+  isPackageZipFile,
+} from "./uploadUtils";
 
 export function usePackageFileUpload(
   requestConfig: OutletContextShape["requestConfig"]
@@ -22,6 +26,15 @@ export function usePackageFileUpload(
 
   const startUpload = useCallback(async () => {
     if (!file) return;
+
+    if (!isPackageZipFile(file)) {
+      setUploadError(PACKAGE_ZIP_FILE_ERROR_MESSAGE);
+      setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
 
     setUploadError(null);
 
@@ -62,9 +75,35 @@ export function usePackageFileUpload(
     setUploadError(null);
   }, [handle]);
 
+  const selectFile = useCallback(
+    (nextFile: File | null) => {
+      if (!nextFile) {
+        clearFile();
+        return;
+      }
+
+      if (!isPackageZipFile(nextFile)) {
+        setUploadError(PACKAGE_ZIP_FILE_ERROR_MESSAGE);
+        setFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        handle?.abort();
+        setHandle(undefined);
+        setUsermedia(undefined);
+        setIsDone(false);
+        return;
+      }
+
+      setUploadError(null);
+      setFile(nextFile);
+    },
+    [clearFile, handle]
+  );
+
   return {
     file,
-    setFile,
+    selectFile,
     fileInputRef,
     handle,
     isDone,

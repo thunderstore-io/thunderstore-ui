@@ -12,7 +12,7 @@ import { DnDFileInput } from "@thunderstore/react-dnd";
 import type { IBaseUploadHandle } from "@thunderstore/ts-uploader";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
-import { formatBytes } from "../uploadUtils";
+import { PACKAGE_ZIP_ACCEPT, formatBytes } from "../uploadUtils";
 import { SectionErrors } from "./SectionErrors";
 
 export interface UploadFileSectionProps {
@@ -48,6 +48,7 @@ export function UploadFileSection({
           file && !uploadError ? "drag-n-drop--success" : null
         )}
         name="file"
+        accept={PACKAGE_ZIP_ACCEPT}
         baseState={
           <div className="drag-n-drop__body">
             {file ? (
