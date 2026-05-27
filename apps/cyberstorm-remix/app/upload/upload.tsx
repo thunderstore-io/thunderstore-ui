@@ -54,6 +54,7 @@ import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
 import { SubmissionResult } from "./components/SubmissionResult";
+import { UploadSubmitSection } from "./components/UploadSubmitSection";
 import { formatBytes } from "./utils/formatBytes";
 import {
   getSubmissionErrorMessages,
@@ -348,6 +349,60 @@ export default function Upload() {
   useEffect(() => {
     setSubmissionStatus(strongForm.submitOutput);
   }, [strongForm.submitOutput]);
+
+  const hasSubmissionFormErrors =
+    !!submissionStatus?.form_errors &&
+    Object.keys(submissionStatus.form_errors).length > 0;
+
+  const submitDisabled =
+    strongForm.submitting ||
+    submissionStatus?.status === "PENDING" ||
+    !usermedia?.uuid ||
+    formInputs.communities.length === 0;
+
+  const handleReset = () => {
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    handle?.abort();
+    setHandle(undefined);
+    setUsermedia(undefined);
+    setIsDone(false);
+    setUploadError(null);
+    setSubmitError(null);
+    updateFormFieldState({
+      field: "author_name",
+      value: "",
+    });
+    updateFormFieldState({
+      field: "communities",
+      value: [],
+    });
+    updateFormFieldState({
+      field: "has_nsfw_content",
+      value: false,
+    });
+    updateFormFieldState({
+      field: "upload_uuid",
+      value: "",
+    });
+    updateFormFieldState({
+      field: "categories",
+      value: undefined,
+    });
+    updateFormFieldState({
+      field: "community_categories",
+      value: undefined,
+    });
+    setSubmissionStatus(undefined);
+  };
+
+  const handleSubmit = () => {
+    setSubmitError(null);
+    setPollingError(null);
+    strongForm.submit();
+  };
 
   return (
     <>
@@ -673,91 +728,15 @@ export default function Upload() {
               <FormSectionSeparator />
             </>
           ) : null}
-          <FormSection
-            title="Submit"
-            description='Double-check your selections and hit "Submit" when you&apos;re ready!'
-          >
-            {submitError ? (
-              <NewAlert csVariant="danger" rootClasses="upload__alert">
-                {submitError}
-              </NewAlert>
-            ) : null}
-            {!strongForm.submitting &&
-            submissionStatus?.status !== "PENDING" &&
-            submissionStatus?.form_errors &&
-            Object.keys(submissionStatus.form_errors).length > 0 ? (
-              <NewAlert csVariant="danger" rootClasses="upload__alert">
-                Please review the form errors above and submit again.
-              </NewAlert>
-            ) : null}
-            <div className="upload__buttons">
-              <NewButton
-                onClick={() => {
-                  setFile(null);
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = "";
-                  }
-                  handle?.abort();
-                  setHandle(undefined);
-                  setUsermedia(undefined);
-                  setIsDone(false);
-                  setUploadError(null);
-                  setSubmitError(null);
-                  updateFormFieldState({
-                    field: "author_name",
-                    value: "",
-                  });
-                  updateFormFieldState({
-                    field: "communities",
-                    value: [],
-                  });
-                  updateFormFieldState({
-                    field: "has_nsfw_content",
-                    value: false,
-                  });
-                  updateFormFieldState({
-                    field: "upload_uuid",
-                    value: "",
-                  });
-                  updateFormFieldState({
-                    field: "categories",
-                    value: undefined,
-                  });
-                  updateFormFieldState({
-                    field: "community_categories",
-                    value: undefined,
-                  });
-                  setSubmissionStatus(undefined);
-                }}
-                csVariant="secondary"
-                csSize="big"
-              >
-                Reset
-              </NewButton>
-              <NewButton
-                disabled={
-                  strongForm.submitting ||
-                  submissionStatus?.status === "PENDING" ||
-                  !usermedia?.uuid ||
-                  formInputs.communities.length === 0
-                }
-                onClick={() => {
-                  setSubmitError(null);
-                  setPollingError(null);
-                  strongForm.submit();
-                }}
-                csVariant="accent"
-                csSize="big"
-                rootClasses="upload__submit"
-              >
-                {strongForm.submitting
-                  ? "Submitting…"
-                  : submissionStatus?.status === "PENDING"
-                    ? "Processing…"
-                    : "Submit"}
-              </NewButton>
-            </div>
-          </FormSection>
+          <UploadSubmitSection
+            submitError={submitError}
+            strongFormSubmitting={strongForm.submitting}
+            submissionStatus={submissionStatus}
+            hasSubmissionFormErrors={hasSubmissionFormErrors}
+            submitDisabled={submitDisabled}
+            onReset={handleReset}
+            onSubmit={handleSubmit}
+          />
           {submissionStatus ? (
             <>
               <FormSectionSeparator />
