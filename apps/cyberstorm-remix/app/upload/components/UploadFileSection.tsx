@@ -12,7 +12,8 @@ import { DnDFileInput } from "@thunderstore/react-dnd";
 import type { IBaseUploadHandle } from "@thunderstore/ts-uploader";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
-import { formatBytes } from "../utils/formatBytes";
+import { formatBytes } from "../uploadUtils";
+import { SectionErrors } from "./SectionErrors";
 
 export interface UploadFileSectionProps {
   file: File | null;
@@ -132,15 +133,7 @@ export function UploadFileSection({
       {handle && !isDone ? (
         <p className="upload__processing">Uploading…</p>
       ) : null}
-      {sectionErrors.length > 0 ? (
-        <NewAlert csVariant="danger" rootClasses="upload__alert">
-          <ul>
-            {sectionErrors.map((msg) => (
-              <li key={msg}>{msg}</li>
-            ))}
-          </ul>
-        </NewAlert>
-      ) : null}
+      <SectionErrors errors={sectionErrors} />
     </FormSection>
   );
 }

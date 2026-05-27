@@ -4,14 +4,7 @@ import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { useLoaderData, useOutletContext } from "react-router";
 
 import {
@@ -20,11 +13,6 @@ import {
 } from "@thunderstore/dapper-ts";
 import { type PackageSubmissionStatus } from "@thunderstore/dapper/types";
 import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
-import {
-  type IBaseUploadHandle,
-  MultipartUpload,
-  type UserMedia,
-} from "@thunderstore/ts-uploader";
 
 import { RouteErrorBoundary } from "../commonComponents/ErrorBoundary/RouteErrorBoundary";
 import {
@@ -43,19 +31,18 @@ import { UploadSubmissionStatus } from "./components/UploadSubmissionStatus";
 import { UploadSubmitSection } from "./components/UploadSubmitSection";
 import { UploadTeamSection } from "./components/UploadTeamSection";
 import {
+  usePackageFileUpload,
+  useSubmissionStatusPolling,
+  useUploadCategoryOptions,
+} from "./uploadHooks";
+import {
+  type UploadFormFieldAction,
+  buildCommunityOptions,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
-} from "./utils/submissionFormErrors";
-
-interface CommunityOption {
-  value: string;
-  label: string;
-}
-
-interface CategoryOption {
-  value: string;
-  label: string;
-}
+  initialUploadFormInputs,
+  uploadFormFieldReducer,
+} from "./uploadUtils";
 
 export const loader = ssrLoader(async () => {
   const dapper = new DapperTs(() => {
@@ -112,12 +99,11 @@ export default function Upload() {
   const currentUser = outletContext.currentUser;
   const dapper = outletContext.dapper;
 
-  // Category options
-  const [categoryOptions, setCategoryOptions] = useState<
-    { communityId: string; categories: CategoryOption[] }[]
-  >([]);
+  const communityOptions = useMemo(
+    () => buildCommunityOptions(uploadData.results),
+    [uploadData.results]
+  );
 
-  // Available teams
   const [availableTeams, setAvailableTeams] = useState<
     {
       name: string;
@@ -129,27 +115,23 @@ export default function Upload() {
     setAvailableTeams(currentUser?.teams_full ?? []);
   }, [currentUser?.teams_full]);
 
-  // Community options
-  const communityOptions: CommunityOption[] = [];
-  for (const community of uploadData.results) {
-    communityOptions.push({
-      value: community.identifier,
-      label: community.name,
-    });
-  }
-
   const [submissionStatus, setSubmissionStatus] =
     useState<PackageSubmissionStatus>();
-
-  const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [handle, setHandle] = useState<IBaseUploadHandle>();
-  const [isDone, setIsDone] = useState<boolean>(false);
-
-  const [usermedia, setUsermedia] = useState<UserMedia>();
-  const [uploadError, setUploadError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [pollingError, setPollingError] = useState<string | null>(null);
+
+  const {
+    file,
+    setFile,
+    fileInputRef,
+    handle,
+    isDone,
+    usermedia,
+    uploadError,
+    clearFile,
+  } = usePackageFileUpload(requestConfig);
+
+  const { pollingError, setPollingError, retryPolling } =
+    useSubmissionStatusPolling(dapper, submissionStatus, setSubmissionStatus);
 
   const submissionErrorMessages = useMemo(
     () => getSubmissionErrorMessages(submissionStatus?.form_errors),
@@ -161,128 +143,19 @@ export default function Upload() {
     [submissionErrorMessages]
   );
 
-  const startUpload = useCallback(async () => {
-    if (!file) return;
-
-    setUploadError(null);
-
-    const config = requestConfig();
-    if (!config.apiHost) {
-      setUploadError("API host is not configured");
-      return;
-    }
-    const upload = new MultipartUpload(
-      {
-        file,
-      },
-      requestConfig
-    );
-
-    setHandle(upload);
-    try {
-      await upload.start();
-      setUsermedia(upload.handle);
-      setIsDone(true);
-    } catch (error) {
-      setUploadError(error instanceof Error ? error.message : "Upload failed");
-      setHandle(undefined);
-    }
-  }, [file, requestConfig]);
-
-  useEffect(() => {
-    if (file) {
-      startUpload();
-    }
-  }, [file]);
-
-  const pollSubmission = async (
-    submissionId: string,
-    noSleep?: boolean
-  ): Promise<PackageSubmissionStatus> => {
-    if (!noSleep) {
-      // Wait 5 seconds before polling again
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-    }
-    return await dapper.getPackageSubmissionStatus(submissionId);
-  };
-
-  const submissionStatusRef = useRef<PackageSubmissionStatus | undefined>(
-    submissionStatus
+  const [formInputs, dispatchForm] = useReducer(
+    uploadFormFieldReducer,
+    initialUploadFormInputs
   );
 
-  useEffect(() => {
-    if (
-      submissionStatus &&
-      submissionStatusRef.current !== submissionStatus &&
-      submissionStatus.status === "PENDING"
-    ) {
-      pollSubmission(submissionStatus.id)
-        .then((data) => {
-          setPollingError(null);
-          submissionStatusRef.current = data;
-          setSubmissionStatus(data);
-          if (data.status !== "PENDING") {
-            // Success is rendered inline via SubmissionResult
-          }
-        })
-        .catch((error) => {
-          // TODO: Add sentry logging
-          setPollingError(`Error polling submission status: ${error.message}`);
-        });
-    }
-  }, [submissionStatus]);
-
-  const retryPolling = () => {
-    if (submissionStatus?.id) {
-      setPollingError(null);
-      pollSubmission(submissionStatus.id, true).then((data) => {
-        setSubmissionStatus(data);
-      });
-    }
+  const updateFormFieldState = (action: UploadFormFieldAction) => {
+    dispatchForm(action);
   };
 
-  function formFieldUpdateAction(
-    state: PackageSubmissionRequestData,
-    action: {
-      field: keyof PackageSubmissionRequestData;
-      value: PackageSubmissionRequestData[keyof PackageSubmissionRequestData];
-    }
-  ) {
-    return {
-      ...state,
-      [action.field]: action.value,
-    };
-  }
-
-  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    author_name: "",
-    communities: [],
-    has_nsfw_content: false,
-    upload_uuid: "",
-    categories: undefined,
-    community_categories: undefined,
-  });
-
-  useEffect(() => {
-    for (const community of formInputs.communities) {
-      // Skip if we already have categories for this community
-      if (categoryOptions.some((opt) => opt.communityId === community)) {
-        continue;
-      }
-      dapper.getCommunityFilters(community).then((filters) => {
-        setCategoryOptions((prev) => [
-          ...prev,
-          {
-            communityId: community,
-            categories: filters.package_categories.map((cat) => ({
-              value: cat.slug,
-              label: cat.name,
-            })),
-          },
-        ]);
-      });
-    }
-  }, [formInputs.communities]);
+  const categoryOptions = useUploadCategoryOptions(
+    dapper,
+    formInputs.communities
+  );
 
   type SubmitorOutput = Awaited<
     ReturnType<typeof postPackageSubmissionMetadata>
@@ -290,8 +163,8 @@ export default function Upload() {
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
     const config = requestConfig();
-    const dapper = new DapperTs(() => config);
-    return await dapper.postPackageSubmissionMetadata(
+    const submitDapper = new DapperTs(() => config);
+    return await submitDapper.postPackageSubmissionMetadata(
       data.author_name,
       data.communities,
       data.has_nsfw_content,
@@ -347,59 +220,16 @@ export default function Upload() {
     formInputs.communities.length === 0;
 
   const handleReset = () => {
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-    handle?.abort();
-    setHandle(undefined);
-    setUsermedia(undefined);
-    setIsDone(false);
-    setUploadError(null);
+    clearFile();
     setSubmitError(null);
-    updateFormFieldState({
-      field: "author_name",
-      value: "",
-    });
-    updateFormFieldState({
-      field: "communities",
-      value: [],
-    });
-    updateFormFieldState({
-      field: "has_nsfw_content",
-      value: false,
-    });
-    updateFormFieldState({
-      field: "upload_uuid",
-      value: "",
-    });
-    updateFormFieldState({
-      field: "categories",
-      value: undefined,
-    });
-    updateFormFieldState({
-      field: "community_categories",
-      value: undefined,
-    });
     setSubmissionStatus(undefined);
+    dispatchForm("reset");
   };
 
   const handleSubmit = () => {
     setSubmitError(null);
     setPollingError(null);
     strongForm.submit();
-  };
-
-  const handleRemoveFile = () => {
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-    handle?.abort();
-    setHandle(undefined);
-    setUsermedia(undefined);
-    setIsDone(false);
-    setUploadError(null);
   };
 
   return (
@@ -430,7 +260,7 @@ export default function Upload() {
                 sectionErrors={submissionErrorsBySection.uploadFile}
                 fileInputRef={fileInputRef}
                 onFileChange={setFile}
-                onRemoveFile={handleRemoveFile}
+                onRemoveFile={clearFile}
               />
               <FormSectionSeparator />
             </>

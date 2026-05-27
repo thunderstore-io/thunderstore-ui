@@ -1,11 +1,8 @@
-import { NewAlert, NewSelectSearch } from "@thunderstore/cyberstorm";
+import { NewSelectSearch } from "@thunderstore/cyberstorm";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
-
-export interface CommunityOption {
-  value: string;
-  label: string;
-}
+import type { CommunityOption } from "../uploadUtils";
+import { SectionErrors } from "./SectionErrors";
 
 export interface UploadCommunitiesSectionProps {
   communityOptions: CommunityOption[];
@@ -38,15 +35,7 @@ export function UploadCommunitiesSection({
             communityOptions.find((c) => c.value === communityId)?.label || "",
         }))}
       />
-      {sectionErrors.length > 0 ? (
-        <NewAlert csVariant="danger" rootClasses="upload__alert">
-          <ul>
-            {sectionErrors.map((msg) => (
-              <li key={msg}>{msg}</li>
-            ))}
-          </ul>
-        </NewAlert>
-      ) : null}
+      <SectionErrors errors={sectionErrors} />
     </FormSection>
   );
 }

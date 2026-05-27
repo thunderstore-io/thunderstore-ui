@@ -2,6 +2,7 @@ import { NewAlert, NewButton } from "@thunderstore/cyberstorm";
 import type { PackageSubmissionStatus } from "@thunderstore/dapper/types";
 
 import { FormSectionSeparator } from "../../commonComponents/FormSection/FormSection";
+import { SectionErrors } from "./SectionErrors";
 import { SubmissionResult } from "./SubmissionResult";
 
 export interface UploadSubmissionStatusProps {
@@ -21,15 +22,7 @@ export function UploadSubmissionStatus({
     <>
       <FormSectionSeparator />
       <div className="submission__status">
-        {submitSectionErrors.length > 0 ? (
-          <NewAlert csVariant="danger" rootClasses="upload__alert">
-            <ul>
-              {submitSectionErrors.map((msg) => (
-                <li key={msg}>{msg}</li>
-              ))}
-            </ul>
-          </NewAlert>
-        ) : null}
+        <SectionErrors errors={submitSectionErrors} />
         {submissionStatus.result ? (
           <SubmissionResult submissionStatusResult={submissionStatus.result} />
         ) : null}
