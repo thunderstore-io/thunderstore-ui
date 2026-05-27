@@ -146,6 +146,32 @@ export function getSubmissionErrorMessages(formErrors: unknown): string[] {
   return Array.from(new Set(out));
 }
 
+export function isUploadSubmitDisabled({
+  submitting,
+  submissionPending,
+  uploadUuid,
+  communitiesCount,
+}: {
+  submitting: boolean;
+  submissionPending: boolean;
+  uploadUuid: string | undefined;
+  communitiesCount: number;
+}): boolean {
+  return (
+    submitting || submissionPending || !uploadUuid || communitiesCount === 0
+  );
+}
+
+export function isUploadResetDisabled({
+  submitting,
+  submissionPending,
+}: {
+  submitting: boolean;
+  submissionPending: boolean;
+}): boolean {
+  return submitting || submissionPending;
+}
+
 export function getSubmissionErrorsBySection(
   messages: string[]
 ): SubmissionErrorsBySection {

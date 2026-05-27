@@ -2,6 +2,7 @@ import { NewAlert, NewButton } from "@thunderstore/cyberstorm";
 import type { PackageSubmissionStatus } from "@thunderstore/dapper/types";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
+import { isUploadResetDisabled } from "../uploadUtils";
 
 export interface UploadSubmitSectionProps {
   submitError: string | null;
@@ -22,8 +23,10 @@ export function UploadSubmitSection({
   onReset,
   onSubmit,
 }: UploadSubmitSectionProps) {
-  const resetDisabled =
-    strongFormSubmitting || submissionStatus?.status === "PENDING";
+  const resetDisabled = isUploadResetDisabled({
+    submitting: strongFormSubmitting,
+    submissionPending: submissionStatus?.status === "PENDING",
+  });
 
   return (
     <FormSection
