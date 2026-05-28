@@ -10,6 +10,7 @@ import {
   FormSection,
   FormSections,
 } from "~/commonComponents/FormSection/FormSection";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
@@ -99,7 +100,7 @@ export default function Teams() {
   const currentUser = outletContext.currentUser;
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Teams
       </PageHeader>
@@ -163,7 +164,7 @@ export default function Teams() {
           )}
         </FormSection>
       </FormSections>
-    </>
+    </Page>
   );
 }
 

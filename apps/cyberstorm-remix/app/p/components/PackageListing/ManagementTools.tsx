@@ -2,6 +2,7 @@ import { faBoxOpen, faCog, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { Island, IslandContainer } from "~/commonComponents/Island/Island";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
@@ -44,9 +45,12 @@ export function ManagementTools({
     listingStatus.package_admin_url;
 
   return (
-    <div className="package-listing-management-tools">
+    <IslandContainer
+      direction="x"
+      rootClasses="package-listing-management-tools"
+    >
       {perms.can_moderate && (
-        <div className="package-listing-management-tools__island">
+        <Island variant="special">
           <ReviewPackageForm
             communityId={listing.community_identifier}
             namespaceId={listing.namespace}
@@ -55,11 +59,11 @@ export function ManagementTools({
             toast={toast}
             config={requestConfig}
           />
-        </div>
+        </Island>
       )}
 
       {(perms.can_manage || perms.can_moderate) && (
-        <div className="package-listing-management-tools__island">
+        <Island variant="special">
           <NewButton
             csSize="small"
             primitiveType="cyberstormLink"
@@ -73,11 +77,11 @@ export function ManagementTools({
             </NewIcon>
             Manage Package
           </NewButton>
-        </div>
+        </Island>
       )}
 
       {listingStatus && (canViewAdminPages || canViewPackageAdminPages) ? (
-        <div className="package-listing-management-tools__island">
+        <Island variant="special">
           {canViewAdminPages ? (
             <NewButton
               csSize="small"
@@ -110,8 +114,8 @@ export function ManagementTools({
               </NewIcon>
             </NewButton>
           ) : null}
-        </div>
+        </Island>
       ) : null}
-    </div>
+    </IslandContainer>
   );
 }

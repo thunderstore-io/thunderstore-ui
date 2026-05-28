@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import { useDebounce } from "use-debounce";
+import {
+  FormSection,
+  FormSectionSeparator,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 
 import { CodeInput, isRecord } from "@thunderstore/cyberstorm";
@@ -10,9 +15,9 @@ import {
   toolsMarkdownPreview,
 } from "@thunderstore/thunderstore-api";
 
+import { Page } from "../../commonComponents/Page/Page";
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../../root";
-import "./MarkdownPreview.css";
 
 export default function MarkdownPreview() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -54,41 +59,31 @@ export default function MarkdownPreview() {
   }, [debouncedMarkdownPreviewInput]);
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Markdown Preview
       </PageHeader>
-      <section className="container container--y container--full markdown-preview">
-        <div className="container container--x container--full markdown-preview__row">
-          <div className="markdown-preview__meta">
-            <p className="markdown-preview__title">Manifest Validator</p>
-            <p className="markdown-preview__description">
-              Select a team to validate a package
-            </p>
-          </div>
-          <div className="markdown-preview__content">
-            <CodeInput
-              placeholder="# This is a markdown preview placeholder"
-              onChange={(e) => setMarkdownPreviewInput(e.currentTarget.value)}
-              value={markdownPreviewInput}
-              validationBarProps={validation}
-            />
-          </div>
-        </div>
-        <div className="markdown-preview__divider" />
-        <div className="container container--x container--full markdown-preview__row">
-          <div className="markdown-preview__meta">
-            <p className="markdown-preview__title">Markdown output</p>
-            <p className="markdown-preview__description">
-              A preview of your rendered markdown
-            </p>
-          </div>
-          <div className="markdown-preview__content">
-            <Markdown input={html} placeholder={placeholder} dangerous />
-          </div>
-        </div>
-      </section>
-    </>
+      <FormSections>
+        <FormSection
+          title="Markdown Preview"
+          description="Preview your markdown"
+        >
+          <CodeInput
+            placeholder="# This is a markdown preview placeholder"
+            onChange={(e) => setMarkdownPreviewInput(e.currentTarget.value)}
+            value={markdownPreviewInput}
+            validationBarProps={validation}
+          />
+        </FormSection>
+        <FormSectionSeparator />
+        <FormSection
+          title="Markdown Output"
+          description="A preview of your rendered markdown"
+        >
+          <Markdown input={html} placeholder={placeholder} dangerous />
+        </FormSection>
+      </FormSections>
+    </Page>
   );
 }
 

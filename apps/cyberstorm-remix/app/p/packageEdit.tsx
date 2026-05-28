@@ -7,6 +7,7 @@ import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useReducer } from "react";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
@@ -219,7 +220,7 @@ export default function PackageListing() {
   const { listing, filters, permissions } = loaderData;
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Edit package
       </PageHeader>
@@ -387,6 +388,6 @@ export default function PackageListing() {
           </div>
         </section>
       </div>
-    </>
+    </Page>
   );
 }

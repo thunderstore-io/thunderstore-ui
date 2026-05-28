@@ -30,6 +30,7 @@ import { useHydrated } from "remix-utils/use-hydrated";
 
 import {
   AdContainer,
+  Container,
   LinkingProvider,
   ToastProvider,
 } from "@thunderstore/cyberstorm";
@@ -47,6 +48,7 @@ import {
 
 import type { Route } from "./+types/root";
 import { Footer } from "./commonComponents/Footer/Footer";
+import { Island, IslandContainer } from "./commonComponents/Island/Island";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 import { Seo } from "./commonComponents/Seo/Seo";
 
@@ -325,46 +327,43 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }}
           />
         )}
-        <div className="container container--y container--full island layout">
-          <LinkingProvider value={LinkLibrary}>
-            <ToastProvider toastDuration={10000}>
-              <TooltipProvider>
+        <LinkingProvider value={LinkLibrary}>
+          <ToastProvider toastDuration={10000}>
+            <TooltipProvider>
+              <IslandContainer direction="y" rootClasses="width-100">
                 <NavigationWrapper
                   domain={resolvedEnvVars?.VITE_API_URL || ""}
                   currentUser={data?.currentUser}
                   communityId={communityId}
                 />
-                <div className="container container--x container--full island">
-                  <main className="container container--x container--full island-item layout__main">
-                    <section className="container container--y container--full layout__content">
-                      {/* Breadcrumbs are build progressively */}
+                <IslandContainer direction="x">
+                  <Island rootClasses="layout__main flex--grow-1">
+                    <Container size="narrow">
                       <Breadcrumbs />
                       {children}
-                    </section>
-                  </main>
-                  {shouldShowAds ? (
-                    <div className="container container--y island-item layout__ads">
-                      <div className="container container--y layout__ads-inner">
-                        {adContainerIds.map((cid, k_i) => (
-                          <AdContainer key={k_i} containerId={cid} />
-                        ))}
-                        <AdContainer
-                          containerId={"bottom-video-ad"}
-                          videoAd={true}
-                        />
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
+                    </Container>
+                  </Island>
+                  {shouldShowAds && (
+                    <Island rootClasses="layout__ads">
+                      {adContainerIds.map((cid, k_i) => (
+                        <AdContainer key={k_i} containerId={cid} />
+                      ))}
+                      <AdContainer
+                        containerId={"bottom-video-ad"}
+                        videoAd={true}
+                      />
+                    </Island>
+                  )}
+                </IslandContainer>
                 <Footer />
                 {shouldShowAds ? <AdsInit /> : null}
-              </TooltipProvider>
-            </ToastProvider>
-          </LinkingProvider>
-          <ScrollRestoration />
-          <Scripts />
-          <BetaButtonInit />
-        </div>
+              </IslandContainer>
+            </TooltipProvider>
+          </ToastProvider>
+        </LinkingProvider>
+        <ScrollRestoration />
+        <Scripts />
+        <BetaButtonInit />
       </body>
     </html>
   );

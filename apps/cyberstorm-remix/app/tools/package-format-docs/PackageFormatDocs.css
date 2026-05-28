@@ -1,9 +1,13 @@
 @layer nimbus-layout {
   .package-format-docs {
-    gap: var(--gap-5xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-7xl);
   }
 
   .package-format-docs__container {
+    display: flex;
+    flex-direction: column;
     gap: var(--gap-md);
   }
 

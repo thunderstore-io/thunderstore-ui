@@ -81,24 +81,17 @@ function asStatus(
 }
 
 describe("UploadSubmissionStatus", () => {
-  it("shows retry button while submission is pending", () => {
-    const onRetryPolling = vi.fn();
+  it("does not show retry button while submission is pending without polling error", () => {
     const { container, unmount } = render(
       React.createElement(UploadSubmissionStatus, {
         submissionStatus: asStatus("PENDING"),
         pollingError: null,
         submitSectionErrors: [],
-        onRetryPolling,
+        onRetryPolling: vi.fn(),
       })
     );
 
-    const retryButton = container.querySelector("button");
-    expect(retryButton?.textContent).toBe("Retry Status Check");
-
-    act(() => {
-      retryButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
-    expect(onRetryPolling).toHaveBeenCalledTimes(1);
+    expect(container.querySelector("button")).toBeNull();
 
     unmount();
   });

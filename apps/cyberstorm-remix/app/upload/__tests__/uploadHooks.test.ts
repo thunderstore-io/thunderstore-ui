@@ -196,6 +196,43 @@ describe("usePackageFileUpload", () => {
 
     unmount();
   });
+
+  it("aborts in-flight upload on unmount", async () => {
+    mockStart.mockImplementation(
+      () =>
+        new Promise<void>(() => {
+          /* never resolves */
+        })
+    );
+
+    const requestConfig = vi.fn(() => ({
+      apiHost: "https://api.example.com",
+    }));
+
+    let latest: ReturnType<typeof usePackageFileUpload> | undefined;
+
+    function Harness() {
+      latest = usePackageFileUpload(requestConfig);
+      return null;
+    }
+
+    const unmount = render(React.createElement(Harness));
+
+    act(() => {
+      latest?.selectFile(zipFile());
+    });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(mockStart).toHaveBeenCalledTimes(1);
+    mockAbort.mockClear();
+
+    unmount();
+
+    expect(mockAbort).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("useSubmissionStatusPolling", () => {

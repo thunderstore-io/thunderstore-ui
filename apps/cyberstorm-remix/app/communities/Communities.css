@@ -1,26 +1,20 @@
 @layer nimbus-layout {
   .communities {
-    gap: var(--space-20);
-
-    --nimbus-layout-content-max-width: 120rem;
-  }
-
-  .communities__heading {
-    padding: var(--space-8) 0;
+    container-type: inline-size;
   }
 
   .communities__content {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-3xl);
-    align-items: flex-start;
-    align-self: stretch;
+    gap: var(--gap-md);
   }
 
   .communities__tools {
+    display: flex;
     flex-direction: row;
     gap: var(--gap-md);
     justify-content: space-between;
+    width: 100%;
   }
 
   .communities__search {
@@ -31,7 +25,10 @@
   }
 
   .communities__results {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
+    width: 100%;
   }
 
   .communities__communities-list {
@@ -77,13 +74,7 @@
     }
   }
 
-  @media (width <= 41rem) {
-    .communities__communities-list {
-      gap: var(--gap-3xl) var(--gap-xl);
-    }
-  }
-
-  @media (width <= 39rem) {
+  @container (width <= 39rem) {
     .communities__tools {
       flex-direction: column;
     }
@@ -94,9 +85,13 @@
       min-width: unset;
       max-width: unset;
     }
+
+    .communities__communities-list {
+      gap: var(--gap-3xl) var(--gap-xl);
+    }
   }
 
-  @media (width <= 27.5rem) {
+  @container (width <= 27.5rem) {
     .communities__communities-list {
       grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
     }

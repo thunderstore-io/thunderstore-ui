@@ -19,6 +19,7 @@ import {
   FormSectionSeparator,
   FormSections,
 } from "../commonComponents/FormSection/FormSection";
+import { Page } from "../commonComponents/Page/Page";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
@@ -236,105 +237,103 @@ export default function Upload() {
   };
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Upload package
       </PageHeader>
-      <section className="container container--y container--full upload">
-        <FormSections rootClasses="upload">
-          <UploadTeamSection
-            availableTeams={availableTeams}
-            authorName={formInputs.author_name}
-            onAuthorNameChange={(authorName) => {
-              updateFormFieldState({
-                field: "author_name",
-                value: authorName,
-              });
-            }}
-          />
-          <FormSectionSeparator />
-          {formInputs.author_name ? (
-            <>
-              <UploadFileSection
-                file={file}
-                uploadError={uploadError}
-                handle={handle}
-                isDone={isDone}
-                sectionErrors={submissionErrorsBySection.uploadFile}
-                fileInputRef={fileInputRef}
-                onFileChange={selectFile}
-                onRemoveFile={clearFile}
-              />
-              <FormSectionSeparator />
-            </>
-          ) : null}
-          {isDone && usermedia?.uuid ? (
-            <>
-              <UploadCommunitiesSection
-                communityOptions={communityOptions}
+      <FormSections>
+        <UploadTeamSection
+          availableTeams={availableTeams}
+          authorName={formInputs.author_name}
+          onAuthorNameChange={(authorName) => {
+            updateFormFieldState({
+              field: "author_name",
+              value: authorName,
+            });
+          }}
+        />
+        <FormSectionSeparator />
+        {formInputs.author_name ? (
+          <>
+            <UploadFileSection
+              file={file}
+              uploadError={uploadError}
+              handle={handle}
+              isDone={isDone}
+              sectionErrors={submissionErrorsBySection.uploadFile}
+              fileInputRef={fileInputRef}
+              onFileChange={selectFile}
+              onRemoveFile={clearFile}
+            />
+            <FormSectionSeparator />
+          </>
+        ) : null}
+        {isDone && usermedia?.uuid ? (
+          <>
+            <UploadCommunitiesSection
+              communityOptions={communityOptions}
+              communities={formInputs.communities}
+              sectionErrors={submissionErrorsBySection.communities}
+              onCommunitiesChange={(communities) => {
+                updateFormFieldState({
+                  field: "communities",
+                  value: communities,
+                });
+                updateFormFieldState({
+                  field: "community_categories",
+                  value: pruneCommunityCategories(
+                    formInputs.community_categories,
+                    communities
+                  ),
+                });
+              }}
+            />
+            {formInputs.communities.length > 0 ? (
+              <UploadCategoriesSection
                 communities={formInputs.communities}
-                sectionErrors={submissionErrorsBySection.communities}
-                onCommunitiesChange={(communities) => {
-                  updateFormFieldState({
-                    field: "communities",
-                    value: communities,
-                  });
+                communityCategories={formInputs.community_categories}
+                categoryOptions={categoryOptions}
+                communityResults={uploadData.results}
+                sectionErrors={submissionErrorsBySection.categories}
+                onCommunityCategoriesChange={(communityCategories) => {
                   updateFormFieldState({
                     field: "community_categories",
-                    value: pruneCommunityCategories(
-                      formInputs.community_categories,
-                      communities
-                    ),
+                    value: communityCategories,
                   });
                 }}
               />
-              {formInputs.communities.length > 0 ? (
-                <UploadCategoriesSection
-                  communities={formInputs.communities}
-                  communityCategories={formInputs.community_categories}
-                  categoryOptions={categoryOptions}
-                  communityResults={uploadData.results}
-                  sectionErrors={submissionErrorsBySection.categories}
-                  onCommunityCategoriesChange={(communityCategories) => {
-                    updateFormFieldState({
-                      field: "community_categories",
-                      value: communityCategories,
-                    });
-                  }}
-                />
-              ) : null}
-              <FormSectionSeparator />
-              <UploadNsfwSection
-                hasNsfwContent={formInputs.has_nsfw_content}
-                onHasNsfwContentChange={(hasNsfwContent) => {
-                  updateFormFieldState({
-                    field: "has_nsfw_content",
-                    value: hasNsfwContent,
-                  });
-                }}
-              />
-              <FormSectionSeparator />
-            </>
-          ) : null}
-          <UploadSubmitSection
-            submitError={submitError}
-            strongFormSubmitting={strongForm.submitting}
-            submissionStatus={submissionStatus}
-            hasSubmissionFormErrors={hasSubmissionFormErrors}
-            submitDisabled={submitDisabled}
-            onReset={handleReset}
-            onSubmit={handleSubmit}
-          />
-          {submissionStatus ? (
-            <UploadSubmissionStatus
-              submissionStatus={submissionStatus}
-              pollingError={pollingError}
-              submitSectionErrors={submissionErrorsBySection.submit}
-              onRetryPolling={retryPolling}
+            ) : null}
+            <FormSectionSeparator />
+            <UploadNsfwSection
+              hasNsfwContent={formInputs.has_nsfw_content}
+              onHasNsfwContentChange={(hasNsfwContent) => {
+                updateFormFieldState({
+                  field: "has_nsfw_content",
+                  value: hasNsfwContent,
+                });
+              }}
             />
-          ) : null}
-        </FormSections>
-      </section>
-    </>
+            <FormSectionSeparator />
+          </>
+        ) : null}
+        <UploadSubmitSection
+          submitError={submitError}
+          strongFormSubmitting={strongForm.submitting}
+          submissionStatus={submissionStatus}
+          hasSubmissionFormErrors={hasSubmissionFormErrors}
+          submitDisabled={submitDisabled}
+          onReset={handleReset}
+          onSubmit={handleSubmit}
+        />
+        {submissionStatus ? (
+          <UploadSubmissionStatus
+            submissionStatus={submissionStatus}
+            pollingError={pollingError}
+            submitSectionErrors={submissionErrorsBySection.submit}
+            onRetryPolling={retryPolling}
+          />
+        ) : null}
+      </FormSections>
+    </Page>
   );
 }

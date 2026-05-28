@@ -63,6 +63,13 @@ export function usePackageFileUpload(
     }
   }, [file, startUpload]);
 
+  useEffect(() => {
+    const activeHandle = handle;
+    return () => {
+      activeHandle?.abort();
+    };
+  }, [handle]);
+
   const clearFile = useCallback(() => {
     setFile(null);
     if (fileInputRef.current) {
