@@ -1,0 +1,12 @@
+@layer theme-components {
+  /* Breadcrumb segments use background hover, not link underlines (reset + cyber link). */
+  .breadcrumbs :is(a, .link) {
+    text-decoration: none;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:where(:hover, :active) {
+        text-decoration: none;
+      }
+    }
+  }
+}

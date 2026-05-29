@@ -20,6 +20,7 @@
 @import "./components/Icon/Icon.css";
 @import "./components/Image/Image.css";
 @import "./components/Link/Link.css";
+@import "./components/BreadCrumbs/BreadCrumbs.css";
 @import "./components/Menu/Menu.css";
 @import "./components/MetaItem/MetaItem.css";
 @import "./components/Modal/Modal.css";
