@@ -55,7 +55,6 @@ export const CardCommunity = memo(function CardCommunity(props: Props) {
         tabIndex={-1}
         linkId="Community"
         community={community.identifier}
-        title={community.name}
       >
         <Image
           src={community.cover_image_url}
@@ -70,6 +69,7 @@ export const CardCommunity = memo(function CardCommunity(props: Props) {
         linkId="Community"
         community={community.identifier}
         rootClasses="card-community__title"
+        title={community.name}
       >
         {community.name}
       </NewLink>
