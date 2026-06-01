@@ -1,13 +1,12 @@
-import * as Sentry from "@sentry/remix";
+import * as Sentry from "@sentry/react-router";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { initializeClientDapper } from "cyberstorm/utils/dapperSingleton";
-import { denyUrls } from "cyberstorm/utils/sentry";
-import { StrictMode, startTransition, useEffect } from "react";
+import { beforeSend, denyUrls } from "cyberstorm/utils/sentry";
+import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { useLocation, useMatches } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 
 const publicEnvVariables = getPublicEnvVariables([
@@ -22,11 +21,6 @@ const publicEnvVariables = getPublicEnvVariables([
 Sentry.init({
   dsn: publicEnvVariables.VITE_CLIENT_SENTRY_DSN,
   integrations: [
-    Sentry.browserTracingIntegration({
-      useEffect,
-      useLocation,
-      useMatches,
-    }),
     // Replay is only available in the client
     Sentry.replayIntegration(),
   ],
@@ -71,6 +65,7 @@ Sentry.init({
 
   // Filter out e.g. ad related domains that may spam errors.
   denyUrls,
+  beforeSend,
 });
 
 try {
@@ -87,7 +82,7 @@ startTransition(() => {
   hydrateRoot(
     document,
     <StrictMode>
-      <HydratedRouter />
+      <HydratedRouter onError={Sentry.sentryOnError} />
     </StrictMode>
   );
 });
