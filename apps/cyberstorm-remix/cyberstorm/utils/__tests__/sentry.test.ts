@@ -1,6 +1,6 @@
-import { assert, describe, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 
-import { denyUrls } from "../sentry";
+import { beforeSend, denyUrls } from "../sentry";
 
 // This attempts to match how Sentry does things.
 // https://docs.sentry.io/platforms/javascript/configuration/options/#denyUrls
@@ -27,6 +27,10 @@ describe("utils.sentry.denyUrls", () => {
     ["api.btloader.com", true],
     ["https://btloader.com/foo", true],
     ["bitloader.com", false],
+    ["https://s.nitropay.com/ads-785.js", true],
+    ["https://adnxs.com/prebid/creative", true],
+    ["https://doubleclick.net/pagead/js/foo.js", true],
+    ["https://googlesyndication.com/pagead/js/foo.js", true],
     ["/app/apps/cyberstorm-remix/build/server/index.js", false],
     ["https://thunderstore.io/api/cyberstorm/listing/riskofrain2/", false],
   ])("correctly classifies %s", (url, expectedToMatch) => {
@@ -44,5 +48,60 @@ describe("utils.sentry.denyUrls", () => {
     if (expectedToMatch) {
       assert.fail(`${url} was not caught by denyUrls config`);
     }
+  });
+});
+
+describe("utils.sentry.beforeSend", () => {
+  it("passes through events with no stack frames", () => {
+    const event = { exception: { values: [] } };
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("passes through events where frames have no filename", () => {
+    const event = {
+      exception: {
+        values: [{ stacktrace: { frames: [{ lineno: 1 }] } }],
+      },
+    };
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("drops events where all frames come from ad scripts", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            stacktrace: {
+              frames: [
+                { filename: "https://s.nitropay.com/ads-785.js" },
+                { filename: "https://s.nitropay.com/ads-785.js" },
+              ],
+            },
+          },
+        ],
+      },
+    };
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("drops events where at least one frame comes from an ad script", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            stacktrace: {
+              frames: [
+                { filename: "https://s.nitropay.com/ads-785.js" },
+                {
+                  filename:
+                    "https://thunderstore.io/__remix/entry.client-abc.js",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+    expect(beforeSend(event)).toBeNull();
   });
 });
