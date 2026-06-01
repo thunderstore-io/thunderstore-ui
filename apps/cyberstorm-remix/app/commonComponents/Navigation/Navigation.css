@@ -11,7 +11,9 @@
     justify-content: space-between;
     height: var(--header-height, 64px);
     padding: 5px 0;
+    border-radius: unset;
     overflow-x: auto;
+    box-shadow: 0 var(--section-gap) 0 0 var(--color-surface-1);
   }
 
   .navigation-header__global {

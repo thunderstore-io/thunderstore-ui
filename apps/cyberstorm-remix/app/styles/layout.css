@@ -3,6 +3,7 @@
     /* Header dimensions */
     --header-height: 3.5rem;
     --content-padding-top: 1.5rem;
+    --sidebar-sticky-top: calc(var(--header-height) + var(--section-gap));
 
     /* stylelint-disable */
     interpolate-size: allow-keywords;
@@ -32,16 +33,15 @@
     gap: var(--gap-xs);
     align-items: flex-start;
     align-self: stretch;
-    padding: 0 var(--space-16) var(--space-16) var(--space-16);
   }
 
   .layout__ads-inner {
     position: sticky;
-    top: var(--header-height);
+    top: var(--sidebar-sticky-top);
     gap: var(--gap-xl);
     align-items: center;
     justify-content: center;
-    padding: var(--space-16) 0 0 0;
+    padding: var(--space-16);
   }
 
   @media (width <= 92.125rem) {
