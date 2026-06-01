@@ -277,7 +277,7 @@ export function PackageSearch(props: Props) {
 
   const filtersContent = (
     <>
-      {sortedSections && sortedSections.length > 0 ? (
+      {sortedSections ? (
         <CollapsibleMenu headerTitle="Sections" defaultOpen>
           <RadioGroup
             sections={[
@@ -290,8 +290,10 @@ export function PackageSearch(props: Props) {
               },
             ]}
             selected={
-              searchParamsBlob.section === ""
-                ? sortedSections[0]?.uuid
+              searchParamsBlob.section === "" || sortedSections.length === 0
+                ? sortedSections.length > 0
+                  ? sortedSections[0].uuid
+                  : "all"
                 : searchParamsBlob.section
             }
             setSelected={setParamsBlobValue(
