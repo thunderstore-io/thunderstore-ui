@@ -8,23 +8,18 @@
     gap: var(--gap-md);
     align-items: start;
     align-self: stretch;
-    padding: var(--gap-md) var(--gap-7xl) var(--gap-3xl);
+    container-type: inline-size;
   }
 
   .community--packageListingSubpath {
     gap: var(--gap-xl);
   }
 
-  @media (width <= 41rem) {
-    .community {
-      padding: var(--gap-md) 0 var(--gap-3xl);
-    }
-  }
-
   .community__header {
     display: grid;
     grid-template-rows: auto auto;
     align-items: start;
+    padding: var(--space-16) 0;
   }
 
   .community__header--compact {
@@ -191,9 +186,10 @@
     }
   }
 
-  @media (width < 48rem) {
+  @container (width < 48rem) {
     .community__header {
       gap: var(--gap-md);
+      padding: 0;
     }
 
     .community__background {

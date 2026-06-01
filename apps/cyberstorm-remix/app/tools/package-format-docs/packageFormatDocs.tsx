@@ -1,5 +1,6 @@
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import { CodeBox, NewIcon, NewTable } from "@thunderstore/cyberstorm";
@@ -8,12 +9,12 @@ import "./PackageFormatDocs.css";
 
 export default function PackageFormatDocs() {
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Package Format Docs
       </PageHeader>
-      <section className="container container--y container--full package-format-docs">
-        <div className="container container--y package-format-docs__container">
+      <section className="package-format-docs">
+        <div className="package-format-docs__container">
           <p className="package-format-docs__title">
             A valid package is a zip file that contains the following files:
           </p>
@@ -26,7 +27,7 @@ export default function PackageFormatDocs() {
             />
           </div>
         </div>
-        <div className="container container--y package-format-docs__container">
+        <div className="package-format-docs__container">
           <p className="package-format-docs__title">
             Additionally, the manifest.json must contain the following fields:
           </p>
@@ -39,7 +40,7 @@ export default function PackageFormatDocs() {
             />
           </div>
         </div>
-        <div className="container container--y package-format-docs__container">
+        <div className="package-format-docs__container">
           <p className="package-format-docs__title">
             Example manifest.json content:
           </p>
@@ -48,7 +49,7 @@ export default function PackageFormatDocs() {
           </div>
         </div>
       </section>
-    </>
+    </Page>
   );
 }
 

@@ -7,7 +7,7 @@
     gap: var(--space-32);
     align-items: flex-start;
     align-self: stretch;
-    padding: var(--space-16);
+    padding: var(--space-24);
     border-radius: var(--radius-md);
   }
 
@@ -17,7 +17,7 @@
 
   .page-header--simple {
     gap: 1.5rem;
-    padding: var(--space-16) 0;
+    padding: var(--space-24) 0;
   }
 
   .page-header__image {
@@ -120,7 +120,7 @@
   @media (width <= 48rem) {
     .page-header {
       gap: var(--space-16);
-      padding: var(--space-8);
+      padding: var(--space-8) 0;
     }
 
     .page-header__image {

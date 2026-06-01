@@ -1,5 +1,6 @@
 import { createSeo } from "cyberstorm/utils/meta";
 import { Outlet, useLocation, useOutletContext, useParams } from "react-router";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
@@ -43,7 +44,7 @@ export default function TeamSettings() {
   const currentTab = parts.length === 4 ? parts[3] : "profile";
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         {teamName}
       </PageHeader>
@@ -102,6 +103,6 @@ export default function TeamSettings() {
           <Outlet context={outletContext} />
         </section>
       </div>
-    </>
+    </Page>
   );
 }

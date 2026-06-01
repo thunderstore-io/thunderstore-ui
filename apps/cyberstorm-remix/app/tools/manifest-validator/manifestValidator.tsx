@@ -2,6 +2,11 @@ import { Buffer } from "buffer";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import { useDebounce } from "use-debounce";
+import {
+  FormSection,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import {
@@ -18,7 +23,6 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { type OutletContextShape } from "../../root";
-import "./manifestValidator.css";
 
 export default function ManifestValidator() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -71,40 +75,35 @@ export default function ManifestValidator() {
   }, [debouncedTeamInput, debouncedManifestInput, outletContext.requestConfig]);
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Manifest Validator
       </PageHeader>
-      <section className="container container--y container--full manifest-validator">
-        <div className="container container--x container--full manifest-validator__row">
-          <div className="manifest-validator__meta">
-            <p className="manifest-validator__title">Manifest Validator</p>
-            <p className="manifest-validator__description">
-              Select a team to validate a package
-            </p>
-          </div>
-          <div className="manifest-validator__content">
-            {currentUser && currentUser.username ? null : (
-              <NewAlert csVariant="warning">
-                You must be logged in to see your teams
-              </NewAlert>
-            )}
-            <NewSelect
-              onChange={setTeamInput}
-              options={selectOptions}
-              value={teamInput}
-              placeholder="Select team"
-            />
-            <CodeInput
-              placeholder={PLACEHOLDER}
-              onChange={(e) => setManifestInput(e.currentTarget.value)}
-              value={manifestInput}
-              validationBarProps={validation}
-            />
-          </div>
-        </div>
-      </section>
-    </>
+      <FormSections>
+        <FormSection
+          title="Manifest Validator"
+          description="Select a team to validate a package"
+        >
+          {currentUser && currentUser.username ? null : (
+            <NewAlert csVariant="warning">
+              You must be logged in to see your teams
+            </NewAlert>
+          )}
+          <NewSelect
+            onChange={setTeamInput}
+            options={selectOptions}
+            value={teamInput}
+            placeholder="Select team"
+          />
+          <CodeInput
+            placeholder={PLACEHOLDER}
+            onChange={(e) => setManifestInput(e.currentTarget.value)}
+            value={manifestInput}
+            validationBarProps={validation}
+          />
+        </FormSection>
+      </FormSections>
+    </Page>
   );
 }
 

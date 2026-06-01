@@ -1,41 +1,24 @@
 @layer theme-layout {
-  :root {
-    --section-bg: var(--color-surface-2);
-    --section-border-radius: var(--radius-sm);
-    --section-gap: var(--gap-2xs);
-  }
-
-  /* CONTAINER, basically flex wrapper utility class */
-  .container {
+  .flex {
     display: flex;
-    min-width: 0;
-    min-height: 0;
   }
 
-  .container--x {
-    flex-direction: row;
+  .width-100 {
+    width: 100%;
   }
 
-  .container--y {
+  .flex--grow-1 {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .flex--y {
+    display: flex;
     flex-direction: column;
   }
 
-  .container--full {
-    flex: 1;
-  }
-
-  .container--stretch {
-    align-self: stretch;
-  }
-
-  /* ISLANDS, visual helper classes for islands */
-  .island {
+  .flex--x {
     display: flex;
-    gap: var(--section-gap);
-  }
-
-  .island-item {
-    border-radius: var(--section-border-radius);
-    background-color: var(--section-bg);
+    flex-direction: row;
   }
 }

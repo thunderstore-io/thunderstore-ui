@@ -182,195 +182,187 @@ export default function PackageVersion() {
 
   return (
     <>
-      <div className="container container--y container--full">
-        <section className="package-listing__package-section">
-          <div className="package-listing__main">
-            <section className="package-listing__package-content-section">
-              <NewAlert csVariant="warning">
-                You are viewing a potentially older version of this package.
-              </NewAlert>
-              <Suspense
-                fallback={
-                  <SkeletonBox className="package-listing__page-header-skeleton" />
-                }
-              >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <PageHeader
-                      headingLevel="1"
-                      headingSize="3"
-                      image={resolvedValue.icon_url}
-                      description={resolvedValue.description}
-                      variant="detailed"
-                      meta={
-                        <>
-                          <span>
+      <section className="package-listing__package-section">
+        <div className="package-listing__main">
+          <section className="package-listing__package-content-section">
+            <NewAlert csVariant="warning">
+              You are viewing a potentially older version of this package.
+            </NewAlert>
+            <Suspense
+              fallback={
+                <SkeletonBox className="package-listing__page-header-skeleton" />
+              }
+            >
+              <Await resolve={version}>
+                {(resolvedValue) => (
+                  <PageHeader
+                    headingLevel="1"
+                    headingSize="3"
+                    image={resolvedValue.icon_url}
+                    description={resolvedValue.description}
+                    variant="detailed"
+                    meta={
+                      <>
+                        <span>
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faUsers} />
+                          </NewIcon>
+                          {resolvedValue.namespace}
+                        </span>
+                        {resolvedValue.website_url ? (
+                          <NewLink
+                            primitiveType="link"
+                            href={resolvedValue.website_url}
+                            csVariant="cyber"
+                            rootClasses="page-header__meta-item"
+                          >
+                            {resolvedValue.website_url}
                             <NewIcon csMode="inline" noWrapper>
-                              <FontAwesomeIcon icon={faUsers} />
+                              <FontAwesomeIcon icon={faArrowUpRight} />
                             </NewIcon>
-                            {resolvedValue.namespace}
-                          </span>
-                          {resolvedValue.website_url ? (
-                            <NewLink
-                              primitiveType="link"
-                              href={resolvedValue.website_url}
-                              csVariant="cyber"
-                              rootClasses="page-header__meta-item"
-                            >
-                              {resolvedValue.website_url}
-                              <NewIcon csMode="inline" noWrapper>
-                                <FontAwesomeIcon icon={faArrowUpRight} />
-                              </NewIcon>
-                            </NewLink>
-                          ) : null}
+                          </NewLink>
+                        ) : null}
+                      </>
+                    }
+                  >
+                    {formatToDisplayName(resolvedValue.name)}
+                  </PageHeader>
+                )}
+              </Await>
+            </Suspense>
+
+            <div className="package-listing__narrow-actions">
+              <Suspense fallback={<p>Loading...</p>}>
+                <Await resolve={versionAndTeamPromise}>
+                  {([versionData, teamData]) => (
+                    <PackageActions
+                      downloadUrl={versionData.download_url}
+                      team={teamData}
+                      installUrl={versionData.install_url ?? ""}
+                      installDisabled={!versionData.install_url}
+                      packageDetailsNarrow={
+                        <>
+                          <button
+                            popoverTarget="packageDetailDrawer"
+                            popoverTargetAction="show"
+                            className="button button--variant--secondary button--size--medium package-listing__drawer-button"
+                          >
+                            Details
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faCaretRight} />
+                            </NewIcon>
+                          </button>
+                          <Drawer
+                            popoverId="packageDetailDrawer"
+                            headerContent={
+                              <Heading csLevel="3" csSize="3">
+                                Details
+                              </Heading>
+                            }
+                            rootClasses="package-listing__drawer"
+                          >
+                            {packageMeta(firstUploaded, versionData)}
+                          </Drawer>
                         </>
                       }
-                    >
-                      {formatToDisplayName(resolvedValue.name)}
-                    </PageHeader>
+                    />
                   )}
                 </Await>
               </Suspense>
-
-              <div className="package-listing__narrow-actions">
-                <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={versionAndTeamPromise}>
-                    {([versionData, teamData]) => (
-                      <PackageActions
-                        downloadUrl={versionData.download_url}
-                        team={teamData}
-                        installUrl={versionData.install_url ?? ""}
-                        installDisabled={!versionData.install_url}
-                        packageDetailsNarrow={
-                          <>
-                            <button
-                              popoverTarget="packageDetailDrawer"
-                              popoverTargetAction="show"
-                              className="button button--variant--secondary button--size--medium package-listing__drawer-button"
-                            >
-                              Details
-                              <NewIcon csMode="inline" noWrapper>
-                                <FontAwesomeIcon icon={faCaretRight} />
-                              </NewIcon>
-                            </button>
-                            <Drawer
-                              popoverId="packageDetailDrawer"
-                              headerContent={
-                                <Heading csLevel="3" csSize="3">
-                                  Details
-                                </Heading>
-                              }
-                              rootClasses="package-listing__drawer"
-                            >
-                              {packageMeta(firstUploaded, versionData)}
-                            </Drawer>
-                          </>
-                        }
-                      />
-                    )}
-                  </Await>
-                </Suspense>
-              </div>
+            </div>
+            <Suspense
+              fallback={
+                <SkeletonBox className="package-listing__nav-skeleton" />
+              }
+            >
+              <Await resolve={version}>
+                {(resolvedValue) => (
+                  <>
+                    <Tabs>
+                      <NewLink
+                        key="description"
+                        primitiveType="cyberstormLink"
+                        linkId="PackageVersionWithoutCommunity"
+                        namespace={resolvedValue.namespace}
+                        package={resolvedValue.name}
+                        version={resolvedValue.version_number}
+                        aria-current={currentTab === "details"}
+                        rootClasses={`tabs-item${
+                          currentTab === "details" ? " tabs-item--current" : ""
+                        }`}
+                      >
+                        Details
+                      </NewLink>
+                      <NewLink
+                        key="required"
+                        primitiveType="cyberstormLink"
+                        linkId="PackageVersionWithoutCommunityRequired"
+                        namespace={resolvedValue.namespace}
+                        package={resolvedValue.name}
+                        version={resolvedValue.version_number}
+                        aria-current={currentTab === "required"}
+                        rootClasses={`tabs-item${
+                          currentTab === "required" ? " tabs-item--current" : ""
+                        }`}
+                      >
+                        Required ({resolvedValue.dependency_count})
+                      </NewLink>
+                      <NewLink
+                        key="versions"
+                        primitiveType="cyberstormLink"
+                        linkId="PackageVersionWithoutCommunityVersions"
+                        namespace={resolvedValue.namespace}
+                        package={resolvedValue.name}
+                        version={resolvedValue.version_number}
+                        aria-current={currentTab === "versions"}
+                        rootClasses={`tabs-item${
+                          currentTab === "versions" ? " tabs-item--current" : ""
+                        }`}
+                      >
+                        Versions
+                      </NewLink>
+                    </Tabs>
+                  </>
+                )}
+              </Await>
+            </Suspense>
+            <div className="package-listing__content">
+              <Outlet context={outletContext} />
+            </div>
+          </section>
+          <aside className="package-listing-sidebar">
+            <div className="package-listing-sidebar__main">
               <Suspense
                 fallback={
-                  <SkeletonBox className="package-listing__nav-skeleton" />
+                  <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
+                }
+              >
+                <Await resolve={versionAndTeamPromise}>
+                  {([versionData, teamData]) => (
+                    <PackageActions
+                      downloadUrl={versionData.download_url}
+                      team={teamData}
+                      installUrl={versionData.install_url ?? ""}
+                      installDisabled={!versionData.install_url}
+                    />
+                  )}
+                </Await>
+              </Suspense>
+              <Suspense
+                fallback={
+                  <SkeletonBox className="package-listing-sidebar__skeleton" />
                 }
               >
                 <Await resolve={version}>
                   {(resolvedValue) => (
-                    <>
-                      <Tabs>
-                        <NewLink
-                          key="description"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionWithoutCommunity"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "details"}
-                          rootClasses={`tabs-item${
-                            currentTab === "details"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Details
-                        </NewLink>
-                        <NewLink
-                          key="required"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionWithoutCommunityRequired"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "required"}
-                          rootClasses={`tabs-item${
-                            currentTab === "required"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Required ({resolvedValue.dependency_count})
-                        </NewLink>
-                        <NewLink
-                          key="versions"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionWithoutCommunityVersions"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "versions"}
-                          rootClasses={`tabs-item${
-                            currentTab === "versions"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Versions
-                        </NewLink>
-                      </Tabs>
-                    </>
+                    <>{packageMeta(firstUploaded, resolvedValue)}</>
                   )}
                 </Await>
               </Suspense>
-              <div className="package-listing__content">
-                <Outlet context={outletContext} />
-              </div>
-            </section>
-            <aside className="package-listing-sidebar">
-              <div className="package-listing-sidebar__main">
-                <Suspense
-                  fallback={
-                    <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
-                  }
-                >
-                  <Await resolve={versionAndTeamPromise}>
-                    {([versionData, teamData]) => (
-                      <PackageActions
-                        downloadUrl={versionData.download_url}
-                        team={teamData}
-                        installUrl={versionData.install_url ?? ""}
-                        installDisabled={!versionData.install_url}
-                      />
-                    )}
-                  </Await>
-                </Suspense>
-                <Suspense
-                  fallback={
-                    <SkeletonBox className="package-listing-sidebar__skeleton" />
-                  }
-                >
-                  <Await resolve={version}>
-                    {(resolvedValue) => (
-                      <>{packageMeta(firstUploaded, resolvedValue)}</>
-                    )}
-                  </Await>
-                </Suspense>
-              </div>
-            </aside>
-          </div>
-        </section>
-      </div>
+            </div>
+          </aside>
+        </div>
+      </section>
     </>
   );
 }

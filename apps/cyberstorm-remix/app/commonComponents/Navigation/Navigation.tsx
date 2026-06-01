@@ -26,6 +26,7 @@ import {
 } from "cyberstorm/utils/ThunderstoreAuth";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
+import { Island } from "~/commonComponents/Island/Island";
 
 import {
   Heading,
@@ -81,10 +82,7 @@ export function Navigation(props: {
 
   return (
     <>
-      <header
-        className="container container--x island-item navigation-header"
-        aria-label="Header"
-      >
+      <Island as="header" rootClasses="navigation-header" aria-label="Header">
         <nav className="navigation-header__global" aria-label="Main">
           <div className="navigation-header__start">
             <NewButton
@@ -243,7 +241,7 @@ export function Navigation(props: {
             <DesktopLoginPopover />
           )}
         </div>
-      </header>
+      </Island>
     </>
   );
 }
