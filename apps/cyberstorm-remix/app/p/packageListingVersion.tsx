@@ -1,3 +1,4 @@
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,7 +36,11 @@ import type { PackageListingDetails } from "@thunderstore/dapper/types";
 
 import type { Route } from "./+types/packageListingVersion";
 import { PackageActions } from "./components/PackageListing/PackageActions";
-import { getPrivateListing, getPublicListing } from "./listingUtils";
+import {
+  getPrivateListing,
+  getPublicListing,
+  isGithubUrl,
+} from "./listingUtils";
 import "./packageListing.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
@@ -208,10 +213,16 @@ export default function PackageListingVersion() {
                         csVariant="cyber"
                         rootClasses="page-header__meta-item"
                       >
-                        {listing.website_url}
                         <NewIcon csMode="inline" noWrapper>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
+                          <FontAwesomeIcon
+                            icon={
+                              isGithubUrl(listing.website_url)
+                                ? faGithub
+                                : faArrowUpRight
+                            }
+                          />
                         </NewIcon>
+                        {listing.website_url}
                       </NewLink>
                     ) : null}
                   </>
