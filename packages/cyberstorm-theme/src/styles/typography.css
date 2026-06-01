@@ -37,6 +37,7 @@
   body {
     color: var(--color-text-primary);
     font: var(--font-body);
+    text-underline-position: from-font;
     line-height: normal;
     background-color: var(--body-bg-color);
   }
