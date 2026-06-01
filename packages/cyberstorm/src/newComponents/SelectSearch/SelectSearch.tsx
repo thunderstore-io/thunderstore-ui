@@ -221,7 +221,15 @@ export const SelectSearch = React.forwardRef<
               onFocus={() => !disabled && setIsVisible(true)}
               onChange={(e) => !disabled && setSearch(e.currentTarget.value)}
               ref={inputRef}
-              placeholder={selectedValue ? undefined : placeholder}
+              placeholder={
+                (
+                  Array.isArray(selectedValue)
+                    ? selectedValue.length > 0
+                    : !!selectedValue
+                )
+                  ? undefined
+                  : placeholder
+              }
               disabled={disabled}
             />
           </div>
