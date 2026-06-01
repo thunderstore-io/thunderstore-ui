@@ -10,12 +10,9 @@
     }
   }
 
-  .link[disabled],
+  .link[aria-disabled="true"],
   .link-disabled {
+    cursor: not-allowed;
     pointer-events: none;
-  }
-
-  .link-strikethrough {
-    display: flex;
   }
 }
