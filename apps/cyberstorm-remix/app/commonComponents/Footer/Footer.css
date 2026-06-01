@@ -228,6 +228,15 @@
   @media (width <= 72rem) {
     .footer__content {
       flex-direction: column;
+      reading-flow: flex-visual;
+    }
+
+    .footer__info {
+      reading-flow: flex-visual;
+    }
+
+    .footer__company {
+      order: 1;
     }
 
     .footer__links,
@@ -260,6 +269,7 @@
       gap: var(--gap-xs);
       align-items: flex-start;
       align-self: stretch;
+      order: -1;
       width: 100%;
       padding: 3rem var(--space-24) 0;
     }
