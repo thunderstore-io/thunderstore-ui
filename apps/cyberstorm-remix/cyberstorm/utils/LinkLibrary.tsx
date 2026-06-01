@@ -7,6 +7,35 @@ import type {
   ThunderstoreLinkProps,
 } from "@thunderstore/cyberstorm";
 
+import { getPublicEnvVariables } from "../security/publicEnvVariables";
+
+// Returns true when the current document is NOT being served by the React Router
+// app, in which case in-app <Link> navigations need to force a full document
+// load (otherwise React Router would intercept clicks and try to handle
+// routes that only exist on the React Router side). We treat
+// VITE_BETA_SITE_URL as the canonical React Router app origin: if the current
+// hostname matches it, we know we are inside the React Router app and SPA
+// navigation is safe. This intentionally allows the React Router app to be served
+// from either the beta subdomain (e.g. new.thunderstore.io) or the base
+// domain (e.g. thunderstore.dev in QA).
+// TODO: Remove usage of VITE_BETA_SITE_URL as the canonical React Router origin
+// once the React Router app is deployed to the base domain in production, and
+// update the name of the env variable to reflect its new purpose.
+export function shouldReloadDocument(
+  hostname = typeof window !== "undefined"
+    ? window.location.hostname
+    : undefined
+): boolean {
+  if (hostname === undefined) return false;
+  const { VITE_BETA_SITE_URL } = getPublicEnvVariables(["VITE_BETA_SITE_URL"]);
+  if (!VITE_BETA_SITE_URL) return false;
+  try {
+    return hostname !== new URL(VITE_BETA_SITE_URL).hostname;
+  } catch {
+    return false;
+  }
+}
+
 interface LinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
     PropsWithChildren,
@@ -46,15 +75,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         {...fProps}
         className={className}
         ref={forwardedRef}
-        // TODO: Remove this when the site is deployed to full use. This here only to correct the link behaviour
-        // in "https://thunderstore.io/communities/" page as it's a Remix page that links to Django pages directly.
-        // Linking to Django pages wouldn't be a problem if there were not inconsistent expectations between the new. subdomain
-        // and the subdomainless Remix pages that are served. (At the time of writing it's only "https://thunderstore.io/communities/")
-        // For simplicity and time saving the new. subdomain is hardcoded here. If that subdomain is changed; this should be updated too.
-        reloadDocument={
-          typeof window !== "undefined" &&
-          !window.location.hostname.startsWith("new.")
-        }
+        reloadDocument={shouldReloadDocument()}
       >
         {children}
       </RRLink>
