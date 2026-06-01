@@ -8,6 +8,10 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import {
+  FormSection,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 
 import { MemberAddForm } from "./MemberAddForm";
 import "./Members.css";
@@ -34,29 +38,28 @@ export default function Members() {
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={members}>
         {(resolvedMembers) => (
-          <div className="settings-items">
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Teams</p>
-                <p className="settings-items__description">Manage your teams</p>
-                {isOwner && (
+          <FormSections>
+            <FormSection
+              title="Members"
+              description="Manage your team members"
+              metaExtra={
+                isOwner ? (
                   <MemberAddForm
                     teamName={teamName}
                     updateTrigger={teamMemberRevalidate}
                     config={outletContext.requestConfig}
                   />
-                )}
-              </div>
-              <div className="settings-items__content">
-                <MembersTable
-                  teamName={teamName}
-                  members={resolvedMembers}
-                  updateTrigger={teamMemberRevalidate}
-                  config={outletContext.requestConfig}
-                />
-              </div>
-            </div>
-          </div>
+                ) : undefined
+              }
+            >
+              <MembersTable
+                teamName={teamName}
+                members={resolvedMembers}
+                updateTrigger={teamMemberRevalidate}
+                config={outletContext.requestConfig}
+              />
+            </FormSection>
+          </FormSections>
         )}
       </Await>
     </Suspense>

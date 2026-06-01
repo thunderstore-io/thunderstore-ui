@@ -6,6 +6,10 @@ import { type ReactElement, useRef } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
 import { Connection } from "~/commonComponents/Connection/Connection";
+import {
+  FormSection,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 import { type OutletContextShape } from "~/root";
 
 import {
@@ -114,11 +118,11 @@ export default function Connections() {
   if (!currentUser?.username) return <SkeletonBox />;
 
   return (
-    <div className="settings-items">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Connections</p>
-          <p className="settings-items__description">
+    <FormSections>
+      <FormSection
+        title="Connections"
+        description={
+          <>
             This information will not be shared outside of Thunderstore. Read
             more on our{" "}
             <NewLink
@@ -129,36 +133,35 @@ export default function Connections() {
               Privacy Policy
             </NewLink>
             .
-          </p>
-        </div>
-        <div className="settings-items__content">
-          {PROVIDERS.map((provider) => (
-            <Connection
-              key={provider.name}
-              disabled={onlyOneConnected() && !!getConnection(provider)}
-              icon={provider.icon}
-              name={provider.name}
-              identifier={provider.identifier}
-              connection={getConnection(provider)}
-              connectionLink={buildAuthLoginUrl({
-                type: provider.identifier,
-                authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
-                authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
-                nextUrl: `${publicEnvVariables.VITE_BETA_SITE_URL}/settings`,
-              })}
-              disconnectFunction={(provider) => {
-                disconnectingProviderRef.current = provider;
-                return onSubmit({
-                  params: { provider },
-                  config: outletContext.requestConfig,
-                  queryParams: {},
-                  data: { provider },
-                });
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+          </>
+        }
+      >
+        {PROVIDERS.map((provider) => (
+          <Connection
+            key={provider.name}
+            disabled={onlyOneConnected() && !!getConnection(provider)}
+            icon={provider.icon}
+            name={provider.name}
+            identifier={provider.identifier}
+            connection={getConnection(provider)}
+            connectionLink={buildAuthLoginUrl({
+              type: provider.identifier,
+              authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+              authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+              nextUrl: `${publicEnvVariables.VITE_BETA_SITE_URL}/settings`,
+            })}
+            disconnectFunction={(provider) => {
+              disconnectingProviderRef.current = provider;
+              return onSubmit({
+                params: { provider },
+                config: outletContext.requestConfig,
+                queryParams: {},
+                data: { provider },
+              });
+            }}
+          />
+        ))}
+      </FormSection>
+    </FormSections>
   );
 }
