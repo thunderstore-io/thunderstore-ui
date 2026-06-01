@@ -78,10 +78,6 @@ export default [
   ),
   route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx"),
   route(
-    "/package/create/docs",
-    "tools/package-format-docs/packageFormatDocs.tsx"
-  ),
-  route(
     "/tools/markdown-preview",
     "tools/markdown-preview/markdownPreview.tsx"
   ),
