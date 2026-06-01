@@ -3,7 +3,6 @@ import "./styles/cyberstorm.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
-import { withSentry } from "@sentry/remix";
 import { Breadcrumbs } from "app/commonComponents/Breadcrumbs/Breadcrumbs";
 import {
   getPublicEnvVariables,
@@ -401,7 +400,7 @@ function App() {
   );
 }
 
-export default withSentry(App);
+export default App;
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
 // Temporary solution for implementing ads

@@ -1,4 +1,4 @@
-import { captureRemixErrorBoundaryError } from "@sentry/remix";
+import * as Sentry from "@sentry/react-router";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { type JSX, useEffect } from "react";
 import {
@@ -27,7 +27,7 @@ export function RouteErrorBoundary() {
   // rerenders don't get logged in Sentry twice.
   useEffect(() => {
     if (error && import.meta.env.PROD) {
-      captureRemixErrorBoundaryError(error);
+      Sentry.captureException(error);
     } else if (error) {
       console.error("Error boundary caught error", error);
     }
