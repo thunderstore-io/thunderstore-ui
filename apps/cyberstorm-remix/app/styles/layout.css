@@ -25,8 +25,24 @@
     gap: var(--gap-sm);
     align-self: flex-start;
     justify-content: flex-start;
-    max-width: var(--nimbus-layout-content-max-width, 120rem);
+
+    /* Fallback covers routes without a unique root class (e.g. /login, /teams) */
+    max-width: var(--nimbus-layout-content-max-width, 90rem);
     padding: var(--space-16);
+  }
+
+  /* Route-specific content max-width overrides */
+
+  /* TODO: When the new "Container" component is implemented, that will be used to wrap these routes, check if these should be removed */
+  .layout__content:has(.community),
+  .layout__content:has(.communities),
+  .layout__content:has(.dependants),
+  .layout__content:has(.team),
+  .layout__content:has(.markdown-preview),
+  .layout__content:has(.manifest-validator),
+  .layout__content:has(.upload),
+  .layout__content:has(.settings-page) {
+    --nimbus-layout-content-max-width: 90rem;
   }
 
   .layout__ads {
