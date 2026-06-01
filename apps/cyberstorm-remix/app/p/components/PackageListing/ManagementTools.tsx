@@ -1,4 +1,4 @@
-import { faBoxOpen, faCog, faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
@@ -10,42 +10,46 @@ import {
   fetchPackagePermissions,
 } from "@thunderstore/thunderstore-api";
 
+import { type getPrivateListing } from "../../listingUtils";
+import { ManagePackageForm } from "./ManagePackageForm";
 import { ReviewPackageForm } from "./ReviewPackageForm";
 
+type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
+type Permissions = Awaited<
+  ReturnType<typeof fetchPackagePermissions>
+>["permissions"];
+
 export interface ManagementToolsProps {
-  packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>;
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
+  listing: Listing;
+  permissions: Permissions;
   listingStatus:
     | Awaited<ReturnType<DapperTsInterface["getPackageListingStatus"]>>
     | undefined;
+  communityFilters: Awaited<
+    ReturnType<DapperTsInterface["getCommunityFilters"]>
+  >;
   toast: ReturnType<typeof useToast>;
   requestConfig: () => RequestConfig;
 }
 
 export function ManagementTools({
-  packagePermissions,
   listing,
+  permissions,
   listingStatus,
+  communityFilters,
   toast,
   requestConfig,
 }: ManagementToolsProps) {
-  const perms = packagePermissions.permissions;
-  const pkg = packagePermissions.package;
-
   const publicEnvVariables = getPublicEnvVariables(["VITE_SITE_URL"]);
 
-  const canViewAdminPages =
-    perms.can_view_listing_admin_page &&
-    listingStatus &&
-    listingStatus.listing_admin_url;
-  const canViewPackageAdminPages =
-    perms.can_view_package_admin_page &&
-    listingStatus &&
-    listingStatus.package_admin_url;
+  const canViewListingAdmin =
+    permissions.can_view_listing_admin_page && listingStatus?.listing_admin_url;
+  const canViewPackageAdmin =
+    permissions.can_view_package_admin_page && listingStatus?.package_admin_url;
 
   return (
     <div className="package-listing-management-tools">
-      {perms.can_moderate && (
+      {permissions.can_moderate && (
         <div className="package-listing-management-tools__island">
           <ReviewPackageForm
             communityId={listing.community_identifier}
@@ -58,27 +62,21 @@ export function ManagementTools({
         </div>
       )}
 
-      {(perms.can_manage || perms.can_moderate) && (
+      {permissions.can_manage && (
         <div className="package-listing-management-tools__island">
-          <NewButton
-            csSize="small"
-            primitiveType="cyberstormLink"
-            linkId="PackageEdit"
-            community={pkg.community_id}
-            namespace={pkg.namespace_id}
-            package={pkg.package_name}
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faCog} />
-            </NewIcon>
-            Manage Package
-          </NewButton>
+          <ManagePackageForm
+            listing={listing}
+            permissions={permissions}
+            communityFilters={communityFilters}
+            toast={toast}
+            config={requestConfig}
+          />
         </div>
       )}
 
-      {listingStatus && (canViewAdminPages || canViewPackageAdminPages) ? (
+      {canViewListingAdmin || canViewPackageAdmin ? (
         <div className="package-listing-management-tools__island">
-          {canViewAdminPages ? (
+          {canViewListingAdmin ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
@@ -94,7 +92,7 @@ export function ManagementTools({
               </NewIcon>
             </NewButton>
           ) : null}
-          {canViewPackageAdminPages ? (
+          {canViewPackageAdmin ? (
             <NewButton
               csSize="small"
               csVariant="secondary"

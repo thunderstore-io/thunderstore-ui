@@ -81,8 +81,6 @@ export interface LinkLibrary {
   MarkdownPreview: NoRequiredProps;
   /** Package's detail view */
   Package: (props: AnyProps & PackageProps) => RE | null;
-  /** Package's edit view */
-  PackageEdit: (props: AnyProps & PackageProps) => RE | null;
   /** Package's required view */
   PackageRequired: (props: AnyProps & PackageProps) => RE | null;
   /** Package's wiki view */
@@ -166,7 +164,6 @@ const library: LinkLibrary = {
   ManifestValidator: noop,
   MarkdownPreview: noop,
   Package: noop,
-  PackageEdit: noop,
   PackageRequired: noop,
   PackageWiki: noop,
   PackageWikiNewPage: noop,

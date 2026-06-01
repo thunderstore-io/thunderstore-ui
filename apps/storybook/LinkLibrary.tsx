@@ -88,13 +88,6 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
-  PackageEdit: (p) => (
-    <Link
-      {...p}
-      url={`/c/${p.community}/p/${p.namespace}/${p.package}/edit`}
-      ref={p.customRef}
-    />
-  ),
   PackageRequired: (p) => (
     <Link
       {...p}
