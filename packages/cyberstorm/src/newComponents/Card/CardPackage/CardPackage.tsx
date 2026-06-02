@@ -278,8 +278,7 @@ export function CardPackage(props: Props) {
           </div>
         </div>
 
-        {["card", "featured", "fullWidth"].includes(csVariant) &&
-        packageData.description
+        {["card", "featured", "fullWidth"].includes(csVariant)
           ? description
           : null}
 
