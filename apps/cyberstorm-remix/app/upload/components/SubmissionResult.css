@@ -1,0 +1,7 @@
+@layer nimbus-layout {
+  .submission-result__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-2xs);
+  }
+}

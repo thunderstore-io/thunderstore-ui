@@ -102,7 +102,7 @@ describe("usePackageFileUpload", () => {
     unmount();
   });
 
-  it("starts multipart upload for valid zip files", async () => {
+  it("does not start upload on file select", async () => {
     const requestConfig = vi.fn(() => ({
       apiHost: "https://api.example.com",
     }));
@@ -122,7 +122,36 @@ describe("usePackageFileUpload", () => {
 
     await act(async () => {
       await Promise.resolve();
-      await Promise.resolve();
+    });
+
+    expect(mockStart).not.toHaveBeenCalled();
+    expect(latest?.isDone).toBe(false);
+    expect(latest?.usermedia).toBeUndefined();
+    expect(latest?.uploadError).toBeNull();
+
+    unmount();
+  });
+
+  it("starts multipart upload when startUpload is called", async () => {
+    const requestConfig = vi.fn(() => ({
+      apiHost: "https://api.example.com",
+    }));
+
+    let latest: ReturnType<typeof usePackageFileUpload> | undefined;
+
+    function Harness() {
+      latest = usePackageFileUpload(requestConfig);
+      return null;
+    }
+
+    const unmount = render(React.createElement(Harness));
+
+    act(() => {
+      latest?.selectFile(zipFile());
+    });
+
+    await act(async () => {
+      await latest?.startUpload();
     });
 
     expect(mockStart).toHaveBeenCalledTimes(1);
@@ -133,7 +162,7 @@ describe("usePackageFileUpload", () => {
     unmount();
   });
 
-  it("surfaces missing API host configuration", async () => {
+  it("surfaces missing API host configuration on submit-triggered upload", async () => {
     const requestConfig = vi.fn(() => ({
       apiHost: "",
     })) as unknown as Parameters<typeof usePackageFileUpload>[0];
@@ -152,8 +181,9 @@ describe("usePackageFileUpload", () => {
     });
 
     await act(async () => {
-      await Promise.resolve();
-      await Promise.resolve();
+      await expect(latest?.startUpload()).rejects.toThrow(
+        "API host is not configured"
+      );
     });
 
     expect(latest?.uploadError).toBe("API host is not configured");
@@ -166,6 +196,7 @@ describe("usePackageFileUpload", () => {
     const requestConfig = vi.fn(() => ({
       apiHost: "https://api.example.com",
     }));
+    mockStart.mockImplementation(() => new Promise<void>(() => undefined));
 
     let latest: ReturnType<typeof usePackageFileUpload> | undefined;
 
@@ -181,7 +212,7 @@ describe("usePackageFileUpload", () => {
     });
 
     await act(async () => {
-      await Promise.resolve();
+      void latest?.startUpload();
       await Promise.resolve();
     });
 

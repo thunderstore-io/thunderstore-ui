@@ -14,12 +14,12 @@ import type { IBaseUploadHandle } from "@thunderstore/ts-uploader";
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
 import { PACKAGE_ZIP_ACCEPT, formatBytes } from "../uploadUtils";
 import { SectionErrors } from "./SectionErrors";
+import "./UploadFileSection.css";
 
 export interface UploadFileSectionProps {
   file: File | null;
   uploadError: string | null;
   handle?: IBaseUploadHandle;
-  isDone: boolean;
   sectionErrors: string[];
   fileInputRef: RefObject<HTMLInputElement | null>;
   onFileChange: (file: File | null) => void;
@@ -30,7 +30,6 @@ export function UploadFileSection({
   file,
   uploadError,
   handle,
-  isDone,
   sectionErrors,
   fileInputRef,
   onFileChange,
@@ -44,7 +43,7 @@ export function UploadFileSection({
       <DnDFileInput
         rootClasses={classnames(
           "drag-n-drop",
-          uploadError ? "drag-n-drop--error" : null,
+          file && uploadError ? "drag-n-drop--error" : null,
           file && !uploadError ? "drag-n-drop--success" : null
         )}
         name="file"
@@ -85,7 +84,12 @@ export function UploadFileSection({
                   </>
                 )}
                 <button
+                  type="button"
                   className="drag-n-drop__remove-button"
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -101,7 +105,7 @@ export function UploadFileSection({
                   <FontAwesomeIcon icon={faFileZip} />
                 </NewIcon>
                 <span className="drag-n-drop__main-text">
-                  Drag and drop your ZIP file here
+                  Choose or drag ZIP file here
                 </span>
                 <span className="drag-n-drop__sub-text">5GB max</span>
               </>
@@ -113,26 +117,26 @@ export function UploadFileSection({
             <NewIcon wrapperClasses="drag-n-drop__icon" csVariant="accent">
               <FontAwesomeIcon icon={faTreasureChest} />
             </NewIcon>
+            <span className="drag-n-drop__main-text">Drop ZIP file here</span>
             {file ? (
-              <span>{file.name}</span>
-            ) : (
-              <span className="drag-n-drop__main-text">Drag file here</span>
-            )}
+              <span className="drag-n-drop__sub-text">{file.name}</span>
+            ) : null}
+            <span className="drag-n-drop__sub-text">5GB max</span>
           </div>
         }
         onChange={(files) => {
-          onFileChange(files.item(0));
+          const nextFile = files.item(0);
+          if (nextFile) {
+            onFileChange(nextFile);
+          }
         }}
-        readonly={!!handle}
+        readonly={!!handle || !!file}
         fileInputRef={fileInputRef}
       />
       {uploadError ? (
         <NewAlert csVariant="danger" rootClasses="upload__alert">
           {uploadError}
         </NewAlert>
-      ) : null}
-      {handle && !isDone ? (
-        <p className="upload__processing">Uploading…</p>
       ) : null}
       <SectionErrors errors={sectionErrors} />
     </FormSection>

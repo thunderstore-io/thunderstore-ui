@@ -5,6 +5,7 @@ import {
   formatBytes,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
+  getUploadProgressPercent,
   isPackageZipFile,
   isUploadResetDisabled,
   isUploadSubmitDisabled,
@@ -115,12 +116,13 @@ describe("formatBytes", () => {
 });
 
 describe("isUploadSubmitDisabled", () => {
-  it("is disabled while submitting, pending, missing upload, or no communities", () => {
+  it("is disabled while submitting, pending, missing team/file, or no communities", () => {
     expect(
       isUploadSubmitDisabled({
         submitting: true,
         submissionPending: false,
-        uploadUuid: "uuid",
+        authorName: "TeamA",
+        hasSelectedFile: true,
         communitiesCount: 1,
       })
     ).toBe(true);
@@ -129,7 +131,8 @@ describe("isUploadSubmitDisabled", () => {
       isUploadSubmitDisabled({
         submitting: false,
         submissionPending: true,
-        uploadUuid: "uuid",
+        authorName: "TeamA",
+        hasSelectedFile: true,
         communitiesCount: 1,
       })
     ).toBe(true);
@@ -138,7 +141,8 @@ describe("isUploadSubmitDisabled", () => {
       isUploadSubmitDisabled({
         submitting: false,
         submissionPending: false,
-        uploadUuid: undefined,
+        authorName: "",
+        hasSelectedFile: true,
         communitiesCount: 1,
       })
     ).toBe(true);
@@ -147,18 +151,30 @@ describe("isUploadSubmitDisabled", () => {
       isUploadSubmitDisabled({
         submitting: false,
         submissionPending: false,
-        uploadUuid: "uuid",
+        authorName: "TeamA",
+        hasSelectedFile: false,
+        communitiesCount: 1,
+      })
+    ).toBe(true);
+
+    expect(
+      isUploadSubmitDisabled({
+        submitting: false,
+        submissionPending: false,
+        authorName: "TeamA",
+        hasSelectedFile: true,
         communitiesCount: 0,
       })
     ).toBe(true);
   });
 
-  it("is enabled when upload and communities are ready", () => {
+  it("is enabled when team, file, and communities are ready", () => {
     expect(
       isUploadSubmitDisabled({
         submitting: false,
         submissionPending: false,
-        uploadUuid: "uuid",
+        authorName: "TeamA",
+        hasSelectedFile: true,
         communitiesCount: 2,
       })
     ).toBe(false);
@@ -203,6 +219,27 @@ describe("getSubmissionErrorsBySection", () => {
     expect(sections.communities).toEqual(["Invalid community selection"]);
     expect(sections.categories).toEqual(["Unknown category slug"]);
     expect(sections.submit).toEqual(["Server error"]);
+  });
+});
+
+describe("getUploadProgressPercent", () => {
+  it("returns 0 when progress is missing or total is zero", () => {
+    expect(getUploadProgressPercent(undefined)).toBe(0);
+    expect(
+      getUploadProgressPercent({
+        total: 0,
+        complete: 0,
+      } as Parameters<typeof getUploadProgressPercent>[0])
+    ).toBe(0);
+  });
+
+  it("returns percentage from complete and total bytes", () => {
+    expect(
+      getUploadProgressPercent({
+        total: 200,
+        complete: 50,
+      } as Parameters<typeof getUploadProgressPercent>[0])
+    ).toBe(25);
   });
 });
 

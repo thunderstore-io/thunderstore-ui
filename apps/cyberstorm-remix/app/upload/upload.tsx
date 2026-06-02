@@ -5,14 +5,16 @@ import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { useLoaderData, useOutletContext } from "react-router";
+import { Link, useLoaderData, useOutletContext } from "react-router";
 
+import { NewAlert } from "@thunderstore/cyberstorm";
 import {
   DapperTs,
   postPackageSubmissionMetadata,
 } from "@thunderstore/dapper-ts";
 import { type PackageSubmissionStatus } from "@thunderstore/dapper/types";
 import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
+import { useUploadProgress } from "@thunderstore/ts-uploader-react";
 
 import { RouteErrorBoundary } from "../commonComponents/ErrorBoundary/RouteErrorBoundary";
 import {
@@ -40,6 +42,7 @@ import {
   buildCommunityOptions,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
+  getUploadProgressPercent,
   initialUploadFormInputs,
   isUploadSubmitDisabled,
   pruneCommunityCategories,
@@ -123,6 +126,7 @@ export default function Upload() {
 
   const {
     file,
+    startUpload,
     selectFile,
     fileInputRef,
     handle,
@@ -131,6 +135,10 @@ export default function Upload() {
     uploadError,
     clearFile,
   } = usePackageFileUpload(requestConfig);
+
+  const uploadProgress = useUploadProgress(handle);
+  const isUploading = !!handle && !isDone;
+  const uploadProgressPercent = getUploadProgressPercent(uploadProgress);
 
   const { pollingError, setPollingError, retryPolling } =
     useSubmissionStatusPolling(dapper, submissionStatus, setSubmissionStatus);
@@ -164,13 +172,30 @@ export default function Upload() {
   >;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    let uploadUuid = data.upload_uuid;
+
+    if (!uploadUuid) {
+      const uploadedMedia = await startUpload();
+      uploadUuid = uploadedMedia?.uuid;
+
+      if (!uploadUuid) {
+        throw new Error("Upload failed before submission.");
+      }
+
+      updateFormFieldState({
+        field: "upload_uuid",
+        value: uploadUuid,
+      });
+    }
+
     const config = requestConfig();
     const submitDapper = new DapperTs(() => config);
+
     return await submitDapper.postPackageSubmissionMetadata(
       data.author_name,
       data.communities,
       data.has_nsfw_content,
-      data.upload_uuid,
+      uploadUuid,
       data.categories,
       data.community_categories
     );
@@ -218,7 +243,8 @@ export default function Upload() {
   const submitDisabled = isUploadSubmitDisabled({
     submitting: strongForm.submitting,
     submissionPending: submissionStatus?.status === "PENDING",
-    uploadUuid: usermedia?.uuid,
+    authorName: formInputs.author_name,
+    hasSelectedFile: !!file,
     communitiesCount: formInputs.communities.length,
   });
 
@@ -232,6 +258,7 @@ export default function Upload() {
   const handleSubmit = () => {
     setSubmitError(null);
     setPollingError(null);
+    setSubmissionStatus(undefined);
     strongForm.submit();
   };
 
@@ -241,7 +268,55 @@ export default function Upload() {
         Upload package
       </PageHeader>
       <section className="container container--y container--full upload">
-        <FormSections rootClasses="upload">
+        <div className="upload__helper-alerts">
+          <NewAlert csVariant="info">
+            <p className="upload__helper-text">
+              Need help formatting your package? Check out the{" "}
+              <a
+                href="https://wiki.thunderstore.io/mods/creating-a-package"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Thunderstore wiki
+              </a>
+              .
+            </p>
+            <p className="upload__helper-text">
+              Review your readme before upload using the{" "}
+              <Link to="/tools/markdown-preview">markdown preview tool</Link>.
+            </p>
+            <p className="upload__helper-text">
+              Uploading a large file? Check your package manifest first with the{" "}
+              <Link to="/tools/manifest-validator">
+                package manifest validator
+              </Link>
+              .
+            </p>
+          </NewAlert>
+        </div>
+        <FormSections>
+          <UploadFileSection
+            file={file}
+            uploadError={uploadError}
+            handle={handle}
+            sectionErrors={submissionErrorsBySection.uploadFile}
+            fileInputRef={fileInputRef}
+            onFileChange={(nextFile) => {
+              selectFile(nextFile);
+              updateFormFieldState({
+                field: "upload_uuid",
+                value: "",
+              });
+            }}
+            onRemoveFile={() => {
+              clearFile();
+              updateFormFieldState({
+                field: "upload_uuid",
+                value: "",
+              });
+            }}
+          />
+          <FormSectionSeparator />
           <UploadTeamSection
             availableTeams={availableTeams}
             authorName={formInputs.author_name}
@@ -253,80 +328,63 @@ export default function Upload() {
             }}
           />
           <FormSectionSeparator />
-          {formInputs.author_name ? (
-            <>
-              <UploadFileSection
-                file={file}
-                uploadError={uploadError}
-                handle={handle}
-                isDone={isDone}
-                sectionErrors={submissionErrorsBySection.uploadFile}
-                fileInputRef={fileInputRef}
-                onFileChange={selectFile}
-                onRemoveFile={clearFile}
-              />
-              <FormSectionSeparator />
-            </>
-          ) : null}
-          {isDone && usermedia?.uuid ? (
-            <>
-              <UploadCommunitiesSection
-                communityOptions={communityOptions}
-                communities={formInputs.communities}
-                sectionErrors={submissionErrorsBySection.communities}
-                onCommunitiesChange={(communities) => {
-                  updateFormFieldState({
-                    field: "communities",
-                    value: communities,
-                  });
-                  updateFormFieldState({
-                    field: "community_categories",
-                    value: pruneCommunityCategories(
-                      formInputs.community_categories,
-                      communities
-                    ),
-                  });
-                }}
-              />
-              {formInputs.communities.length > 0 ? (
-                <UploadCategoriesSection
-                  communities={formInputs.communities}
-                  communityCategories={formInputs.community_categories}
-                  categoryOptions={categoryOptions}
-                  communityResults={uploadData.results}
-                  sectionErrors={submissionErrorsBySection.categories}
-                  onCommunityCategoriesChange={(communityCategories) => {
-                    updateFormFieldState({
-                      field: "community_categories",
-                      value: communityCategories,
-                    });
-                  }}
-                />
-              ) : null}
-              <FormSectionSeparator />
-              <UploadNsfwSection
-                hasNsfwContent={formInputs.has_nsfw_content}
-                onHasNsfwContentChange={(hasNsfwContent) => {
-                  updateFormFieldState({
-                    field: "has_nsfw_content",
-                    value: hasNsfwContent,
-                  });
-                }}
-              />
-              <FormSectionSeparator />
-            </>
-          ) : null}
+          <UploadCommunitiesSection
+            communityOptions={communityOptions}
+            communities={formInputs.communities}
+            sectionErrors={submissionErrorsBySection.communities}
+            onCommunitiesChange={(communities) => {
+              updateFormFieldState({
+                field: "communities",
+                value: communities,
+              });
+              updateFormFieldState({
+                field: "community_categories",
+                value: pruneCommunityCategories(
+                  formInputs.community_categories,
+                  communities
+                ),
+              });
+            }}
+          />
+          <FormSectionSeparator />
+          <UploadCategoriesSection
+            communities={formInputs.communities}
+            communityCategories={formInputs.community_categories}
+            categoryOptions={categoryOptions}
+            communityResults={uploadData.results}
+            sectionErrors={submissionErrorsBySection.categories}
+            onCommunityCategoriesChange={(communityCategories) => {
+              updateFormFieldState({
+                field: "community_categories",
+                value: communityCategories,
+              });
+            }}
+          />
+          <FormSectionSeparator />
+          <UploadNsfwSection
+            hasNsfwContent={formInputs.has_nsfw_content}
+            onHasNsfwContentChange={(hasNsfwContent) => {
+              updateFormFieldState({
+                field: "has_nsfw_content",
+                value: hasNsfwContent,
+              });
+            }}
+          />
+          <FormSectionSeparator />
           <UploadSubmitSection
             submitError={submitError}
             strongFormSubmitting={strongForm.submitting}
             submissionStatus={submissionStatus}
             hasSubmissionFormErrors={hasSubmissionFormErrors}
             submitDisabled={submitDisabled}
+            isUploading={isUploading}
+            uploadProgressPercent={uploadProgressPercent}
             onReset={handleReset}
             onSubmit={handleSubmit}
           />
-          {submissionStatus ? (
+          {submissionStatus || strongForm.submitting ? (
             <UploadSubmissionStatus
+              submitting={strongForm.submitting}
               submissionStatus={submissionStatus}
               pollingError={pollingError}
               submitSectionErrors={submissionErrorsBySection.submit}

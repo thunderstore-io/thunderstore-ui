@@ -3,6 +3,7 @@ import type { PackageSubmissionStatus } from "@thunderstore/dapper/types";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
 import { isUploadResetDisabled } from "../uploadUtils";
+import { UploadProgressBar } from "./UploadProgressBar";
 
 export interface UploadSubmitSectionProps {
   submitError: string | null;
@@ -10,6 +11,8 @@ export interface UploadSubmitSectionProps {
   submissionStatus?: PackageSubmissionStatus;
   hasSubmissionFormErrors: boolean;
   submitDisabled: boolean;
+  isUploading: boolean;
+  uploadProgressPercent: number;
   onReset: () => void;
   onSubmit: () => void;
 }
@@ -20,6 +23,8 @@ export function UploadSubmitSection({
   submissionStatus,
   hasSubmissionFormErrors,
   submitDisabled,
+  isUploading,
+  uploadProgressPercent,
   onReset,
   onSubmit,
 }: UploadSubmitSectionProps) {
@@ -27,6 +32,10 @@ export function UploadSubmitSection({
     submitting: strongFormSubmitting,
     submissionPending: submissionStatus?.status === "PENDING",
   });
+  const displayUploadProgressPercent = Math.min(
+    100,
+    Math.max(0, Math.trunc(uploadProgressPercent))
+  );
 
   return (
     <FormSection
@@ -68,6 +77,20 @@ export function UploadSubmitSection({
               : "Submit"}
         </NewButton>
       </div>
+      {isUploading ? (
+        <div className="upload__upload-indicator">
+          <UploadProgressBar
+            progress={displayUploadProgressPercent}
+            labelId="upload-progress-label"
+          />
+          <p
+            id="upload-progress-label"
+            className="upload__upload-indicator-label"
+          >
+            Uploading… {displayUploadProgressPercent}%
+          </p>
+        </div>
+      ) : null}
     </FormSection>
   );
 }
