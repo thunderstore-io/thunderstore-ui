@@ -4,17 +4,11 @@ import { defineProject } from "vitest/config";
 
 const projectDir = path.dirname(fileURLToPath(import.meta.url));
 const cyberstormRoot = path.join(projectDir, "cyberstorm");
-// package.json exports point at dist/, which CI does not build before `yarn coverage`.
-const cyberstormPackageSrc = path.resolve(
-  projectDir,
-  "../../packages/cyberstorm/src/index.ts"
-);
 
 export default defineProject({
   resolve: {
     alias: {
       cyberstorm: cyberstormRoot,
-      "@thunderstore/cyberstorm": cyberstormPackageSrc,
     },
   },
   test: {

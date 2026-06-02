@@ -1,3 +1,4 @@
+import { queryByRole } from "@testing-library/dom";
 import React from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
@@ -52,7 +53,7 @@ describe("SectionErrors", () => {
       React.createElement(SectionErrors, { errors: [] })
     );
 
-    expect(container.textContent).toBe("");
+    expect(queryByRole(container, "alert")).toBeNull();
     unmount();
   });
 

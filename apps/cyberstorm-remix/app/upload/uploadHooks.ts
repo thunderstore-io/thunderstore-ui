@@ -134,27 +134,38 @@ export function useSubmissionStatusPolling(
 
   useEffect(() => {
     if (
-      submissionStatus &&
-      submissionStatusRef.current !== submissionStatus.id &&
-      submissionStatus.status === "PENDING"
+      !submissionStatus ||
+      submissionStatusRef.current === submissionStatus.id ||
+      submissionStatus.status !== "PENDING"
     ) {
-      submissionStatusRef.current = submissionStatus.id;
-      pollSubmission(dapper, submissionStatus.id)
-        .then((data) => {
-          setPollingError(null);
-          submissionStatusRef.current =
-            data.status === "PENDING" ? undefined : data.id;
-          setSubmissionStatus(data);
-        })
-        .catch((error) => {
-          submissionStatusRef.current = undefined;
-          setPollingError(
-            `Error polling submission status: ${
-              error instanceof Error ? error.message : "Unknown error"
-            }`
-          );
-        });
+      return;
     }
+
+    let cancelled = false;
+    submissionStatusRef.current = submissionStatus.id;
+    pollSubmission(dapper, submissionStatus.id)
+      .then((data) => {
+        if (cancelled) return;
+
+        setPollingError(null);
+        submissionStatusRef.current =
+          data.status === "PENDING" ? undefined : data.id;
+        setSubmissionStatus(data);
+      })
+      .catch((error) => {
+        if (cancelled) return;
+
+        submissionStatusRef.current = undefined;
+        setPollingError(
+          `Error polling submission status: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [dapper, submissionStatus, setSubmissionStatus]);
 
   const retryPolling = () => {

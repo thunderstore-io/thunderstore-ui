@@ -5,11 +5,11 @@ export function SectionErrors({ errors }: { errors: string[] }) {
 
   return (
     <NewAlert csVariant="danger" rootClasses="upload__alert">
-      <ul>
+      <div>
         {errors.map((msg) => (
-          <li key={msg}>{msg}</li>
+          <div key={msg}>{msg}</div>
         ))}
-      </ul>
+      </div>
     </NewAlert>
   );
 }
