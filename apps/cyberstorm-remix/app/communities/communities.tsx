@@ -17,6 +17,7 @@ import {
   useSearchParams,
 } from "react-router";
 import { useDebounce } from "use-debounce";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import {
@@ -174,12 +175,12 @@ export default function CommunitiesPage() {
   }, [debouncedSearchValue]);
 
   return (
-    <>
-      <PageHeader headingLevel="1" headingSize="3">
+    <Page as="section" rootClasses="communities">
+      <PageHeader headingLevel="1" headingSize="2">
         Communities
       </PageHeader>
-      <div className="container container--y container--full communities__content">
-        <div className="container container--stretch communities__tools">
+      <div className="communities__content">
+        <div className="communities__tools">
           <NewTextInput
             onChange={(e) => setSearchValue(e.target.value)}
             value={searchValue}
@@ -190,17 +191,16 @@ export default function CommunitiesPage() {
             rootClasses="communities__search"
             csSize="small"
           />
-          <span className="container container--x">
+          <div className="communities__sort">
             <NewSelect
               onChange={(val) => changeOrder(val as SortOptions)}
               options={selectOptions}
               value={searchParams.get("order") ?? SortOptions.Popular}
               aria-label="Sort communities by"
             />
-          </span>
+          </div>
         </div>
-
-        <div className="container container--x container--stretch communities__results">
+        <div className="communities__results">
           <Suspense fallback={<CommunitiesListSkeleton />}>
             <Await
               resolve={communities}
@@ -213,7 +213,7 @@ export default function CommunitiesPage() {
           </Suspense>
         </div>
       </div>
-    </>
+    </Page>
   );
 }
 

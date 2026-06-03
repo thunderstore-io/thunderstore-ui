@@ -194,7 +194,11 @@ const library: LinkLibrary = {
     />
   ),
   PackageFormatDocs: (p) => (
-    <Link {...p} url={"/package/create/docs/"} ref={p.customRef} />
+    <Link
+      {...p}
+      url={"https://wiki.thunderstore.io/mods/creating-a-package"}
+      ref={p.customRef}
+    />
   ),
   PackageUpload: (p) => (
     <Link {...p} url={"/package/create/"} ref={p.customRef} />

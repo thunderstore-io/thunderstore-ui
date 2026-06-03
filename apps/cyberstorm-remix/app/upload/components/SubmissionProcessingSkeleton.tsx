@@ -1,13 +1,14 @@
 import { Heading, SkeletonBox } from "@thunderstore/cyberstorm";
 
+import { Page } from "../../commonComponents/Page/Page";
 import "./SubmissionProcessingSkeleton.css";
 
 const SKELETON_ROW_COUNT = 3;
 
 export function SubmissionProcessingSkeleton() {
   return (
-    <div
-      className="container container--y container--full island submission-processing"
+    <Page
+      rootClasses="submission-processing"
       aria-busy="true"
       aria-label="Processing submission"
     >
@@ -44,6 +45,6 @@ export function SubmissionProcessingSkeleton() {
           ))}
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

@@ -11,6 +11,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { type PackageSubmissionResult } from "@thunderstore/dapper/types";
 
+import { Island } from "../../commonComponents/Island/Island";
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
 import "./SubmissionResult.css";
 
@@ -22,7 +23,7 @@ export function SubmissionResult({
   submissionStatusResult,
 }: SubmissionResultProps) {
   return (
-    <div className="container container--y container--full island">
+    <Island rootClasses="upload__submission-result">
       <PageHeader
         headingLevel="1"
         headingSize="3"
@@ -123,6 +124,6 @@ export function SubmissionResult({
         sortDirection={NewTableSort.ASC}
         csModifiers={["alignLastColumnRight"]}
       />
-    </div>
+    </Island>
   );
 }
