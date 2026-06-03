@@ -1,9 +1,10 @@
 import { reactRouter } from "@react-router/dev/vite";
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryReactRouter } from "@sentry/react-router";
 import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig((config) => {
+  const { mode } = config;
   const env = loadEnv(mode, process.cwd(), "");
   return {
     server: {
@@ -17,12 +18,15 @@ export default defineConfig(({ mode }) => {
     plugins: [
       reactRouter(),
       tsconfigPaths(),
-      env.SENTRY_AUTH_TOKEN && env.SENTRY_ORG && env.SENTRY_PROJECT
-        ? sentryVitePlugin({
-            org: env.SENTRY_ORG,
-            project: env.SENTRY_PROJECT,
-            authToken: env.SENTRY_AUTH_TOKEN,
-          })
+      env.SENTRY_ORG && env.SENTRY_PROJECT
+        ? sentryReactRouter(
+            {
+              org: env.SENTRY_ORG,
+              project: env.SENTRY_PROJECT,
+              authToken: env.SENTRY_AUTH_TOKEN,
+            },
+            config
+          )
         : null,
     ],
     build: {

@@ -1,5 +1,5 @@
 import { createReadableStreamFromReadable } from "@react-router/node";
-import * as Sentry from "@sentry/remix";
+import * as Sentry from "@sentry/react-router";
 import * as isbotModule from "isbot";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
@@ -8,10 +8,6 @@ import { ServerRouter } from "react-router";
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
   tracesSampleRate: 0,
 });
 
@@ -70,6 +66,7 @@ function handleBotRequest(
   responseHeaders: Headers,
   reactRouterContext: EntryContext
 ) {
+  const path = new URL(request.url).pathname;
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
@@ -96,6 +93,14 @@ function handleBotRequest(
           pipe(body);
         },
         onShellError(error: unknown) {
+          Sentry.captureException(error, {
+            tags: {
+              handler: "bot",
+              phase: "onShellError",
+              path,
+              method: request.method,
+            },
+          });
           reject(error);
         },
         onError(error: unknown) {
@@ -104,6 +109,14 @@ function handleBotRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
+            Sentry.captureException(error, {
+              tags: {
+                handler: "bot",
+                phase: "onError",
+                path,
+                method: request.method,
+              },
+            });
             console.error(error);
           }
         },
@@ -120,6 +133,7 @@ function handleBrowserRequest(
   responseHeaders: Headers,
   reactRouterContext: EntryContext
 ) {
+  const path = new URL(request.url).pathname;
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
@@ -146,6 +160,14 @@ function handleBrowserRequest(
           pipe(body);
         },
         onShellError(error: unknown) {
+          Sentry.captureException(error, {
+            tags: {
+              handler: "browser",
+              phase: "onShellError",
+              path,
+              method: request.method,
+            },
+          });
           reject(error);
         },
         onError(error: unknown) {
@@ -154,6 +176,14 @@ function handleBrowserRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
+            Sentry.captureException(error, {
+              tags: {
+                handler: "browser",
+                phase: "onError",
+                path,
+                method: request.method,
+              },
+            });
             console.error(error);
           }
         },
@@ -164,4 +194,4 @@ function handleBrowserRequest(
   });
 }
 
-export const handleError = Sentry.sentryHandleError;
+export const handleError = Sentry.createSentryHandleError({ logErrors: false });
