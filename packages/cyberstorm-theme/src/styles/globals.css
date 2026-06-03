@@ -24,6 +24,7 @@
     --space-48: 3rem;
     --space-51: 3.188rem;
     --space-54: 3.375rem;
+    --space-80: 5rem;
 
     /* Space affecting layout values */
 
@@ -40,6 +41,7 @@
     --gap-5xl: var(--space-40);
     --gap-6xl: var(--space-44);
     --gap-7xl: var(--space-48);
+    --gap-form-column: var(--space-80);
     --page-margin: 16rem;
     --page-margin-top: 25px;
 
