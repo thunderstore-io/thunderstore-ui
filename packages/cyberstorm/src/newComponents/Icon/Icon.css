@@ -10,19 +10,26 @@
     display: flex;
 
     flex-shrink: 0;
-    color: var(--icon-color, "currentColor");
+    color: var(--icon-color, currentColor);
     fill: currentcolor;
     stroke: currentcolor;
     block-size: 100%;
     inline-size: auto;
     min-inline-size: 100%;
-
+    max-inline-size: none;
     stroke-width: 0;
   }
 
   .icon--inline {
     display: inline-flex;
-    height: var(--icon-inline-size, 1em);
+    block-size: var(--icon-inline-size, 1em);
     min-inline-size: 1em;
+    vertical-align: -0.125em;
+  }
+
+  .icon--fixed {
+    block-size: var(--icon-height, 1em);
+    inline-size: var(--icon-width, 1em);
+    min-inline-size: var(--icon-width, 0);
   }
 }
