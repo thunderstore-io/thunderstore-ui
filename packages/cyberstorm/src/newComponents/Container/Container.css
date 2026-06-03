@@ -1,0 +1,17 @@
+@layer components {
+  .container {
+    container-type: inline-size;
+    flex: 0 1 auto;
+    width: min(100%, var(--container-max-width));
+    margin-inline: auto;
+    padding: var(--space-16) var(--space-16) 4rem;
+  }
+
+  .container:where([data-size="wide"]) {
+    --container-max-width: 120rem;
+  }
+
+  .container:where([data-size="narrow"]) {
+    --container-max-width: 90rem;
+  }
+}
