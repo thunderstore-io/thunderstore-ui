@@ -1,0 +1,21 @@
+@layer nimbus-layout {
+  .community--packageListingSubpath {
+    gap: var(--gap-xl);
+  }
+
+  .community__header--compact {
+    grid-template-rows: auto;
+  }
+
+  .community__background--packagePage {
+    --community-hero-max-height: 6rem;
+    --community-hero-aspect-ratio: 8 / 1;
+
+    margin-bottom: 0;
+
+    .community__background-image > img {
+      opacity: 0.3;
+      mix-blend-mode: luminosity;
+    }
+  }
+}
