@@ -19,6 +19,7 @@
     "import-notation": "string",
     "number-max-precision": 3,
     "custom-property-pattern": null,
+    "property-no-unknown": [true, { "ignoreProperties": ["reading-flow"] }],
     "selector-class-pattern": null,
     "selector-id-pattern": null,
     "selector-no-vendor-prefix": null,
