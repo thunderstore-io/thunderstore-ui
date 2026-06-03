@@ -27,94 +27,101 @@ type ResultType = {
   seo?: ReturnType<typeof createSeo>;
 };
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (
-    params.communityId &&
-    params.namespaceId &&
-    params.packageId &&
-    params.slug
-  ) {
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
-      };
-    });
-
-    let result: ResultType = {
-      wiki: undefined,
-      page: undefined,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
-
-    try {
-      const wiki = await dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
-      const pageId = wiki.pages?.find((p) => p.slug === params.slug)?.id;
-      if (!pageId) {
-        result = {
-          wiki,
-          page: undefined,
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageId: params.packageId,
-          seo: createSeo({
-            descriptors: [
-              { title: `${params.slug} | Wiki Not Found | Thunderstore` },
-            ],
-          }),
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (
+      params.communityId &&
+      params.namespaceId &&
+      params.packageId &&
+      params.slug
+    ) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
         };
-        return result;
-      }
-      const page = await dapper.getPackageWikiPage(pageId);
-      result = {
-        wiki: wiki,
-        page: page,
+      });
+
+      let result: ResultType = {
+        wiki: undefined,
+        page: undefined,
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${page.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
       };
-    } catch (error) {
-      if (isApiError(error)) {
-        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
-        if (error.response.status === 404) {
+
+      try {
+        const wiki = await dapper.getPackageWiki(
+          params.namespaceId,
+          params.packageId
+        );
+        const pageId = wiki.pages?.find((p) => p.slug === params.slug)?.id;
+        if (!pageId) {
           result = {
-            wiki: undefined,
+            wiki,
             page: undefined,
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
             seo: createSeo({
-              descriptors: [{ title: "Wiki Not Found | Thunderstore" }],
+              descriptors: [
+                { title: `${params.slug} | Wiki Not Found | Thunderstore` },
+              ],
             }),
           };
+          return result;
+        }
+        const page = await dapper.getPackageWikiPage(pageId);
+        result = {
+          wiki: wiki,
+          page: page,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          seo: createSeo({
+            descriptors: [
+              {
+                title: `${page.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
+              },
+              {
+                name: "description",
+                content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
+              },
+            ],
+          }),
+        };
+      } catch (error) {
+        if (isApiError(error)) {
+          // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
+          if (error.response.status === 404) {
+            result = {
+              wiki: undefined,
+              page: undefined,
+              communityId: params.communityId,
+              namespaceId: params.namespaceId,
+              packageId: params.packageId,
+              seo: createSeo({
+                descriptors: [{ title: "Wiki Not Found | Thunderstore" }],
+              }),
+            };
+          } else {
+            throw error;
+          }
         } else {
           throw error;
         }
-      } else {
-        throw error;
       }
+      return result;
+    } else {
+      throw new Error("Namespace ID or Package ID is missing");
     }
-    return result;
-  } else {
-    throw new Error("Namespace ID or Package ID is missing");
-  }
-});
+  },
+  { cache: true }
+);
+
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (

@@ -31,50 +31,60 @@ import "./Wiki.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
-      };
-    });
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (params.communityId && params.namespaceId && params.packageId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
 
-    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
+      let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
 
-    try {
-      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
-    } catch (error) {
-      if (isApiError(error) && error.response.status === 404) {
-        wiki = undefined;
-      } else {
-        throw error;
+      try {
+        wiki = await dapper.getPackageWiki(
+          params.namespaceId,
+          params.packageId
+        );
+      } catch (error) {
+        if (isApiError(error) && error.response.status === 404) {
+          wiki = undefined;
+        } else {
+          throw error;
+        }
       }
-    }
 
-    return {
-      wiki: wiki,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      slug: params.slug,
-      permissions: undefined,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} Wiki | Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Wiki for ${params.namespaceId}-${params.packageId}`,
-          },
-        ],
-      }),
-    };
-  } else {
-    throw new Error("Namespace ID or Package ID is missing");
-  }
-});
+      return {
+        wiki: wiki,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        slug: params.slug,
+        permissions: undefined,
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `${params.namespaceId}-${params.packageId} Wiki | Thunderstore`,
+            },
+            {
+              name: "description",
+              content: `Wiki for ${params.namespaceId}-${params.packageId}`,
+            },
+          ],
+        }),
+      };
+    } else {
+      throw new Error("Namespace ID or Package ID is missing");
+    }
+  },
+  { cache: true }
+);
+
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {

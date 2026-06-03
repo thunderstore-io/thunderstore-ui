@@ -27,84 +27,91 @@ type ResultType = {
   seo?: ReturnType<typeof createSeo>;
 };
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (params.communityId && params.namespaceId && params.packageId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
+      let result: ResultType = {
+        wiki: undefined,
+        firstPage: undefined,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
       };
-    });
-    let result: ResultType = {
-      wiki: undefined,
-      firstPage: undefined,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
 
-    try {
-      const wiki = await dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
-      if (wiki.pages && wiki.pages.length > 0) {
-        const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
-        result = {
-          wiki: wiki,
-          firstPage: firstPage,
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageId: params.packageId,
-          seo: createSeo({
-            descriptors: [
-              {
-                title: `${firstPage.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
-              },
-              {
-                name: "description",
-                content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
-              },
-            ],
-          }),
-        };
-      } else {
-        result = {
-          wiki: wiki,
-          firstPage: undefined,
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageId: params.packageId,
-          seo: createSeo({
-            descriptors: [
-              { title: `${params.namespaceId}-${params.packageId} Wiki` },
-            ],
-          }),
-        };
-      }
-    } catch (error) {
-      if (isApiError(error)) {
-        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
-        if (error.response.status === 404) {
+      try {
+        const wiki = await dapper.getPackageWiki(
+          params.namespaceId,
+          params.packageId
+        );
+        if (wiki.pages && wiki.pages.length > 0) {
+          const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
           result = {
-            wiki: undefined,
+            wiki: wiki,
+            firstPage: firstPage,
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageId: params.packageId,
+            seo: createSeo({
+              descriptors: [
+                {
+                  title: `${firstPage.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
+                },
+                {
+                  name: "description",
+                  content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
+                },
+              ],
+            }),
+          };
+        } else {
+          result = {
+            wiki: wiki,
             firstPage: undefined,
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            seo: createSeo({ descriptors: [{ title: "Wiki Not Found" }] }),
+            seo: createSeo({
+              descriptors: [
+                { title: `${params.namespaceId}-${params.packageId} Wiki` },
+              ],
+            }),
           };
+        }
+      } catch (error) {
+        if (isApiError(error)) {
+          // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
+          if (error.response.status === 404) {
+            result = {
+              wiki: undefined,
+              firstPage: undefined,
+              communityId: params.communityId,
+              namespaceId: params.namespaceId,
+              packageId: params.packageId,
+              seo: createSeo({ descriptors: [{ title: "Wiki Not Found" }] }),
+            };
+          } else {
+            throw error;
+          }
         } else {
           throw error;
         }
-      } else {
-        throw error;
       }
+      return result;
     }
-    return result;
-  }
-  throw new Error("Namespace ID or Package ID is missing");
-});
+    throw new Error("Namespace ID or Package ID is missing");
+  },
+  { cache: true }
+);
+
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
