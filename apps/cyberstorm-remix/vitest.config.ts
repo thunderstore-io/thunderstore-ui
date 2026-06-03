@@ -1,6 +1,9 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineProject } from "vitest/config";
 
-const cyberstormRoot = new URL("./cyberstorm", import.meta.url).pathname;
+const projectDir = path.dirname(fileURLToPath(import.meta.url));
+const cyberstormRoot = path.join(projectDir, "cyberstorm");
 
 export default defineProject({
   resolve: {

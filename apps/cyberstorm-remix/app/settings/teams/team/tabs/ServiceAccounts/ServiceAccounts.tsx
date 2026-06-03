@@ -11,6 +11,10 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import {
+  FormSection,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
@@ -47,27 +51,24 @@ export default function ServiceAccounts() {
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={serviceAccounts}>
         {(resolvedServiceAccounts) => (
-          <div className="settings-items">
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Service accounts</p>
-                <p className="settings-items__description">
-                  Your loyal servants
-                </p>
+          <FormSections>
+            <FormSection
+              title="Service accounts"
+              description="Your loyal servants"
+              metaExtra={
                 <AddServiceAccountForm
                   teamName={teamName}
                   serviceAccountRevalidate={serviceAccountRevalidate}
                 />
-              </div>
-              <div className="settings-items__content">
-                <ServiceAccountsTable
-                  serviceAccounts={resolvedServiceAccounts}
-                  serviceAccountRevalidate={serviceAccountRevalidate}
-                  teamName={teamName}
-                />
-              </div>
-            </div>
-          </div>
+              }
+            >
+              <ServiceAccountsTable
+                serviceAccounts={resolvedServiceAccounts}
+                serviceAccountRevalidate={serviceAccountRevalidate}
+                teamName={teamName}
+              />
+            </FormSection>
+          </FormSections>
         )}
       </Await>
     </Suspense>

@@ -138,9 +138,17 @@ def run_tests():
     run_command([YARN_PATH, "coverage"], cwd=REPO_ROOT)
 
 
+def build_test_dependencies():
+    # Coverage imports workspace packages that resolve through dist exports.
+    # Build shared package deps first so CI does not depend on stale/missing dist outputs.
+    run_command([YARN_PATH, "build"], cwd=REPO_ROOT)
+
+
 def main():
     print("Setting up frontend")
     setup_frontend()
+    print("Building frontend dependencies for coverage")
+    build_test_dependencies()
     backend_success = start_backend()
 
     if backend_success:

@@ -25,10 +25,8 @@
     gap: var(--gap-sm);
     align-self: flex-start;
     justify-content: flex-start;
-
-    /* Fallback covers routes without a unique root class (e.g. /login, /teams) */
-    max-width: var(--nimbus-layout-content-max-width, 90rem);
-    padding: var(--space-16);
+    max-width: var(--nimbus-layout-content-max-width, 120rem);
+    padding: var(--space-16) var(--space-16) 4rem;
   }
 
   /* Route-specific content max-width overrides */

@@ -1,3 +1,7 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
 # TypeScript incremental build outputs
 *.tsbuildinfo
 .idea

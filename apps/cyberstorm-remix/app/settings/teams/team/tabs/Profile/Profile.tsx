@@ -9,6 +9,11 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import {
+  FormSection,
+  FormSectionIsland,
+  FormSections,
+} from "~/commonComponents/FormSection/FormSection";
 
 import {
   NewAlert,
@@ -40,9 +45,9 @@ export default function Profile() {
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={team}>
         {(resolvedTeam) => (
-          <div className="settings-items team-profile">
+          <FormSections rootClasses="team-profile">
             <ProfileForm team={resolvedTeam} />
-          </div>
+          </FormSections>
         )}
       </Await>
     </Suspense>
@@ -144,60 +149,57 @@ function ProfileForm(props: { team: TeamDetails }) {
   );
 
   return (
-    <div className="settings-items__item">
-      <div className="settings-items__meta">
-        <p className="settings-items__title">Donation Link</p>
-        <p className="settings-items__description">Must be a valid HTTPS URL</p>
-      </div>
-      <div className="settings-items__content">
-        <div className="settings-items__island">
-          <div className="team-profile__donationLink">
-            <span className="team-profile__label">URL</span>
-            <NewTextInput
-              name={"donation_link"}
-              placeholder={"https://"}
-              value={formInputs.donation_link ?? ""}
-              onChange={(e) =>
-                updateFormFieldState({
-                  field: "donation_link",
-                  value: e.target.value,
-                })
-              }
-              clearValue={
-                formDisabled
-                  ? undefined
-                  : () =>
-                      updateFormFieldState({
-                        field: "donation_link",
-                        value: "",
-                      })
-              }
-              rootClasses="team-profile__input"
-              disabled={formDisabled}
-              {...donationLinkFieldProps}
-            />
-          </div>
+    <FormSection title="Donation Link" description="Must be a valid HTTPS URL">
+      <FormSectionIsland>
+        <div className="team-profile__donationLink">
+          <label className="team-profile__label" htmlFor="donation_link_input">
+            URL
+          </label>
+          <NewTextInput
+            id="donation_link_input"
+            name={"donation_link"}
+            placeholder={"https://"}
+            value={formInputs.donation_link ?? ""}
+            onChange={(e) =>
+              updateFormFieldState({
+                field: "donation_link",
+                value: e.target.value,
+              })
+            }
+            clearValue={
+              formDisabled
+                ? undefined
+                : () =>
+                    updateFormFieldState({
+                      field: "donation_link",
+                      value: "",
+                    })
+            }
+            rootClasses="team-profile__input"
+            disabled={formDisabled}
+            {...donationLinkFieldProps}
+          />
         </div>
-        {strongForm.getFieldState("donation_link").isInvalid &&
-          !strongForm.inputErrors?.donation_link?.[0] && (
-            <NewAlert csVariant="danger" csSize="small">
-              {strongForm.getFieldError("donation_link")}
-            </NewAlert>
-          )}
-        {strongForm.inputErrors?.donation_link?.[0] && (
+      </FormSectionIsland>
+      {strongForm.getFieldState("donation_link").isInvalid &&
+        !strongForm.inputErrors?.donation_link?.[0] && (
           <NewAlert csVariant="danger" csSize="small">
-            {strongForm.inputErrors.donation_link[0]}
+            {strongForm.getFieldError("donation_link")}
           </NewAlert>
         )}
-        <NewButton
-          rootClasses="team-profile__save"
-          onClick={strongForm.handleSubmit}
-          disabled={formDisabled}
-        >
-          Save changes
-        </NewButton>
-      </div>
-    </div>
+      {strongForm.inputErrors?.donation_link?.[0] && (
+        <NewAlert csVariant="danger" csSize="small">
+          {strongForm.inputErrors.donation_link[0]}
+        </NewAlert>
+      )}
+      <NewButton
+        rootClasses="team-profile__save"
+        onClick={strongForm.handleSubmit}
+        disabled={formDisabled}
+      >
+        Save changes
+      </NewButton>
+    </FormSection>
   );
 }
 
