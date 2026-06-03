@@ -20,9 +20,9 @@ const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
     { value: "Spam", label: "Spam" },
     { value: "Malware", label: "Malware" },
     { value: "Reupload", label: "Reupload" },
-    { value: "CopyrightOrLicense", label: "Copyright Or License" },
-    { value: "WrongCommunity", label: "Wrong Community" },
-    { value: "WrongCategories", label: "Wrong Categories" },
+    { value: "CopyrightOrLicense", label: "Copyright or license" },
+    { value: "WrongCommunity", label: "Wrong community" },
+    { value: "WrongCategories", label: "Wrong categories" },
     { value: "Other", label: "Other" },
   ];
 
