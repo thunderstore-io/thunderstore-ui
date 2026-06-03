@@ -1,6 +1,6 @@
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useRevalidator } from "react-router";
 
 import {
@@ -12,10 +12,11 @@ import {
   NewTag,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { type DapperTsInterface } from "@thunderstore/dapper-ts";
 import {
+  type CommunityFilters,
   type RequestConfig,
   extractApiErrorMessage,
+  fetchCommunityFilters,
   fetchPackagePermissions,
   packageDeprecate,
   packageListingUpdate,
@@ -34,14 +35,10 @@ type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
 type Permissions = Awaited<
   ReturnType<typeof fetchPackagePermissions>
 >["permissions"];
-type CommunityFilters = Awaited<
-  ReturnType<DapperTsInterface["getCommunityFilters"]>
->;
 
 export interface ManagePackageFormProps {
   listing: Listing;
   permissions: Permissions;
-  communityFilters: CommunityFilters;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
 }
@@ -57,10 +54,56 @@ function sameCategories(a: string[], b: string[]) {
 export function ManagePackageForm({
   listing,
   permissions,
-  communityFilters,
   config,
   toast,
 }: ManagePackageFormProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const isActionInProgressRef = useRef(false);
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open && isActionInProgressRef.current) return;
+    setIsOpen(open);
+  };
+
+  return (
+    <Modal
+      csSize="medium"
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      trigger={
+        <NewButton csSize="small">
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCog} />
+          </NewIcon>
+          Manage Package
+        </NewButton>
+      }
+      titleContent="Manage Package"
+    >
+      {isOpen ? (
+        <ManagePackageFormContent
+          listing={listing}
+          permissions={permissions}
+          config={config}
+          toast={toast}
+          isActionInProgressRef={isActionInProgressRef}
+        />
+      ) : null}
+    </Modal>
+  );
+}
+
+interface ManagePackageFormContentProps extends ManagePackageFormProps {
+  isActionInProgressRef: RefObject<boolean>;
+}
+
+function ManagePackageFormContent({
+  listing,
+  permissions,
+  config,
+  toast,
+  isActionInProgressRef,
+}: ManagePackageFormContentProps) {
   const { revalidate } = useRevalidator();
 
   const packageParams = useMemo(
@@ -72,13 +115,20 @@ export function ManagePackageForm({
     [listing.community_identifier, listing.namespace, listing.name]
   );
 
+  const [communityFilters, setCommunityFilters] =
+    useState<CommunityFilters | null>(null);
+  const [isLoadingCommunityFilters, setIsLoadingCommunityFilters] =
+    useState(false);
+  const [communityFiltersErrorMessage, setCommunityFiltersErrorMessage] =
+    useState<string | null>(null);
+
   const categoryOptions = useMemo(
     () =>
-      communityFilters.package_categories.map((category) => ({
+      communityFilters?.package_categories.map((category) => ({
         value: category.slug,
         label: category.name,
-      })),
-    [communityFilters.package_categories]
+      })) ?? [],
+    [communityFilters?.package_categories]
   );
 
   const categoryNameBySlug = useMemo(
@@ -92,7 +142,6 @@ export function ManagePackageForm({
     [listing.categories]
   );
 
-  const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState(initialCategories);
   const [isSavingCategories, setIsSavingCategories] = useState(false);
   const [isTogglingDeprecation, setIsTogglingDeprecation] = useState(false);
@@ -100,9 +149,40 @@ export function ManagePackageForm({
     string | null
   >(null);
   const [unlistConfirming, setUnlistConfirming] = useState(false);
+  const [isUnlisting, setIsUnlisting] = useState(false);
 
-  const isActionInProgress = isSavingCategories || isTogglingDeprecation;
-  const wasOpenRef = useRef(false);
+  const isUnlistingRef = useRef(false);
+  const isTogglingDeprecationRef = useRef(false);
+  const isSavingCategoriesRef = useRef(false);
+
+  const isActionInProgress =
+    isSavingCategories || isTogglingDeprecation || isUnlisting;
+
+  const syncActionInProgressRef = () => {
+    isActionInProgressRef.current =
+      isUnlistingRef.current ||
+      isTogglingDeprecationRef.current ||
+      isSavingCategoriesRef.current;
+  };
+
+  const clearUnlistInFlight = () => {
+    isUnlistingRef.current = false;
+    setIsUnlisting(false);
+    setUnlistConfirming(false);
+    syncActionInProgressRef();
+  };
+
+  const clearDeprecationInFlight = () => {
+    isTogglingDeprecationRef.current = false;
+    setIsTogglingDeprecation(false);
+    syncActionInProgressRef();
+  };
+
+  const clearCategoriesSaveInFlight = () => {
+    isSavingCategoriesRef.current = false;
+    setIsSavingCategories(false);
+    syncActionInProgressRef();
+  };
 
   const showSuccessToast = (message: string) => {
     toast.addToast({
@@ -122,108 +202,164 @@ export function ManagePackageForm({
   };
 
   useEffect(() => {
-    const justOpened = isOpen && !wasOpenRef.current;
-    wasOpenRef.current = isOpen;
-    if (justOpened) {
-      setCategories(initialCategories);
-      setCategoriesErrorMessage(null);
-    }
-  }, [isOpen, initialCategories]);
+    setCategories(initialCategories);
+    setCategoriesErrorMessage(null);
+    clearUnlistInFlight();
+  }, [initialCategories]);
 
   useEffect(() => {
-    if (!unlistConfirming) return;
+    if (!permissions.can_manage_categories || communityFilters) {
+      return;
+    }
+
+    let cancelled = false;
+    setIsLoadingCommunityFilters(true);
+    setCommunityFiltersErrorMessage(null);
+
+    void fetchCommunityFilters({
+      config,
+      params: { community_id: listing.community_identifier },
+      data: {},
+      queryParams: {},
+    })
+      .then((data) => {
+        if (!cancelled) setCommunityFilters(data);
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setCommunityFiltersErrorMessage(
+            extractApiErrorMessage(
+              error instanceof Error ? error : new Error(String(error))
+            )
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingCommunityFilters(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    permissions.can_manage_categories,
+    communityFilters,
+    config,
+    listing.community_identifier,
+  ]);
+
+  useEffect(() => {
+    if (!unlistConfirming || isUnlisting) return;
     const timeout = setTimeout(
       () => setUnlistConfirming(false),
       UNLIST_CONFIRM_TIMEOUT_MS
     );
     return () => clearTimeout(timeout);
-  }, [unlistConfirming]);
+  }, [unlistConfirming, isUnlisting]);
 
   const deprecateToggleAction = ApiAction({
     endpoint: packageDeprecate,
-    onSubmitSuccess: () => {
-      setIsTogglingDeprecation(false);
-      showSuccessToast(
-        listing.is_deprecated ? "Package published" : "Package deprecated"
-      );
-    },
-    onSubmitError: (error) => {
-      setIsTogglingDeprecation(false);
-      showErrorToast(error);
-    },
   });
 
   const unlistAction = ApiAction({
     endpoint: packageUnlist,
-    onSubmitSuccess: () => {
-      setUnlistConfirming(false);
-      showSuccessToast("Package unlisted");
-    },
-    onSubmitError: showErrorToast,
   });
 
   const saveCategoriesAction = ApiAction({
     endpoint: packageListingUpdate,
-    onSubmitSuccess: () => {
-      setIsSavingCategories(false);
-      setCategoriesErrorMessage(null);
-      showSuccessToast("Categories saved");
-    },
-    onSubmitError: (error) => {
-      setIsSavingCategories(false);
-      setCategoriesErrorMessage(extractApiErrorMessage(error));
-    },
   });
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) setUnlistConfirming(false);
-    if (!open && isActionInProgress) return;
-    setIsOpen(open);
-  };
+  const handleToggleDeprecation = async () => {
+    if (isTogglingDeprecationRef.current) return;
 
-  const handleToggleDeprecation = () => {
+    isTogglingDeprecationRef.current = true;
     setIsTogglingDeprecation(true);
-    void deprecateToggleAction({
-      config,
-      params: {
-        namespace: packageParams.namespace,
-        package: packageParams.package,
-      },
-      queryParams: {},
-      data: { deprecate: !listing.is_deprecated },
-      useSession: true,
-    });
+    syncActionInProgressRef();
+
+    try {
+      await deprecateToggleAction({
+        config,
+        params: {
+          namespace: packageParams.namespace,
+          package: packageParams.package,
+        },
+        queryParams: {},
+        data: { deprecate: !listing.is_deprecated },
+        useSession: true,
+      });
+      showSuccessToast(
+        listing.is_deprecated ? "Package published" : "Package deprecated"
+      );
+    } catch (error) {
+      showErrorToast(error instanceof Error ? error : new Error(String(error)));
+    } finally {
+      clearDeprecationInFlight();
+    }
   };
 
-  const handleUnlist = () => {
+  const handleUnlist = async () => {
+    if (isUnlistingRef.current) return;
     if (!unlistConfirming) {
       setUnlistConfirming(true);
       return;
     }
-    void unlistAction({
-      config,
-      params: packageParams,
-      queryParams: {},
-      data: { unlist: "unlist" },
-      useSession: true,
-    });
+
+    isUnlistingRef.current = true;
+    setIsUnlisting(true);
+    syncActionInProgressRef();
+
+    try {
+      await unlistAction({
+        config,
+        params: packageParams,
+        queryParams: {},
+        data: { unlist: "unlist" },
+        useSession: true,
+      });
+      showSuccessToast("Package unlisted");
+    } catch (error) {
+      showErrorToast(error instanceof Error ? error : new Error(String(error)));
+    } finally {
+      clearUnlistInFlight();
+    }
   };
 
-  const handleSaveCategories = () => {
+  const handleSaveCategories = async () => {
+    if (isSavingCategoriesRef.current) return;
+
     setCategoriesErrorMessage(null);
+    isSavingCategoriesRef.current = true;
     setIsSavingCategories(true);
-    void saveCategoriesAction({
-      config,
-      params: packageParams,
-      queryParams: {},
-      data: { categories },
-      useSession: true,
-    });
+    syncActionInProgressRef();
+
+    try {
+      await saveCategoriesAction({
+        config,
+        params: packageParams,
+        queryParams: {},
+        data: { categories },
+        useSession: true,
+      });
+      setCategoriesErrorMessage(null);
+      showSuccessToast("Categories saved");
+    } catch (error) {
+      setCategoriesErrorMessage(
+        extractApiErrorMessage(
+          error instanceof Error ? error : new Error(String(error))
+        )
+      );
+    } finally {
+      clearCategoriesSaveInFlight();
+    }
   };
+
+  const canSaveCategories =
+    permissions.can_manage_categories &&
+    !isLoadingCommunityFilters &&
+    communityFilters !== null;
 
   const hasCategoryChanges =
-    permissions.can_manage_categories &&
-    !sameCategories(categories, initialCategories);
+    canSaveCategories && !sameCategories(categories, initialCategories);
 
   const selectedCategories = categories.map((slug) => ({
     value: slug,
@@ -231,23 +367,15 @@ export function ManagePackageForm({
   }));
 
   return (
-    <Modal
-      csSize="medium"
-      open={isOpen}
-      onOpenChange={handleOpenChange}
-      trigger={
-        <NewButton csSize="small">
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faCog} />
-          </NewIcon>
-          Manage Package
-        </NewButton>
-      }
-      titleContent="Manage Package"
-    >
+    <>
       <Modal.Body className="manage-package__body">
         {permissions.can_manage_categories && (
           <>
+            {communityFiltersErrorMessage && (
+              <NewAlert csVariant="danger">
+                {communityFiltersErrorMessage}
+              </NewAlert>
+            )}
             {categoriesErrorMessage && (
               <NewAlert csVariant="danger">{categoriesErrorMessage}</NewAlert>
             )}
@@ -274,10 +402,14 @@ export function ManagePackageForm({
           <section className="manage-package__block">
             <p className="manage-package__label">Edit categories</p>
             <NewSelectSearch
-              placeholder="Select categories"
+              placeholder={
+                isLoadingCommunityFilters
+                  ? "Loading categories…"
+                  : "Select categories"
+              }
               multiple
               options={categoryOptions}
-              disabled={isActionInProgress}
+              disabled={isActionInProgress || isLoadingCommunityFilters}
               onChange={(val) => {
                 setCategories(val?.map((option) => option.value) ?? []);
               }}
@@ -303,7 +435,11 @@ export function ManagePackageForm({
               csVariant="danger"
               disabled={isActionInProgress}
             >
-              {unlistConfirming ? "Confirm unlist" : "Unlist"}
+              {isUnlisting
+                ? "Unlisting…"
+                : unlistConfirming
+                  ? "Confirm unlist"
+                  : "Unlist"}
             </NewButton>
           </section>
         )}
@@ -318,7 +454,13 @@ export function ManagePackageForm({
             rootClasses="manage-package__deprecate-button"
             disabled={isActionInProgress}
           >
-            {listing.is_deprecated ? "Publish" : "Deprecate"}
+            {isTogglingDeprecation
+              ? listing.is_deprecated
+                ? "Publishing…"
+                : "Deprecating…"
+              : listing.is_deprecated
+                ? "Publish"
+                : "Deprecate"}
           </NewButton>
         )}
         {hasCategoryChanges ? (
@@ -327,7 +469,7 @@ export function ManagePackageForm({
             onClick={handleSaveCategories}
             disabled={isActionInProgress}
           >
-            Save changes
+            {isSavingCategories ? "Saving…" : "Save changes"}
           </NewButton>
         ) : (
           <Modal.Close asChild>
@@ -337,6 +479,6 @@ export function ManagePackageForm({
           </Modal.Close>
         )}
       </Modal.Footer>
-    </Modal>
+    </>
   );
 }

@@ -2,6 +2,8 @@ import { faBoxOpen, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { Suspense } from "react";
+import { Await } from "react-router";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
@@ -18,16 +20,14 @@ type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
 type Permissions = Awaited<
   ReturnType<typeof fetchPackagePermissions>
 >["permissions"];
+type ListingStatus = Awaited<
+  ReturnType<DapperTsInterface["getPackageListingStatus"]>
+>;
 
 export interface ManagementToolsProps {
   listing: Listing;
   permissions: Permissions;
-  listingStatus:
-    | Awaited<ReturnType<DapperTsInterface["getPackageListingStatus"]>>
-    | undefined;
-  communityFilters: Awaited<
-    ReturnType<DapperTsInterface["getCommunityFilters"]>
-  >;
+  listingStatus: Promise<ListingStatus | undefined> | ListingStatus | undefined;
   toast: ReturnType<typeof useToast>;
   requestConfig: () => RequestConfig;
 }
@@ -36,20 +36,75 @@ export function ManagementTools({
   listing,
   permissions,
   listingStatus,
-  communityFilters,
   toast,
   requestConfig,
 }: ManagementToolsProps) {
   const publicEnvVariables = getPublicEnvVariables(["VITE_SITE_URL"]);
 
+  const showManagePackage = permissions.can_manage || permissions.can_moderate;
+
+  return (
+    <div className="package-listing-management-tools">
+      {showManagePackage ? (
+        <div className="package-listing-management-tools__island">
+          <ManagePackageForm
+            listing={listing}
+            permissions={permissions}
+            toast={toast}
+            config={requestConfig}
+          />
+        </div>
+      ) : null}
+
+      <Suspense fallback={null}>
+        <Await resolve={listingStatus}>
+          {(resolvedListingStatus) => (
+            <ManagementToolsListingStatus
+              listing={listing}
+              permissions={permissions}
+              listingStatus={resolvedListingStatus}
+              publicEnvVariables={publicEnvVariables}
+              toast={toast}
+              requestConfig={requestConfig}
+            />
+          )}
+        </Await>
+      </Suspense>
+    </div>
+  );
+}
+
+function ManagementToolsListingStatus({
+  listing,
+  permissions,
+  listingStatus,
+  publicEnvVariables,
+  toast,
+  requestConfig,
+}: {
+  listing: Listing;
+  permissions: Permissions;
+  listingStatus: ListingStatus | undefined;
+  publicEnvVariables: ReturnType<typeof getPublicEnvVariables>;
+  toast: ReturnType<typeof useToast>;
+  requestConfig: () => RequestConfig;
+}) {
   const canViewListingAdmin =
     permissions.can_view_listing_admin_page && listingStatus?.listing_admin_url;
   const canViewPackageAdmin =
     permissions.can_view_package_admin_page && listingStatus?.package_admin_url;
 
+  if (
+    !permissions.can_moderate &&
+    !canViewListingAdmin &&
+    !canViewPackageAdmin
+  ) {
+    return null;
+  }
+
   return (
-    <div className="package-listing-management-tools">
-      {permissions.can_moderate && (
+    <>
+      {permissions.can_moderate ? (
         <div className="package-listing-management-tools__island">
           <ReviewPackageForm
             communityId={listing.community_identifier}
@@ -60,19 +115,7 @@ export function ManagementTools({
             config={requestConfig}
           />
         </div>
-      )}
-
-      {permissions.can_manage && (
-        <div className="package-listing-management-tools__island">
-          <ManagePackageForm
-            listing={listing}
-            permissions={permissions}
-            communityFilters={communityFilters}
-            toast={toast}
-            config={requestConfig}
-          />
-        </div>
-      )}
+      ) : null}
 
       {canViewListingAdmin || canViewPackageAdmin ? (
         <div className="package-listing-management-tools__island">
@@ -110,6 +153,6 @@ export function ManagementTools({
           ) : null}
         </div>
       ) : null}
-    </div>
+    </>
   );
 }

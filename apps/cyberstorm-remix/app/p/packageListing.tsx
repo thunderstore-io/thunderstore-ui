@@ -53,7 +53,7 @@ import type { Route } from "./+types/packageListing";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageListingManagement } from "./components/PackageListing/PackageListingManagement";
 import {
-  getPackageListingStatus,
+  getPackageListingStatusWhenNeeded,
   getPrivateListing,
   getPublicListing,
   getUserPermissions,
@@ -95,7 +95,6 @@ export const loader = ssrLoader(
 
     return {
       community,
-      communityFilters: await dapper.getCommunityFilters(communityId),
       listing: listing,
       listingStatus: undefined,
       team: await dapper.getTeamDetails(namespaceId),
@@ -153,25 +152,28 @@ export async function clientLoader({
     packageId,
   });
 
+  const listingIds = { communityId, namespaceId, packageId };
+  const permissions = getUserPermissions(
+    tools,
+    dapper,
+    communityId,
+    namespaceId,
+    packageId
+  );
+
   return {
     community: dapper.getCommunity(communityId),
-    communityFilters: dapper.getCommunityFilters(communityId),
     listing: listing,
-    listingStatus: getPackageListingStatus(
-      tools,
-      dapper,
-      communityId,
-      namespaceId,
-      packageId
+    listingStatus: permissions.then((resolvedPermissions) =>
+      getPackageListingStatusWhenNeeded(
+        tools,
+        dapper,
+        listingIds,
+        resolvedPermissions
+      )
     ),
     team: dapper.getTeamDetails(namespaceId),
-    permissions: getUserPermissions(
-      tools,
-      dapper,
-      communityId,
-      namespaceId,
-      packageId
-    ),
+    permissions,
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
@@ -183,7 +185,6 @@ clientLoader.hydrate = true;
 export default function PackageListing() {
   const {
     community,
-    communityFilters,
     listing,
     listingStatus,
     team,
@@ -277,7 +278,6 @@ export default function PackageListing() {
             listing={listing}
             listingStatus={listingStatus}
             permissions={permissions}
-            communityFilters={communityFilters}
             toast={toast}
             requestConfig={config}
           />
