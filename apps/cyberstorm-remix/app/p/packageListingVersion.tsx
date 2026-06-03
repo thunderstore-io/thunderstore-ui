@@ -126,8 +126,13 @@ export const loader = ssrLoader(
         ],
       }),
     };
-  }
+  },
+  { cache: true }
 );
+
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export async function clientLoader({
   params,
