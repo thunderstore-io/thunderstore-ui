@@ -50,14 +50,10 @@ import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/packageListing";
-import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import { PackageActions } from "./components/PackageListing/PackageActions";
+import { PackageListingManagement } from "./components/PackageListing/PackageListingManagement";
 import {
-  InternalNotes,
-  RejectionReason,
-} from "./components/PackageListing/ReviewInformation";
-import {
-  getPackageListingStatus,
+  getPackageListingStatusWhenNeeded,
   getPrivateListing,
   getPublicListing,
   getUserPermissions,
@@ -99,7 +95,6 @@ export const loader = ssrLoader(
 
     return {
       community,
-      communityFilters: await dapper.getCommunityFilters(communityId),
       listing: listing,
       listingStatus: undefined,
       team: await dapper.getTeamDetails(namespaceId),
@@ -157,25 +152,28 @@ export async function clientLoader({
     packageId,
   });
 
+  const listingIds = { communityId, namespaceId, packageId };
+  const permissions = getUserPermissions(
+    tools,
+    dapper,
+    communityId,
+    namespaceId,
+    packageId
+  );
+
   return {
     community: dapper.getCommunity(communityId),
-    communityFilters: dapper.getCommunityFilters(communityId),
     listing: listing,
-    listingStatus: getPackageListingStatus(
-      tools,
-      dapper,
-      communityId,
-      namespaceId,
-      packageId
+    listingStatus: permissions.then((resolvedPermissions) =>
+      getPackageListingStatusWhenNeeded(
+        tools,
+        dapper,
+        listingIds,
+        resolvedPermissions
+      )
     ),
     team: dapper.getTeamDetails(namespaceId),
-    permissions: getUserPermissions(
-      tools,
-      dapper,
-      communityId,
-      namespaceId,
-      packageId
-    ),
+    permissions,
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
@@ -276,29 +274,13 @@ export default function PackageListing() {
     <>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
-          <Suspense>
-            <Await resolve={listingStatus}>
-              {(resolvedStatus) => (
-                <Await resolve={permissions}>
-                  {(resolvedPermissions) =>
-                    resolvedPermissions ? (
-                      <>
-                        <ManagementTools
-                          listingStatus={resolvedStatus}
-                          packagePermissions={resolvedPermissions}
-                          listing={listing}
-                          toast={toast}
-                          requestConfig={config}
-                        />
-                        <RejectionReason status={resolvedStatus} />
-                        <InternalNotes status={resolvedStatus} />
-                      </>
-                    ) : null
-                  }
-                </Await>
-              )}
-            </Await>
-          </Suspense>
+          <PackageListingManagement
+            listing={listing}
+            listingStatus={listingStatus}
+            permissions={permissions}
+            toast={toast}
+            requestConfig={config}
+          />
 
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">

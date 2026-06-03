@@ -1,6 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
+import type { PackagePermissions } from "@thunderstore/dapper/types";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
 /**
@@ -89,6 +90,43 @@ export async function getPrivateListing(
   }
 
   return privateListing;
+}
+
+export function needsPackageListingStatus(
+  permissions: PackagePermissions["permissions"] | undefined
+): boolean {
+  if (!permissions) {
+    return false;
+  }
+
+  return (
+    permissions.can_manage ||
+    permissions.can_moderate ||
+    permissions.can_view_listing_admin_page ||
+    permissions.can_view_package_admin_page
+  );
+}
+
+/**
+ * Resolves listing status only when permissions require it (moderation/manage/admin).
+ */
+export async function getPackageListingStatusWhenNeeded(
+  tools: ReturnType<typeof getSessionTools>,
+  dapper: DapperTs,
+  ids: ListingIdentifiers,
+  permissions: PackagePermissions | undefined
+) {
+  if (!needsPackageListingStatus(permissions?.permissions)) {
+    return undefined;
+  }
+
+  return getPackageListingStatus(
+    tools,
+    dapper,
+    ids.communityId,
+    ids.namespaceId,
+    ids.packageId
+  );
 }
 
 /**

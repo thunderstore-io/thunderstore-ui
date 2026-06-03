@@ -46,7 +46,6 @@ export function Breadcrumbs() {
   const packageVersionWithoutCommunityPage = matches.find(
     (m) => m.id === "p/packageVersionWithoutCommunity"
   );
-  const packageEditPage = matches.find((m) => m.id === "p/packageEdit");
   const packageDependantsPage = matches.find(
     (m) => m.id === "p/dependants/Dependants"
   );
@@ -69,13 +68,11 @@ export function Breadcrumbs() {
           packageListingPage ||
           packageDependantsPage ||
           packageTeamPage ||
-          packageVersionPage ||
-          packageEditPage,
+          packageVersionPage,
         Boolean(packageListingPage) ||
           Boolean(packageDependantsPage) ||
           Boolean(packageTeamPage) ||
-          Boolean(packageVersionPage) ||
-          Boolean(packageEditPage)
+          Boolean(packageVersionPage)
       ),
     [
       communityPage,
@@ -83,17 +80,12 @@ export function Breadcrumbs() {
       packageDependantsPage,
       packageTeamPage,
       packageVersionPage,
-      packageEditPage,
     ]
   );
   const packageListingBreadcrumb = useMemo(
     () =>
-      getPackageListingBreadcrumb(
-        packageListingPage,
-        packageEditPage,
-        packageDependantsPage
-      ),
-    [packageListingPage, packageEditPage, packageDependantsPage]
+      getPackageListingBreadcrumb(packageListingPage, packageDependantsPage),
+    [packageListingPage, packageDependantsPage]
   );
 
   const userSettingsBreadcrumb = useMemo(() => {
@@ -229,9 +221,6 @@ export function Breadcrumbs() {
   const miscPackageBreadcrumb = useMemo(() => {
     return (
       <>
-        {packageEditPage ? (
-          <NewBreadCrumbsItem>Edit package</NewBreadCrumbsItem>
-        ) : null}
         {packageDependantsPage ? (
           <NewBreadCrumbsItem>Dependants</NewBreadCrumbsItem>
         ) : null}
@@ -242,7 +231,7 @@ export function Breadcrumbs() {
         ) : null}
       </>
     );
-  }, [packageEditPage, packageDependantsPage, packageTeamPage]);
+  }, [packageDependantsPage, packageTeamPage]);
 
   const toolsBreadcrumb = useMemo(() => {
     return (
@@ -340,29 +329,15 @@ function getCommunityBreadcrumb(
 
 function getPackageListingBreadcrumb(
   packageListingPage: UIMatch | undefined,
-  packageEditPage: UIMatch | undefined,
   packageDependantsPage: UIMatch | undefined
 ) {
-  if (!packageListingPage && !packageEditPage && !packageDependantsPage)
-    return null;
+  if (!packageListingPage && !packageDependantsPage) return null;
   return (
     <>
       {packageListingPage ? (
         <NewBreadCrumbsItem>
           {packageListingPage.params.packageId}
         </NewBreadCrumbsItem>
-      ) : null}
-      {packageEditPage ? (
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Package"
-          community={packageEditPage.params.communityId}
-          namespace={packageEditPage.params.namespaceId}
-          package={packageEditPage.params.packageId}
-          csVariant="cyber"
-        >
-          {packageEditPage.params.packageId}
-        </NewBreadCrumbsLink>
       ) : null}
       {packageDependantsPage ? (
         <NewBreadCrumbsLink

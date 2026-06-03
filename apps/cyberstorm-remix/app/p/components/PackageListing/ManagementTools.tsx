@@ -1,7 +1,9 @@
-import { faBoxOpen, faCog, faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { Suspense } from "react";
+import { Await } from "react-router";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
@@ -10,42 +12,99 @@ import {
   fetchPackagePermissions,
 } from "@thunderstore/thunderstore-api";
 
+import { type getPrivateListing } from "../../listingUtils";
+import { ManagePackageForm } from "./ManagePackageForm";
 import { ReviewPackageForm } from "./ReviewPackageForm";
 
+type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
+type Permissions = Awaited<
+  ReturnType<typeof fetchPackagePermissions>
+>["permissions"];
+type ListingStatus = Awaited<
+  ReturnType<DapperTsInterface["getPackageListingStatus"]>
+>;
+
 export interface ManagementToolsProps {
-  packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>;
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
-  listingStatus:
-    | Awaited<ReturnType<DapperTsInterface["getPackageListingStatus"]>>
-    | undefined;
+  listing: Listing;
+  permissions: Permissions;
+  listingStatus: Promise<ListingStatus | undefined> | ListingStatus | undefined;
   toast: ReturnType<typeof useToast>;
   requestConfig: () => RequestConfig;
 }
 
 export function ManagementTools({
-  packagePermissions,
   listing,
+  permissions,
   listingStatus,
   toast,
   requestConfig,
 }: ManagementToolsProps) {
-  const perms = packagePermissions.permissions;
-  const pkg = packagePermissions.package;
-
   const publicEnvVariables = getPublicEnvVariables(["VITE_SITE_URL"]);
 
-  const canViewAdminPages =
-    perms.can_view_listing_admin_page &&
-    listingStatus &&
-    listingStatus.listing_admin_url;
-  const canViewPackageAdminPages =
-    perms.can_view_package_admin_page &&
-    listingStatus &&
-    listingStatus.package_admin_url;
+  const showManagePackage = permissions.can_manage || permissions.can_moderate;
 
   return (
     <div className="package-listing-management-tools">
-      {perms.can_moderate && (
+      {showManagePackage ? (
+        <div className="package-listing-management-tools__island">
+          <ManagePackageForm
+            listing={listing}
+            permissions={permissions}
+            toast={toast}
+            config={requestConfig}
+          />
+        </div>
+      ) : null}
+
+      <Suspense fallback={null}>
+        <Await resolve={listingStatus}>
+          {(resolvedListingStatus) => (
+            <ManagementToolsListingStatus
+              listing={listing}
+              permissions={permissions}
+              listingStatus={resolvedListingStatus}
+              publicEnvVariables={publicEnvVariables}
+              toast={toast}
+              requestConfig={requestConfig}
+            />
+          )}
+        </Await>
+      </Suspense>
+    </div>
+  );
+}
+
+function ManagementToolsListingStatus({
+  listing,
+  permissions,
+  listingStatus,
+  publicEnvVariables,
+  toast,
+  requestConfig,
+}: {
+  listing: Listing;
+  permissions: Permissions;
+  listingStatus: ListingStatus | undefined;
+  publicEnvVariables: ReturnType<typeof getPublicEnvVariables>;
+  toast: ReturnType<typeof useToast>;
+  requestConfig: () => RequestConfig;
+}) {
+  const canViewListingAdmin =
+    permissions.can_view_listing_admin_page && listingStatus?.listing_admin_url;
+  const canViewPackageAdmin =
+    permissions.can_view_package_admin_page && listingStatus?.package_admin_url;
+
+  if (
+    !permissions.can_moderate &&
+    !canViewListingAdmin &&
+    !canViewPackageAdmin
+  ) {
+    return null;
+  }
+
+  return (
+    <>
+      {permissions.can_moderate ? (
         <div className="package-listing-management-tools__island">
           <ReviewPackageForm
             communityId={listing.community_identifier}
@@ -56,29 +115,11 @@ export function ManagementTools({
             config={requestConfig}
           />
         </div>
-      )}
+      ) : null}
 
-      {(perms.can_manage || perms.can_moderate) && (
+      {canViewListingAdmin || canViewPackageAdmin ? (
         <div className="package-listing-management-tools__island">
-          <NewButton
-            csSize="small"
-            primitiveType="cyberstormLink"
-            linkId="PackageEdit"
-            community={pkg.community_id}
-            namespace={pkg.namespace_id}
-            package={pkg.package_name}
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faCog} />
-            </NewIcon>
-            Manage Package
-          </NewButton>
-        </div>
-      )}
-
-      {listingStatus && (canViewAdminPages || canViewPackageAdminPages) ? (
-        <div className="package-listing-management-tools__island">
-          {canViewAdminPages ? (
+          {canViewListingAdmin ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
@@ -94,7 +135,7 @@ export function ManagementTools({
               </NewIcon>
             </NewButton>
           ) : null}
-          {canViewPackageAdminPages ? (
+          {canViewPackageAdmin ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
@@ -112,6 +153,6 @@ export function ManagementTools({
           ) : null}
         </div>
       ) : null}
-    </div>
+    </>
   );
 }

@@ -1,0 +1,34 @@
+@layer nimbus-layout {
+  .manage-package__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: stretch;
+  }
+
+  .manage-package__block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .manage-package__label {
+    color: var(--color-text-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: normal;
+  }
+
+  .manage-package__description {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+
+  .manage-package__deprecate-button {
+    margin-right: auto;
+  }
+}
