@@ -275,7 +275,7 @@
     }
   }
 
-  @media (width <= 990px) {
+  @container (width <= 58rem) {
     .package-listing__narrow-actions {
       display: flex;
     }

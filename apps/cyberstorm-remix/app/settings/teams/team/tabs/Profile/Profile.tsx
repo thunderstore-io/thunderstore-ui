@@ -150,7 +150,7 @@ function ProfileForm(props: { team: TeamDetails }) {
 
   return (
     <FormSection title="Donation Link" description="Must be a valid HTTPS URL">
-      <Island level="2">
+      <Island rootClasses="team-profile__island">
         <div className="team-profile__donationLink">
           <label className="team-profile__label" htmlFor="donation_link_input">
             URL

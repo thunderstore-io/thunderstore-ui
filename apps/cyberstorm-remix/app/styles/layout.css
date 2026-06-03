@@ -33,7 +33,7 @@
     padding: var(--space-16);
   }
 
-  @media (width <= 92.125rem) {
+  @container (width <= 82rem) {
     .layout__ads {
       display: none;
     }
