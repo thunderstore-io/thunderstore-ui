@@ -74,8 +74,13 @@ export const loader = ssrLoader(
       };
     }
     throw new Response("Community not found", { status: 404 });
-  }
+  },
+  { cache: true }
 );
+
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId) {
