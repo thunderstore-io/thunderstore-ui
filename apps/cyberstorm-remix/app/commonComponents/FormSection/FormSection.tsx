@@ -2,8 +2,6 @@ import type { ReactNode } from "react";
 
 import { classnames } from "@thunderstore/cyberstorm";
 
-import "./FormSection.css";
-
 export interface FormSectionsProps {
   children: ReactNode;
   rootClasses?: string;
@@ -46,20 +44,4 @@ export function FormSection({
 
 export function FormSectionSeparator() {
   return <div className="form-section__separator" role="separator" />;
-}
-
-export interface FormSectionIslandProps {
-  children: ReactNode;
-  rootClasses?: string;
-}
-
-export function FormSectionIsland({
-  children,
-  rootClasses,
-}: FormSectionIslandProps) {
-  return (
-    <div className={classnames("form-section__island", rootClasses)}>
-      {children}
-    </div>
-  );
 }
