@@ -1,4 +1,5 @@
 import type { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
+import type { UploadProgress } from "@thunderstore/ts-uploader";
 
 /** Value for `<input type="file" accept="...">` — MIME types plus `.zip` for file picker UX. */
 export const PACKAGE_ZIP_ACCEPT =
@@ -68,6 +69,16 @@ export function formatBytes(bytes: number, decimals = 2) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+
+export function getUploadProgressPercent(
+  progress: UploadProgress | undefined
+): number {
+  if (!progress || progress.total <= 0) {
+    return 0;
+  }
+
+  return (progress.complete / progress.total) * 100;
 }
 
 export const initialUploadFormInputs: PackageSubmissionRequestData = {
@@ -149,16 +160,22 @@ export function getSubmissionErrorMessages(formErrors: unknown): string[] {
 export function isUploadSubmitDisabled({
   submitting,
   submissionPending,
-  uploadUuid,
+  authorName,
+  hasSelectedFile,
   communitiesCount,
 }: {
   submitting: boolean;
   submissionPending: boolean;
-  uploadUuid: string | undefined;
+  authorName: string;
+  hasSelectedFile: boolean;
   communitiesCount: number;
 }): boolean {
   return (
-    submitting || submissionPending || !uploadUuid || communitiesCount === 0
+    submitting ||
+    submissionPending ||
+    !authorName ||
+    !hasSelectedFile ||
+    communitiesCount === 0
   );
 }
 

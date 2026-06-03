@@ -25,23 +25,31 @@ export function usePackageFileUpload(
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const startUpload = useCallback(async () => {
-    if (!file) return;
+    if (!file) {
+      const message = "Please choose a ZIP file before submitting.";
+      setUploadError(message);
+      throw new Error(message);
+    }
 
     if (!isPackageZipFile(file)) {
-      setUploadError(PACKAGE_ZIP_FILE_ERROR_MESSAGE);
+      const message = PACKAGE_ZIP_FILE_ERROR_MESSAGE;
+      setUploadError(message);
       setFile(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      return;
+      throw new Error(message);
     }
 
     setUploadError(null);
+    setIsDone(false);
+    setUsermedia(undefined);
 
     const config = requestConfig();
     if (!config.apiHost) {
-      setUploadError("API host is not configured");
-      return;
+      const message = "API host is not configured";
+      setUploadError(message);
+      throw new Error(message);
     }
 
     const upload = new MultipartUpload({ file }, requestConfig);
@@ -51,17 +59,18 @@ export function usePackageFileUpload(
       await upload.start();
       setUsermedia(upload.handle);
       setIsDone(true);
+      return upload.handle;
     } catch (error) {
-      setUploadError(error instanceof Error ? error.message : "Upload failed");
+      const message = error instanceof Error ? error.message : "Upload failed";
+      setUploadError(message);
+      setIsDone(false);
+      setUsermedia(undefined);
+      setHandle(undefined);
+      throw new Error(message);
+    } finally {
       setHandle(undefined);
     }
   }, [file, requestConfig]);
-
-  useEffect(() => {
-    if (file) {
-      void startUpload();
-    }
-  }, [file, startUpload]);
 
   const clearFile = useCallback(() => {
     setFile(null);
@@ -103,6 +112,7 @@ export function usePackageFileUpload(
 
   return {
     file,
+    startUpload,
     selectFile,
     fileInputRef,
     handle,

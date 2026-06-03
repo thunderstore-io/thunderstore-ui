@@ -12,6 +12,7 @@ import {
 import { type PackageSubmissionResult } from "@thunderstore/dapper/types";
 
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
+import "./SubmissionResult.css";
 
 export interface SubmissionResultProps {
   submissionStatusResult: PackageSubmissionResult;
@@ -107,11 +108,15 @@ export function SubmissionResult({
             sortValue: v.url,
           },
           {
-            value: v.categories.map((c) => (
-              <NewTag key={c.slug} csSize="small">
-                {c.name}
-              </NewTag>
-            )),
+            value: (
+              <div className="submission-result__categories">
+                {v.categories.map((c) => (
+                  <NewTag key={c.slug} csSize="small">
+                    {c.name}
+                  </NewTag>
+                ))}
+              </div>
+            ),
             sortValue: v.categories.map((c) => c.name).join(", "),
           },
         ])}

@@ -45,6 +45,13 @@ vi.mock("../SubmissionResult", () => ({
     React.createElement("div", { "data-testid": "submission-result" }),
 }));
 
+vi.mock("../SubmissionProcessingSkeleton", () => ({
+  SubmissionProcessingSkeleton: () =>
+    React.createElement("div", {
+      "data-testid": "submission-processing-skeleton",
+    }),
+}));
+
 function render(element: React.ReactElement) {
   const container = document.createElement("div");
   document.body.appendChild(container);
@@ -81,24 +88,39 @@ function asStatus(
 }
 
 describe("UploadSubmissionStatus", () => {
-  it("shows retry button while submission is pending", () => {
-    const onRetryPolling = vi.fn();
+  it("shows processing skeleton while submission is pending", () => {
     const { container, unmount } = render(
       React.createElement(UploadSubmissionStatus, {
+        submitting: false,
         submissionStatus: asStatus("PENDING"),
         pollingError: null,
         submitSectionErrors: [],
-        onRetryPolling,
+        onRetryPolling: vi.fn(),
       })
     );
 
-    const retryButton = container.querySelector("button");
-    expect(retryButton?.textContent).toBe("Retry Status Check");
+    expect(
+      container.querySelector("[data-testid='submission-processing-skeleton']")
+    ).not.toBeNull();
+    expect(container.querySelector("button")).toBeNull();
 
-    act(() => {
-      retryButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
-    expect(onRetryPolling).toHaveBeenCalledTimes(1);
+    unmount();
+  });
+
+  it("shows processing skeleton while form is submitting", () => {
+    const { container, unmount } = render(
+      React.createElement(UploadSubmissionStatus, {
+        submitting: true,
+        pollingError: null,
+        submitSectionErrors: [],
+        onRetryPolling: vi.fn(),
+      })
+    );
+
+    expect(
+      container.querySelector("[data-testid='submission-processing-skeleton']")
+    ).not.toBeNull();
+    expect(container.querySelector("button")).toBeNull();
 
     unmount();
   });
@@ -106,6 +128,7 @@ describe("UploadSubmissionStatus", () => {
   it("renders submission result and section errors when present", () => {
     const { container, unmount } = render(
       React.createElement(UploadSubmissionStatus, {
+        submitting: false,
         submissionStatus: asStatus("FINISHED", true),
         pollingError: null,
         submitSectionErrors: ["Submit failed"],
@@ -122,9 +145,30 @@ describe("UploadSubmissionStatus", () => {
     unmount();
   });
 
+  it("hides polling error UI while processing is active", () => {
+    const { container, unmount } = render(
+      React.createElement(UploadSubmissionStatus, {
+        submitting: true,
+        submissionStatus: asStatus("PENDING"),
+        pollingError: "network error",
+        submitSectionErrors: [],
+        onRetryPolling: vi.fn(),
+      })
+    );
+
+    expect(
+      container.querySelector("[data-testid='submission-processing-skeleton']")
+    ).not.toBeNull();
+    expect(container.querySelector("button")).toBeNull();
+    expect(container.querySelector("[data-testid='alert']")).toBeNull();
+
+    unmount();
+  });
+
   it("shows polling error alert and retry when polling fails", () => {
     const { container, unmount } = render(
       React.createElement(UploadSubmissionStatus, {
+        submitting: false,
         submissionStatus: asStatus("FINISHED"),
         pollingError: "network error",
         submitSectionErrors: [],

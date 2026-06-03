@@ -30,6 +30,11 @@ export function UploadCategoriesSection({
       description="Select descriptive categories to help people discover your package."
     >
       <SectionErrors errors={sectionErrors} />
+      {communities.length === 0 ? (
+        <p className="upload__category-placeholder">
+          Select a community to view available categories
+        </p>
+      ) : null}
       {communities.map((community) => {
         const communityData = communityResults.find(
           (c) => c.identifier === community

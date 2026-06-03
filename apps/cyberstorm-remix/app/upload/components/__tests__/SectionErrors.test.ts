@@ -22,7 +22,11 @@ vi.mock("@thunderstore/cyberstorm", () => ({
   }) =>
     React.createElement(
       "div",
-      { "data-variant": csVariant, "data-testid": "alert" },
+      {
+        role: "alert",
+        "data-variant": csVariant,
+        "data-testid": "alert",
+      },
       children
     ),
 }));

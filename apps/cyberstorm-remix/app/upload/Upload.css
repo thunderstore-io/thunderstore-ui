@@ -1,7 +1,26 @@
 @layer nimbus-layout {
+  .upload {
+    gap: var(--gap-xl);
+  }
+
+  .upload__helper-alerts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-self: stretch;
+  }
+
+  .upload__helper-text {
+    margin: 0;
+  }
+
+  .upload__helper-text + .upload__helper-text {
+    margin-top: var(--gap-xs);
+  }
+
   .upload__no-teams {
     display: flex;
-    gap: 4px;
+    gap: var(--gap-2xs);
     align-items: center;
   }
 
@@ -27,81 +46,22 @@
     font-size: var(--font-size-body-md);
   }
 
-  .drag-n-drop {
-    display: flex;
-    flex: 1 0 0;
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: center;
-    align-self: stretch;
-    justify-content: center;
-    padding: 1.5rem 2rem;
-    border: 2px dashed var(--color-surface-a9);
-
-    border-radius: var(--radius-md);
-    background: var(--color-surface-a4);
-
-    cursor: pointer;
-  }
-
-  .drag-n-drop--success {
-    border: 2px solid var(--color-cyber-green-7);
-    background: var(--color-surface-1);
-  }
-
-  .drag-n-drop--error {
-    border: 2px solid var(--color-accent-red-7);
-    background: var(--color-surface-1);
+  .upload__category-placeholder {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body-md);
   }
 
   .upload__alert {
     align-self: stretch;
   }
 
-  .drag-n-drop__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
+  .upload__helper-text a:hover {
+    text-decoration-thickness: 2px;
   }
 
-  .drag-n-drop__icon {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-
-  .drag-n-drop__main-text {
-    color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-
-    font-size: var(--font-size-body-lg);
-    text-align: center;
-  }
-
-  .drag-n-drop__sub-text {
-    color: var(--color-text-tertiary);
-    font-weight: var(--font-weight-medium);
-
-    font-size: var(--font-size-body-md);
-    text-align: center;
-  }
-
-  .drag-n-drop__remove-button {
-    color: var(--color-text-tertiary);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-body-md);
-    background: transparent;
-    text-decoration-line: underline;
-    text-decoration-style: solid;
-    text-decoration-skip-ink: none;
-    text-decoration-thickness: auto;
-    text-underline-offset: auto;
-    text-underline-position: from-font;
+  .upload__buttons .new-button:hover:not(:disabled) {
+    filter: brightness(1.05);
   }
 
   .upload__nsfw-switch {
@@ -125,27 +85,23 @@
     align-self: stretch;
   }
 
-  .upload__processing {
-    color: var(--color-text-tertiary);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-body-md);
-  }
-
   .submission__status {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
   }
 
-  .submission__status-item {
+  .upload__upload-indicator {
     display: flex;
-    flex: 1 1 0;
-    flex-direction: row;
-    gap: var(--gap-md);
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid var(--color-surface-a9);
-    border-radius: var(--radius-md);
-    background-color: var(--color-surface-a4);
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-self: stretch;
+  }
+
+  .upload__upload-indicator-label {
+    margin: 0;
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body-md);
   }
 }

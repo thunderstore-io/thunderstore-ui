@@ -1,0 +1,64 @@
+@layer nimbus-layout {
+  .submission-processing__header {
+    display: flex;
+    gap: var(--gap-md);
+    align-items: flex-start;
+  }
+
+  .submission-processing__icon {
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+
+    --skeleton-radius: var(--radius-md);
+  }
+
+  .submission-processing__header-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    min-width: 0;
+  }
+
+  .submission-processing__title {
+    width: 40%;
+    height: 1.5rem;
+  }
+
+  .submission-processing__description {
+    width: 75%;
+    height: 1rem;
+  }
+
+  .submission-processing__table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    margin-top: var(--gap-lg);
+  }
+
+  .submission-processing__table-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .submission-processing__table-subtitle {
+    width: 55%;
+    height: 1rem;
+  }
+
+  .submission-processing__rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .submission-processing__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--gap-md);
+    height: 1.25rem;
+  }
+}
