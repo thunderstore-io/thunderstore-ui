@@ -29,33 +29,44 @@ async function fetchReadmeSafe(
   }
 }
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (!params.namespaceId || !params.packageId) {
-    throw new Response("Not Found", { status: 404 });
-  }
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (!params.namespaceId || !params.packageId) {
+      throw new Response("Not Found", { status: 404 });
+    }
 
-  const dapper = new DapperTs(() => {
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: getApiHostForSsr(),
+        sessionId: undefined,
+      };
+    });
+
     return {
-      apiHost: getApiHostForSsr(),
-      sessionId: undefined,
+      readme: await fetchReadmeSafe(
+        dapper,
+        params.namespaceId,
+        params.packageId
+      ),
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} Readme | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Readme for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
-  });
+  },
+  { cache: true }
+);
 
-  return {
-    readme: await fetchReadmeSafe(dapper, params.namespaceId, params.packageId),
-    seo: createSeo({
-      descriptors: [
-        {
-          title: `${params.namespaceId}-${params.packageId} Readme | Thunderstore`,
-        },
-        {
-          name: "description",
-          content: `Readme for ${params.namespaceId}-${params.packageId}`,
-        },
-      ],
-    }),
-  };
-});
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (!params.namespaceId || !params.packageId) {
