@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { Await } from "react-router";
+import { Island, IslandContainer } from "~/commonComponents/Island/Island";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
@@ -44,16 +45,19 @@ export function ManagementTools({
   const showManagePackage = permissions.can_manage || permissions.can_moderate;
 
   return (
-    <div className="package-listing-management-tools">
+    <IslandContainer
+      direction="x"
+      rootClasses="package-listing-management-tools"
+    >
       {showManagePackage ? (
-        <div className="package-listing-management-tools__island">
+        <Island variant="special">
           <ManagePackageForm
             listing={listing}
             permissions={permissions}
             toast={toast}
             config={requestConfig}
           />
-        </div>
+        </Island>
       ) : null}
 
       <Suspense fallback={null}>
@@ -70,7 +74,7 @@ export function ManagementTools({
           )}
         </Await>
       </Suspense>
-    </div>
+    </IslandContainer>
   );
 }
 
@@ -105,7 +109,7 @@ function ManagementToolsListingStatus({
   return (
     <>
       {permissions.can_moderate ? (
-        <div className="package-listing-management-tools__island">
+        <Island variant="special">
           <ReviewPackageForm
             communityId={listing.community_identifier}
             namespaceId={listing.namespace}
@@ -114,11 +118,11 @@ function ManagementToolsListingStatus({
             toast={toast}
             config={requestConfig}
           />
-        </div>
+        </Island>
       ) : null}
 
       {canViewListingAdmin || canViewPackageAdmin ? (
-        <div className="package-listing-management-tools__island">
+        <Island variant="special">
           {canViewListingAdmin ? (
             <NewButton
               csSize="small"
@@ -151,7 +155,7 @@ function ManagementToolsListingStatus({
               </NewIcon>
             </NewButton>
           ) : null}
-        </div>
+        </Island>
       ) : null}
     </>
   );

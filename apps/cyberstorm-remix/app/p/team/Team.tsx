@@ -5,6 +5,7 @@ import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -12,7 +13,6 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/packageOrderOptions";
 import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Team";
-import "./Team.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
@@ -153,22 +153,18 @@ export default function Team() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <>
-      <section className="team">
-        <PageHeader headingLevel="1" headingSize="3">
-          Mods uploaded by {teamId}
-        </PageHeader>
-        <>
-          <PackageSearch
-            listings={listings}
-            filters={filters}
-            config={outletContext.requestConfig}
-            currentUser={outletContext.currentUser}
-            dapper={outletContext.dapper}
-            teamName={teamId}
-          />
-        </>
-      </section>
-    </>
+    <Page as="section" rootClasses="team">
+      <PageHeader headingLevel="1" headingSize="2">
+        Mods uploaded by {teamId}
+      </PageHeader>
+      <PackageSearch
+        listings={listings}
+        filters={filters}
+        config={outletContext.requestConfig}
+        currentUser={outletContext.currentUser}
+        dapper={outletContext.dapper}
+        teamName={teamId}
+      />
+    </Page>
   );
 }
