@@ -1,7 +1,15 @@
+import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { NewBreadCrumbs, NewBreadCrumbsLink } from "@thunderstore/cyberstorm";
+import {
+  Image,
+  NewBreadCrumbs,
+  NewBreadCrumbsItem,
+  NewBreadCrumbsLink,
+} from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
+
+import catHeim from "../assets/catheim.png";
 
 const meta = {
   title: "Cyberstorm/BreadCrumbs",
@@ -17,9 +25,7 @@ export const Default: Story = {
   render: () => (
     <div style={{ width: "300px" }}>
       <NewBreadCrumbs>
-        <span>
-          <span>Just Text</span>
-        </span>
+        <NewBreadCrumbsItem>Just Text</NewBreadCrumbsItem>
         <NewBreadCrumbsLink primitiveType="link" href="#">
           Category
         </NewBreadCrumbsLink>
@@ -31,13 +37,34 @@ export const Default: Story = {
   ),
 };
 
+export const WithCommunityIcon: Story = {
+  render: () => (
+    <div style={{ width: "400px" }}>
+      <NewBreadCrumbs>
+        <NewBreadCrumbsLink primitiveType="link" href="#">
+          Communities
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink primitiveType="link" href="#">
+          <Image
+            src={catHeim}
+            fallbackIcon={faGamepad}
+            square
+            alt=""
+            rootClasses="breadcrumbs__community-icon"
+          />
+          Catheim
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsItem>Some Package</NewBreadCrumbsItem>
+      </NewBreadCrumbs>
+    </div>
+  ),
+};
+
 export const Short: Story = {
   render: () => (
     <div style={{ width: "100px" }}>
       <NewBreadCrumbs>
-        <span>
-          <span>Just Text</span>
-        </span>
+        <NewBreadCrumbsItem>Just Text</NewBreadCrumbsItem>
         <NewBreadCrumbsLink primitiveType="link" href="#">
           Category
         </NewBreadCrumbsLink>

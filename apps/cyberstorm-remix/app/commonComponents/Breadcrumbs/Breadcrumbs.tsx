@@ -1,10 +1,10 @@
-import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { Suspense, useMemo } from "react";
 import { Await, type UIMatch, useMatches } from "react-router";
 
 import {
   Image,
   NewBreadCrumbs,
+  NewBreadCrumbsItem,
   NewBreadCrumbsLink,
   isRecord,
 } from "@thunderstore/cyberstorm";
@@ -51,6 +51,9 @@ export function Breadcrumbs() {
     (m) => m.id === "p/dependants/Dependants"
   );
   const packageTeamPage = matches.find((m) => m.id === "p/team/Team");
+  const packageFormatDocsPage = matches.find(
+    (m) => m.id === "tools/package-format-docs/packageFormatDocs"
+  );
   const manifestValidatorPage = matches.find(
     (m) => m.id === "tools/manifest-validator/manifestValidator"
   );
@@ -106,14 +109,10 @@ export function Breadcrumbs() {
             Settings
           </NewBreadCrumbsLink>
         ) : (
-          <span>
-            <span>Settings</span>
-          </span>
+          <NewBreadCrumbsItem>Settings</NewBreadCrumbsItem>
         )}
         {userSettingsAccountPage ? (
-          <span>
-            <span>Account</span>
-          </span>
+          <NewBreadCrumbsItem>Account</NewBreadCrumbsItem>
         ) : null}
       </>
     );
@@ -141,24 +140,16 @@ export function Breadcrumbs() {
           </NewBreadCrumbsLink>
         ) : null}
         {teamSettingsProfilePage ? (
-          <span>
-            <span>Profile</span>
-          </span>
+          <NewBreadCrumbsItem>Profile</NewBreadCrumbsItem>
         ) : null}
         {teamSettingsMembersPage ? (
-          <span>
-            <span>Members</span>
-          </span>
+          <NewBreadCrumbsItem>Members</NewBreadCrumbsItem>
         ) : null}
         {teamSettingsServiceAccountsPage ? (
-          <span>
-            <span>Service Accounts</span>
-          </span>
+          <NewBreadCrumbsItem>Service Accounts</NewBreadCrumbsItem>
         ) : null}
         {teamSettingsSettingsPage ? (
-          <span>
-            <span>Settings</span>
-          </span>
+          <NewBreadCrumbsItem>Settings</NewBreadCrumbsItem>
         ) : null}
       </>
     );
@@ -173,11 +164,7 @@ export function Breadcrumbs() {
 
   const uploadBreadcrumb = useMemo(() => {
     if (!uploadPage) return null;
-    return (
-      <span>
-        <span>Upload</span>
-      </span>
-    );
+    return <NewBreadCrumbsItem>Upload</NewBreadCrumbsItem>;
   }, [uploadPage]);
 
   const communitiesBreadcrumb = useMemo(() => {
@@ -197,9 +184,7 @@ export function Breadcrumbs() {
         Communities
       </NewBreadCrumbsLink>
     ) : (
-      <span>
-        <span>Communities</span>
-      </span>
+      <NewBreadCrumbsItem>Communities</NewBreadCrumbsItem>
     );
   }, [communitiesPage, communityPage, packageDependantsPage, packageTeamPage]);
 
@@ -217,9 +202,9 @@ export function Breadcrumbs() {
         >
           {packageVersionPage.params.packageId}
         </NewBreadCrumbsLink>
-        <span>
-          <span>{packageVersionPage.params.packageVersion}</span>
-        </span>
+        <NewBreadCrumbsItem>
+          {packageVersionPage.params.packageVersion}
+        </NewBreadCrumbsItem>
       </>
     );
   }, [packageVersionPage]);
@@ -228,17 +213,15 @@ export function Breadcrumbs() {
     if (!packageVersionWithoutCommunityPage) return null;
     return (
       <>
-        <span>
-          <span>{packageVersionWithoutCommunityPage.params.namespaceId}</span>
-        </span>
-        <span>
-          <span>{packageVersionWithoutCommunityPage.params.packageId}</span>
-        </span>
-        <span>
-          <span>
-            {packageVersionWithoutCommunityPage.params.packageVersion}
-          </span>
-        </span>
+        <NewBreadCrumbsItem>
+          {packageVersionWithoutCommunityPage.params.namespaceId}
+        </NewBreadCrumbsItem>
+        <NewBreadCrumbsItem>
+          {packageVersionWithoutCommunityPage.params.packageId}
+        </NewBreadCrumbsItem>
+        <NewBreadCrumbsItem>
+          {packageVersionWithoutCommunityPage.params.packageVersion}
+        </NewBreadCrumbsItem>
       </>
     );
   }, [packageVersionWithoutCommunityPage]);
@@ -247,19 +230,15 @@ export function Breadcrumbs() {
     return (
       <>
         {packageEditPage ? (
-          <span>
-            <span>Edit package</span>
-          </span>
+          <NewBreadCrumbsItem>Edit package</NewBreadCrumbsItem>
         ) : null}
         {packageDependantsPage ? (
-          <span>
-            <span>Dependants</span>
-          </span>
+          <NewBreadCrumbsItem>Dependants</NewBreadCrumbsItem>
         ) : null}
         {packageTeamPage ? (
-          <span>
-            <span>{packageTeamPage.params.namespaceId}</span>
-          </span>
+          <NewBreadCrumbsItem>
+            {packageTeamPage.params.namespaceId}
+          </NewBreadCrumbsItem>
         ) : null}
       </>
     );
@@ -268,27 +247,22 @@ export function Breadcrumbs() {
   const toolsBreadcrumb = useMemo(() => {
     return (
       <>
+        {packageFormatDocsPage ? (
+          <NewBreadCrumbsItem>Package Format Docs</NewBreadCrumbsItem>
+        ) : null}
         {manifestValidatorPage ? (
-          <span>
-            <span>Manifest Validator</span>
-          </span>
+          <NewBreadCrumbsItem>Manifest Validator</NewBreadCrumbsItem>
         ) : null}
         {markdownPreviewPage ? (
-          <span>
-            <span>Markdown Preview</span>
-          </span>
+          <NewBreadCrumbsItem>Markdown Preview</NewBreadCrumbsItem>
         ) : null}
       </>
     );
-  }, [manifestValidatorPage, markdownPreviewPage]);
+  }, [packageFormatDocsPage, manifestValidatorPage, markdownPreviewPage]);
 
   const loginBreadcrumb = useMemo(() => {
     if (!loginPage) return null;
-    return (
-      <span>
-        <span>Log in</span>
-      </span>
-    );
+    return <NewBreadCrumbsItem>Log in</NewBreadCrumbsItem>;
   }, [loginPage]);
 
   return (
@@ -318,11 +292,7 @@ function getCommunityBreadcrumb(
       {isRecord(communityPage.data) &&
       Object.prototype.hasOwnProperty.call(communityPage.data, "community") ? (
         <Suspense
-          fallback={
-            <span>
-              <span>Loading...</span>
-            </span>
-          }
+          fallback={<NewBreadCrumbsItem>Loading...</NewBreadCrumbsItem>}
         >
           <Await resolve={communityPage.data.community}>
             {(resolvedValue) => {
@@ -334,19 +304,15 @@ function getCommunityBreadcrumb(
                   typeof resolvedValue.name === "string"
                     ? resolvedValue.name
                     : communityPage.params.communityId;
-                icon = (
-                  <Image
-                    src={
-                      typeof resolvedValue.community_icon_url === "string"
-                        ? resolvedValue.community_icon_url
-                        : null
-                    }
-                    fallbackIcon={faGamepad}
-                    square
-                    alt=""
-                    rootClasses="breadcrumbs__community-icon"
-                  />
-                );
+                icon =
+                  typeof resolvedValue.community_icon_url === "string" ? (
+                    <Image
+                      src={resolvedValue.community_icon_url}
+                      square
+                      alt=""
+                      rootClasses="breadcrumbs__community-icon"
+                    />
+                  ) : undefined;
               }
               return isNotLast ? (
                 <NewBreadCrumbsLink
@@ -359,12 +325,10 @@ function getCommunityBreadcrumb(
                   {label}
                 </NewBreadCrumbsLink>
               ) : (
-                <span>
-                  <span>
-                    {icon}
-                    {label}
-                  </span>
-                </span>
+                <NewBreadCrumbsItem>
+                  {icon}
+                  {label}
+                </NewBreadCrumbsItem>
               );
             }}
           </Await>
@@ -384,9 +348,9 @@ function getPackageListingBreadcrumb(
   return (
     <>
       {packageListingPage ? (
-        <span>
-          <span>{packageListingPage.params.packageId}</span>
-        </span>
+        <NewBreadCrumbsItem>
+          {packageListingPage.params.packageId}
+        </NewBreadCrumbsItem>
       ) : null}
       {packageEditPage ? (
         <NewBreadCrumbsLink
