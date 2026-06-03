@@ -175,7 +175,7 @@
     --select-item-md-font-weight: var(--font-weight-regular);
     --select-item-md-font-size: var(--font-size-body-md);
     --select-trigger-md-font-weight: var(--font-weight-bold);
-    --select-trigger-md-font-size: var(--font-size-body-sm);
+    --select-trigger-md-font-size: var(--font-size-body-md);
     --select-xs-border-radius: var(--radius-md);
     --select-xs-padding: var(--space-4) 0;
     --select-item-xs-gap: var(--gap-md);
