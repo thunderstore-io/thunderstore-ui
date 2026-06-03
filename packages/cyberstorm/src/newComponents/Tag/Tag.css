@@ -10,9 +10,16 @@
     color: var(--tag-color);
     font-weight: var(--tag-font-weight);
     font-size: var(--tag-font-size);
+    text-decoration: none;
     background: var(--tag-background-color);
     padding-block: var(--tag-padding-block);
     padding-inline: var(--tag-padding-inline);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:where(:hover, :active) {
+        text-decoration: none;
+      }
+    }
   }
 
   .tag > span {
