@@ -2,6 +2,7 @@ import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Island, IslandContainer } from "~/commonComponents/Island/Island";
 
 import {
   Heading,
@@ -20,17 +21,16 @@ const GITHUB_URL = "https://github.com/thunderstore-io";
  */
 export function Footer() {
   return (
-    <footer
-      className="container container--y island footer"
-      aria-label="Footer"
-    >
-      <div className="container container--y container--full island footer__content">
-        <div className="container container--y island footer__info">
-          <div className="container container--x island-item footer__company">
-            <div className="footer__company-wrapper">
-              <NewIcon csVariant="accent" wrapperClasses="footer__logo">
-                <ThunderstoreLogoHorizontal />
-              </NewIcon>
+    <IslandContainer as="footer" rootClasses="footer" aria-label="Footer">
+      <IslandContainer direction="x" rootClasses="footer__content">
+        <IslandContainer direction="y" rootClasses="footer__section">
+          <Island rootClasses="footer-item">
+            <div className="footer-item__content">
+              <div className="footer__company">
+                <NewIcon csVariant="accent" wrapperClasses="footer__logo">
+                  <ThunderstoreLogoHorizontal />
+                </NewIcon>
+              </div>
               <div className="footer__icon-links">
                 <NewLink
                   primitiveType="link"
@@ -58,9 +58,9 @@ export function Footer() {
                 </NewLink>
               </div>
             </div>
-          </div>
-          <div className="container container--x container--full island-item footer__links">
-            <div className="footer__links-wrapper">
+          </Island>
+          <Island rootClasses="footer-item">
+            <div className="footer-item__content">
               <nav className="footer__nav" aria-label="Thunderstore links">
                 <Heading
                   csVariant="primary"
@@ -140,11 +140,11 @@ export function Footer() {
                 </ul>
               </nav>
             </div>
-          </div>
-        </div>
+          </Island>
+        </IslandContainer>
 
-        <div className="container container--x island-item manager-ad">
-          <div className="manager-ad__wrapper">
+        <Island rootClasses="footer__section manager-ad">
+          <div className="footer-item manager-ad__wrapper">
             <Heading mode="display" csLevel="2" csSize="3">
               Thunderstore Mod Manager
             </Heading>
@@ -177,10 +177,10 @@ export function Footer() {
               />
             </div>
           </div>
-        </div>
-      </div>
+        </Island>
+      </IslandContainer>
 
-      <div className="container container--x container--stretch island-item footnote">
+      <Island rootClasses="footnote">
         <div className="footnote__inner">
           <div className="footnote__links">
             <NewLink
@@ -214,8 +214,8 @@ export function Footer() {
             </span>
           </p>
         </div>
-      </div>
-    </footer>
+      </Island>
+    </IslandContainer>
   );
 }
 

@@ -26,6 +26,7 @@ import {
 } from "cyberstorm/utils/ThunderstoreAuth";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
+import { Island } from "~/commonComponents/Island/Island";
 
 import {
   Heading,
@@ -81,10 +82,7 @@ export function Navigation(props: {
 
   return (
     <>
-      <header
-        className="container container--x island-item navigation-header"
-        aria-label="Header"
-      >
+      <Island as="header" rootClasses="navigation-header" aria-label="Header">
         <nav className="navigation-header__global" aria-label="Main">
           <div className="navigation-header__start">
             <NewButton
@@ -258,7 +256,7 @@ export function Navigation(props: {
             <DesktopLoginPopover />
           )}
         </div>
-      </header>
+      </Island>
     </>
   );
 }
@@ -426,7 +424,7 @@ export function DesktopUserDropdown(props: {
           linkId="Settings"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary" csWidth="1em">
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faCog} />
           </NewIcon>
           Settings
@@ -435,12 +433,7 @@ export function DesktopUserDropdown(props: {
       {communityId ? (
         <NewDropDownSub>
           <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
-            <NewIcon
-              csMode="inline"
-              noWrapper
-              csVariant="tertiary"
-              csWidth="1em"
-            >
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
               <FontAwesomeIcon icon={faUsers} />
             </NewIcon>
             Teams
@@ -452,12 +445,7 @@ export function DesktopUserDropdown(props: {
                 linkId="Teams"
                 rootClasses="dropdown__item navigation-header__dropdown-item"
               >
-                <NewIcon
-                  csMode="inline"
-                  noWrapper
-                  csVariant="tertiary"
-                  csWidth="1em"
-                >
+                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
                   <FontAwesomeIcon icon={faUsers} />
                 </NewIcon>
                 All Teams
@@ -471,12 +459,7 @@ export function DesktopUserDropdown(props: {
                   href={`/c/${communityId}/p/${teamName}/`}
                   rootClasses="dropdown__item navigation-header__dropdown-item"
                 >
-                  <NewIcon
-                    csMode="inline"
-                    noWrapper
-                    csVariant="tertiary"
-                    csWidth="1em"
-                  >
+                  <NewIcon csMode="inline" noWrapper csVariant="tertiary">
                     <FontAwesomeIcon icon={faUsers} />
                   </NewIcon>
                   {teamName}
@@ -492,12 +475,7 @@ export function DesktopUserDropdown(props: {
             linkId="Teams"
             rootClasses="dropdown__item navigation-header__dropdown-item"
           >
-            <NewIcon
-              csMode="inline"
-              noWrapper
-              csVariant="tertiary"
-              csWidth="1em"
-            >
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
               <FontAwesomeIcon icon={faUsers} />
             </NewIcon>
             Teams
@@ -510,7 +488,7 @@ export function DesktopUserDropdown(props: {
           href={buildLogoutUrl(domain)}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary" csWidth="1em">
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faSignOut} />
           </NewIcon>
           Log Out
@@ -781,9 +759,6 @@ export function MobileNavigationMenu(props: {
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
           >
             Contact Us
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faArrowUpRight} />
-            </NewIcon>
           </NewLink>
           <NewLink
             primitiveType="link"
@@ -791,9 +766,6 @@ export function MobileNavigationMenu(props: {
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
           >
             Privacy Policy
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faArrowUpRight} />
-            </NewIcon>
           </NewLink>
           <NewLink
             primitiveType="link"
@@ -801,9 +773,6 @@ export function MobileNavigationMenu(props: {
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
           >
             News
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faArrowUpRight} />
-            </NewIcon>
           </NewLink>
         </section>
         <div className="mobile-navigation__divider" />
