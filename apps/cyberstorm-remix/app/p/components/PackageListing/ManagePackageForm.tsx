@@ -8,7 +8,7 @@ import {
   NewAlert,
   NewButton,
   NewIcon,
-  NewSelectSearch,
+  NewSelectSearchMultiple,
   NewTag,
   useToast,
 } from "@thunderstore/cyberstorm";
@@ -401,13 +401,12 @@ function ManagePackageFormContent({
         {permissions.can_manage_categories && (
           <section className="manage-package__block">
             <p className="manage-package__label">Edit categories</p>
-            <NewSelectSearch
+            <NewSelectSearchMultiple
               placeholder={
                 isLoadingCommunityFilters
                   ? "Loading categories…"
                   : "Select categories"
               }
-              multiple
               options={categoryOptions}
               disabled={isActionInProgress || isLoadingCommunityFilters}
               onChange={(val) => {
