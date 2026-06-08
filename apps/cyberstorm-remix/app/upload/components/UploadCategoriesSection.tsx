@@ -1,4 +1,4 @@
-import { NewSelectSearch } from "@thunderstore/cyberstorm";
+import { NewSelectSearchMultiple } from "@thunderstore/cyberstorm";
 import type { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
@@ -46,9 +46,8 @@ export function UploadCategoriesSection({
         return (
           <div key={community} className="upload__category">
             <p className="upload__category-label">{communityData?.name}</p>
-            <NewSelectSearch
+            <NewSelectSearchMultiple
               placeholder="Select categories"
-              multiple
               options={categories}
               onChange={(val) => {
                 if (val) {
