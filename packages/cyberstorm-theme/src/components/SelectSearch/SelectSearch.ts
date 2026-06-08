@@ -1,12 +1,4 @@
 // SELECT SEARCH ROOT
-// Variants
-export const SelectSearchVariantsList = ["default", "multiple"] as const;
-export type SelectSearchVariants = "default" | "multiple";
-
-// Sizes
-export const SelectSearchSizesList = ["medium"] as const;
-export type SelectSearchSizes = "medium";
-
 // Modifiers
 export const SelectSearchModifiersList = [
   "",

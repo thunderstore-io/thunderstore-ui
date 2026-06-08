@@ -43,6 +43,15 @@ export function SelectSearchItem({
     onOptionHighlight(index);
   }, [index, onOptionHighlight]);
 
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      handleSelect(event);
+    },
+    [handleSelect]
+  );
+
   return (
     <div
       id={id}
@@ -52,6 +61,7 @@ export function SelectSearchItem({
         isHighlighted ? "select-search__item--highlighted" : null
       )}
       onClick={handleSelect}
+      onKeyDown={handleKeyDown}
       onMouseEnter={handleHighlight}
       onMouseDown={(e) => e.preventDefault()}
       role="option"

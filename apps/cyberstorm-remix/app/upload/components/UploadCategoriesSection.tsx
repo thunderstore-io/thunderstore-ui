@@ -50,7 +50,7 @@ export function UploadCategoriesSection({
               placeholder="Select categories"
               options={categories}
               onChange={(val) => {
-                if (val) {
+                if (val && val.length > 0) {
                   onCommunityCategoriesChange({
                     ...communityCategories,
                     [community]: val.map((v) => v.value),

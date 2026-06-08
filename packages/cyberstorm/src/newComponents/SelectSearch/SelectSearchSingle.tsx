@@ -8,6 +8,7 @@ import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./SelectSearch.css";
 import { SelectSearchMenu } from "./SelectSearchMenu";
+import "./SelectSearchSingle.css";
 import type { SelectSearchSingleProps } from "./types";
 import {
   getSelectSearchOptionId,
@@ -37,8 +38,6 @@ export const SelectSearchSingle = React.forwardRef<
     value,
     onChange,
     placeholder,
-    csVariant = "default",
-    csSize = "medium",
     csModifiers,
     disabled = false,
     defaultOpen = false,
@@ -77,7 +76,8 @@ export const SelectSearchSingle = React.forwardRef<
     <div
       className={classnames(
         "select-search",
-        ...componentClasses("select-search", csVariant, csSize, csModifiers),
+        "select-search--single",
+        ...componentClasses("select-search", undefined, undefined, csModifiers),
         disabled ? "select-search--variant--disabled" : null
       )}
       ref={containerRef}

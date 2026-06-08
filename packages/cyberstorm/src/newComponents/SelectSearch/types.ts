@@ -1,8 +1,4 @@
-import {
-  type SelectSearchModifiers,
-  type SelectSearchSizes,
-  type SelectSearchVariants,
-} from "@thunderstore/cyberstorm-theme";
+import { type SelectSearchModifiers } from "@thunderstore/cyberstorm-theme";
 
 import type { SelectOption } from "../../utils/types";
 
@@ -10,8 +6,6 @@ export type SelectSearchBaseProps = {
   options: SelectOption<string>[];
   disabled?: boolean;
   placeholder?: string;
-  csVariant?: SelectSearchVariants;
-  csSize?: SelectSearchSizes;
   csModifiers?: SelectSearchModifiers[];
   defaultOpen?: boolean;
 };

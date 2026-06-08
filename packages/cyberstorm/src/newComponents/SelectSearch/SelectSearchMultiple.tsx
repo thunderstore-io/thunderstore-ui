@@ -9,6 +9,7 @@ import { Icon as NewIcon } from "../Icon/Icon";
 import { Tag as NewTag } from "../Tag/Tag";
 import "./SelectSearch.css";
 import { SelectSearchMenu } from "./SelectSearchMenu";
+import "./SelectSearchMultiple.css";
 import type { SelectSearchMultipleProps } from "./types";
 import {
   getSelectSearchOptionId,
@@ -28,7 +29,6 @@ export const SelectSearchMultiple = React.forwardRef<
     value,
     onChange,
     placeholder,
-    csSize = "medium",
     csModifiers,
     disabled = false,
     defaultOpen = false,
@@ -45,7 +45,10 @@ export const SelectSearchMultiple = React.forwardRef<
       const isSelected = selectedValues.some((v) => v.value === option.value);
 
       if (isSelected) {
-        onChange(selectedValues.filter((v) => v.value !== option.value));
+        const newSelected = selectedValues.filter(
+          (v) => v.value !== option.value
+        );
+        onChange(newSelected.length > 0 ? newSelected : undefined);
       } else {
         onChange([...selectedValues, option]);
       }
@@ -78,7 +81,10 @@ export const SelectSearchMultiple = React.forwardRef<
 
   const removeOption = React.useCallback(
     (optionToRemove: SelectOption<string>) => {
-      onChange(selectedValues.filter((v) => v.value !== optionToRemove.value));
+      const newSelected = selectedValues.filter(
+        (v) => v.value !== optionToRemove.value
+      );
+      onChange(newSelected.length > 0 ? newSelected : undefined);
     },
     [onChange, selectedValues]
   );
@@ -105,7 +111,8 @@ export const SelectSearchMultiple = React.forwardRef<
     <div
       className={classnames(
         "select-search",
-        ...componentClasses("select-search", "multiple", csSize, csModifiers),
+        "select-search--multiple",
+        ...componentClasses("select-search", undefined, undefined, csModifiers),
         disabled ? "select-search--variant--disabled" : null
       )}
       ref={containerRef}

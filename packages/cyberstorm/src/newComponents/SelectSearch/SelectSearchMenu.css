@@ -8,8 +8,7 @@
     flex-direction: column;
     width: 100%;
     min-height: 1.5rem;
-    max-height: 12rem;
-    padding: var(--space-8) 0;
+    padding: var(--space-8);
     border: var(--space-px) var(--color-surface-6) solid;
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -21,7 +20,7 @@
   }
 
   .select-search__no-options {
-    padding: var(--space-12) var(--space-16);
+    padding: var(--space-12);
     color: var(--color-text-tertiary);
     text-align: center;
   }

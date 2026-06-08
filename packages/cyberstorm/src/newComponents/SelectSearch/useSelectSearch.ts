@@ -9,11 +9,16 @@ function filterOptions(
 ): SelectOption<string>[] {
   const normalizedSearch = search.toLowerCase();
 
-  return options.filter(
-    (option) =>
-      option.label?.toLowerCase().includes(normalizedSearch) &&
+  return options.filter((option) => {
+    const searchableValue = (option.label ?? option.value)
+      ?.toString()
+      .toLowerCase();
+
+    return (
+      searchableValue?.includes(normalizedSearch) &&
       (!excludeValues || !excludeValues.includes(option.value))
-  );
+    );
+  });
 }
 
 export function getSelectSearchOptionId(menuId: string, index: number): string {

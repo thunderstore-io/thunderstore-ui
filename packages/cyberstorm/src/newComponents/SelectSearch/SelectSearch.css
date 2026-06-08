@@ -22,11 +22,7 @@
     --select-search-font-weight: var(--font-weight-regular);
     --select-search-control-height: 1rem;
     --select-search-tag-height: 1.5rem;
-    --select-search-padding-block: var(--space-8);
     --select-search-padding-inline: var(--space-16);
-    --select-search-min-height: calc(
-      var(--select-search-tag-height) + var(--select-search-padding-block) * 2
-    );
   }
 
   .select-search:hover {
@@ -44,7 +40,6 @@
   .select-search__input {
     flex: 1 1 6rem;
     min-width: 0;
-    height: var(--select-search-control-height);
     margin: 0;
     color: var(--select-search-text-color);
     font-weight: var(--select-search-font-weight);
@@ -145,15 +140,5 @@
     height: var(--select-search-tag-height);
     margin: calc(var(--select-search-padding-block) * -1) 0;
     background: var(--color-surface-9);
-  }
-
-  .select-search__selected-button {
-    min-width: 0;
-    max-width: 200px;
-    overflow: hidden;
-
-    --tag-content-height: calc(
-      var(--select-search-tag-height) - var(--tag-padding-block) * 2
-    );
   }
 }

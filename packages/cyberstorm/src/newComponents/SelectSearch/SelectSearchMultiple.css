@@ -1,0 +1,24 @@
+@layer components {
+  .select-search:where(.select-search--multiple) {
+    --select-search-padding-block: var(--space-8);
+    --select-search-min-height: calc(
+      var(--select-search-tag-height) + var(--select-search-padding-block) * 2
+    );
+  }
+
+  .select-search:where(.select-search--multiple) .select-search__input {
+    height: var(--select-search-control-height);
+    line-height: var(--select-search-control-height);
+  }
+
+  .select-search:where(.select-search--multiple)
+    .select-search__selected-button {
+    min-width: 0;
+    max-width: 200px;
+    overflow: hidden;
+
+    --tag-content-height: calc(
+      var(--select-search-tag-height) - var(--tag-padding-block) * 2
+    );
+  }
+}

@@ -9,19 +9,13 @@ import {
   type SelectOption,
 } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
-import {
-  SelectSearchModifiersList,
-  SelectSearchSizesList,
-  SelectSearchVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import { SelectSearchModifiersList } from "@thunderstore/cyberstorm-theme/src/components";
 
 const meta = {
   title: "Cyberstorm/SelectSearch",
   component: NewSelectSearchSingle,
   tags: ["autodocs"],
   argTypes: {
-    csVariant: { control: "select", options: SelectSearchVariantsList },
-    csSize: { control: "select", options: SelectSearchSizesList },
     csModifiers: {
       control: "multi-select",
       options: SelectSearchModifiersList,
@@ -82,74 +76,6 @@ function MultipleComponent(props: { args: NewSelectSearchMultipleProps }) {
       <NewSelectSearchMultiple {...args} value={val2} onChange={setVal2} />
     </div>
   );
-}
-
-export const Variants: Story = {
-  args: {},
-  render: (args) => <VariantsComponent args={args} />,
-};
-
-function VariantsComponent(props: { args: NewSelectSearchSingleProps }) {
-  const { args } = props;
-  const [val, setVal] = useState<{ value: string; label?: string } | undefined>(
-    undefined
-  );
-  const variants = SelectSearchVariantsList.map((variant) => (
-    <div
-      key={variant}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "0.5rem",
-      }}
-    >
-      <span>{variant}</span>
-      <NewSelectSearchSingle
-        {...args}
-        csVariant={variant}
-        value={val}
-        onChange={setVal}
-      />
-    </div>
-  ));
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "12rem" }}>
-      {variants}
-    </div>
-  );
-}
-
-export const Sizes: Story = {
-  args: {},
-  render: (args) => (
-    <SizesComponent args={args as NewSelectSearchMultipleProps} />
-  ),
-};
-
-function SizesComponent(props: { args: NewSelectSearchMultipleProps }) {
-  const { args } = props;
-  const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
-  const sizes = SelectSearchSizesList.map((size) => (
-    <div
-      key={size}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "0.5rem",
-      }}
-    >
-      <span>{size}</span>
-      <NewSelectSearchMultiple
-        {...args}
-        csSize={size}
-        value={val}
-        onChange={setVal}
-      />
-    </div>
-  ));
-  return <div style={{ display: "flex", gap: "12rem" }}>{sizes}</div>;
 }
 
 export const Modifiers: Story = {

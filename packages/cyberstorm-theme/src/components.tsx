@@ -138,10 +138,6 @@ export {
   CardPackageModifiersList,
 } from "./components/CardPackage/CardPackage";
 export {
-  type SelectSearchVariants,
-  SelectSearchVariantsList,
-  type SelectSearchSizes,
-  SelectSearchSizesList,
   type SelectSearchModifiers,
   SelectSearchModifiersList,
 } from "./components/SelectSearch/SelectSearch";
