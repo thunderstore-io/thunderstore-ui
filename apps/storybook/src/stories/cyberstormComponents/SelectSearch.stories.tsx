@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
 import {
-  NewSelectSearch,
-  type NewSelectSearchProps,
+  NewSelectSearchMultiple,
+  type NewSelectSearchMultipleProps,
+  NewSelectSearchSingle,
+  type NewSelectSearchSingleProps,
   type SelectOption,
 } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
@@ -15,7 +17,7 @@ import {
 
 const meta = {
   title: "Cyberstorm/SelectSearch",
-  component: NewSelectSearch,
+  component: NewSelectSearchSingle,
   tags: ["autodocs"],
   argTypes: {
     csVariant: { control: "select", options: SelectSearchVariantsList },
@@ -24,7 +26,6 @@ const meta = {
       control: "multi-select",
       options: SelectSearchModifiersList,
     },
-    multiple: { control: "boolean" },
     options: { control: "object" },
     value: { control: "object" },
   },
@@ -36,10 +37,9 @@ const meta = {
     ] as SelectOption<string>[],
     onChange: () => {},
     value: undefined,
-    multiple: false,
     defaultOpen: true,
   },
-} satisfies Meta<typeof NewSelectSearch>;
+} satisfies Meta<typeof NewSelectSearchSingle>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -49,7 +49,7 @@ export const Single: Story = {
   render: (args) => <SingleComponent args={args} />,
 };
 
-function SingleComponent(props: { args: NewSelectSearchProps }) {
+function SingleComponent(props: { args: NewSelectSearchSingleProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption<string> | undefined>(undefined);
   const [val2, setVal2] = useState<SelectOption<string> | undefined>(
@@ -57,28 +57,20 @@ function SingleComponent(props: { args: NewSelectSearchProps }) {
   );
   return (
     <div style={{ display: "flex", gap: "12rem", flexDirection: "column" }}>
-      <NewSelectSearch
-        {...args}
-        value={val}
-        onChange={setVal}
-        multiple={false}
-      />
-      <NewSelectSearch
-        {...args}
-        value={val2}
-        onChange={setVal2}
-        multiple={false}
-      />
+      <NewSelectSearchSingle {...args} value={val} onChange={setVal} />
+      <NewSelectSearchSingle {...args} value={val2} onChange={setVal2} />
     </div>
   );
 }
 
 export const Multiple: Story = {
   args: {},
-  render: (args) => <MultipleComponent args={args} />,
+  render: (args) => (
+    <MultipleComponent args={args as NewSelectSearchMultipleProps} />
+  ),
 };
 
-function MultipleComponent(props: { args: NewSelectSearchProps }) {
+function MultipleComponent(props: { args: NewSelectSearchMultipleProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
   const [val2, setVal2] = useState<SelectOption<string>[] | undefined>(
@@ -86,8 +78,8 @@ function MultipleComponent(props: { args: NewSelectSearchProps }) {
   );
   return (
     <div style={{ display: "flex", gap: "12rem", flexDirection: "column" }}>
-      <NewSelectSearch {...args} multiple value={val} onChange={setVal} />
-      <NewSelectSearch {...args} multiple value={val2} onChange={setVal2} />
+      <NewSelectSearchMultiple {...args} value={val} onChange={setVal} />
+      <NewSelectSearchMultiple {...args} value={val2} onChange={setVal2} />
     </div>
   );
 }
@@ -97,7 +89,7 @@ export const Variants: Story = {
   render: (args) => <VariantsComponent args={args} />,
 };
 
-function VariantsComponent(props: { args: NewSelectSearchProps }) {
+function VariantsComponent(props: { args: NewSelectSearchSingleProps }) {
   const { args } = props;
   const [val, setVal] = useState<{ value: string; label?: string } | undefined>(
     undefined
@@ -113,10 +105,9 @@ function VariantsComponent(props: { args: NewSelectSearchProps }) {
       }}
     >
       <span>{variant}</span>
-      <NewSelectSearch
+      <NewSelectSearchSingle
         {...args}
         csVariant={variant}
-        multiple={false}
         value={val}
         onChange={setVal}
       />
@@ -131,10 +122,12 @@ function VariantsComponent(props: { args: NewSelectSearchProps }) {
 
 export const Sizes: Story = {
   args: {},
-  render: (args) => <SizesComponent args={args} />,
+  render: (args) => (
+    <SizesComponent args={args as NewSelectSearchMultipleProps} />
+  ),
 };
 
-function SizesComponent(props: { args: NewSelectSearchProps }) {
+function SizesComponent(props: { args: NewSelectSearchMultipleProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
   const sizes = SelectSearchSizesList.map((size) => (
@@ -148,12 +141,11 @@ function SizesComponent(props: { args: NewSelectSearchProps }) {
       }}
     >
       <span>{size}</span>
-      <NewSelectSearch
+      <NewSelectSearchMultiple
         {...args}
         csSize={size}
         value={val}
         onChange={setVal}
-        multiple={true}
       />
     </div>
   ));
@@ -162,10 +154,12 @@ function SizesComponent(props: { args: NewSelectSearchProps }) {
 
 export const Modifiers: Story = {
   args: {},
-  render: (args) => <ModifiersComponent args={args} />,
+  render: (args) => (
+    <ModifiersComponent args={args as NewSelectSearchMultipleProps} />
+  ),
 };
 
-function ModifiersComponent(props: { args: NewSelectSearchProps }) {
+function ModifiersComponent(props: { args: NewSelectSearchMultipleProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
   const modifiers = SelectSearchModifiersList.map((modifier) => (
@@ -179,12 +173,11 @@ function ModifiersComponent(props: { args: NewSelectSearchProps }) {
       }}
     >
       <span>{modifier}</span>
-      <NewSelectSearch
+      <NewSelectSearchMultiple
         {...args}
         csModifiers={[modifier]}
         value={val}
         onChange={setVal}
-        multiple={true}
       />
     </div>
   ));
