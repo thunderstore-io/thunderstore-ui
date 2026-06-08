@@ -1,0 +1,28 @@
+@layer components {
+  .select-search__menu {
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    z-index: 800;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 1.5rem;
+    max-height: 12rem;
+    padding: var(--space-8) 0;
+    border: var(--space-px) var(--color-surface-6) solid;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    overflow-y: auto;
+    color: var(--color-white);
+    background-color: var(--color-surface-2);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(100%);
+  }
+
+  .select-search__no-options {
+    padding: var(--space-12) var(--space-16);
+    color: var(--color-text-tertiary);
+    text-align: center;
+  }
+}
