@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react-router";
 import type { CacheControlOptions } from "cyberstorm/utils/cache";
 import { cacheControl } from "cyberstorm/utils/cache";
 import { type LoaderFunctionArgs, data } from "react-router";
@@ -45,7 +46,7 @@ export function ssrLoader<A extends LoaderFunctionArgs, T>(
     try {
       const result = await fn(args);
 
-      if (cache === false) {
+      if (cache === false || result instanceof Response) {
         return result;
       }
 

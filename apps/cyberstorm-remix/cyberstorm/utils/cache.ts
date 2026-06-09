@@ -25,7 +25,7 @@ export function cacheControl(options?: CacheControlOptions): {
   } = options ?? {};
 
   if (isPrivate) {
-    return { "Cache-Control": `private, max-age=${browserMaxAge}, no-store` };
+    return { "Cache-Control": `private, max-age=${browserMaxAge}` };
   }
 
   return {
