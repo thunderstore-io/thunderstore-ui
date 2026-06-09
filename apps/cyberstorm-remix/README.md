@@ -1,45 +1,79 @@
 # Cyberstorm Remix (Nimbus)
 
-This is the Remix application that powers the new Thunderstore frontend (codenamed Nimbus).
+This is the Remix (React Router v7) application that powers the new Thunderstore
+frontend (codenamed Nimbus). It is the **main site**: in local development it is
+served at `http://thunderstore.localhost`, with the Django backend serving the
+API and other backend paths on the same origin.
 
-## Quick Start (Docker)
+## Quick Start
 
-The easiest way to run the full stack (Backend + Frontend) is using Docker.
+You need both `Thunderstore` (backend) and `thunderstore-ui` (frontend) cloned
+side by side, e.g.:
 
-1.  **Clone Repositories**
-    Ensure you have both `Thunderstore` (Backend) and `thunderstore-ui` (Frontend) cloned side-by-side.
-    ```bash
-    # Example structure
-    # C:\projects\Thunderstore
-    # C:\projects\thunderstore-ui
-    ```
+```text
+C:\projects\Thunderstore
+C:\projects\thunderstore-ui
+```
 
-2.  **Start Backend**
-    ```bash
-    cd ../Thunderstore
-    docker compose up -d
-    docker compose exec django python manage.py setup_dev_env
-    ```
-    (If you have some pre-existing containers, please do `docker compose down -v`, `docker compose up -d --build` and `docker compose exec django python manage.py setup_dev_env`)
+The backend runs in Docker; the frontend runs **natively** with Node (this is
+much faster than running it in a container, and SSR + the browser then share a
+single API origin).
 
-3.  **Start Frontend**
-    ```bash
-    cd ../thunderstore-ui
-    docker compose -f docker-compose.remix.development.yml up -d
-    ```
-    (If you have some pre-existing containers, please do `docker compose -f docker-compose.remix.development.yml down -v` and `docker compose -f docker-compose.remix.development.yml up -d --build`)
+1. **Start the backend** (from the `Thunderstore` repo):
 
-4.  **Open Browser**
-    -   **Frontend**: [http://new.thunderstore.localhost](http://new.thunderstore.localhost)
-    -   **Backend**: [http://thunderstore.localhost](http://thunderstore.localhost)
+   ```bash
+   cd ../Thunderstore
+   docker compose up -d
+   docker compose exec django python manage.py setup_dev_env
+   ```
 
-## Manual Setup
+2. **Start the frontend** (from this repo's root):
 
-If you prefer running Node locally instead of in Docker:
+   ```bash
+   cd ../thunderstore-ui
+   yarn install
+   yarn dev
+   ```
 
-1.  **Install Dependencies**: `yarn install` (in repo root)
-2.  **Configure Env**: Copy `.env.example` to `.env` in `apps/cyberstorm-remix`.
-3.  **Run Dev Server**:
-    ```bash
-    yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
-    ```
+   `yarn dev` builds the workspace UI packages on first run, then starts their
+   watchers together with the Remix dev server (on `:3000`). nginx in the backend
+   stack proxies `thunderstore.localhost` to it.
+
+3. **Open the browser**:
+   - **Main site (this app)**: <http://thunderstore.localhost>
+   - **Legacy Django site**: <http://old.thunderstore.localhost>
+
+> **Hosts file:** `*.localhost` resolves to `127.0.0.1` automatically on most
+> systems, but Windows needs explicit entries. Ensure
+> `C:\Windows\System32\drivers\etc\hosts` contains:
+>
+> ```text
+> 127.0.0.1 thunderstore.localhost
+> 127.0.0.1 old.thunderstore.localhost
+> 127.0.0.1 auth.thunderstore.localhost
+> ```
+
+## How it fits together
+
+- `yarn dev` runs the Remix dev server on `0.0.0.0:3000` (see `tools/scripts/dev.mjs`).
+- The backend's nginx (`Thunderstore/nginx/conf/default.conf`) routes
+  `thunderstore.localhost` to `host.docker.internal:3000` for app routes and to
+  Django for `/api`, `/auth`, `/djangoadmin`, `/media`, `/static`, etc.
+- Shared local-dev defaults live in the committed `.env.development`, which
+  points the app at `http://thunderstore.localhost` out of the box. Put
+  personal values (e.g. real Sentry tokens) in a git-ignored
+  `.env.development.local`; it takes precedence.
+- Editing the Remix app hot-reloads instantly; editing the `@thunderstore/cyberstorm`,
+  `@thunderstore/cyberstorm-theme` or `@thunderstore/ts-uploader` packages rebuilds
+  their `dist` (~1-2s) and then hot-reloads.
+
+### WSL2 / container file watching
+
+Native file watching is used by default. Inside WSL2 or a bind-mounted volume,
+file events may not propagate; set `VITE_USE_POLLING=true` to fall back to
+polling.
+
+Also, when Docker Desktop runs the backend on Windows while `yarn dev` runs
+inside WSL2, nginx's `host.docker.internal` reaches the Windows host — not the
+WSL2 VM — so port 3000 needs a port proxy (or WSL2 mirrored networking). See
+the **WSL2** note in the Thunderstore repo's README.
