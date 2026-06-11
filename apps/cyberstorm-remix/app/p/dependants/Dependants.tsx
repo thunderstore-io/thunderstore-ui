@@ -6,6 +6,7 @@ import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import {
@@ -18,7 +19,6 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/packageOrderOptions";
 import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Dependants";
-import "./Dependants.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
@@ -187,47 +187,43 @@ export default function Dependants() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <>
-      <section className="dependants">
-        <Suspense fallback={<SkeletonBox />}>
-          <Await resolve={listing}>
-            {(resolvedValue) => (
-              <PageHeader headingLevel="1" headingSize="3">
-                Mods that depend on{" "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Package"
-                  community={resolvedValue.community_identifier}
-                  namespace={resolvedValue.namespace}
-                  package={resolvedValue.name}
-                  csVariant="cyber"
-                >
-                  {formatToDisplayName(resolvedValue.name)}
-                </NewLink>
-                {" by "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Team"
-                  community={resolvedValue.community_identifier}
-                  team={resolvedValue.namespace}
-                  csVariant="cyber"
-                >
-                  {resolvedValue.namespace}
-                </NewLink>
-              </PageHeader>
-            )}
-          </Await>
-        </Suspense>
-        <>
-          <PackageSearch
-            listings={listings}
-            filters={filters}
-            config={outletContext.requestConfig}
-            currentUser={outletContext.currentUser}
-            dapper={outletContext.dapper}
-          />
-        </>
-      </section>
-    </>
+    <Page as="section" rootClasses="dependants">
+      <Suspense fallback={<SkeletonBox />}>
+        <Await resolve={listing}>
+          {(resolvedValue) => (
+            <PageHeader headingLevel="1" headingSize="2">
+              Mods that depend on{" "}
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Package"
+                community={resolvedValue.community_identifier}
+                namespace={resolvedValue.namespace}
+                package={resolvedValue.name}
+                csVariant="cyber"
+              >
+                {formatToDisplayName(resolvedValue.name)}
+              </NewLink>
+              {" by "}
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Team"
+                community={resolvedValue.community_identifier}
+                team={resolvedValue.namespace}
+                csVariant="cyber"
+              >
+                {resolvedValue.namespace}
+              </NewLink>
+            </PageHeader>
+          )}
+        </Await>
+      </Suspense>
+      <PackageSearch
+        listings={listings}
+        filters={filters}
+        config={outletContext.requestConfig}
+        currentUser={outletContext.currentUser}
+        dapper={outletContext.dapper}
+      />
+    </Page>
   );
 }

@@ -1,0 +1,23 @@
+@layer nimbus-layout {
+  .island-container {
+    gap: var(--gap-2xs);
+    container-type: inline-size;
+  }
+
+  .island {
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-2);
+  }
+
+  .island[data-variant="special"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    align-items: center;
+    justify-content: flex-end;
+    padding: var(--space-8);
+    border: 2px dashed var(--color-surface-a10);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-1);
+  }
+}

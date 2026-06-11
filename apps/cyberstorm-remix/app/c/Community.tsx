@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Page } from "app/commonComponents/Page/Page";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -27,13 +28,16 @@ import {
   NewIcon,
   NewLink,
   SkeletonBox,
-  classnames,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/Community";
 import "./Community.css";
+import {
+  CommunityPackageListingPage,
+  isPackageListingPath,
+} from "./CommunityPackageListingSubpath";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
@@ -99,159 +103,164 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   return arg.defaultShouldRevalidate;
 }
 
+type CommunityLoaderData = ReturnType<
+  typeof useLoaderData<typeof loader | typeof clientLoader>
+>;
+
+type ResolvedCommunity = Awaited<
+  Awaited<ReturnType<typeof loader>>["community"]
+>;
+
+function CommunityMainHeroBackground({
+  resolvedCommunity,
+}: {
+  resolvedCommunity: ResolvedCommunity;
+}) {
+  return (
+    <div className="community__background">
+      {resolvedCommunity.hero_image_url ? (
+        <div className="community__background-image">
+          <img
+            src={resolvedCommunity.hero_image_url}
+            alt={resolvedCommunity.name}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function CommunityMainHeader({
+  resolvedCommunity,
+}: {
+  resolvedCommunity: ResolvedCommunity;
+}) {
+  return (
+    <div className="community__header">
+      <CommunityMainHeroBackground resolvedCommunity={resolvedCommunity} />
+      <div className="community__content-header-wrapper">
+        <div className="community__content-header">
+          <div className="community__game-icon">
+            <div className="community__game-icon-tinified">
+              <Image
+                src={resolvedCommunity.community_icon_url}
+                fallbackIcon={faGamepad}
+                square
+                alt={resolvedCommunity.name}
+                intrinsicWidth={88}
+                intrinsicHeight={88}
+                rootClasses="community__game-icon-image"
+              />
+            </div>
+          </div>
+          <div className="community__content-header-content">
+            <div className="community__header-info">
+              <Heading
+                csLevel={"1"}
+                csSize={"3"}
+                csVariant="primary"
+                mode="display"
+              >
+                {resolvedCommunity.name}
+              </Heading>
+            </div>
+            <div className="community__header-meta">
+              {resolvedCommunity.wiki_url ? (
+                <NewLink
+                  primitiveType="link"
+                  href={resolvedCommunity.wiki_url}
+                  csVariant="cyber"
+                  rootClasses="community__item"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faBook} />
+                  </NewIcon>
+                  <span>Modding Wiki</span>
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
+                </NewLink>
+              ) : null}
+              {resolvedCommunity.discord_url ? (
+                <NewLink
+                  primitiveType="link"
+                  href={resolvedCommunity.discord_url}
+                  csVariant="cyber"
+                  rootClasses="community__item"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faDiscord} />
+                  </NewIcon>
+                  <span>Modding Discord</span>
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
+                </NewLink>
+              ) : null}
+            </div>
+          </div>
+        </div>
+        <NewButton
+          csSize="big"
+          csVariant="secondary"
+          primitiveType="cyberstormLink"
+          linkId="PackageUpload"
+          rootClasses="community__upload-button"
+        >
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faDownload} />
+          </NewIcon>
+          Upload package
+        </NewButton>
+      </div>
+    </div>
+  );
+}
+
+function CommunityMainHeaderSkeleton() {
+  return (
+    <div className="community__header">
+      <SkeletonBox />
+    </div>
+  );
+}
+
+function CommunityMainPage({
+  community,
+  outletContext,
+}: {
+  community: CommunityLoaderData["community"];
+  outletContext: OutletContextShape;
+}) {
+  return (
+    <Page rootClasses="community">
+      <Suspense fallback={<CommunityMainHeaderSkeleton />}>
+        <Await resolve={community}>
+          {(resolvedCommunity) => (
+            <CommunityMainHeader resolvedCommunity={resolvedCommunity} />
+          )}
+        </Await>
+      </Suspense>
+      <Outlet context={outletContext} />
+    </Page>
+  );
+}
+
 export default function Community() {
   const { community } = useLoaderData<typeof loader | typeof clientLoader>();
   const location = useLocation();
-  const splitPath = location.pathname.split("/");
-  const isSubPath = splitPath.length > 4;
-  const isPackageListingSubPath =
-    splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
-
   const outletContext = useOutletContext() as OutletContextShape;
 
-  return (
-    <div
-      className={classnames(
-        "community",
-        isPackageListingSubPath ? "community--packageListingSubpath" : null
-      )}
-    >
-      <div
-        className={classnames(
-          "community__header",
-          isPackageListingSubPath ? "community__header--compact" : null
-        )}
-      >
-        <div
-          className={classnames(
-            "community__background",
-            isPackageListingSubPath
-              ? "community__background--packagePage"
-              : null
-          )}
-        >
-          <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={community}>
-              {(resolvedValue) =>
-                resolvedValue.hero_image_url ? (
-                  <div className="community__background-image">
-                    <img
-                      src={resolvedValue.hero_image_url}
-                      alt={resolvedValue.name}
-                    />
-                  </div>
-                ) : null
-              }
-            </Await>
-          </Suspense>
-        </div>
+  if (isPackageListingPath(location.pathname)) {
+    return (
+      <CommunityPackageListingPage
+        community={community}
+        outletContext={outletContext}
+      />
+    );
+  }
 
-        <div
-          className={classnames(
-            "community__content-header-wrapper",
-            isSubPath ? "community__content-header--hide" : null
-          )}
-        >
-          <div className="community__content-header">
-            <div className="community__game-icon">
-              <div className="community__game-icon-tinified">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) => (
-                      <Image
-                        src={resolvedValue.community_icon_url}
-                        fallbackIcon={faGamepad}
-                        square
-                        alt={resolvedValue.name}
-                        intrinsicWidth={88}
-                        intrinsicHeight={88}
-                        rootClasses="community__game-icon-image"
-                      />
-                    )}
-                  </Await>
-                </Suspense>
-              </div>
-            </div>
-            <div className="community__content-header-content">
-              <div className="community__header-info">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) => (
-                      <Heading
-                        csLevel={"1"}
-                        csSize={"3"}
-                        csVariant="primary"
-                        mode="display"
-                      >
-                        {resolvedValue.name}
-                      </Heading>
-                    )}
-                  </Await>
-                </Suspense>
-              </div>
-              <div className="community__header-meta">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.wiki_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.wiki_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faBook} />
-                          </NewIcon>
-                          <span>Modding Wiki</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.discord_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.discord_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faDiscord} />
-                          </NewIcon>
-                          <span>Modding Discord</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-              </div>
-            </div>
-          </div>
-          <NewButton
-            csSize="big"
-            csVariant="secondary"
-            primitiveType="cyberstormLink"
-            linkId="PackageUpload"
-            rootClasses="community__upload-button"
-          >
-            <NewIcon noWrapper csMode="inline">
-              <FontAwesomeIcon icon={faDownload} />
-            </NewIcon>
-            Upload package
-          </NewButton>
-        </div>
-      </div>
-      <Outlet context={outletContext} />
-    </div>
+  return (
+    <CommunityMainPage community={community} outletContext={outletContext} />
   );
 }

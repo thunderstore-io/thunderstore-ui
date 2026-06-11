@@ -68,6 +68,10 @@ export {
   CodeInput,
   type CodeInputProps,
 } from "./newComponents/CodeInput/CodeInput";
+export {
+  Container,
+  type ContainerProps,
+} from "./newComponents/Container/Container";
 export { CycleButton } from "./newComponents/CycleButton/CycleButton";
 export { Drawer, DrawerDivider } from "./newComponents/Drawer/Drawer";
 export {

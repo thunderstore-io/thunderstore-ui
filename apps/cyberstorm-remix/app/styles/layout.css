@@ -19,46 +19,21 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-  }
-
-  .layout__content {
-    gap: var(--gap-sm);
-    align-self: flex-start;
-    justify-content: flex-start;
-    max-width: var(--nimbus-layout-content-max-width, 120rem);
-    padding: var(--space-16) var(--space-16) 4rem;
-  }
-
-  /* Route-specific content max-width overrides */
-
-  /* TODO: When the new "Container" component is implemented, that will be used to wrap these routes, check if these should be removed */
-  .layout__content:has(.community),
-  .layout__content:has(.communities),
-  .layout__content:has(.dependants),
-  .layout__content:has(.team),
-  .layout__content:has(.markdown-preview),
-  .layout__content:has(.manifest-validator),
-  .layout__content:has(.upload),
-  .layout__content:has(.settings-page) {
-    --nimbus-layout-content-max-width: 90rem;
+    min-width: 0;
   }
 
   .layout__ads {
-    gap: var(--gap-xs);
+    position: sticky;
+    top: var(--header-height);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
     align-items: flex-start;
     align-self: stretch;
-  }
-
-  .layout__ads-inner {
-    position: sticky;
-    top: var(--sidebar-sticky-top);
-    gap: var(--gap-xl);
-    align-items: center;
-    justify-content: center;
     padding: var(--space-16);
   }
 
-  @media (width <= 92.125rem) {
+  @container (width <= 82rem) {
     .layout__ads {
       display: none;
     }
@@ -73,19 +48,19 @@
 
   /* Progressively hide stacked right-column ads as viewport height shrinks */
   @media (height <= 525px) {
-    .layout__ads-inner .ad-container[data-cid="right-column-1"] {
+    .layout__ads .ad-container[data-cid="right-column-1"] {
       display: none;
     }
   }
 
   @media (height <= 800px) {
-    .layout__ads-inner .ad-container[data-cid="right-column-2"] {
+    .layout__ads .ad-container[data-cid="right-column-2"] {
       display: none;
     }
   }
 
   @media (height <= 1075px) {
-    .layout__ads-inner .ad-container[data-cid="right-column-3"] {
+    .layout__ads .ad-container[data-cid="right-column-3"] {
       display: none;
     }
   }

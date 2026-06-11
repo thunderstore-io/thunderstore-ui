@@ -21,19 +21,34 @@
     min-width: 7rem;
   }
 
-  .team-profile__save {
-    align-self: flex-end;
+  .team-profile__island {
+    padding: var(--space-16) var(--space-32);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    background-color: var(--color-surface-default);
   }
 
-  @media (width <= 48rem) {
+  @container form-section-content (width <= 40rem) {
+    .team-profile__island {
+      padding: var(--space-12) var(--space-24);
+    }
+
     .team-profile__label {
       min-width: 4rem;
     }
   }
 
-  @media (width <= 375px) {
+  @container form-section-content (width <= 24rem) {
+    .team-profile__island {
+      padding: var(--space-10) var(--space-20);
+    }
+
     .team-profile__label {
       min-width: 2rem;
     }
+  }
+
+  .team-profile__save {
+    align-self: flex-end;
   }
 }

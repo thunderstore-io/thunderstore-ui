@@ -6,27 +6,13 @@
     gap: var(--gap-md);
     align-items: start;
     align-self: stretch;
-    padding: var(--gap-md) var(--gap-7xl) var(--gap-3xl);
-  }
-
-  .community--packageListingSubpath {
-    gap: var(--gap-xl);
-  }
-
-  @media (width <= 41rem) {
-    .community {
-      padding: var(--gap-md) 0 var(--gap-3xl);
-    }
+    container-type: inline-size;
   }
 
   .community__header {
     display: grid;
     grid-template-rows: auto auto;
     align-items: start;
-  }
-
-  .community__header--compact {
-    grid-template-rows: auto;
   }
 
   .community__game-icon-tinified {
@@ -87,18 +73,6 @@
     }
   }
 
-  .community__background--packagePage {
-    --community-hero-max-height: 6rem;
-    --community-hero-aspect-ratio: 8 / 1;
-
-    margin-bottom: 0;
-
-    .community__background-image > img {
-      opacity: 0.3;
-      mix-blend-mode: luminosity;
-    }
-  }
-
   .community__content-header-wrapper {
     z-index: 1;
     display: grid;
@@ -115,10 +89,6 @@
     gap: var(--gap-xl);
     align-items: end;
     min-width: 0;
-  }
-
-  .community__content-header--hide {
-    display: none;
   }
 
   .community__upload-button {
@@ -189,9 +159,10 @@
     }
   }
 
-  @media (width < 48rem) {
+  @container (width < 48rem) {
     .community__header {
       gap: var(--gap-md);
+      padding: 0;
     }
 
     .community__background {

@@ -23,11 +23,9 @@ export default function Login() {
   const returnUrl = sanitizeReturnUrl(rawReturnUrl);
 
   return (
-    <div className="container container--x container--full">
-      <NotLoggedIn
-        returnUrl={returnUrl}
-        title={returnUrl ? undefined : "Log in to Thunderstore"}
-      />
-    </div>
+    <NotLoggedIn
+      returnUrl={returnUrl}
+      title={returnUrl ? undefined : "Log in to Thunderstore"}
+    />
   );
 }

@@ -2,6 +2,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { createSeo } from "cyberstorm/utils/meta";
 import { Outlet, useLocation, useOutletContext } from "react-router";
+import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
@@ -54,7 +55,7 @@ export default function UserSettings() {
   }
 
   return (
-    <>
+    <Page>
       <PageHeader headingLevel="1" headingSize="2">
         Settings
       </PageHeader>
@@ -85,6 +86,6 @@ export default function UserSettings() {
           <Outlet context={context} />
         </section>
       </div>
-    </>
+    </Page>
   );
 }

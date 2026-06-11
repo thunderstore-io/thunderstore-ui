@@ -11,9 +11,9 @@ import {
 } from "react-router";
 import {
   FormSection,
-  FormSectionIsland,
   FormSections,
 } from "~/commonComponents/FormSection/FormSection";
+import { Island } from "~/commonComponents/Island/Island";
 
 import {
   NewAlert,
@@ -150,7 +150,7 @@ function ProfileForm(props: { team: TeamDetails }) {
 
   return (
     <FormSection title="Donation Link" description="Must be a valid HTTPS URL">
-      <FormSectionIsland>
+      <Island rootClasses="team-profile__island">
         <div className="team-profile__donationLink">
           <label className="team-profile__label" htmlFor="donation_link_input">
             URL
@@ -180,7 +180,7 @@ function ProfileForm(props: { team: TeamDetails }) {
             {...donationLinkFieldProps}
           />
         </div>
-      </FormSectionIsland>
+      </Island>
       {strongForm.getFieldState("donation_link").isInvalid &&
         !strongForm.inputErrors?.donation_link?.[0] && (
           <NewAlert csVariant="danger" csSize="small">
