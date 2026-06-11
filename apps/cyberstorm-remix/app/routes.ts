@@ -85,6 +85,11 @@ export default [
     "tools/manifest-validator/manifestValidator.tsx"
   ),
   route("/package/create", "upload/upload.tsx"),
+  // Legacy base-domain package URLs: the old Django CommunitySite served
+  // `/package/...` as the riskofrain2 community. Redirect them to the
+  // community-scoped `/c/riskofrain2/...` routes. `/package/create` above wins
+  // by route ranking (static > splat); the splat only catches the rest.
+  route("/package/*", "legacyPackageRedirect.tsx"),
 
   route("/login", "login/login.tsx"),
 
