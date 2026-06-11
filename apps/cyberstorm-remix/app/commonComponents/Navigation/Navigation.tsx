@@ -507,7 +507,7 @@ export function DesktopUserDropdown(props: {
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
-          href={buildLogoutUrl(domain)}
+          href={buildLogoutUrl()}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary" csWidth="1em">
@@ -611,7 +611,7 @@ export function MobileUserMenu(props: {
         <section>
           <NewLink
             primitiveType="link"
-            href={buildLogoutUrl(domain)}
+            href={buildLogoutUrl()}
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
           >
             <NewIcon csMode="inline" noWrapper>

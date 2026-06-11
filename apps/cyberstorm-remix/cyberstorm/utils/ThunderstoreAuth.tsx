@@ -18,10 +18,16 @@ export function buildAuthLoginUrl(props: LoginProps) {
   }`;
 }
 
-export function buildLogoutUrl(domain?: string) {
-  const publicEnvVariables = getPublicEnvVariables(["VITE_AUTH_RETURN_URL"]);
+export function buildLogoutUrl() {
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+  ]);
+  const authBaseUrl = publicEnvVariables.VITE_AUTH_BASE_URL || "";
   const returnURL = publicEnvVariables.VITE_AUTH_RETURN_URL || "";
-  const logoutURL = domain ? `${domain}/logout/` : "/logout";
+  const logoutURL = authBaseUrl
+    ? `${authBaseUrl}/auth/logout/`
+    : "/auth/logout/";
   return `${logoutURL}?next=${encodeURIComponent(returnURL)}`;
 }
 
