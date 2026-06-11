@@ -1,4 +1,4 @@
-import { NewSelectSearch } from "@thunderstore/cyberstorm";
+import { NewSelectSearchMultiple } from "@thunderstore/cyberstorm";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
 import type { CommunityOption } from "../uploadUtils";
@@ -22,9 +22,8 @@ export function UploadCommunitiesSection({
       title="Communities"
       description="Select communities you want your package to be listed under."
     >
-      <NewSelectSearch
+      <NewSelectSearchMultiple
         placeholder="Select communities"
-        multiple
         options={communityOptions}
         onChange={(val) => {
           onCommunitiesChange(val ? val.map((c) => c.value) : []);

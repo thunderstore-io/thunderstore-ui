@@ -1,0 +1,12 @@
+@layer components {
+  .select-search__item {
+    padding: var(--space-12) var(--space-16);
+    font-weight: var(--select-search-font-weight);
+    font-size: var(--select-search-font-size);
+    cursor: pointer;
+  }
+
+  .select-search__item--highlighted {
+    background-color: var(--color-surface-4);
+  }
+}

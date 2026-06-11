@@ -1,0 +1,24 @@
+@layer components {
+  .select-search--single {
+    --select-search-border-color: transparent;
+    --select-search-background-color: var(--button-secondary-bg-color--default);
+    --select-search-padding-block: var(--space-12);
+    --select-search-min-height: 2.75rem;
+    --select-search-text-color: var(--button-secondary-text-color--default);
+  }
+
+  .select-search--single:hover:not(:focus-within) {
+    --select-search-text-color: var(--button-secondary-text-color--hover);
+    --select-search-background-color: var(--button-secondary-bg-color--hover);
+  }
+
+  .select-search--single .select-search__input {
+    height: auto;
+    font-weight: var(--font-weight-bold);
+    line-height: normal;
+
+    &::placeholder {
+      color: var(--select-search-text-color);
+    }
+  }
+}

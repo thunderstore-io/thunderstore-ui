@@ -97,9 +97,11 @@ export {
   type SelectProps as NewSelectProps,
 } from "./newComponents/Select/Select";
 export {
-  SelectSearch as NewSelectSearch,
-  type SelectSearchProps as NewSelectSearchProps,
-} from "./newComponents/SelectSearch/SelectSearch";
+  SelectSearchSingle as NewSelectSearchSingle,
+  SelectSearchMultiple as NewSelectSearchMultiple,
+  type SelectSearchSingleProps as NewSelectSearchSingleProps,
+  type SelectSearchMultipleProps as NewSelectSearchMultipleProps,
+} from "./newComponents/SelectSearch";
 export { SkeletonBox } from "./newComponents/SkeletonBox/SkeletonBox";
 export { Switch as NewSwitch } from "./newComponents/Switch/Switch";
 export { Tag as NewTag } from "./newComponents/Tag/Tag";

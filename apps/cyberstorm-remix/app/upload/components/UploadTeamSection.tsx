@@ -1,4 +1,4 @@
-import { NewLink, NewSelectSearch } from "@thunderstore/cyberstorm";
+import { NewLink, NewSelectSearchSingle } from "@thunderstore/cyberstorm";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
 
@@ -18,7 +18,7 @@ export function UploadTeamSection({
       title="Team"
       description="Select the team you want your package to be associated with."
     >
-      <NewSelectSearch
+      <NewSelectSearchSingle
         placeholder="Select team"
         options={availableTeams.map((team) => ({
           value: team.name,
