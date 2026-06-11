@@ -116,7 +116,7 @@ describe("formatBytes", () => {
 });
 
 describe("isUploadSubmitDisabled", () => {
-  it("is disabled while submitting, pending, missing team/file, or no communities", () => {
+  it("is disabled while submitting, pending, missing team/file, no communities, or blocking file errors", () => {
     expect(
       isUploadSubmitDisabled({
         submitting: true,
@@ -124,6 +124,7 @@ describe("isUploadSubmitDisabled", () => {
         authorName: "TeamA",
         hasSelectedFile: true,
         communitiesCount: 1,
+        hasBlockingFileErrors: false,
       })
     ).toBe(true);
 
@@ -134,6 +135,7 @@ describe("isUploadSubmitDisabled", () => {
         authorName: "TeamA",
         hasSelectedFile: true,
         communitiesCount: 1,
+        hasBlockingFileErrors: false,
       })
     ).toBe(true);
 
@@ -144,6 +146,7 @@ describe("isUploadSubmitDisabled", () => {
         authorName: "",
         hasSelectedFile: true,
         communitiesCount: 1,
+        hasBlockingFileErrors: false,
       })
     ).toBe(true);
 
@@ -154,6 +157,7 @@ describe("isUploadSubmitDisabled", () => {
         authorName: "TeamA",
         hasSelectedFile: false,
         communitiesCount: 1,
+        hasBlockingFileErrors: false,
       })
     ).toBe(true);
 
@@ -164,11 +168,23 @@ describe("isUploadSubmitDisabled", () => {
         authorName: "TeamA",
         hasSelectedFile: true,
         communitiesCount: 0,
+        hasBlockingFileErrors: false,
+      })
+    ).toBe(true);
+
+    expect(
+      isUploadSubmitDisabled({
+        submitting: false,
+        submissionPending: false,
+        authorName: "TeamA",
+        hasSelectedFile: true,
+        communitiesCount: 1,
+        hasBlockingFileErrors: true,
       })
     ).toBe(true);
   });
 
-  it("is enabled when team, file, and communities are ready", () => {
+  it("is enabled when team, file, and communities are ready with no blocking file errors", () => {
     expect(
       isUploadSubmitDisabled({
         submitting: false,
@@ -176,6 +192,7 @@ describe("isUploadSubmitDisabled", () => {
         authorName: "TeamA",
         hasSelectedFile: true,
         communitiesCount: 2,
+        hasBlockingFileErrors: false,
       })
     ).toBe(false);
   });

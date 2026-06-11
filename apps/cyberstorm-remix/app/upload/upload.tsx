@@ -135,6 +135,8 @@ export default function Upload() {
     usermedia,
     uploadError,
     clearFile,
+    fileWarnings,
+    fileErrors,
   } = usePackageFileUpload(requestConfig);
 
   const uploadProgress = useUploadProgress(handle);
@@ -247,6 +249,7 @@ export default function Upload() {
     authorName: formInputs.author_name,
     hasSelectedFile: !!file,
     communitiesCount: formInputs.communities.length,
+    hasBlockingFileErrors: fileErrors.length > 0,
   });
 
   const handleReset = () => {
@@ -300,6 +303,8 @@ export default function Upload() {
           uploadError={uploadError}
           handle={handle}
           sectionErrors={submissionErrorsBySection.uploadFile}
+          fileWarnings={fileWarnings}
+          fileValidationErrors={fileErrors}
           fileInputRef={fileInputRef}
           onFileChange={(nextFile) => {
             selectFile(nextFile);

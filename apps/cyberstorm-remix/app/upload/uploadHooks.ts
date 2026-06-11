@@ -13,6 +13,7 @@ import {
   PACKAGE_ZIP_FILE_ERROR_MESSAGE,
   isPackageZipFile,
 } from "./uploadUtils";
+import { validatePackageZip } from "./uploadZipValidation";
 
 export function usePackageFileUpload(
   requestConfig: OutletContextShape["requestConfig"]
@@ -23,6 +24,21 @@ export function usePackageFileUpload(
   const [isDone, setIsDone] = useState(false);
   const [usermedia, setUsermedia] = useState<UserMedia>();
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [fileWarnings, setFileWarnings] = useState<string[]>([]);
+  const [fileErrors, setFileErrors] = useState<string[]>([]);
+  // Incremented whenever the selected file changes so a slow async validation
+  // for a stale file can't overwrite results for the current one.
+  const validationTokenRef = useRef(0);
+
+  // Invalidates any in-flight validation and clears the current
+  // warnings/errors. Returns the new token so the caller can guard its own
+  // async result against staleness.
+  const resetFileValidation = useCallback(() => {
+    const token = ++validationTokenRef.current;
+    setFileWarnings([]);
+    setFileErrors([]);
+    return token;
+  }, []);
 
   const startUpload = useCallback(async () => {
     if (!file) {
@@ -38,6 +54,25 @@ export function usePackageFileUpload(
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+      throw new Error(message);
+    }
+
+    // Re-run ZIP validation at submit time so a blocking archive can't slip
+    // through the async gap between selecting a file and its validation result
+    // landing — the disabled submit button is otherwise the only guard.
+    const validationToken = validationTokenRef.current;
+    const validation = await validatePackageZip(file);
+    // If the selection changed while validation was in flight (e.g. the user
+    // cleared or replaced the file), abort instead of uploading a stale file.
+    if (validationTokenRef.current !== validationToken) {
+      throw new Error("File selection changed during validation.");
+    }
+    setFileWarnings(validation.warnings);
+    setFileErrors(validation.errors);
+    if (validation.errors.length > 0) {
+      const message =
+        "Please fix the problems with your .zip file before submitting.";
+      setUploadError(message);
       throw new Error(message);
     }
 
@@ -73,6 +108,7 @@ export function usePackageFileUpload(
   }, [file, requestConfig]);
 
   const clearFile = useCallback(() => {
+    resetFileValidation();
     setFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -82,7 +118,7 @@ export function usePackageFileUpload(
     setUsermedia(undefined);
     setIsDone(false);
     setUploadError(null);
-  }, [handle]);
+  }, [handle, resetFileValidation]);
 
   const selectFile = useCallback(
     (nextFile: File | null) => {
@@ -92,6 +128,7 @@ export function usePackageFileUpload(
       }
 
       if (!isPackageZipFile(nextFile)) {
+        resetFileValidation();
         setUploadError(PACKAGE_ZIP_FILE_ERROR_MESSAGE);
         setFile(null);
         if (fileInputRef.current) {
@@ -106,8 +143,22 @@ export function usePackageFileUpload(
 
       setUploadError(null);
       setFile(nextFile);
+
+      // Inspect the archive's contents and surface warnings/blocking errors.
+      const token = resetFileValidation();
+      validatePackageZip(nextFile)
+        .then((result) => {
+          if (validationTokenRef.current !== token) return;
+          setFileWarnings(result.warnings);
+          setFileErrors(result.errors);
+        })
+        .catch(() => {
+          if (validationTokenRef.current !== token) return;
+          setFileWarnings([]);
+          setFileErrors([]);
+        });
     },
-    [clearFile, handle]
+    [clearFile, handle, resetFileValidation]
   );
 
   return {
@@ -120,6 +171,8 @@ export function usePackageFileUpload(
     usermedia,
     uploadError,
     clearFile,
+    fileWarnings,
+    fileErrors,
   };
 }
 
