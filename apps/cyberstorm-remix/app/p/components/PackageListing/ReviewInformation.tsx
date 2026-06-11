@@ -18,7 +18,7 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
   return (
     <div className="review-information-card">
       <h4 className="review-package__label">Internal notes</h4>
-      <p>{notes}</p>
+      <pre className="review-information-card__text">{notes}</pre>
     </div>
   );
 };
@@ -38,7 +38,11 @@ export const RejectionReason = ({ status }: ReviewInformationProps) => {
   return (
     <div className="review-information-card review-information-card--danger">
       <h4 className="review-package__label">Package rejected</h4>
-      <p>{reason}</p>
+      <pre className="review-information-card__text">{reason}</pre>
+      <p className="review-information-card__text">
+        If you think this is a mistake, please reach out to the moderators in{" "}
+        <a href="https://discord.thunderstore.io/">our Discord server</a>.
+      </p>
     </div>
   );
 };
