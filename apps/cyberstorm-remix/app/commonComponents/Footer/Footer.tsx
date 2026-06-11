@@ -18,8 +18,13 @@ const GITHUB_URL = "https://github.com/thunderstore-io";
 
 /**
  * Cyberstorm Footer Component
+ *
+ * `domain` is the Django origin (VITE_API_URL); Django-served pages like
+ * the API docs must link there, since the React Router app doesn't serve
+ * them on every deployment origin.
  */
-export function Footer() {
+export function Footer(props: { domain: string }) {
+  const { domain } = props;
   return (
     <IslandContainer as="footer" rootClasses="footer" aria-label="Footer">
       <IslandContainer direction="x" rootClasses="footer__content">
@@ -95,7 +100,7 @@ export function Footer() {
                   <li>
                     <NewLink
                       primitiveType="link"
-                      href="/api/docs"
+                      href={`${domain}/api/docs/`}
                       csVariant="primary"
                     >
                       API Documentation

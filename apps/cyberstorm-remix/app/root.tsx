@@ -354,7 +354,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </Island>
                   )}
                 </IslandContainer>
-                <Footer />
+                <Footer domain={resolvedEnvVars?.VITE_API_URL || ""} />
                 {shouldShowAds ? <AdsInit /> : null}
               </IslandContainer>
             </TooltipProvider>
