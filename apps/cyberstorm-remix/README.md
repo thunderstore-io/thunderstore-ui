@@ -31,11 +31,11 @@ single API origin).
 
    ```bash
    cd ../thunderstore-ui
-   yarn install
-   yarn dev
+   pnpm install
+   pnpm dev
    ```
 
-   `yarn dev` builds the workspace UI packages on first run, then starts their
+   `pnpm dev` builds the workspace UI packages on first run, then starts their
    watchers together with the Remix dev server (on `:3000`). nginx in the backend
    stack proxies `thunderstore.localhost` to it.
 
@@ -55,7 +55,7 @@ single API origin).
 
 ## How it fits together
 
-- `yarn dev` runs the Remix dev server on `0.0.0.0:3000` (see `tools/scripts/dev.mjs`).
+- `pnpm dev` runs the Remix dev server on `0.0.0.0:3000` (see `tools/scripts/dev.mjs`).
 - The backend's nginx (`Thunderstore/nginx/conf/default.conf`) routes
   `thunderstore.localhost` to `host.docker.internal:3000` for app routes and to
   Django for `/api`, `/auth`, `/djangoadmin`, `/media`, `/static`, etc.
@@ -73,7 +73,7 @@ Native file watching is used by default. Inside WSL2 or a bind-mounted volume,
 file events may not propagate; set `VITE_USE_POLLING=true` to fall back to
 polling.
 
-Also, when Docker Desktop runs the backend on Windows while `yarn dev` runs
+Also, when Docker Desktop runs the backend on Windows while `pnpm dev` runs
 inside WSL2, nginx's `host.docker.internal` reaches the Windows host — not the
 WSL2 VM — so port 3000 needs a port proxy (or WSL2 mirrored networking). See
 the **WSL2** note in the Thunderstore repo's README.

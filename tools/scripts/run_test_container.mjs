@@ -96,9 +96,9 @@ function parseArgs(argv) {
   }
 
   const dashDashIndex = rest.indexOf("--");
-  // Yarn v1 forwards args without requiring `--`. Accept both forms:
-  //   yarn test:container path/to/test
-  //   yarn test:container -- path/to/test
+  // pnpm forwards script args without requiring `--`. Accept both forms:
+  //   pnpm test:container path/to/test
+  //   pnpm test:container -- path/to/test
   const vitestArgs =
     dashDashIndex === -1 ? rest : rest.slice(dashDashIndex + 1);
 
@@ -159,7 +159,7 @@ async function main() {
       "--rm",
       "--build",
       "cyberstorm-tests",
-      "yarn",
+      "pnpm",
       command,
       ...vitestArgs,
     ];

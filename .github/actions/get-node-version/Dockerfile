@@ -1,8 +1,9 @@
 # Image already pulled on runners
 FROM node:24.14.0-alpine
+RUN npm install -g pnpm@11.5.3
 WORKDIR /src
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY . .
-RUN yarn build
+RUN pnpm run build
 CMD ["node", "/src/dist/main.js"]

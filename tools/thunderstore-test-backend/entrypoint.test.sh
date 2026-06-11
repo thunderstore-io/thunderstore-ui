@@ -81,32 +81,32 @@ mkdir -p \
   /workspace/node_modules \
   /workspace/apps/cyberstorm-remix/node_modules \
   /workspace/apps/cyberstorm-remix/.react-router \
-  /usr/local/share/.cache/yarn
+  "${npm_config_store_dir:-/pnpm-store}"
 
 # Install JS deps if missing
 if [ -z "$(ls -A /workspace/node_modules 2>/dev/null || true)" ] || [ ! -x /workspace/node_modules/.bin/vitest ]; then
   echo "Installing dependencies..."
-  if ! command -v yarn >/dev/null 2>&1; then
-    echo "ERROR: yarn is required but was not found in PATH" >&2
+  if ! command -v pnpm >/dev/null 2>&1; then
+    echo "ERROR: pnpm is required but was not found in PATH" >&2
     exit 127
   fi
-  yarn install --frozen-lockfile --production=false
+  pnpm install --frozen-lockfile --prod=false
 fi
 
 # `preconstruct dev` generates workspace-local link files that rsync will delete on the next sync.
 # When node_modules is cached, we still need to recreate those links so Vite can resolve package
 # entrypoints (e.g. @thunderstore/dapper-ts, @thunderstore/thunderstore-api).
 if [ "$did_sync" = "true" ]; then
-  if ! command -v yarn >/dev/null 2>&1; then
-    echo "ERROR: yarn is required but was not found in PATH" >&2
+  if ! command -v pnpm >/dev/null 2>&1; then
+    echo "ERROR: pnpm is required but was not found in PATH" >&2
     exit 127
   fi
   echo "Refreshing workspace links (preconstruct dev)..."
-  yarn run -s preconstruct dev
+  pnpm exec preconstruct dev
 fi
 
 if [ "$#" -eq 0 ]; then
-  set -- yarn test
+  set -- pnpm test
 fi
 
 exec "$@"

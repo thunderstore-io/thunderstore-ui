@@ -1,0 +1,11 @@
+# Marks this action as its own standalone pnpm project (stops pnpm from
+# walking up to the repository workspace root) and mirrors the repo's
+# supply-chain settings.
+engineStrict: true
+minimumReleaseAge: 4320
+
+# Security floor: @actions/http-client pins undici 5.x, which has open
+# advisories (patched >=6.24.0). The undici code paths (OIDC/proxy fetches)
+# are unused by this action, and undici 6 is API-compatible for http-client.
+overrides:
+  undici: "^6.24.0"

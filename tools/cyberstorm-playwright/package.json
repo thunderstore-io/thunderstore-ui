@@ -11,9 +11,9 @@
     "node": "24.14.0"
   },
   "devDependencies": {
-    "@percy/cli": "^1.29.2",
-    "@percy/playwright": "^1.0.6",
-    "@playwright/test": "^1.46.1",
-    "@types/node": "^24"
+    "@percy/cli": "1.29.2",
+    "@percy/playwright": "1.0.6",
+    "@playwright/test": "1.46.1",
+    "@types/node": "24.12.0"
   }
 }

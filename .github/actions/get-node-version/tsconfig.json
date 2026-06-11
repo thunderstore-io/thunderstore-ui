@@ -37,6 +37,9 @@
     "experimentalDecorators": true,
     "lib": ["ES2021"],
     "target": "ES2021",
+    // Only include @types/node implicitly; without this tsc walks up to the
+    // repo root's node_modules/@types and trips on unrelated type stubs.
+    "types": ["node"],
 
     "composite": true,
 

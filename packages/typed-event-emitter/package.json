@@ -23,14 +23,16 @@
     "watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.25.6"
+    "@babel/runtime": "7.28.6"
   },
   "engines": {
     "node": "24.14.0"
   },
   "devDependencies": {
-    "@vitest/browser": "3.2.4",
+    "@types/node": "24.12.0",
+    "@vitest/browser": "3.2.6",
     "playwright": "1.55.1",
-    "vitest": "3.2.4"
+    "typescript": "5.9.3",
+    "vitest": "3.2.6"
   }
 }

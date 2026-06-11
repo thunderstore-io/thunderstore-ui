@@ -30,10 +30,10 @@
     "node": "24.14.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.25.6",
-    "@types/react": "^19.1.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@babel/runtime": "7.28.6",
+    "@types/react": "19.2.8",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "preconstruct": {
     "entrypoints": [
@@ -41,5 +41,8 @@
       "types/index.ts"
     ],
     "exports": true
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
   }
 }

@@ -53,8 +53,8 @@ This library should:
 
 ### Scripts
 
-- `yarn run build`: Builds the project
-- `yarn run dev`: Builds the project & watches files for changes, triggering a rebuild
+- `pnpm run build`: Builds the project
+- `pnpm run dev`: Builds the project & watches files for changes, triggering a rebuild
 
 
 ### Testing

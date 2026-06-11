@@ -7,7 +7,7 @@ provides a sandbox to build UI components in isolation, without having to start
 up the whole service stack. Additionally it showcases the existing components,
 promoting reusability.
 
-To start Cyberstorm Storybook, run `yarn workspace @thunderstore/cyberstorm-storybook storybook`.
+To start Cyberstorm Storybook, run `pnpm --filter @thunderstore/storybook run storybook`.
 
 Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006/).
 

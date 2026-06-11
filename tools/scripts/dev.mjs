@@ -9,7 +9,7 @@
 // three packages triggers its watcher to rebuild dist (~1-2s), which the remix
 // dev server then hot-reloads. This replaces the old Docker + rsync setup.
 //
-// Usage: `yarn dev` (from the repo root).
+// Usage: `pnpm dev` (from the repo root).
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -44,7 +44,7 @@ const children = new Set();
 let shuttingDown = false;
 
 // Kill the child AND its descendants. Each child is `shell:true` (a cmd.exe /
-// /bin/sh wrapper around yarn -> node -> vite), so killing only the wrapper pid
+// /bin/sh wrapper around pnpm -> node -> vite), so killing only the wrapper pid
 // would orphan the real dev/watch processes (and leave port 3000 held). On
 // Windows use `taskkill /T` to kill the tree; on POSIX the child is spawned
 // detached as its own process-group leader, so kill the negative pid (the group).
@@ -67,7 +67,7 @@ function killTree(child) {
 // spawnChild handlers drain `children`) rather than after a fixed grace
 // period — on a slow machine a fixed timer could return the prompt while
 // taskkill/SIGINT is still mid-kill, leaving the trees briefly alive and
-// port 3000 still bound for an immediate `yarn dev` restart. A generous
+// port 3000 still bound for an immediate `pnpm dev` restart. A generous
 // deadline remains as a backstop for a tree that refuses to die.
 function shutdown(code) {
   if (shuttingDown) return;
@@ -120,7 +120,7 @@ process.on("unhandledRejection", onFatal);
 process.on("uncaughtException", onFatal);
 
 function spawnChild(args, opts = {}) {
-  const child = spawn("yarn", args, {
+  const child = spawn("pnpm", args, {
     cwd: root,
     shell: true,
     // Own process group on POSIX so killTree can take down the whole tree.
@@ -139,10 +139,10 @@ function spawnChild(args, opts = {}) {
 // `children` so a Ctrl+C mid-build tears the build down too.
 function build(name) {
   return new Promise((resolve_, reject) => {
-    const child = spawnChild(["workspace", name, "build"], {
+    const child = spawnChild(["--filter", name, "run", "build"], {
       stdio: "inherit",
     });
-    // A failed spawn (e.g. yarn not on PATH) emits `error`, not `exit`; reject
+    // A failed spawn (e.g. pnpm not on PATH) emits `error`, not `exit`; reject
     // so main()'s try/catch reports it and shuts the stack down cleanly.
     child.on("error", reject);
     child.on("exit", (code, signal) =>
@@ -193,7 +193,7 @@ function pipeLines(stream, prefix, out) {
 // `critical` processes (the remix server) bring the whole stack down if they
 // exit; a watcher dying only logs a warning so the app server keeps running.
 function start(name, { label, color, critical = false }) {
-  const child = spawnChild(["workspace", name, "dev"]);
+  const child = spawnChild(["--filter", name, "run", "dev"]);
   const prefix = `\x1b[${color}m[${label}]\x1b[0m`;
   // stdout/stderr can be null when the spawn itself fails; the `error`
   // handler below reports that case.
@@ -209,7 +209,7 @@ function start(name, { label, color, critical = false }) {
     } else {
       process.stderr.write(
         `${prefix} watcher could not start. Edits to ${name} won't rebuild ` +
-          `until you restart \`yarn dev\`. Leaving the app server up.\n`
+          `until you restart \`pnpm dev\`. Leaving the app server up.\n`
       );
     }
   });
@@ -223,7 +223,7 @@ function start(name, { label, color, critical = false }) {
     } else {
       process.stderr.write(
         `${prefix} watcher exited (${cause}). Edits to ${name} won't ` +
-          `rebuild until you restart \`yarn dev\`. Leaving the app server up.\n`
+          `rebuild until you restart \`pnpm dev\`. Leaving the app server up.\n`
       );
     }
   });

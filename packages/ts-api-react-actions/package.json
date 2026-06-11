@@ -24,12 +24,15 @@
     "node": "24.14.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.25.6",
-    "@thunderstore/thunderstore-api": "*",
-    "@thunderstore/ts-api-react": "*",
-    "@types/react": "^19.1.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "zod": "^3.23.8"
+    "@babel/runtime": "7.28.6",
+    "@thunderstore/thunderstore-api": "workspace:*",
+    "@thunderstore/ts-api-react": "workspace:*",
+    "@types/react": "19.2.8",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
   }
 }

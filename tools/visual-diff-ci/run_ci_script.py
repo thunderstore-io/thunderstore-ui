@@ -12,9 +12,12 @@ import requests
 
 CURRENT_DIR = Path(__file__).parent
 REPO_ROOT = CURRENT_DIR / ".." / ".."
-YARN_PATH = shutil.which("yarn")
+PNPM_PATH = shutil.which("pnpm")
 NPX_PATH = shutil.which("npx")
 NPM_PATH = shutil.which("npm")
+if PNPM_PATH is None:
+    sys.stderr.write("error: pnpm was not found on PATH; cannot run CI script\n")
+    sys.exit(127)
 
 
 class EarlyExit(Exception):
@@ -131,22 +134,28 @@ class BgProcess:
 
 
 def setup_frontend():
-    run_command([YARN_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "workspace", "@thunderstore/ts-uploader", "build"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-theme", "build"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm", "build"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "build"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "--filter", "@thunderstore/ts-uploader", "run", "build"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "--filter", "@thunderstore/cyberstorm-theme", "run", "build"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "--filter", "@thunderstore/cyberstorm", "run", "build"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "--filter", "@thunderstore/cyberstorm-remix", "run", "build"], cwd=REPO_ROOT)
 
 
 def start_frontend() -> BgProcess:
+    # react-router-serve takes its host/port from the HOST/PORT environment
+    # variables, not CLI flags. Appending `--host/--port` to `pnpm run start`
+    # would be parsed by pnpm (or ignored by the server), not forwarded, so set
+    # them via the environment instead.
     configs = {
         "VITE_SITE_URL": "http://127.0.0.1:8000",
         "VITE_API_URL": "http://127.0.0.1:8000",
         "VITE_AUTH_BASE_URL": "http://127.0.0.1:8000",
         "VITE_AUTH_RETURN_URL": "http://127.0.0.1:8000",
+        "HOST": "0.0.0.0",
+        "PORT": "3000",
     }
     process = BgProcess(
-        [YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "start", "--host", "0.0.0.0", "--port", "3000"],
+        [PNPM_PATH, "--filter", "@thunderstore/cyberstorm-remix", "run", "start"],
         cwd=REPO_ROOT,
         env=configs,
     )
