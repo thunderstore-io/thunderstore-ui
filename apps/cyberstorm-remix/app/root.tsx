@@ -362,7 +362,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </LinkingProvider>
         <ScrollRestoration />
         <Scripts />
-        <BetaButtonInit />
       </body>
     </html>
   );
@@ -497,33 +496,6 @@ function AdsInit() {
       });
     }
   }, [adsScriptLoaded, nitroAds]);
-
-  return <></>;
-}
-
-// Temporary solution for adding the beta button
-// REMIX TODO: Move to dynamic html
-function BetaButtonInit() {
-  const isHydrated = useHydrated();
-  const startsHydrated = useRef(isHydrated);
-  const hasRun = useRef(false);
-
-  // This will be loaded 2 times in development because of:
-  // https://react.dev/reference/react/StrictMode
-  // If strict mode is removed from the entry.client.tsx, this should only run once
-  useEffect(() => {
-    if ((!startsHydrated.current && isHydrated) || hasRun.current) return;
-    if (typeof window !== "undefined") {
-      const $script = document.createElement("script");
-      $script.src = "/cyberstorm-static/scripts/beta-switch.js";
-      $script.setAttribute("async", "true");
-
-      document.body.append($script);
-      hasRun.current = true;
-
-      return () => $script.remove();
-    }
-  }, []);
 
   return <></>;
 }
