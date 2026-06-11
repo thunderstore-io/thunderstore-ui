@@ -6,14 +6,39 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig((config) => {
   const { mode } = config;
   const env = loadEnv(mode, process.cwd(), "");
+
+  // Extra allowed hosts (comma separated) so the dev server accepts requests
+  // proxied by nginx, e.g. ".thunderstore.localhost".
+  const additionalAllowedHosts = (
+    env.__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS ?? ""
+  )
+    .split(",")
+    .map((host) => host.trim())
+    .filter(Boolean);
+
   return {
     server: {
-      // Because of a WSL2 limitations we must use polling and set the interval to a 500
-      // This way we don't kill the cpu
-      // https://vitejs.dev/config/server-options.html#server-watch
-      watch: { usePolling: true, interval: 500 },
+      // Bind to all interfaces so the nginx container can reach the dev server
+      // on the host via host.docker.internal:3000. Note this also exposes the
+      // dev server (with source maps + HMR) to the local network — fine on a
+      // trusted machine; avoid running it on untrusted/public Wi-Fi.
+      host: true,
+      port: 3000,
+      strictPort: true,
+      // Native file watching is fast on Windows/macOS/Linux. Polling is only
+      // needed inside WSL2 or a bind-mounted container; opt in with
+      // VITE_USE_POLLING=true there instead of paying its cost everywhere.
+      watch:
+        env.VITE_USE_POLLING === "true"
+          ? { usePolling: true, interval: 500 }
+          : undefined,
       hmr: { path: "/react-router" },
-      allowedHosts: [".thunderstore.dev", ".thunderstore.io"],
+      allowedHosts: [
+        ".thunderstore.dev",
+        ".thunderstore.io",
+        ".thunderstore.localhost",
+        ...additionalAllowedHosts,
+      ],
     },
     plugins: [
       reactRouter(),

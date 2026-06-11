@@ -2,182 +2,191 @@
 
 [![codecov](https://codecov.io/gh/thunderstore-io/thunderstore-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/thunderstore-io/thunderstore-ui)
 
-Monorepo containing Remix frontend for [thunderstore.io](https://thunderstore.io)
-and reusable UI components.
+The web frontend for [thunderstore.io](https://thunderstore.io) and its reusable UI
+packages. The main app, `cyberstorm-remix`, is a
+[React Router](https://reactrouter.com/) v7 app. It runs against the
+[Thunderstore backend](https://github.com/thunderstore-io/Thunderstore), which
+serves the API in local development.
 
-## Monorepo Setup
+## Contents
 
-- [`yarn` workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) manages
-  the packages in the monorepo (see `packages` key in base `package.json` file)
-  and handles dependency installation/deduplication.
-- [`preconstruct`](https://preconstruct.tools/) automates building and linking
-  the packages within the monorepo. Instead of using relative paths, local
-  packages can be imported as if they were installed via a package manager.
-  - Packages can be linked locally by running `yarn preconstruct dev`, but this
-    is handled automatically by `postinstall` hook, so developers don't need to
-    worry about it.
+- [Getting started](#getting-started)
+- [Monorepo layout](#monorepo-layout)
+- [Storybook](#storybook)
+- [Testing](#testing)
+- [Working in the monorepo](#working-in-the-monorepo)
+- [Building for production](#building-for-production)
+- [Code style](#code-style)
+- [Troubleshooting](#troubleshooting)
 
-```
-// first time setup
-git clone git@github.com:thunderstore-io/thunderstore-ui.git thunderstore-ui
+## Getting started
+
+### Prerequisites
+
+- **Node `24.14.0`** (pinned in `engines`) and **Yarn 1 (Classic)**.
+- **Font Awesome registry access.** The UI uses Font Awesome Pro icons, served from
+  a private registry, so configure auth before installing (see the
+  [Font Awesome docs](https://fontawesome.com/docs/web/setup/packages)):
+
+  ```bash
+  npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+  npm config set "//npm.fontawesome.com/:_authToken" <your-token>
+  ```
+
+### Install and run
+
+```bash
+git clone git@github.com:thunderstore-io/thunderstore-ui.git
 cd thunderstore-ui
 yarn install
-
-// start Remix dev server
-yarn workspace @thunderstore/cyberstorm-remix dev
+yarn dev
 ```
 
-That's it. Changes done to `apps/cyberstorm-remix` and
-`packages/cyberstorm` should both be automatically visible at
-[http://localhost:3000/].
+`yarn dev` starts the React Router dev server (on `:3000`) together with the build
+watchers for the UI packages consumed as `dist` (`@thunderstore/cyberstorm`,
+`@thunderstore/cyberstorm-theme`, `@thunderstore/ts-uploader`), so changes to the
+app **and** those packages are picked up automatically.
 
+The app expects the Thunderstore backend to be running, which serves it at
+[http://thunderstore.localhost](http://thunderstore.localhost) (the dev server also
+listens directly on [http://localhost:3000](http://localhost:3000)). See
+[`apps/cyberstorm-remix/README.md`](apps/cyberstorm-remix/README.md) for the full
+backend-plus-frontend setup.
+
+## Monorepo layout
+
+- **`apps/*`** — runnable applications. The main one is `cyberstorm-remix` (the
+  React Router web app); `storybook` hosts the component sandbox.
+- **`packages/*`** — reusable libraries, such as `@thunderstore/cyberstorm`
+  (components), `@thunderstore/cyberstorm-theme` (design system), and the data and
+  uploader packages.
+
+Two tools tie it together:
+
+- [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) manage the
+  packages (see the `workspaces` key in the root `package.json`) and handle
+  dependency installation and deduplication.
+- [Preconstruct](https://preconstruct.tools/) builds and links the local packages,
+  so you can import them as `@thunderstore/<pkg>` instead of via relative paths.
+  Linking runs automatically in the `postinstall` hook (`yarn preconstruct dev`),
+  so you normally don't need to run it yourself.
+
+## Storybook
+
+[Storybook](https://storybook.js.org/) is a sandbox for building UI components in
+isolation, without starting the whole stack. It also showcases existing components
+to encourage reuse.
+
+```bash
+yarn workspace @thunderstore/storybook storybook
 ```
-// production build, assumes yarn install has already been run
-// build packages/* with preconstruct
-yarn build
 
-// build and start Remix prod server
-yarn workspace @thunderstore/cyberstorm-remix build
-yarn workspace @thunderstore/cyberstorm-remix start
+Storybook is then available at [http://localhost:6006](http://localhost:6006).
+
+When adding components to `@thunderstore/cyberstorm`, add stories for them under
+[`apps/storybook/src/stories`](apps/storybook/src/stories) — see the existing files
+for examples. To upgrade Storybook when it reports a new version, run the suggested
+`npx storybook@latest upgrade` command in the `apps/storybook` directory.
+
+### Chromatic
+
+[Chromatic](https://www.chromatic.com/docs/) runs in CI to host Storybook and
+detect visual changes to stories. Visual changes must be reviewed before the
+related PR can merge:
+
+1. Push your changes as usual. The `chromatic-deployment` job in
+   `.github/workflows/test.yml` builds and uploads Storybook to Chromatic. This
+   step only fails if the build or upload itself fails — component changes are
+   not flagged here.
+2. Open a PR as usual.
+3. If there were visual changes, GitHub shows a pending check (_"UI Tests Pending —
+   N changes must be accepted as baselines"_). Open its **Details** link to review
+   and accept or reject the changes in Chromatic. The PR cannot merge until they
+   are accepted.
+
+`yarn workspace @thunderstore/storybook chromatic` uploads a Storybook manually
+(rarely needed, since CI automates it). The Chromatic CLI reads the project
+token from the `CHROMATIC_PROJECT_TOKEN` environment variable (or pass
+`--project-token`); in CI the token comes from the `CHROMATIC_CYBERSTORM_TOKEN`
+Actions secret.
+
+## Testing
+
+Frontend tests run in Vitest browser mode (Playwright). To keep the environment
+consistent, use the dedicated test-runner compose file rather than the dev
+container.
+
+**Prerequisite:** `./build-secrets/.npmrc` must exist (the same Font Awesome
+registry auth required for Docker builds — see
+[Building for production](#building-for-production)).
+
+```bash
+yarn test:container       # run the tests
+yarn coverage:container   # run with coverage
 ```
 
-### Troubleshooting
+To type-check the whole monorepo, run `yarn tsc`.
 
-#### After runinng `yarn install` on Windows, you see symlinking errors
-
-**Solution**: Enable developer mode in windows settings.
-See https://github.com/preconstruct/preconstruct/issues/381 for more details
-
-#### Yarn error `expected workspace package to exist for X`
-
-**Solution**: Downgrade yarn to a working version by running
-`yarn policies set-version 1.19.0`. See
-https://github.com/yarnpkg/yarn/issues/8405 for more details.
+## Working in the monorepo
 
 ### Adding dependencies
 
-To add new dependencies to existing packages, simply run something like:
+Add a dependency to a specific workspace:
 
-```
+```bash
 yarn workspace @thunderstore/cyberstorm add react-table @types/react-table
 ```
 
 ### Adding a new package
 
-**Template**
-
-This repository includes a templated package generation script, powered by
-[plop](https://plopjs.com/documentation/). The templates can be found in
-[./plop/package](./plop/package) and should be updated if the requirements
-for new packages change.
-
-Behavior of plop is controlled in a single JS file at
-[./plopfile.mjs](./plopfile.mjs)
-
-**Generating**
-
-To actually generate a new package stub, simply run `yarn run plop` at the
-root of the repository. You should be prompted with a handful of questions after
-which a new package is created.
+New packages are scaffolded with [plop](https://plopjs.com/documentation/). Run
+`yarn plop` at the repo root and answer the prompts. The templates live in
+[`./plop/package`](./plop/package) and the generator config in
+[`./plopfile.mjs`](./plopfile.mjs); update them if package requirements change.
 
 ![Plop generation example](./docs/plop.png)
 
-### About VS Code...
 
-VS Code may have problem detecting installed packages in this monorepo/workspace
-setup. Installing
-[Monorepo Workspace extension](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace)
-may solve them.
 
-## Storybook
+## Building for production
 
-[Storybook](https://storybook.js.org/docs/react/get-started/introduction)
-provides a sandbox to build UI components in isolation, without having to start
-up the whole service stack. Additionally it showcases the existing components,
-promoting reusability.
-
-To start Storybook, run `yarn workspace @thunderstore/cyberstorm-storybook storybook`.
-Storybook can then be accessed at [http://localhost:6006/].
-
-When creating new components for `@thunderstore/cyberstorm`, add stories for
-them by creating files under `apps/cyberstorm-storybook/stories`. See the
-existing files for examples.
-
-To upgrade Storybook when it informs you about new version being available, run
-the given `npx sb@latest upgrade` command in `apps/cyberstorm-storybook`
-directory.
-
-### Chromatic
-
-[Chromatic](https://www.chromatic.com/docs/) is used as a part of CI pipeline.
-It hosts Storybook, and detects visual changes to any stories. These changes
-needs to be reviewed before a related PR can be merged. The workflow is:
-
-1. Commit and push the changes as usual. `storybook-chromatic.yml` Action
-   builds and uploads a new version of our Storybook to Chromatic. Note that
-   this step only fails if there's error building or uploading the Storybook -
-   any changes to components are not important at this point.
-2. Create a PR as usual.
-3. If there were visual changes, GitHub will show a pending action: _"UI Tests
-   Pending — 10 changes must be accepted as baselines."_ Clicking the *Details*
-   link will take you to Chromatic, where you must review and either accept or
-   reject the changes. The PR can't be merged before the changes are accepted.
-
-`yarn workspace @thunderstore/cyberstorm-storybook chromatic` can be used to
-manually upload a Storybook to Chromatic, but this seems unnecessary since we
-have it automated. To use the manual method, `CHROMATIC_CYBERSTORM_TOKEN` env
-variable needs to be set (in the repo it's stored as a Secret for Actions).
-
-## Docker Compose
-
-The build configuration for some apps is included in the
-`docker-compose.build.yml` file, making building of the services simple.
-
-**You will need to ensure all configured secrets are present before building
-with docker compose.** Currently the only required secret is the `.npmrc` file,
-which should include authentication to the font awesome private registry. See
-[Font Awesome documentation](https://fontawesome.com/docs/web/setup/packages)
-for more info on how to authenticate with npm, and then copy the `~/.npmrc` file
-it generates to the `./build-secrets` directory.
-
-**Build secrets are unsupported in the `docker-compose` python package, you must
-use the built-in `docker compose` subcommand instead.**
-
-Once the build-time secrets are available, building the services is as simple as
-running:
+`yarn build` builds the workspace packages with Preconstruct (assuming `yarn
+install` has already run). To build and serve the app itself:
 
 ```bash
-docker compose -f docker-compose.build.yml build
+yarn build
+yarn workspace @thunderstore/cyberstorm-remix build
+yarn workspace @thunderstore/cyberstorm-remix start
 ```
 
-## Testing (Docker)
+### Docker images
 
-Frontend tests run in Vitest browser mode (Playwright). To keep the environment consistent, use the dedicated test runner compose file instead of the dev container.
+Build configuration for some apps lives in `docker-compose.remix.build.yml`.
+Building requires the Font Awesome private-registry credentials: follow the
+[Font Awesome docs](https://fontawesome.com/docs/web/setup/packages) to generate a
+`~/.npmrc`, then copy it to `./build-secrets/.npmrc`.
 
-Prereqs:
-- Ensure `./build-secrets/.npmrc` exists (same requirement as Docker builds).
-
-Run tests:
+> Build secrets are **not** supported by the `docker-compose` Python package — use
+> the built-in `docker compose` subcommand.
 
 ```bash
-yarn test:container
+docker compose -f docker-compose.remix.build.yml build
 ```
 
-Run coverage:
+## Code style
 
-```bash
-yarn coverage:container
-```
+[pre-commit](https://pre-commit.com/) enforces code style (Prettier, Stylelint, and
+ESLint). Install the hooks once with `pre-commit install`; they then run
+automatically on commit and will block — and often auto-fix — style issues. Re-stage
+the fixed files and commit again. CI runs the same checks, so commits that skip them
+(`--no-verify`) will fail there.
 
-## pre-commit
+## Troubleshooting
 
-[Pre-commit](https://pre-commit.com/) enforces code style practices in this
-project. Choose your preferred
-[installation method](https://pre-commit.com/#install) and then run `pre-commit
-install` to enable Git hook scripts. Pre-commit will now automatically cancel
-your commits if any problems are detected, and autofix them. Stage the changed
-files to your commit and re-run the commit command.
+**Symlink errors after `yarn install` on Windows.** Enable Developer Mode in Windows
+settings. See
+[preconstruct#381](https://github.com/preconstruct/preconstruct/issues/381).
 
-Pre-commit can be disabled for a single commit with `--no-verify` option, but
-note that CI also runs pre-commit and will fail if any problems are encountered
-at this stage.
+**`expected workspace package to exist for X`.** Pin Yarn to a known-good version
+with `yarn policies set-version 1.19.0`. See
+[yarn#8405](https://github.com/yarnpkg/yarn/issues/8405).
