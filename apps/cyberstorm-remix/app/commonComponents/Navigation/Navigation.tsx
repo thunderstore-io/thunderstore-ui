@@ -205,7 +205,7 @@ export function Navigation(props: {
           <div className="navigation-header__extra">
             <NewButton
               primitiveType="link"
-              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+              href="https://get.thunderstore.io/"
               csSize="small"
               csVariant="accent"
               aria-label="Get Thunderstore Mod Manager App"
@@ -778,7 +778,7 @@ export function MobileNavigationMenu(props: {
         <section>
           <NewButton
             primitiveType="link"
-            href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+            href="https://get.thunderstore.io/"
             csSize="small"
             csVariant="accent"
             aria-label="Get Thunderstore Mod Manager App"

@@ -157,7 +157,7 @@ export function Footer() {
             </p>
             <NewButton
               primitiveType="link"
-              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+              href="https://get.thunderstore.io/"
               csSize="big"
               csVariant="accent"
               rootClasses="manager-ad__get-manager-button"
