@@ -1,5 +1,7 @@
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -41,24 +43,37 @@ export const loader = ssrLoader(
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const filters = await dapper.getCommunityFilters(params.communityId);
-      const listing = await dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      );
+      const [filters, listing] = await Promise.all([
+        dapper.getCommunityFilters(params.communityId),
+        getPublicListing(dapper, {
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+        }),
+      ]);
+
+      // The listing may exist but be hidden from this anonymous request
+      // (e.g. rejected listings are still visible to moderators and to the
+      // package's team members). Return a gated 404 instead of throwing so
+      // the clientLoader gets to retry with the user's session attached.
+      // The community and filters are public, so pass them through — the
+      // page shell and breadcrumbs render during SSR; only the gated
+      // listing and its dependants are deferred to the client refetch.
+      if (!listing) {
+        return gatedSsr404({
+          community: await dapper.getCommunity(params.communityId),
+          listing: undefined,
+          filters,
+          listings: undefined,
+          seo: createSeo({ descriptors: [] }),
+        });
+      }
 
       const finalSection = getSectionDefault(section, filters.sections);
 
-      if (!listing) {
-        throw new Response("Package not found", { status: 404 });
-      }
-
-      return {
-        community: await dapper.getCommunity(params.communityId),
-        listing,
-        filters: filters,
-        listings: await dapper.getPackageListings(
+      const [community, listings] = await Promise.all([
+        dapper.getCommunity(params.communityId),
+        dapper.getPackageListings(
           {
             kind: "package-dependants",
             communityId: params.communityId,
@@ -74,6 +89,13 @@ export const loader = ssrLoader(
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
         ),
+      ]);
+
+      return {
+        community,
+        listing,
+        filters: filters,
+        listings,
         seo: createSeo({
           descriptors: [
             {
@@ -118,13 +140,7 @@ export async function clientLoader({
   params,
 }: Route.ClientLoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const dapper = getDapperForRequest(request);
     const searchParams = new URL(request.url).searchParams;
     const ordering =
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
@@ -138,15 +154,14 @@ export async function clientLoader({
 
     const filters = await dapper.getCommunityFilters(params.communityId);
     const community = dapper.getCommunity(params.communityId);
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
-    if (!listing) {
-      throw new Response("Package not found", { status: 404 });
-    }
+    // Retries with the session attached when the anonymous request 404s,
+    // so a permitted user (moderator / team member) sees the page; throws
+    // a real 404 only when there is no session or the retry also fails.
+    const listing = await getPrivateListing(dapper, {
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
+    });
 
     const listingsPromise = (async () => {
       const finalSection = getSectionDefault(section, filters.sections);
@@ -179,12 +194,21 @@ export async function clientLoader({
   throw new Response("Community not found", { status: 404 });
 }
 
+clientLoader.hydrate = true;
+
 export default function Dependants() {
   const { filters, listing, listings } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
   const outletContext = useOutletContext() as OutletContextShape;
+
+  // Gated SSR data: the listing was hidden from the anonymous SSR request.
+  // The clientLoader refetches it (and its dependants) with the user's
+  // session right after hydration, so render a placeholder here.
+  if (!listing) {
+    return <SkeletonBox />;
+  }
 
   return (
     <Page as="section" rootClasses="dependants">

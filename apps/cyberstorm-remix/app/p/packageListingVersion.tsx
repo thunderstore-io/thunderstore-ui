@@ -4,6 +4,7 @@ import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
@@ -66,17 +67,37 @@ export const loader = ssrLoader(
     });
 
     if (!listing) {
-      throw new Response("Package not found", { status: 404 });
+      // The listing may exist but be hidden from this anonymous request,
+      // e.g. rejected listings are still visible to moderators and to the
+      // package's team members. Return a gated 404 instead of throwing so
+      // the clientLoader gets to retry with the user's session attached.
+      // The community and team are public, so resolve them here too — the
+      // page shell and breadcrumbs render during SSR; only the gated
+      // listing is deferred to the client refetch.
+      const [community, team] = await Promise.all([
+        dapper.getCommunity(communityId),
+        dapper.getTeamDetails(namespaceId),
+      ]);
+      return gatedSsr404({
+        community,
+        listing: undefined,
+        packageVersion,
+        team,
+        seo: createSeo({ descriptors: [] }),
+      });
     }
 
-    const community = await dapper.getCommunity(communityId);
+    const [community, team] = await Promise.all([
+      dapper.getCommunity(communityId),
+      dapper.getTeamDetails(namespaceId),
+    ]);
     const url = new URL(request.url);
 
     return {
       community,
       listing,
       packageVersion,
-      team: await dapper.getTeamDetails(namespaceId),
+      team,
       seo: createSeo({
         descriptors: [
           {
@@ -161,6 +182,8 @@ export default function PackageListingVersion() {
   const outletContext = useOutletContext() as OutletContextShape;
   const currentTab = location.pathname.split("/")[8] || "details";
 
+  // listing is missing only for gated SSR data; the clientLoader refetches
+  // it with the user's session right after hydration.
   if (!listing) {
     return <div>Loading listing...</div>;
   }

@@ -13,6 +13,7 @@ import { type OutletContextShape } from "app/root";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import {
@@ -87,17 +88,41 @@ export const loader = ssrLoader(
     });
 
     if (!listing) {
-      throw new Response("Package not found", { status: 404 });
+      // The listing may exist but be hidden from this anonymous request,
+      // e.g. rejected listings are still visible to moderators and to the
+      // package's team members. Return a gated 404 instead of throwing so
+      // the clientLoader gets to retry with the user's session attached.
+      // The community and team are public, so resolve them here too — the
+      // page shell and breadcrumbs render during SSR; only the gated
+      // listing and the user-specific fields are deferred to the client.
+      const [community, team] = await Promise.all([
+        dapper.getCommunity(communityId),
+        dapper.getTeamDetails(namespaceId),
+      ]);
+      return gatedSsr404({
+        community,
+        listing: undefined,
+        listingStatus: undefined,
+        team,
+        permissions: undefined,
+        community_identifier: communityId,
+        namespace_id: namespaceId,
+        package_id: packageId,
+        seo: createSeo({ descriptors: [] }),
+      });
     }
 
-    const community = await dapper.getCommunity(communityId);
+    const [community, team] = await Promise.all([
+      dapper.getCommunity(communityId),
+      dapper.getTeamDetails(namespaceId),
+    ]);
     const url = new URL(request.url);
 
     return {
       community,
       listing: listing,
       listingStatus: undefined,
-      team: await dapper.getTeamDetails(namespaceId),
+      team,
       permissions: undefined,
       community_identifier: communityId,
       namespace_id: namespaceId,
@@ -265,6 +290,8 @@ export default function PackageListing() {
   });
 
   // TODO: Add proper loading element
+  // listing is missing only for gated SSR data; the clientLoader refetches
+  // it with the user's session right after hydration.
   if (!listing) {
     return <SkeletonBox />;
   }
