@@ -1,9 +1,10 @@
 import { createReadableStreamFromReadable } from "@react-router/node";
 import * as Sentry from "@sentry/react-router";
+import { isExpectedRouteError } from "cyberstorm/utils/sentry";
 import * as isbotModule from "isbot";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
-import type { AppLoadContext, EntryContext } from "react-router";
+import type { EntryContext, HandleErrorFunction } from "react-router";
 import { ServerRouter } from "react-router";
 
 Sentry.init({
@@ -17,8 +18,7 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  reactRouterContext: EntryContext,
-  loadContext: AppLoadContext
+  reactRouterContext: EntryContext
 ) {
   const prohibitOutOfOrderStreaming =
     isBotRequest(request.headers.get("user-agent")) ||
@@ -194,4 +194,12 @@ function handleBrowserRequest(
   });
 }
 
-export const handleError = Sentry.createSentryHandleError({ logErrors: false });
+const sentryHandleError = Sentry.createSentryHandleError({ logErrors: false });
+
+// React Router routes its internal 404/405 ErrorResponses (unmatched URLs,
+// invalid request methods, POSTs without an action) through handleError,
+// and createSentryHandleError captures everything except aborted requests.
+export const handleError: HandleErrorFunction = (error, args) => {
+  if (isExpectedRouteError(error)) return;
+  sentryHandleError(error, args);
+};

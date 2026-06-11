@@ -4,7 +4,11 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { initializeClientDapper } from "cyberstorm/utils/dapperSingleton";
-import { beforeSend, denyUrls } from "cyberstorm/utils/sentry";
+import {
+  beforeSend,
+  denyUrls,
+  isExpectedRouteError,
+} from "cyberstorm/utils/sentry";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { HydratedRouter } from "react-router/dom";
@@ -82,7 +86,14 @@ startTransition(() => {
   hydrateRoot(
     document,
     <StrictMode>
-      <HydratedRouter onError={Sentry.sentryOnError} />
+      <HydratedRouter
+        onError={(error, info) => {
+          // Client-side navigations to unmatched URLs surface here as 404
+          // ErrorResponses; they are expected traffic, not bugs.
+          if (isExpectedRouteError(error)) return;
+          Sentry.sentryOnError(error, info);
+        }}
+      />
     </StrictMode>
   );
 });
