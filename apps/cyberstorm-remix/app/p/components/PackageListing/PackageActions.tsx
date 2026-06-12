@@ -73,6 +73,8 @@ export const PackageActions = memo(function PackageActions(
           primitiveType="link"
           href={installUrl}
           disabled={installDisabled}
+          tooltipText="Install with mod manager"
+          tooltipSide="top"
         >
           <NewIcon
             wrapperClasses="package-actions__install-link-icon"
