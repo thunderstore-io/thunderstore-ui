@@ -6,6 +6,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  CommunityPromo,
+  communityHasPromo,
+} from "app/commonComponents/CommunityPromo/CommunityPromo";
 import { Page } from "app/commonComponents/Page/Page";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -19,6 +23,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useParams,
 } from "react-router";
 
 import {
@@ -28,6 +33,7 @@ import {
   NewIcon,
   NewLink,
   SkeletonBox,
+  classnames,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
@@ -235,8 +241,16 @@ function CommunityMainPage({
   community: CommunityLoaderData["community"];
   outletContext: OutletContextShape;
 }) {
+  const communityId = useParams().communityId;
+  const showCommunityPromo = communityHasPromo(communityId);
+
   return (
-    <Page rootClasses="community">
+    <Page
+      rootClasses={classnames(
+        "community",
+        showCommunityPromo ? "community--with-promo" : null
+      )}
+    >
       <Suspense fallback={<CommunityMainHeaderSkeleton />}>
         <Await resolve={community}>
           {(resolvedCommunity) => (
@@ -244,6 +258,9 @@ function CommunityMainPage({
           )}
         </Await>
       </Suspense>
+      {showCommunityPromo ? (
+        <CommunityPromo variant="bar" communityId={communityId} />
+      ) : null}
       <Outlet context={outletContext} />
     </Page>
   );

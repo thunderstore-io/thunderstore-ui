@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CommunityPromo } from "app/commonComponents/CommunityPromo/CommunityPromo";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
@@ -381,6 +382,11 @@ export default function PackageListing() {
                 namespace={listing.namespace}
                 packageName={listing.name}
               />
+
+              <CommunityPromo
+                variant="pill"
+                communityId={listing.community_identifier}
+              />
             </div>
 
             <>
@@ -501,6 +507,11 @@ export default function PackageListing() {
               packageLikeAction={packageLikeAction}
               namespace={listing.namespace}
               packageName={listing.name}
+            />
+
+            <CommunityPromo
+              variant="pill"
+              communityId={listing.community_identifier}
             />
 
             {packageMeta(lastUpdated, firstUploaded, listing)}

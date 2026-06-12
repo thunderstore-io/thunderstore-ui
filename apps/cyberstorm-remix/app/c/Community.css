@@ -9,6 +9,13 @@
     container-type: inline-size;
   }
 
+  /* Adds a row for the affiliate promo bar inserted between the header and the
+     package search (see CommunityPromo). Without it the 2-row template would
+     push the promo into the content's `1fr` row. */
+  .community--with-promo {
+    grid-template-rows: auto auto 1fr;
+  }
+
   .community__header {
     display: grid;
     grid-template-rows: auto auto;

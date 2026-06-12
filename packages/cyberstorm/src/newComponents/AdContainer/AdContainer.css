@@ -1,10 +1,26 @@
 @layer components {
+  /* Each size variant reserves its box on the container itself — never on the
+     fallback. The fallback is hidden once an ad fills the slot (see the
+     :has(iframe) rule below), so any size it established would collapse with
+     it; the container owning the box keeps the geometry identical whether the
+     slot is empty, showing the fallback, or showing an ad.
+
+     Sizing rule: the box NitroPay measures (the content area, inside the 1px
+     borders) must be exactly the largest ad the slot serves — a creative-sized
+     content box never overflows, and no eligible size gets filtered out for
+     being 2px too big. Hence every dimension is `calc(<ad size> + 2px)`. */
   .ad-container {
     position: relative;
     display: inline-flex;
     flex-direction: column;
-    align-items: flex-start;
     border: 1px solid #1f1f42;
+    overflow: hidden;
+
+    /* Layout + paint containment: whatever the ad script renders or positions
+       (oversized iframes, absolutely/fixed-positioned helpers) stays clipped
+       inside the slot's box and can never overlap site content. Also isolates
+       the slot's layout/paint work from the rest of the page. */
+    contain: layout paint;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-lg);
@@ -16,26 +32,67 @@
     gap: var(--gap-xs);
     place-content: center center;
     align-items: center;
-    width: 300px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     padding: var(--space-24);
     color: var(--ad-container-fallback-color);
     background-color: var(--ad-container-fallback-background-color);
   }
 
-  .video-ad-container {
-    width: 100%;
-
-    /* 302px because of the border in ad-container */
-    max-width: 302px;
-
-    /* 172px because of the border in ad-container */
-    height: 172px;
+  .ad-container[data-size="display-300-250"] {
+    width: calc(300px + 2px);
+    height: calc(250px + 2px);
   }
 
-  .video-ad-container__fallback {
+  /* The 336×60 "fishstick" banner. */
+  .ad-container[data-size="fishstick"] {
+    flex: none;
+    width: calc(336px + 2px);
+    height: calc(60px + 2px);
+  }
+
+  /* Fills whatever vertical space its flex column has left; capped at the
+     600px-tall units (the tallest in the ad inventory). NitroPay measures the
+     resulting box and only loads creatives that fit it, so no fixed
+     reservation here. */
+  .ad-container[data-size="dynamic"] {
+    display: flex;
+    flex: 1 1 0;
+    align-self: stretch;
+    min-height: 0;
+    max-height: calc(600px + 2px);
+  }
+
+  /* The mid-width rail band's only placement: a 160px-wide column that fills
+     the available rail height. */
+  .ad-container[data-size="narrow-dynamic"] {
+    display: flex;
+    flex: 1 1 0;
+    width: calc(160px + 2px);
+    min-height: 0;
+    max-height: calc(600px + 2px);
+  }
+
+  /* The in-content video player box (336×189, 16:9) at the rail's bottom. */
+  .ad-container[data-size="video"] {
+    flex: none;
+    width: calc(336px + 2px);
+    height: calc(189px + 2px);
+  }
+
+  /* 250px tall: the tallest bottom-row unit. */
+  .ad-container[data-size="bottom-banner"] {
+    display: flex;
     width: 100%;
-    height: 100%;
+    height: calc(250px + 2px);
+  }
+
+  /* Companion at the bottom row's right end. The bottom row overrides the
+     flex sizing (90px floor growing up to 980px, see layout.css); the width
+     here is just the standalone box. */
+  .ad-container[data-size="bottom-right"] {
+    width: calc(336px + 2px);
+    height: calc(250px + 2px);
   }
 
   .ad-container__icon {
@@ -43,12 +100,50 @@
     animation: heart-beat 2s cubic-bezier(0, -0.76, 0.89, 1.64) infinite;
   }
 
+  /* Overlay covering the container's reserved box; NitroPay renders into it.
+     The flex centering keeps creatives smaller than the box centered. */
   .ad-container__content {
     position: absolute;
     top: 0;
     left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
+  }
+
+  /* Slim and narrow slots can't fit the adblock notice — show only the heart
+     there. The larger dynamic placement keeps the full text. */
+  .ad-container[data-size="fishstick"] .ad-container__fallback,
+  .ad-container[data-size="narrow-dynamic"] .ad-container__fallback {
+    padding: var(--space-8);
+  }
+
+  /* Visually hidden rather than display:none so the adblock notice stays in
+     the accessibility tree — without it these slots would announce nothing
+     but a decorative heart to screen readers while unfilled. */
+  .ad-container[data-size="fishstick"] .ad-container__fallback-text,
+  .ad-container[data-size="narrow-dynamic"] .ad-container__fallback-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  /* Once NitroPay renders an ad (an iframe) into the slot, hide the fallback so
+     it never shows through or around ads smaller than the reserved box. The
+     fallback (adblock notice / house backfill) therefore only shows while the
+     slot is unfilled. NB: this keys on any iframe in the slot — if NitroPay ever
+     injects a passback/tracking iframe on a no-fill, the fallback would hide on
+     a genuinely empty slot; revisit if that surfaces. */
+  .ad-container:has(.ad-container__content iframe) .ad-container__fallback {
+    display: none;
   }
 
   @keyframes heart-beat {
