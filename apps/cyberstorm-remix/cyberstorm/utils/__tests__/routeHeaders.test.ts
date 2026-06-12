@@ -1,43 +1,31 @@
 import { describe, expect, it } from "vitest";
 
-// Read route source as raw strings via Vite so this works in the browser test
-// environment (Node's fs is unavailable there). Keyed by path relative to this
-// file, e.g. "../../../app/communities/communities.tsx".
-const routeSources = import.meta.glob("../../../app/**/*.tsx", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-}) as Record<string, string>;
+import { allRouteSources, cachedRoutes } from "./cachedRoutes";
 
-function sourceOf(appRelativePath: string): string {
-  const key = `../../../${appRelativePath}`;
-  const content = routeSources[key];
-  if (content === undefined) {
-    throw new Error(
-      `Route source not found for ${appRelativePath} (key ${key})`
-    );
+const FORWARD_HEADERS_EXPORT =
+  'export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader"';
+
+const NO_STORE_HEADERS_EXPORT =
+  'export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader"';
+
+// Auto-discovered so the contract is enforced for future routes too: a route
+// that enables caching but forgets the headers export would otherwise silently
+// drop the header from its document response (caching no-ops with no signal).
+describe("every cached route forwards loader headers", () => {
+  const routes = cachedRoutes();
+
+  it("discovers the expected cached routes", () => {
+    // Sanity check that discovery is actually finding routes; if this drops to
+    // zero the per-route assertions below would vacuously pass.
+    expect(routes.length).toBeGreaterThanOrEqual(14);
+  });
+
+  for (const route of routes) {
+    it(route.path, () => {
+      expect(route.source).toContain(FORWARD_HEADERS_EXPORT);
+    });
   }
-  return content;
-}
-
-// Routes using ssrLoader with caching must forward loader headers (and prefer
-// error headers) on document requests.
-const cachedRouteFiles = [
-  "app/communities/communities.tsx",
-  "app/p/packageListing.tsx",
-  "app/p/packageListingVersion.tsx",
-  "app/p/dependants/Dependants.tsx",
-  "app/p/tabs/Wiki/WikiFirstPage.tsx",
-  "app/p/tabs/Wiki/WikiPage.tsx",
-  "app/p/tabs/Wiki/Wiki.tsx",
-  "app/p/tabs/Readme/PackageVersionReadme.tsx",
-  "app/p/tabs/Readme/Readme.tsx",
-  "app/p/tabs/Changelog/Changelog.tsx",
-  "app/p/tabs/Required/Required.tsx",
-  "app/p/tabs/Versions/Versions.tsx",
-  "app/p/tabs/Versions/PackageVersionVersions.tsx",
-  "app/c/Community.tsx",
-];
+});
 
 // Non-cached, server-rendered routes that sit under a cached parent route.
 // React Router makes a route with no `headers` export inherit its parent's
@@ -50,22 +38,14 @@ const noStoreRouteFiles = [
   "app/p/tabs/Wiki/WikiPageEdit.tsx",
 ];
 
-describe("routes using ssrLoader with cache export forwardLoaderHeaders as headers", () => {
-  for (const file of cachedRouteFiles) {
-    it(file, () => {
-      expect(sourceOf(file)).toContain(
-        'export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader"'
-      );
-    });
-  }
-});
-
 describe("non-cached routes under a cached parent export noStoreHeaders as headers", () => {
+  const byPath = new Map(allRouteSources().map((r) => [r.path, r.source]));
+
   for (const file of noStoreRouteFiles) {
     it(file, () => {
-      expect(sourceOf(file)).toContain(
-        'export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader"'
-      );
+      const source = byPath.get(file);
+      expect(source, `route source not found for ${file}`).toBeDefined();
+      expect(source).toContain(NO_STORE_HEADERS_EXPORT);
     });
   }
 });
