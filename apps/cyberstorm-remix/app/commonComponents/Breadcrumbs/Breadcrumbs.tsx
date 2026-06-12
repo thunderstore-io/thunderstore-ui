@@ -37,6 +37,7 @@ export function Breadcrumbs() {
   const communitiesPage = matches.find(
     (m) => m.id === "communities/communities"
   );
+  const rootIndexPage = matches.find((m) => m.id === "rootIndex");
   const uploadPage = matches.find((m) => m.id === "upload/upload");
   const communityPage = matches.find((m) => m.id === "c/Community");
   const packageListingPage = matches.find((m) => m.id === "p/packageListing");
@@ -159,6 +160,7 @@ export function Breadcrumbs() {
   const communitiesBreadcrumb = useMemo(() => {
     if (
       !communitiesPage &&
+      !rootIndexPage &&
       !communityPage &&
       !packageDependantsPage &&
       !packageTeamPage
@@ -175,7 +177,13 @@ export function Breadcrumbs() {
     ) : (
       <NewBreadCrumbsItem>Communities</NewBreadCrumbsItem>
     );
-  }, [communitiesPage, communityPage, packageDependantsPage, packageTeamPage]);
+  }, [
+    communitiesPage,
+    rootIndexPage,
+    communityPage,
+    packageDependantsPage,
+    packageTeamPage,
+  ]);
 
   const packageVersionBreadcrumb = useMemo(() => {
     if (!packageVersionPage) return null;
