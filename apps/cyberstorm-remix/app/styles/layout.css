@@ -22,20 +22,78 @@
     min-width: 0;
   }
 
+  /* Right ad rail beside the content, ending above the full-width bottom ad
+     row. The island spans the content row's height (background column); the
+     stack inside is a sticky, viewport-fitted flex column: fishstick / dynamic
+     display (absorbs the slack, see AdContainer.css) / fishstick / video
+     player, with the bottom pair pinned to the stack's end. */
   .layout__ads {
-    position: sticky;
-    top: var(--header-height);
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-xl);
-    align-items: flex-start;
     align-self: stretch;
     padding: var(--space-16);
   }
 
-  @container (width <= 82rem) {
+  .layout__ads-stack {
+    position: sticky;
+
+    /* Pin at the stack's natural resting offset (header + island-container gap
+       + island padding): it never travels relative to the island, so scrolling
+       has no catch-up nudge, and it stays clear of the navigation. */
+    top: calc(var(--header-height) + var(--gap-2xs) + var(--space-16));
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
+    align-items: center;
+
+    /* 336px ads + the slots' 1px borders (see AdContainer.css sizing rule). */
+    width: calc(336px + 2px);
+    height: calc(
+      100dvh - var(--header-height) - var(--gap-2xs) - var(--space-32)
+    );
+  }
+
+  /* The bottom fishstick + the video player below it pin to the stack's end:
+     the auto margin here swallows the leftover height (when the dynamic slot
+     hits its 600px cap), so the video always sits directly below the second
+     fishstick at the rail's bottom. */
+  .layout__ads-stack
+    .ad-container[data-cid="nimbus-right-column-fishstick-bottom"] {
+    margin-top: auto;
+  }
+
+  /* Reveal breakpoints mirror each slot's NitroPay `mediaQuery` (see
+     app/commonComponents/Ads/nitroAds.ts) so NitroPay never instantiates a
+     slot that CSS hides — keep the two in sync. The `.98px` upper bounds make
+     each band meet the next `>=` reveal with no fractional-width gap
+     (Bootstrap convention).
+
+     Rail bands: the full 336px rail at >= 1484px (the old Django site's rail
+     breakpoint), a 160px narrow rail from 1214px up to 1483.98px, nothing
+     below either threshold — there the bottom banner row is the only ad
+     surface. */
+  @media (width <= 1213.98px), (height <= 599.98px) {
     .layout__ads {
       display: none;
+    }
+  }
+
+  .layout__ads .ad-container[data-cid="nimbus-right-column-narrow"] {
+    display: none;
+  }
+
+  @media (width >= 1214px) and (width <= 1483.98px) {
+    .layout__ads-stack {
+      width: calc(160px + 2px);
+    }
+
+    .layout__ads .ad-container[data-cid="nimbus-right-column-fishstick-top"],
+    .layout__ads .ad-container[data-cid="nimbus-right-column-dynamic"],
+    .layout__ads .ad-container[data-cid="nimbus-right-column-fishstick-bottom"],
+    .layout__ads .ad-container[data-cid="nimbus-right-column-video"] {
+      display: none;
+    }
+
+    .layout__ads .ad-container[data-cid="nimbus-right-column-narrow"] {
+      display: flex;
     }
   }
 
@@ -46,22 +104,79 @@
     }
   }
 
-  /* Progressively hide stacked right-column ads as viewport height shrinks */
-  @media (height <= 525px) {
-    .layout__ads .ad-container[data-cid="right-column-1"] {
-      display: none;
+  /* Bottom ad row: full-width island between content and footer. Only the
+     breakpoint-matching banner reveals (mirrors each slot's NitroPay
+     mediaQuery). The banner area never exceeds 980px (the widest unit with
+     real bidding pressure) — alone it sits centered; companion placements
+     reveal as soon as the row fits the smallest unit we serve (88px wide)
+     next to the already-capped placements, and grow up to the same 980px cap.
+     Centering also swallows the slack once every visible placement is maxed. */
+  .layout__bottom-ads {
+    gap: var(--space-16);
+    justify-content: center;
+    padding: var(--space-16);
+  }
+
+  .layout__bottom-ads-banners {
+    display: flex;
+    flex: 0 1 auto;
+    width: calc(980px + 2px);
+    min-width: 0;
+  }
+
+  /* Companion reveals: the second at >= 1120px (982 banner + 16 gap + 90
+     smallest-unit floor + 32 island padding), the third at >= 2118px (both
+     predecessors capped + another gap + the 90px floor). The flex-basis IS the
+     90px floor — growing from it keeps the row deficit-free at the reveal
+     breakpoints, so the banner never gets shrink-squeezed below its 982px cap
+     (which would silently filter out the widest, highest-CPM units). */
+  .layout__bottom-ads .ad-container[data-size="bottom-right"] {
+    display: none;
+    flex: 1 1 calc(88px + 2px);
+    min-width: calc(88px + 2px);
+    max-width: calc(980px + 2px);
+  }
+
+  @media (width >= 1120px) {
+    .layout__bottom-ads .ad-container[data-cid="nimbus-bottom-ad-right"] {
+      display: inline-flex;
     }
   }
 
-  @media (height <= 800px) {
-    .layout__ads .ad-container[data-cid="right-column-2"] {
-      display: none;
+  @media (width >= 2118px) {
+    .layout__bottom-ads .ad-container[data-cid="nimbus-bottom-ad-third"] {
+      display: inline-flex;
     }
   }
 
-  @media (height <= 1075px) {
-    .layout__ads .ad-container[data-cid="right-column-3"] {
-      display: none;
+  /* Hidden by default; the matching band's media query below reveals exactly
+     one banner. The box itself (980×250-class) is sized by the bottom-banner
+     variant in AdContainer.css. */
+  .layout__bottom-ads .ad-container[data-size="bottom-banner"] {
+    display: none;
+  }
+
+  @media (width <= 767.98px) {
+    .layout__bottom-ads .ad-container[data-cid="nimbus-bottom-ad-very-narrow"] {
+      display: flex;
+    }
+  }
+
+  @media (width >= 768px) and (width <= 991.98px) {
+    .layout__bottom-ads .ad-container[data-cid="nimbus-bottom-ad-narrow"] {
+      display: flex;
+    }
+  }
+
+  @media (width >= 992px) and (width <= 1199.98px) {
+    .layout__bottom-ads .ad-container[data-cid="nimbus-bottom-ad-wide"] {
+      display: flex;
+    }
+  }
+
+  @media (width >= 1200px) {
+    .layout__bottom-ads .ad-container[data-cid="nimbus-bottom-ad-very-wide"] {
+      display: flex;
     }
   }
 }

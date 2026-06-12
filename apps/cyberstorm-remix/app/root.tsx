@@ -6,6 +6,7 @@ import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import rybbit from "@rybbit/js";
 import { Breadcrumbs } from "app/commonComponents/Breadcrumbs/Breadcrumbs";
 import {
+  ROOT_PUBLIC_ENV_VARIABLES,
   getPublicEnvVariables,
   getSessionTools,
   type publicEnvVariablesType,
@@ -47,6 +48,15 @@ import {
 } from "@thunderstore/ts-api-react";
 
 import type { Route } from "./+types/root";
+import {
+  BOTTOM_BANNER_AD_SLOTS,
+  BOTTOM_RIGHT_AD_SLOTS,
+  type NitroAds,
+  RIGHT_COLUMN_SLOTS,
+  createAllNimbusAds,
+  onNavigateNimbusAds,
+  teardownNimbusAds,
+} from "./commonComponents/Ads/nitroAds";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { Island, IslandContainer } from "./commonComponents/Island/Island";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
@@ -61,37 +71,7 @@ declare global {
   interface Window {
     NIMBUS_PUBLIC_ENV: publicEnvVariablesType;
     Dapper: DapperTs;
-    nitroAds?: {
-      createAd: (
-        containerId: string,
-        params:
-          | {
-              format: "display";
-              demo?: boolean;
-              refreshLimit?: number;
-              refreshTime?: number;
-              renderVisibleOnly?: boolean;
-              refreshVisibleOnly?: boolean;
-              sizes: string[][];
-              report: {
-                enabled: boolean;
-                wording: string;
-                position: string;
-              };
-              mediaQuery: string;
-            }
-          | {
-              format: "video";
-              demo?: boolean;
-              report: {
-                enabled: boolean;
-                wording: string;
-                position: string;
-              };
-              mediaQuery: string;
-            }
-      ) => void;
-    };
+    nitroAds?: NitroAds;
   }
 }
 
@@ -118,17 +98,7 @@ const rootSeo = createSeo({
 
 export async function loader() {
   return {
-    publicEnvVariables: getPublicEnvVariables([
-      "VITE_SITE_URL",
-      "VITE_BETA_SITE_URL",
-      "VITE_API_URL",
-      "VITE_COOKIE_DOMAIN",
-      "VITE_AUTH_BASE_URL",
-      "VITE_AUTH_RETURN_URL",
-      "VITE_CLIENT_SENTRY_DSN",
-      "VITE_RYBBIT_SITE_ID",
-      "VITE_RYBBIT_ANALYTICS_HOST",
-    ]),
+    publicEnvVariables: getPublicEnvVariables(ROOT_PUBLIC_ENV_VARIABLES),
     currentUser: undefined,
     config: {
       apiHost: getApiHostForSsr(),
@@ -139,17 +109,7 @@ export async function loader() {
 }
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const publicEnvVariables = getPublicEnvVariables([
-    "VITE_SITE_URL",
-    "VITE_BETA_SITE_URL",
-    "VITE_API_URL",
-    "VITE_COOKIE_DOMAIN",
-    "VITE_AUTH_BASE_URL",
-    "VITE_AUTH_RETURN_URL",
-    "VITE_CLIENT_SENTRY_DSN",
-    "VITE_RYBBIT_SITE_ID",
-    "VITE_RYBBIT_ANALYTICS_HOST",
-  ]);
+  const publicEnvVariables = getPublicEnvVariables(ROOT_PUBLIC_ENV_VARIABLES);
   if (
     !publicEnvVariables.VITE_API_URL ||
     !publicEnvVariables.VITE_COOKIE_DOMAIN
@@ -226,32 +186,12 @@ export function shouldRevalidate({
 
 clientLoader.hydrate = true;
 
-// Per-slot min-height thresholds align with the CSS hide breakpoints in
-// app/styles/layout.css so NitroPay does not instantiate ads in slots that
-// CSS would render `display: none`. Keep these values in sync with that file.
-const adContainerSlots = [
-  { containerId: "right-column-1", minHeight: 526 },
-  { containerId: "right-column-2", minHeight: 801 },
-  { containerId: "right-column-3", minHeight: 1076 },
-] as const;
-const adContainerIds = adContainerSlots.map((slot) => slot.containerId);
-
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData<RootLoadersType>("root");
   let envVars = undefined;
   let shouldUpdatePublicEnvVars = false;
   if (import.meta.env.SSR) {
-    envVars = getPublicEnvVariables([
-      "VITE_SITE_URL",
-      "VITE_BETA_SITE_URL",
-      "VITE_API_URL",
-      "VITE_COOKIE_DOMAIN",
-      "VITE_AUTH_BASE_URL",
-      "VITE_AUTH_RETURN_URL",
-      "VITE_CLIENT_SENTRY_DSN",
-      "VITE_RYBBIT_SITE_ID",
-      "VITE_RYBBIT_ANALYTICS_HOST",
-    ]);
+    envVars = getPublicEnvVariables(ROOT_PUBLIC_ENV_VARIABLES);
     shouldUpdatePublicEnvVars = true;
   } else {
     envVars = window.NIMBUS_PUBLIC_ENV;
@@ -278,15 +218,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const communityId = matches.find((m) => m.params.communityId)?.params
     .communityId;
 
-  const shouldShowAds = location.pathname.startsWith("/teams")
+  // Kill switch for local development and tests (set VITE_DISABLE_ADS=true).
+  const adsDisabled = resolvedEnvVars?.VITE_DISABLE_ADS === "true";
+  const shouldShowAds = adsDisabled
     ? false
-    : location.pathname.startsWith("/settings")
+    : location.pathname.startsWith("/teams")
       ? false
-      : location.pathname.startsWith("/package/create")
+      : location.pathname.startsWith("/settings")
         ? false
-        : location.pathname.startsWith("/tools")
+        : location.pathname.startsWith("/package/create")
           ? false
-          : true;
+          : location.pathname.startsWith("/tools")
+            ? false
+            : true;
+
+  // Tell NitroPay a new pageview happened on client-side navigation. Without
+  // this an entire SPA session is one long-lived pageview on a refresh timer,
+  // which depresses CPM and drives the ad CPU churn. We key on pathname AND
+  // search so package-search pagination/filtering (which only change the query
+  // string) also count as pageviews. The initial pageview is handled by
+  // createAd, so the first run only records the key; comparing against the last
+  // key also makes this resilient to React StrictMode's mount double-invoke.
+  // Refreshes are throttled inside onNavigateNimbusAds (MIN_AD_LIFETIME_MS),
+  // with NitroPay's per-slot `onNavigateMin` as belt-and-braces.
+  const lastAdNavKey = useRef<string | null>(null);
+  useEffect(() => {
+    const navKey = `${location.pathname}${location.search}`;
+    if (lastAdNavKey.current === null || lastAdNavKey.current === navKey) {
+      lastAdNavKey.current = navKey;
+      return;
+    }
+    lastAdNavKey.current = navKey;
+    onNavigateNimbusAds();
+  }, [location.pathname, location.search]);
 
   return (
     <html lang="en">
@@ -351,16 +315,38 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Island>
                   {shouldShowAds && (
                     <Island rootClasses="layout__ads">
-                      {adContainerIds.map((cid, k_i) => (
-                        <AdContainer key={k_i} containerId={cid} />
-                      ))}
-                      <AdContainer
-                        containerId={"bottom-video-ad"}
-                        videoAd={true}
-                      />
+                      <div className="layout__ads-stack">
+                        {RIGHT_COLUMN_SLOTS.map((slot) => (
+                          <AdContainer
+                            key={slot.containerId}
+                            containerId={slot.containerId}
+                            sizeVariant={slot.sizeVariant}
+                          />
+                        ))}
+                      </div>
                     </Island>
                   )}
                 </IslandContainer>
+                {shouldShowAds ? (
+                  <Island rootClasses="flex--x layout__bottom-ads">
+                    <div className="layout__bottom-ads-banners">
+                      {BOTTOM_BANNER_AD_SLOTS.map((slot) => (
+                        <AdContainer
+                          key={slot.containerId}
+                          containerId={slot.containerId}
+                          sizeVariant={slot.sizeVariant}
+                        />
+                      ))}
+                    </div>
+                    {BOTTOM_RIGHT_AD_SLOTS.map((slot) => (
+                      <AdContainer
+                        key={slot.containerId}
+                        containerId={slot.containerId}
+                        sizeVariant={slot.sizeVariant}
+                      />
+                    ))}
+                  </Island>
+                ) : null}
                 <Footer domain={resolvedEnvVars?.VITE_API_URL || ""} />
                 {shouldShowAds ? <AdsInit /> : null}
               </IslandContainer>
@@ -453,6 +439,13 @@ function AdsInit() {
           }
         };
 
+        $script.onerror = () => {
+          // Ad script blocked or unreachable (adblock, CSP, network). Drop the
+          // dangling <script> tag; adsScriptLoaded stays false so no ads are
+          // created and the fallback message remains visible.
+          $script?.remove();
+        };
+
         document.body.append($script);
       } else if (typeof window.nitroAds !== "undefined") {
         if (!cancelled) {
@@ -472,47 +465,65 @@ function AdsInit() {
       window.removeEventListener("load", loadAds);
       if ($script) {
         $script.onload = null;
+        $script.onerror = null;
         $script.remove();
       }
     };
   }, []);
 
-  const nitroAds = typeof window !== "undefined" ? window.nitroAds : undefined;
+  // Create the slots once per mount. The ref is set when the deferred creation
+  // actually fires (not when scheduled), so React StrictMode's dev
+  // double-invoke — whose first-pass cleanup cancels the pending callback —
+  // still creates the ads exactly once. A real remount is a fresh component
+  // with a fresh ref, so returning from an ad-suppressed route re-creates the
+  // slots on the new containers.
+  const hasCreatedAds = useRef(false);
   useEffect(() => {
+    let idleHandle: number | undefined;
+    let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+
+    // Read window.nitroAds inside the effect rather than depending on it:
+    // re-running on its identity change would tear the registry down (cleanup)
+    // without re-creating it (the hasCreatedAds latch), killing onNavigate
+    // refreshes for the rest of the session.
+    const nitroAds =
+      typeof window !== "undefined" ? window.nitroAds : undefined;
+
     if (
+      !hasCreatedAds.current &&
       adsScriptLoaded &&
       nitroAds !== undefined &&
       nitroAds.createAd !== undefined
     ) {
-      adContainerSlots.forEach(({ containerId, minHeight }) => {
-        nitroAds.createAd(containerId, {
-          demo: false,
-          format: "display",
-          refreshLimit: 0,
-          refreshTime: 30,
-          renderVisibleOnly: true,
-          refreshVisibleOnly: true,
-          sizes: [["300", "250"]],
-          report: {
-            enabled: true,
-            wording: "Report Ad",
-            position: "bottom-right",
-          },
-          mediaQuery: `(min-width: 1475px) and (min-height: ${minHeight}px)`,
-        });
-      });
-      nitroAds.createAd("bottom-video-ad", {
-        demo: false,
-        format: "video",
-        report: {
-          enabled: true,
-          wording: "Report Ad",
-          position: "bottom-right",
-        },
-        mediaQuery: "(min-width: 1475px) and (min-height: 250px)",
-      });
+      const create = () => {
+        hasCreatedAds.current = true;
+        createAllNimbusAds(nitroAds);
+      };
+
+      // Defer slot creation to main-thread idle time so the ad auctions never
+      // contend with hydration/interaction work; the timeout bounds how long
+      // a busy page may delay the first impressions. Safari has no
+      // requestIdleCallback — fall back to a short timeout there.
+      if (typeof window.requestIdleCallback === "function") {
+        idleHandle = window.requestIdleCallback(create, { timeout: 2000 });
+      } else {
+        timeoutHandle = setTimeout(create, 200);
+      }
     }
-  }, [adsScriptLoaded, nitroAds]);
+
+    // Cancel a still-pending creation and forget the slot refs when this
+    // unmounts (e.g. navigating to an ad-suppressed route) so returning
+    // re-creates them on fresh containers.
+    return () => {
+      if (idleHandle !== undefined) {
+        window.cancelIdleCallback(idleHandle);
+      }
+      if (timeoutHandle !== undefined) {
+        clearTimeout(timeoutHandle);
+      }
+      teardownNimbusAds();
+    };
+  }, [adsScriptLoaded]);
 
   return <></>;
 }

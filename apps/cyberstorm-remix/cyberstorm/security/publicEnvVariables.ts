@@ -11,13 +11,32 @@ export type publicEnvVariablesKeys =
   | "AUTH_RETURN_URL"
   | "CLIENT_SENTRY_DSN"
   | "RYBBIT_SITE_ID"
-  | "RYBBIT_ANALYTICS_HOST";
+  | "RYBBIT_ANALYTICS_HOST"
+  | "DISABLE_ADS";
 
 export type PublicPrefix<envVariable extends string> = `VITE_${envVariable}`;
 
 export type publicEnvVariablesType = Partial<{
   [key in PublicPrefix<publicEnvVariablesKeys>]: string | undefined;
 }>;
+
+// Every public env var the root route exposes to the client. Single source for
+// the SSR loader, the client loader, and Layout's SSR fallback (root.tsx), so
+// the three can never drift apart — a key missing from one of them surfaces as
+// an env var that is undefined in exactly one render mode.
+export const ROOT_PUBLIC_ENV_VARIABLES: PublicPrefix<publicEnvVariablesKeys>[] =
+  [
+    "VITE_SITE_URL",
+    "VITE_BETA_SITE_URL",
+    "VITE_API_URL",
+    "VITE_COOKIE_DOMAIN",
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+    "VITE_CLIENT_SENTRY_DSN",
+    "VITE_RYBBIT_SITE_ID",
+    "VITE_RYBBIT_ANALYTICS_HOST",
+    "VITE_DISABLE_ADS",
+  ];
 
 export function getPublicEnvVariables(
   vars: PublicPrefix<publicEnvVariablesKeys>[]

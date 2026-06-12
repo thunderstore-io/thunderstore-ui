@@ -50,7 +50,10 @@ export {
 export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 
 // newComponents
-export { AdContainer } from "./newComponents/AdContainer/AdContainer";
+export {
+  AdContainer,
+  type AdContainerSizeVariant,
+} from "./newComponents/AdContainer/AdContainer";
 export {
   Alert as NewAlert,
   type AlertProps as NewAlertProps,

@@ -8,6 +8,7 @@
     "dev": "react-router dev",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "react-router-serve ./build/server/index.js",
+    "start:local": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=.env.development --env-file-if-exists=.env.development.local node_modules/@react-router/serve/bin.js ./build/server/index.js",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "react-router typegen && tsc"

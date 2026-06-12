@@ -15,6 +15,7 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
+import { CommunityPromo } from "~/commonComponents/CommunityPromo/CommunityPromo";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
@@ -288,6 +289,11 @@ export default function PackageListingVersion() {
                   </>
                 }
               />
+
+              <CommunityPromo
+                variant="pill"
+                communityId={listing.community_identifier}
+              />
             </div>
 
             <Tabs>
@@ -356,6 +362,11 @@ export default function PackageListingVersion() {
                   installDisabled={!listing.install_url}
                 />
               </Suspense>
+
+              <CommunityPromo
+                variant="pill"
+                communityId={listing.community_identifier}
+              />
 
               {packageMeta(listing)}
             </div>
