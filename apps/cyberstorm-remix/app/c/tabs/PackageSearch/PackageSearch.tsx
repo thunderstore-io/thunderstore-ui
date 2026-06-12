@@ -67,6 +67,9 @@ export const loader = ssrLoader(
   }
 );
 
+// The loader is anonymous, so this landing page could be CDN-cached, but the
+// listing's staleness window is a concern. Kept uncached (overriding the cached
+// Community parent's headers) for now; revisit caching it after QA.
 export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({

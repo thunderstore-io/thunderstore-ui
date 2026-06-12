@@ -90,6 +90,14 @@ function errorCacheControl(
  * Loaders wrapped with `cache` MUST remain fully anonymous (no session/cookie
  * reads). Per-user data must be deferred to clientLoader.
  *
+ * Caching also propagates DOWN the route tree: React Router resolves a matched
+ * route's document headers from its own `headers` export, and a route that has
+ * none inherits its parent's accumulated headers. So an uncached child route
+ * under a cached parent (e.g. an editor page under a cached layout) is served
+ * with the parent's public Cache-Control unless it opts out explicitly:
+ *
+ *   export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
+ *
  * @example
  * // No caching (default)
  * export const loader = ssrLoader(async ({ request }) => { ... });
