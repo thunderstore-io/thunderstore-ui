@@ -8,11 +8,13 @@ import { useHydrated } from "remix-utils/use-hydrated";
 import { Connection } from "~/commonComponents/Connection/Connection";
 import {
   FormSection,
+  FormSectionSeparator,
   FormSections,
 } from "~/commonComponents/FormSection/FormSection";
 import { type OutletContextShape } from "~/root";
 
 import {
+  NewButton,
   NewLink,
   OverwolfLogo,
   SkeletonBox,
@@ -161,6 +163,19 @@ export default function Connections() {
             }}
           />
         ))}
+      </FormSection>
+      <FormSectionSeparator />
+      <FormSection
+        title="Team settings"
+        description="You can manage your teams on the team settings page."
+      >
+        <NewButton
+          primitiveType="cyberstormLink"
+          linkId="Teams"
+          csVariant="secondary"
+        >
+          Go to team settings page
+        </NewButton>
       </FormSection>
     </FormSections>
   );
