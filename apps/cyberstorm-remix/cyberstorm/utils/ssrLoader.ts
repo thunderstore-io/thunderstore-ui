@@ -88,7 +88,14 @@ function errorCacheControl(
  *   export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
  *
  * Loaders wrapped with `cache` MUST remain fully anonymous (no session/cookie
- * reads). Per-user data must be deferred to clientLoader.
+ * reads). Per-user data must be deferred to clientLoader. This invariant is
+ * load-bearing: the emitted Cache-Control is `public` with no `Vary`, and it is
+ * applied to BOTH the document HTML and the single-fetch `.data` responses
+ * (React Router runs `getDocumentHeaders` for both). The `.data` requests carry
+ * the session cookie, so if a cached loader ever rendered session-dependent
+ * output, the CDN would cross-serve one user's response to everyone. `Vary` is
+ * intentionally omitted (`Vary: Cookie` would key the cache per-user and negate
+ * caching entirely); the anonymity invariant is the protection instead.
  *
  * Caching also propagates DOWN the route tree: React Router resolves a matched
  * route's document headers from its own `headers` export, and a route that has
