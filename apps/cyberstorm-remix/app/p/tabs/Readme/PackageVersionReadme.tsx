@@ -13,42 +13,47 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import type { Route } from "./+types/PackageVersionReadme";
 import "./Readme.css";
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (params.namespaceId && params.packageId && params.packageVersion) {
-    const dapper = new DapperTs(() => {
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (params.namespaceId && params.packageId && params.packageVersion) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
       return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
+        readme: await dapper.getPackageReadme(
+          params.namespaceId,
+          params.packageId,
+          params.packageVersion
+        ),
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `${params.namespaceId}-${params.packageId} ${params.packageVersion} Readme | Thunderstore`,
+            },
+            {
+              name: "description",
+              content: `Readme for ${params.namespaceId}-${params.packageId} ${params.packageVersion}`,
+            },
+          ],
+        }),
       };
-    });
+    }
     return {
-      readme: await dapper.getPackageReadme(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
+      status: "error",
+      message: "Failed to load readme",
+      readme: { html: "" },
       seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} ${params.packageVersion} Readme | Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Readme for ${params.namespaceId}-${params.packageId} ${params.packageVersion}`,
-          },
-        ],
+        descriptors: [{ title: "Readme Not Found | Thunderstore" }],
       }),
     };
-  }
-  return {
-    status: "error",
-    message: "Failed to load readme",
-    readme: { html: "" },
-    seo: createSeo({
-      descriptors: [{ title: "Readme Not Found | Thunderstore" }],
-    }),
-  };
-});
+  },
+  { cache: true }
+);
+
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {

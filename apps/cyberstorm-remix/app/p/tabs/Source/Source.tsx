@@ -57,6 +57,9 @@ export async function loader({ params }: Route.LoaderArgs) {
     seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
   };
 }
+
+export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
+
 clientLoader.hydrate = true;
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {

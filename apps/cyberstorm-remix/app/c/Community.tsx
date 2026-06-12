@@ -74,8 +74,11 @@ export const loader = ssrLoader(
       };
     }
     throw new Response("Community not found", { status: 404 });
-  }
+  },
+  { cache: true }
 );
+
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (params.communityId) {

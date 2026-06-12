@@ -60,46 +60,51 @@ const selectOptions = [
   },
 ];
 
-export const loader = ssrLoader(async ({ request }: Route.LoaderArgs) => {
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
-  const order = searchParams.get("order") ?? SortOptions.Popular;
-  const search = searchParams.get("search");
-  const page = undefined;
-  const dapper = new DapperTs(() => {
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
+
+export const loader = ssrLoader(
+  async ({ request }: Route.LoaderArgs) => {
+    const url = new URL(request.url);
+    const searchParams = url.searchParams;
+    const order = searchParams.get("order") ?? SortOptions.Popular;
+    const search = searchParams.get("search");
+    const page = undefined;
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: getApiHostForSsr(),
+        sessionId: undefined,
+      };
+    });
     return {
-      apiHost: getApiHostForSsr(),
-      sessionId: undefined,
+      communities: await dapper.getCommunities(
+        page,
+        order === null ? undefined : order,
+        search === null ? undefined : search
+      ),
+      seo: createSeo({
+        descriptors: [
+          { title: "Communities | Thunderstore" },
+          {
+            name: "description",
+            content: "Browse all communities on Thunderstore",
+          },
+          { property: "og:type", content: "website" },
+          {
+            property: "og:url",
+            content: `${url.origin}/communities`,
+          },
+          { property: "og:title", content: "Communities | Thunderstore" },
+          {
+            property: "og:description",
+            content: "Browse all communities on Thunderstore",
+          },
+          { property: "og:site_name", content: "Thunderstore" },
+        ],
+      }),
     };
-  });
-  return {
-    communities: await dapper.getCommunities(
-      page,
-      order === null ? undefined : order,
-      search === null ? undefined : search
-    ),
-    seo: createSeo({
-      descriptors: [
-        { title: "Communities | Thunderstore" },
-        {
-          name: "description",
-          content: "Browse all communities on Thunderstore",
-        },
-        { property: "og:type", content: "website" },
-        {
-          property: "og:url",
-          content: `${url.origin}/communities`,
-        },
-        { property: "og:title", content: "Communities | Thunderstore" },
-        {
-          property: "og:description",
-          content: "Browse all communities on Thunderstore",
-        },
-        { property: "og:site_name", content: "Thunderstore" },
-      ],
-    }),
-  };
-});
+  },
+  { cache: true }
+);
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const tools = getSessionTools();

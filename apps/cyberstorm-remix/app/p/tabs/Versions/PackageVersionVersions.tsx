@@ -22,42 +22,47 @@ import { columns } from "./Versions";
 import "./Versions.css";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    const dapper = new DapperTs(() => {
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (params.communityId && params.namespaceId && params.packageId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
       return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions: await dapper.getPackageVersions(
+          params.namespaceId,
+          params.packageId
+        ),
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
+            },
+            {
+              name: "description",
+              content: `Versions for ${params.namespaceId}-${params.packageId}`,
+            },
+          ],
+        }),
       };
-    });
+    }
     return {
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: await dapper.getPackageVersions(
-        params.namespaceId,
-        params.packageId
-      ),
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
-          },
-          {
-            name: "description",
-            content: `Versions for ${params.namespaceId}-${params.packageId}`,
-          },
-        ],
-      }),
+      status: "error",
+      message: "Failed to load versions",
+      versions: [],
+      seo: createSeo({ descriptors: [{ title: "Versions Not Found" }] }),
     };
-  }
-  return {
-    status: "error",
-    message: "Failed to load versions",
-    versions: [],
-    seo: createSeo({ descriptors: [{ title: "Versions Not Found" }] }),
-  };
-});
+  },
+  { cache: true }
+);
+
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({
   params,

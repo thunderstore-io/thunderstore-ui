@@ -28,32 +28,37 @@ async function fetchChangelogSafe(
   }
 }
 
-export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
-  if (!params.namespaceId || !params.packageId) {
-    throw new Response("Not Found", { status: 404 });
-  }
+export const loader = ssrLoader(
+  async ({ params }: Route.LoaderArgs) => {
+    if (!params.namespaceId || !params.packageId) {
+      throw new Response("Not Found", { status: 404 });
+    }
 
-  const dapper = new DapperTs(() => ({
-    apiHost: getApiHostForSsr(),
-    sessionId: undefined,
-  }));
+    const dapper = new DapperTs(() => ({
+      apiHost: getApiHostForSsr(),
+      sessionId: undefined,
+    }));
 
-  const changelog = await fetchChangelogSafe(
-    dapper,
-    params.namespaceId,
-    params.packageId
-  );
+    const changelog = await fetchChangelogSafe(
+      dapper,
+      params.namespaceId,
+      params.packageId
+    );
 
-  return {
-    changelog,
-    seo: createSeo({
-      descriptors: [
-        { title: `Changelog for ${params.packageId} | Thunderstore` },
-        { name: "description", content: `Changelog for ${params.packageId}` },
-      ],
-    }),
-  };
-});
+    return {
+      changelog,
+      seo: createSeo({
+        descriptors: [
+          { title: `Changelog for ${params.packageId} | Thunderstore` },
+          { name: "description", content: `Changelog for ${params.packageId}` },
+        ],
+      }),
+    };
+  },
+  { cache: true }
+);
+
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (!params.namespaceId || !params.packageId) {
