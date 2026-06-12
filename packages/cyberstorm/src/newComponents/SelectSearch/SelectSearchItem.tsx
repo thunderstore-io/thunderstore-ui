@@ -26,8 +26,28 @@ export function SelectSearchItem({
   const itemRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    if (isHighlighted) {
-      itemRef.current?.scrollIntoView({ block: "nearest" });
+    if (!isHighlighted) {
+      return;
+    }
+
+    const item = itemRef.current;
+    if (!item) {
+      return;
+    }
+
+    const menu = item.closest(".select-search__menu");
+    if (!(menu instanceof HTMLElement)) {
+      item.scrollIntoView({ block: "nearest" });
+      return;
+    }
+
+    const menuRect = menu.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+
+    if (itemRect.bottom > menuRect.bottom) {
+      menu.scrollTop += itemRect.bottom - menuRect.bottom;
+    } else if (itemRect.top < menuRect.top) {
+      menu.scrollTop -= menuRect.top - itemRect.top;
     }
   }, [isHighlighted]);
 

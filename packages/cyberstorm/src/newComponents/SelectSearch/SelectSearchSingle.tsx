@@ -41,6 +41,9 @@ export const SelectSearchSingle = React.forwardRef<
     csModifiers,
     disabled = false,
     defaultOpen = false,
+    onMenuOpenChange,
+    scrollMenuIntoView,
+    scrollContainerSelector,
   } = props;
 
   const isOptionSelected = React.useCallback(
@@ -67,6 +70,9 @@ export const SelectSearchSingle = React.forwardRef<
     options,
     disabled,
     defaultOpen,
+    onMenuOpenChange,
+    scrollMenuIntoView,
+    scrollContainerSelector,
     onOptionSelect: onChange,
   });
 

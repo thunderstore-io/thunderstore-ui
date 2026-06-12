@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { SelectOption } from "../../utils/types";
+import { useScrollMenuIntoScrollParent } from "./useScrollMenuIntoScrollParent";
 
 function filterOptions(
   options: SelectOption<string>[],
@@ -45,6 +46,9 @@ type UseSelectSearchOptions = {
   excludeValues?: string[];
   disabled?: boolean;
   defaultOpen?: boolean;
+  onMenuOpenChange?: (open: boolean) => void;
+  scrollMenuIntoView?: boolean;
+  scrollContainerSelector?: string;
   onOptionSelect: (option: SelectOption<string>) => void;
 };
 
@@ -185,6 +189,9 @@ export function useSelectSearch({
   excludeValues,
   disabled = false,
   defaultOpen = false,
+  onMenuOpenChange,
+  scrollMenuIntoView = true,
+  scrollContainerSelector,
   onOptionSelect,
 }: UseSelectSearchOptions) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -231,6 +238,17 @@ export function useSelectSearch({
       setHighlightedIndex(-1);
     }
   }, [isVisible]);
+
+  React.useEffect(() => {
+    onMenuOpenChange?.(isVisible);
+  }, [isVisible, onMenuOpenChange]);
+
+  useScrollMenuIntoScrollParent({
+    containerRef,
+    isVisible,
+    enabled: scrollMenuIntoView,
+    scrollContainerSelector,
+  });
 
   const openMenu = React.useCallback(() => {
     if (!disabled) {
