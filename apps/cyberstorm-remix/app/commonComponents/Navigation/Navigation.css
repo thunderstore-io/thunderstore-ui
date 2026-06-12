@@ -228,16 +228,10 @@
     display: none;
   }
 
-  /* Medium breakpoint: hide text for Upload and Legacy Switch */
+  /* Medium breakpoint: hide text for Upload */
   @media (width <= 900px) {
     .navigation-header__upload-text {
       display: none;
-    }
-
-    #nimbusBeta button {
-      gap: 0 !important;
-      padding: var(--space-8) !important;
-      font-size: 0 !important;
     }
   }
 
@@ -261,8 +255,7 @@
 
     .navigation-header__main,
     .navigation-header__extra,
-    .navigation-header__profile-actions,
-    #nimbusBeta {
+    .navigation-header__profile-actions {
       display: none;
     }
 

@@ -21,6 +21,8 @@ export interface UploadFileSectionProps {
   uploadError: string | null;
   handle?: IBaseUploadHandle;
   sectionErrors: string[];
+  fileWarnings: string[];
+  fileValidationErrors: string[];
   fileInputRef: RefObject<HTMLInputElement | null>;
   onFileChange: (file: File | null) => void;
   onRemoveFile: () => void;
@@ -31,6 +33,8 @@ export function UploadFileSection({
   uploadError,
   handle,
   sectionErrors,
+  fileWarnings,
+  fileValidationErrors,
   fileInputRef,
   onFileChange,
   onRemoveFile,
@@ -138,6 +142,16 @@ export function UploadFileSection({
           {uploadError}
         </NewAlert>
       ) : null}
+      {fileWarnings.length > 0 ? (
+        <NewAlert csVariant="warning" rootClasses="upload__alert">
+          <div>
+            {fileWarnings.map((msg) => (
+              <div key={msg}>{msg}</div>
+            ))}
+          </div>
+        </NewAlert>
+      ) : null}
+      <SectionErrors errors={fileValidationErrors} />
       <SectionErrors errors={sectionErrors} />
     </FormSection>
   );

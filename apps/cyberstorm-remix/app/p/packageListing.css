@@ -115,6 +115,13 @@
     background-color: var(--color-accent-red-5);
   }
 
+  .review-information-card__text {
+    align-self: stretch;
+    font: inherit;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
   .review-package__body {
     align-items: stretch;
   }

@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/react-router";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { isExpectedRouteError } from "cyberstorm/utils/sentry";
 import { type JSX, useEffect } from "react";
 import {
   isRouteErrorResponse,
@@ -27,7 +28,11 @@ export function RouteErrorBoundary() {
   // rerenders don't get logged in Sentry twice.
   useEffect(() => {
     if (error && import.meta.env.PROD) {
-      Sentry.captureException(error);
+      // Expected 4xx responses (404s for unmatched URLs, upstream 4xx
+      // converted by ssrLoader) render the boundary but are not bugs.
+      if (!isExpectedRouteError(error)) {
+        Sentry.captureException(error);
+      }
     } else if (error) {
       console.error("Error boundary caught error", error);
     }

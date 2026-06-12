@@ -1,0 +1,112 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# ---------------------------------------------------------------------------
+# Build scripts (supply-chain hardening)
+#
+# pnpm 11 blocks dependency build scripts by default and, with strict-dep-builds
+# (the v11 default), FAILS the install when a dependency that ships a build
+# script hasn't been explicitly decided in `allowBuilds`. That map takes
+# package -> bool: `true` runs the script, `false` skips it; a package missing
+# from the map counts as "undecided" and aborts CI with ERR_PNPM_IGNORED_BUILDS.
+#
+# All four below ship prebuilt binaries via optionalDependencies, so their build
+# scripts are unnecessary fallbacks - skip them (`false`). (The older
+# `neverBuiltDependencies` key is not consulted by the strict check, so listing
+# them there still left them "undecided" and broke CI.) To start running a
+# package's build script, set it to `true` after reviewing what the script does.
+# ---------------------------------------------------------------------------
+allowBuilds:
+  "@parcel/watcher": false
+  "@sentry/cli": false
+  esbuild: false
+  less: false
+
+# ---------------------------------------------------------------------------
+# Dependency overrides
+#
+# Two tiers, from the 2026-06 pnpm migration + audit (see git history).
+# Everything is caret-scoped inside the major its consumers expect, unless
+# noted otherwise.
+#
+# 1. REQUIRED - the resolver cannot reach a safe/working version on its own
+#    (the consumer's range excludes the patch, or an exact version is
+#    needed). Removing one of these reintroduces a vulnerability or a bug.
+#
+# 2. SECURITY FLOORS - consumers' current ranges already reach these patched
+#    versions, so these do not change today's resolution. Kept as insurance
+#    against future dependents that pin narrow/exact vulnerable versions,
+#    and as one reviewable list of the minimum versions we accept.
+# ---------------------------------------------------------------------------
+overrides:
+  # ----- 1. REQUIRED -------------------------------------------------------
+
+  # stylelint-config-rational-order (2019, config-only package) declares
+  # stylelint ^9 / stylelint-order ^2: ancient majors dragging ~200 transitive
+  # packages with a dozen advisories (old trim/meow/lodash/postcss...). Only
+  # its exported config object is ever executed, so collapse its subtree onto
+  # the modern versions already used at the root.
+  "stylelint-config-rational-order>stylelint": "16.26.1"
+  "stylelint-config-rational-order>stylelint-order": "6.0.4"
+
+  # express declares qs ~6.14.0, which caps inside the vulnerable range
+  # (DoS, patched >=6.15.2) - the tilde can never reach the patch.
+  "qs@6": "^6.15.2"
+
+  # terser-webpack-plugin declares serialize-javascript ^6 and no patched 6.x
+  # exists (RCE via RegExp.flags, patched >=7.0.5). 7.x is API-compatible for
+  # its serialize() use.
+  "serialize-javascript": "^7.0.5"
+
+  # spawndamnit declares cross-spawn ^5 and no patched 5.x exists (ReDoS,
+  # patched >=6.0.6). 6.x is API-compatible for its spawn(cmd, args, opts)
+  # usage.
+  "spawndamnit>cross-spawn": "^6.0.6"
+
+  # EXACT pin, not a caret floor: ws 8.21.0 breaks @vitest/browser session
+  # teardown (vitest never exits; multi-project browser runs stall after the
+  # first project). 8.20.1 is the minimum patched version for the advisory
+  # (uninitialized memory disclosure) and is verified working. Re-test
+  # browser-mode teardown (pnpm run test:container) before raising.
+  "ws@8": "8.20.1"
+
+  # ----- 2. SECURITY FLOORS ------------------------------------------------
+
+  "@babel/plugin-transform-modules-systemjs": "^7.29.4" # arbitrary code generation
+  "@isaacs/brace-expansion": "^5.0.1" # resource exhaustion
+  "ajv@6": "^6.14.0" # ReDoS via $data
+  "ajv@8": "^8.18.0" # ReDoS via $data
+  "brace-expansion@1": "^1.1.13" # process hang / memory exhaustion
+  "brace-expansion@2": "^2.0.3" # process hang / memory exhaustion
+  "braces@3": "^3.0.3" # uncontrolled resource consumption
+  "fast-uri@3": "^3.1.2" # path traversal + host confusion
+  "flatted@3": "^3.4.2" # unbounded recursion DoS + prototype pollution
+  "handlebars@4": "^4.7.9" # JS injection via AST type confusion
+  "immutable@5": "^5.1.5" # prototype pollution
+  "lodash": "^4.17.24" # code injection via _.template
+  "lodash-es": "^4.17.24" # code injection via _.template
+  "micromatch@4": "^4.0.8" # ReDoS
+  "minimatch@3": "^3.1.4" # ReDoS
+  "minimatch@9": "^9.0.7" # ReDoS
+  "minimatch@10": "^10.2.3" # ReDoS
+  "path-to-regexp@0": "^0.1.13" # ReDoS
+  "picomatch@2": "^2.3.2" # ReDoS + POSIX class method injection
+  "picomatch@4": "^4.0.4" # ReDoS + POSIX class method injection
+  "postcss@8": "^8.5.10" # parse error + XSS in stringified output
+  "rollup@2": "^2.80.0" # arbitrary file write via path traversal
+  "rollup@4": "^4.59.0" # arbitrary file write via path traversal
+  "vite@7": "^7.3.2" # dev-server file read / fs.deny bypass
+  "yaml@1": "^1.10.3" # stack overflow on nested collections
+
+# ---------------------------------------------------------------------------
+# pnpm settings (pnpm 10+ reads them from this file)
+# ---------------------------------------------------------------------------
+
+# Enforce the exact Node version from engines, like Yarn 1 did by default.
+engineStrict: true
+
+# Quarantine newly published dependency versions for 3 days (minutes) before
+# they are eligible for installation; nearly all malicious npm releases are
+# detected and pulled within hours-to-days.
+minimumReleaseAge: 4320

@@ -17,7 +17,6 @@
     { "path": "packages/cyberstorm" },
     { "path": "packages/cyberstorm-forms" },
     { "path": "packages/graph-system" },
-    { "path": "packages/beta-switch" },
     { "path": "apps/cyberstorm-remix" },
     { "path": "apps/storybook" }
   ]

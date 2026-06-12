@@ -1,4 +1,5 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { hasSessionCookie } from "cyberstorm/utils/gatedSsr";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { PackagePermissions } from "@thunderstore/dapper/types";
@@ -54,7 +55,9 @@ export async function getPublicListing(
 /**
  * Client-side listing fetcher:
  * 1. Try public listing
- * 2. If 404, try private listing
+ * 2. If 404 and a session cookie is present, retry with the session
+ *    attached (e.g. rejected listings are visible to moderators and to
+ *    the package's team members)
  * 3. If still missing, throw 404
  */
 export async function getPrivateListing(
@@ -77,19 +80,32 @@ export async function getPrivateListing(
     }
   }
 
-  const privateListing = await dapper.getPackageListingDetails(
-    communityId,
-    namespaceId,
-    packageId,
-    packageVersion,
-    true
-  );
-
-  if (!privateListing) {
+  // An anonymous retry cannot see more than the public request did, so
+  // skip the extra API request and settle for the 404.
+  if (!hasSessionCookie()) {
     throw new Response("Package not found", { status: 404 });
   }
 
-  return privateListing;
+  try {
+    return await dapper.getPackageListingDetails(
+      communityId,
+      namespaceId,
+      packageId,
+      packageVersion,
+      true
+    );
+  } catch (e) {
+    // A logged-in user who still can't see the listing — a genuine 404, or a
+    // 403 when the backend hides its existence — should land on a clean 404
+    // page. Without this, the raw ApiError escapes uncaught: it isn't a
+    // RouteErrorResponse, so isExpectedRouteError() lets Sentry capture it as a
+    // bug and the generic error boundary renders instead of the 404 page.
+    const status = isApiError(e) ? e.response?.status : undefined;
+    if (status === 404 || status === 403) {
+      throw new Response("Package not found", { status: 404 });
+    }
+    throw e;
+  }
 }
 
 export function needsPackageListingStatus(

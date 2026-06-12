@@ -10,6 +10,8 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends rsync \
 	&& rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g pnpm@11.5.3
+
 # Install Playwright + its OS deps and browsers at image build time so
 # containers don't redo this on every start.
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
@@ -26,4 +28,4 @@ RUN chmod +x /usr/local/bin/entrypoint.test.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.test.sh"]
 
 # Default: run the repo test script (vitest)
-CMD ["yarn", "test"]
+CMD ["pnpm", "test"]

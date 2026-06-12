@@ -11,7 +11,10 @@ import requests
 
 CURRENT_DIR = Path(__file__).parent
 REPO_ROOT = CURRENT_DIR / ".." / ".."
-YARN_PATH = shutil.which("yarn")
+PNPM_PATH = shutil.which("pnpm")
+if PNPM_PATH is None:
+    sys.stderr.write("error: pnpm was not found on PATH; cannot run CI script\n")
+    sys.exit(127)
 
 
 class EarlyExit(Exception):
@@ -85,8 +88,22 @@ def run_command(
 
 
 def setup_frontend():
-    run_command([YARN_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "playwright", "install", "--with-deps"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
+    # playwright is a devDependency of @thunderstore/cyberstorm-remix, not of the
+    # workspace root, so run the install in that package's context (its
+    # node_modules/.bin) rather than from REPO_ROOT where the binary isn't found.
+    run_command(
+        [
+            PNPM_PATH,
+            "--filter",
+            "@thunderstore/cyberstorm-remix",
+            "exec",
+            "playwright",
+            "install",
+            "--with-deps",
+        ],
+        cwd=REPO_ROOT,
+    )
 
 
 def wait_for_url(url: str) -> bool:
@@ -135,13 +152,13 @@ def stop_backend():
 
 
 def run_tests():
-    run_command([YARN_PATH, "coverage"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "run", "coverage"], cwd=REPO_ROOT)
 
 
 def build_test_dependencies():
     # Coverage imports workspace packages that resolve through dist exports.
     # Build shared package deps first so CI does not depend on stale/missing dist outputs.
-    run_command([YARN_PATH, "build"], cwd=REPO_ROOT)
+    run_command([PNPM_PATH, "run", "build"], cwd=REPO_ROOT)
 
 
 def main():

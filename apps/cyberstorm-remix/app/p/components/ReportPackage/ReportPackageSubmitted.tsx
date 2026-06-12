@@ -18,7 +18,7 @@ export function ReportPackageSubmitted(props: { closeModal: () => void }) {
         </div>
         <h3 className="report-package__heading">Thank you for your report</h3>
         <p className="report-package__paragraph">
-          We've received your report and will review the content shortly.
+          We&apos;ve received your report and will review the content shortly.
           <br />
           Your feedback helps keep our community safe.
         </p>

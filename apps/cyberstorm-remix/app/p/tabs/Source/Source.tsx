@@ -4,10 +4,9 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
-import { Await, useOutletContext } from "react-router";
+import { Await } from "react-router";
 import { useLoaderData } from "react-router";
 import ago from "s-ago";
-import { type OutletContextShape } from "~/root";
 
 import {
   NewAlert as Alert,
@@ -22,10 +21,6 @@ import { DapperTs, getPackageSource } from "@thunderstore/dapper-ts";
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
 import type { Route } from "./+types/Source";
 import "./Source.css";
-
-type PackageListingOutletContext = OutletContextShape & {
-  packageDownloadUrl?: string;
-};
 
 type ResultType = {
   status: string | null;
@@ -109,7 +104,6 @@ export default function Source() {
   const { status, message, source } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
-  const outletContext = useOutletContext() as PackageListingOutletContext;
 
   if (status === "error") {
     return <TabFetchState variant="info" message={message} />;
@@ -147,7 +141,7 @@ export default function Source() {
                     </div>
                   </div>
                   <DownloadButton
-                    download_url={outletContext.packageDownloadUrl}
+                    download_url={decompilation.url}
                     packageSize={decompilation.result_size}
                   />
                 </div>

@@ -15,17 +15,17 @@
   },
   "dependencies": {
 {{#each dependencies}}
-    "{{this}}": "*"{{#unless @last}},{{/unless}}{{#if @last}}{{#if @root.isReact}},{{/if}}{{/if}}
+    "{{this}}": "workspace:*"{{#unless @last}},{{/unless}}{{#if @last}}{{#if @root.isReact}},{{/if}}{{/if}}
 {{/each}}
 {{#if isReact}}
-    "@types/react": "^18.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@types/react": "19.2.8",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
 {{/if}}
   },
   "devDependencies": {
 {{#if isReact}}
-    "typescript-plugin-css-modules": "^5.1.0"
+    "typescript-plugin-css-modules": "5.2.0"
 {{/if}}
   }
 }

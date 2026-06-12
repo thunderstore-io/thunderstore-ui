@@ -18,7 +18,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ["**/dist/"],
+    ignores: ["**/dist/", "**/build/", "**/.react-router/", "**/coverage/"],
   },
   ...compat.extends(
     "eslint:recommended",

@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  type PackageListingReportRequestData,
-  type RequestConfig,
-} from "@thunderstore/thunderstore-api";
+import { type RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { ReportPackageButton } from "./ReportPackageButton";
 import {

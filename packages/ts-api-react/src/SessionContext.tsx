@@ -59,8 +59,12 @@ export const CURRENT_USER_KEY = "currentUser";
 
 // Util functions
 export const getCookie = (cookieName: string) => {
-  const cookie = new RegExp(`${cookieName}=([^;]+);`).exec(
-    document.cookie[-1] === ";" ? document.cookie : document.cookie + ";"
+  // Anchor to a cookie-name boundary (start of string, or after a "; "
+  // separator) so a lookup for "sessionid" can't match a different cookie
+  // whose name merely ends with it, e.g. "x_sessionid".
+  const escaped = cookieName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const cookie = new RegExp(`(?:^|;\\s*)${escaped}=([^;]+)`).exec(
+    document.cookie
   )?.[1];
   return cookie ? cookie : null;
 };

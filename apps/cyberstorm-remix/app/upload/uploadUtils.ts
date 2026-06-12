@@ -163,19 +163,22 @@ export function isUploadSubmitDisabled({
   authorName,
   hasSelectedFile,
   communitiesCount,
+  hasBlockingFileErrors,
 }: {
   submitting: boolean;
   submissionPending: boolean;
   authorName: string;
   hasSelectedFile: boolean;
   communitiesCount: number;
+  hasBlockingFileErrors: boolean;
 }): boolean {
   return (
     submitting ||
     submissionPending ||
     !authorName ||
     !hasSelectedFile ||
-    communitiesCount === 0
+    communitiesCount === 0 ||
+    hasBlockingFileErrors
   );
 }
 

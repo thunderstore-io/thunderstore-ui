@@ -1,7 +1,7 @@
 import type { ErrorEvent } from "@sentry/react-router";
 import { assert, describe, expect, it } from "vitest";
 
-import { beforeSend, denyUrls } from "../sentry";
+import { beforeSend, denyUrls, isExpectedRouteError } from "../sentry";
 
 // This attempts to match how Sentry does things.
 // https://docs.sentry.io/platforms/javascript/configuration/options/#denyUrls
@@ -140,5 +140,65 @@ describe("utils.sentry.beforeSend", () => {
     } finally {
       denyUrls.splice(denyUrls.indexOf(pattern), 1);
     }
+  });
+});
+
+describe("utils.sentry.isExpectedRouteError", () => {
+  // Matches the shape react-router's isRouteErrorResponse checks for,
+  // i.e. what getInternalRouterError / thrown Responses produce.
+  const routeErrorResponse = (status: number, data: unknown = null) => ({
+    status,
+    statusText: "",
+    internal: true,
+    data,
+    error: new Error(String(data)),
+  });
+
+  it.each([
+    [404, 'No route matches URL "/.well-known/acme-challenge/abc"'],
+    [404, 'No route matches URL "/sldkfjklsdjf"'],
+    [405, 'Invalid request method "OPTIONS"'],
+    [405, 'You made a POST request to "/" but did not provide an `action`'],
+    [401, "Unauthorized"],
+    [403, "Forbidden"],
+    [429, "Too Many Requests"],
+  ])("returns true for expected %i route error responses", (status, data) => {
+    expect(isExpectedRouteError(routeErrorResponse(status, data))).toBe(true);
+  });
+
+  it.each([500, 502, 503, 504])(
+    "returns false for %i route error responses",
+    (status) => {
+      expect(isExpectedRouteError(routeErrorResponse(status))).toBe(false);
+    }
+  );
+
+  it("returns true for loader-thrown Responses deserialized by the router", () => {
+    // ssrLoader converts 4xx ApiErrors to thrown Responses; on the client
+    // these surface as ErrorResponses with internal=false and no `error`.
+    expect(
+      isExpectedRouteError({
+        status: 404,
+        statusText: "",
+        internal: false,
+        data: '{"status":404,"statusText":"","url":"https://example/api"}',
+      })
+    ).toBe(true);
+  });
+
+  it("returns false for plain Errors", () => {
+    expect(isExpectedRouteError(new Error("loader exploded"))).toBe(false);
+  });
+
+  it("returns false for null and undefined", () => {
+    expect(isExpectedRouteError(null)).toBe(false);
+    expect(isExpectedRouteError(undefined)).toBe(false);
+  });
+
+  it("returns false for objects that only resemble a response", () => {
+    // Missing the `internal` boolean which isRouteErrorResponse requires.
+    expect(
+      isExpectedRouteError({ status: 404, statusText: "", data: null })
+    ).toBe(false);
   });
 });

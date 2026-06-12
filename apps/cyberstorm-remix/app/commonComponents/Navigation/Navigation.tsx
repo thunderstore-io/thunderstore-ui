@@ -202,11 +202,10 @@ export function Navigation(props: {
           </div>
         </nav>
         <div className="navigation-header__user">
-          <div id="nimbusBeta" suppressHydrationWarning />
           <div className="navigation-header__extra">
             <NewButton
               primitiveType="link"
-              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+              href="https://get.thunderstore.io/"
               csSize="small"
               csVariant="accent"
               aria-label="Get Thunderstore Mod Manager App"
@@ -777,12 +776,9 @@ export function MobileNavigationMenu(props: {
         </section>
         <div className="mobile-navigation__divider" />
         <section>
-          <div id="nimbusBetaMobile" suppressHydrationWarning />
-        </section>
-        <section>
           <NewButton
             primitiveType="link"
-            href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+            href="https://get.thunderstore.io/"
             csSize="small"
             csVariant="accent"
             aria-label="Get Thunderstore Mod Manager App"

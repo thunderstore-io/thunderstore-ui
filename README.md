@@ -23,7 +23,11 @@ serves the API in local development.
 
 ### Prerequisites
 
-- **Node `24.14.0`** (pinned in `engines`) and **Yarn 1 (Classic)**.
+- **Node `24.14.0`** (pinned in `engines`) and **pnpm `11.5.3`** (pinned in the
+  `packageManager` field of the root `package.json`). Either enable
+  [Corepack](https://nodejs.org/api/corepack.html) (`corepack enable`), which
+  picks up the pinned version automatically, or install pnpm globally
+  (`npm install -g pnpm@11.5.3`).
 - **Font Awesome registry access.** The UI uses Font Awesome Pro icons, served from
   a private registry, so configure auth before installing (see the
   [Font Awesome docs](https://fontawesome.com/docs/web/setup/packages)):
@@ -38,11 +42,11 @@ serves the API in local development.
 ```bash
 git clone git@github.com:thunderstore-io/thunderstore-ui.git
 cd thunderstore-ui
-yarn install
-yarn dev
+pnpm install
+pnpm dev
 ```
 
-`yarn dev` starts the React Router dev server (on `:3000`) together with the build
+`pnpm dev` starts the React Router dev server (on `:3000`) together with the build
 watchers for the UI packages consumed as `dist` (`@thunderstore/cyberstorm`,
 `@thunderstore/cyberstorm-theme`, `@thunderstore/ts-uploader`), so changes to the
 app **and** those packages are picked up automatically.
@@ -63,12 +67,12 @@ backend-plus-frontend setup.
 
 Two tools tie it together:
 
-- [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) manage the
-  packages (see the `workspaces` key in the root `package.json`) and handle
+- [pnpm workspaces](https://pnpm.io/workspaces) manage the
+  packages (see `pnpm-workspace.yaml` at the repo root) and handle
   dependency installation and deduplication.
 - [Preconstruct](https://preconstruct.tools/) builds and links the local packages,
   so you can import them as `@thunderstore/<pkg>` instead of via relative paths.
-  Linking runs automatically in the `postinstall` hook (`yarn preconstruct dev`),
+  Linking runs automatically in the `postinstall` hook (`pnpm exec preconstruct dev`),
   so you normally don't need to run it yourself.
 
 ## Storybook
@@ -78,7 +82,7 @@ isolation, without starting the whole stack. It also showcases existing componen
 to encourage reuse.
 
 ```bash
-yarn workspace @thunderstore/storybook storybook
+pnpm --filter @thunderstore/storybook run storybook
 ```
 
 Storybook is then available at [http://localhost:6006](http://localhost:6006).
@@ -104,7 +108,7 @@ related PR can merge:
    and accept or reject the changes in Chromatic. The PR cannot merge until they
    are accepted.
 
-`yarn workspace @thunderstore/storybook chromatic` uploads a Storybook manually
+`pnpm --filter @thunderstore/storybook exec chromatic` uploads a Storybook manually
 (rarely needed, since CI automates it). The Chromatic CLI reads the project
 token from the `CHROMATIC_PROJECT_TOKEN` environment variable (or pass
 `--project-token`); in CI the token comes from the `CHROMATIC_CYBERSTORM_TOKEN`
@@ -121,11 +125,11 @@ registry auth required for Docker builds — see
 [Building for production](#building-for-production)).
 
 ```bash
-yarn test:container       # run the tests
-yarn coverage:container   # run with coverage
+pnpm run test:container       # run the tests
+pnpm run coverage:container   # run with coverage
 ```
 
-To type-check the whole monorepo, run `yarn tsc`.
+To type-check the whole monorepo, run `pnpm run tsc`.
 
 ## Working in the monorepo
 
@@ -134,13 +138,13 @@ To type-check the whole monorepo, run `yarn tsc`.
 Add a dependency to a specific workspace:
 
 ```bash
-yarn workspace @thunderstore/cyberstorm add react-table @types/react-table
+pnpm --filter @thunderstore/cyberstorm add react-table @types/react-table
 ```
 
 ### Adding a new package
 
 New packages are scaffolded with [plop](https://plopjs.com/documentation/). Run
-`yarn plop` at the repo root and answer the prompts. The templates live in
+`pnpm run plop` at the repo root and answer the prompts. The templates live in
 [`./plop/package`](./plop/package) and the generator config in
 [`./plopfile.mjs`](./plopfile.mjs); update them if package requirements change.
 
@@ -150,13 +154,13 @@ New packages are scaffolded with [plop](https://plopjs.com/documentation/). Run
 
 ## Building for production
 
-`yarn build` builds the workspace packages with Preconstruct (assuming `yarn
+`pnpm run build` builds the workspace packages with Preconstruct (assuming `pnpm
 install` has already run). To build and serve the app itself:
 
 ```bash
-yarn build
-yarn workspace @thunderstore/cyberstorm-remix build
-yarn workspace @thunderstore/cyberstorm-remix start
+pnpm run build
+pnpm --filter @thunderstore/cyberstorm-remix run build
+pnpm --filter @thunderstore/cyberstorm-remix run start
 ```
 
 ### Docker images
@@ -183,10 +187,11 @@ the fixed files and commit again. CI runs the same checks, so commits that skip 
 
 ## Troubleshooting
 
-**Symlink errors after `yarn install` on Windows.** Enable Developer Mode in Windows
+**Symlink errors after `pnpm install` on Windows.** Enable Developer Mode in Windows
 settings. See
 [preconstruct#381](https://github.com/preconstruct/preconstruct/issues/381).
 
-**`expected workspace package to exist for X`.** Pin Yarn to a known-good version
-with `yarn policies set-version 1.19.0`. See
-[yarn#8405](https://github.com/yarnpkg/yarn/issues/8405).
+**Wrong pnpm version.** The expected version is pinned in the `packageManager`
+field of the root `package.json`. With Corepack enabled (`corepack enable`), the
+pinned version is used automatically; otherwise update your global install with
+`npm install -g pnpm@11.5.3`.
