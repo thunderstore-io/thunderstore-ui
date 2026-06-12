@@ -1,9 +1,9 @@
-import type { LoaderFunctionArgs } from "react-router";
+import type { HeadersArgs, LoaderFunctionArgs } from "react-router";
 import { describe, expect, it } from "vitest";
 
 import { ApiError } from "@thunderstore/thunderstore-api";
 
-import { ssrLoader } from "../ssrLoader";
+import { forwardLoaderHeaders, noStoreHeaders, ssrLoader } from "../ssrLoader";
 
 function fakeLoaderArgs(
   overrides: Partial<LoaderFunctionArgs> = {}
@@ -189,5 +189,120 @@ describe("ssrLoader", () => {
       const body = await (thrown as Response).json();
       expect(body.url).toBe(apiUrl);
     }
+  });
+});
+
+async function thrownResponse(run: () => Promise<unknown>): Promise<Response> {
+  try {
+    await run();
+    expect.unreachable("should have thrown");
+  } catch (thrown) {
+    return thrown as Response;
+  }
+  throw new Error("unreachable");
+}
+
+describe("ssrLoader error Cache-Control", () => {
+  it("never caches 5xx responses (no-store)", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createApiError(500, "Internal Server Error");
+      },
+      { cache: true }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+  });
+
+  it("briefly CDN-caches 404 on a cacheable route", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createApiError(404, "Not Found");
+      },
+      { cache: true }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    const cacheControl = response.headers.get("Cache-Control") ?? "";
+    expect(cacheControl).toContain("public");
+    expect(cacheControl).toContain("s-maxage=300");
+  });
+
+  it("briefly CDN-caches 410 on a cacheable route", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createApiError(410, "Gone");
+      },
+      { cache: true }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.headers.get("Cache-Control")).toContain("public");
+  });
+
+  it("does not cache 404 on a non-cacheable route (no-store)", async () => {
+    const loader = ssrLoader(async () => {
+      throw createApiError(404, "Not Found");
+    });
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+  });
+
+  it("never caches other 4xx even on a cacheable route (no-store)", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createApiError(403, "Forbidden");
+      },
+      { cache: true }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+  });
+});
+
+function headersArgs(overrides: Partial<HeadersArgs>): HeadersArgs {
+  return {
+    loaderHeaders: new Headers(),
+    parentHeaders: new Headers(),
+    actionHeaders: new Headers(),
+    errorHeaders: undefined,
+    ...overrides,
+  } as HeadersArgs;
+}
+
+describe("forwardLoaderHeaders", () => {
+  it("forwards loader headers on success", () => {
+    const loaderHeaders = new Headers({
+      "Cache-Control": "public, max-age=60",
+    });
+    const result = forwardLoaderHeaders(headersArgs({ loaderHeaders }));
+    expect(new Headers(result).get("Cache-Control")).toBe("public, max-age=60");
+  });
+
+  it("prefers error headers (no-store) when an error bubbles up", () => {
+    const loaderHeaders = new Headers({
+      "Cache-Control": "public, max-age=60",
+    });
+    const errorHeaders = new Headers({ "Cache-Control": "no-store" });
+    const result = forwardLoaderHeaders(
+      headersArgs({ loaderHeaders, errorHeaders })
+    );
+    expect(new Headers(result).get("Cache-Control")).toBe("no-store");
+  });
+
+  it("falls back to loader headers when error headers carry no Cache-Control", () => {
+    const loaderHeaders = new Headers({
+      "Cache-Control": "public, max-age=60",
+    });
+    const errorHeaders = new Headers({ "X-Other": "1" });
+    const result = forwardLoaderHeaders(
+      headersArgs({ loaderHeaders, errorHeaders })
+    );
+    expect(new Headers(result).get("Cache-Control")).toBe("public, max-age=60");
+  });
+});
+
+describe("noStoreHeaders", () => {
+  it("always returns no-store", () => {
+    const result = noStoreHeaders(headersArgs({}));
+    expect(new Headers(result).get("Cache-Control")).toBe("no-store");
   });
 });

@@ -60,9 +60,7 @@ const selectOptions = [
   },
 ];
 
-export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
-  return loaderHeaders;
-};
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export const loader = ssrLoader(
   async ({ request }: Route.LoaderArgs) => {

@@ -67,6 +67,8 @@ export const loader = ssrLoader(
   }
 );
 
+export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
+
 export async function clientLoader({
   request,
   params,

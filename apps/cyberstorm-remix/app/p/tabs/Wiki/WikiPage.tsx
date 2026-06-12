@@ -119,9 +119,7 @@ export const loader = ssrLoader(
   { cache: true }
 );
 
-export const headers: Route.HeadersFunction = ({ loaderHeaders }) => {
-  return loaderHeaders;
-};
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   if (

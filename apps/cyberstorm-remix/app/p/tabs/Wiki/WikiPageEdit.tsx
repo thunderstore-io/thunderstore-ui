@@ -87,6 +87,8 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   }
 });
 
+export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
+
 export async function clientLoader({
   params,
   request,
