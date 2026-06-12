@@ -93,7 +93,6 @@ export default [
 
   route("/login", "login/login.tsx"),
 
-  route("/sentry-test", "sentryTest/sentry.tsx"),
   route("/settings", "settings/user/Settings.tsx", [
     route("", "settings/user/Connections/Connections.tsx", {
       index: true,
