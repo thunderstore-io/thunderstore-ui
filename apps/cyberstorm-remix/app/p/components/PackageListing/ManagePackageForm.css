@@ -1,11 +1,4 @@
 @layer nimbus-layout {
-  .manage-package__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-    align-items: stretch;
-  }
-
   .manage-package__block {
     display: flex;
     flex-direction: column;
