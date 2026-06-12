@@ -9,7 +9,9 @@ export type publicEnvVariablesKeys =
   | "COOKIE_DOMAIN"
   | "AUTH_BASE_URL"
   | "AUTH_RETURN_URL"
-  | "CLIENT_SENTRY_DSN";
+  | "CLIENT_SENTRY_DSN"
+  | "RYBBIT_SITE_ID"
+  | "RYBBIT_ANALYTICS_HOST";
 
 export type PublicPrefix<envVariable extends string> = `VITE_${envVariable}`;
 

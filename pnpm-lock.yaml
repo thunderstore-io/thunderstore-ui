@@ -170,6 +170,9 @@ importers:
       '@react-router/serve':
         specifier: 7.17.0
         version: 7.17.0(react-router@7.17.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
+      '@rybbit/js':
+        specifier: 0.6.2
+        version: 0.6.2
       '@sentry/react-router':
         specifier: 10.55.0
         version: 10.55.0(@react-router/node@7.17.0(react-router@7.17.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3))(react-router@7.17.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(rollup@4.61.1)
@@ -3020,6 +3023,14 @@ packages:
 
   '@rushstack/ts-command-line@5.1.5':
     resolution: {integrity: sha512-YmrFTFUdHXblYSa+Xc9OO9FsL/XFcckZy0ycQ6q7VSBsVs5P0uD9vcges5Q9vctGlVdu27w+Ct6IuJ458V0cTQ==}
+
+  '@rybbit/js@0.6.2':
+    resolution: {integrity: sha512-UQ3OMau8EevhK1PA6ed74pClNgF3QRG3RlZAsPVzuMZ7UUjk695+sv8ibV1tx8/2IOcfcICNMtUxINcGi20wjg==}
+    peerDependencies:
+      rrweb: ^2.0.0
+    peerDependenciesMeta:
+      rrweb:
+        optional: true
 
   '@sentry-internal/browser-utils@10.55.0':
     resolution: {integrity: sha512-zUvyBr13EK0evKsSTzwSimRzZ3P9kugS32dLCj3ea5gNN+/DFtU/GsMTdcIQDhusEDraIlH17AGgqJH5gUAv5w==}
@@ -9657,6 +9668,8 @@ snapshots:
       string-argv: 0.3.2
     transitivePeerDependencies:
       - '@types/node'
+
+  '@rybbit/js@0.6.2': {}
 
   '@sentry-internal/browser-utils@10.55.0':
     dependencies:

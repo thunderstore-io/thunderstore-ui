@@ -13,7 +13,7 @@ export default defineProject({
   },
   test: {
     include: ["**/__tests__/**/*.test.ts"],
-    exclude: ["dist/**/*"],
+    exclude: ["**/node_modules/**", "dist/**/*"],
     browser: {
       provider: "playwright",
       enabled: true,

@@ -3,6 +3,7 @@ import "./styles/cyberstorm.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
+import rybbit from "@rybbit/js";
 import { Breadcrumbs } from "app/commonComponents/Breadcrumbs/Breadcrumbs";
 import {
   getPublicEnvVariables,
@@ -125,6 +126,8 @@ export async function loader() {
       "VITE_AUTH_BASE_URL",
       "VITE_AUTH_RETURN_URL",
       "VITE_CLIENT_SENTRY_DSN",
+      "VITE_RYBBIT_SITE_ID",
+      "VITE_RYBBIT_ANALYTICS_HOST",
     ]),
     currentUser: undefined,
     config: {
@@ -144,6 +147,8 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     "VITE_AUTH_BASE_URL",
     "VITE_AUTH_RETURN_URL",
     "VITE_CLIENT_SENTRY_DSN",
+    "VITE_RYBBIT_SITE_ID",
+    "VITE_RYBBIT_ANALYTICS_HOST",
   ]);
   if (
     !publicEnvVariables.VITE_API_URL ||
@@ -244,6 +249,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       "VITE_AUTH_BASE_URL",
       "VITE_AUTH_RETURN_URL",
       "VITE_CLIENT_SENTRY_DSN",
+      "VITE_RYBBIT_SITE_ID",
+      "VITE_RYBBIT_ANALYTICS_HOST",
     ]);
     shouldUpdatePublicEnvVars = true;
   } else {
@@ -385,6 +392,16 @@ function App() {
         data?.publicEnvVariables.VITE_COOKIE_DOMAIN
       )
   );
+
+  useEffect(() => {
+    const siteId = data?.publicEnvVariables.VITE_RYBBIT_SITE_ID;
+    const analyticsHost = data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST;
+    if (!siteId || !analyticsHost) return;
+    rybbit.init({ analyticsHost, siteId }).catch(console.error);
+  }, [
+    data?.publicEnvVariables.VITE_RYBBIT_SITE_ID,
+    data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST,
+  ]);
 
   return (
     <Outlet

@@ -26,6 +26,7 @@
     "@radix-ui/react-tooltip": "1.2.8",
     "@react-router/node": "7.17.0",
     "@react-router/serve": "7.17.0",
+    "@rybbit/js": "0.6.2",
     "@sentry/react-router": "10.55.0",
     "@thunderstore/cyberstorm": "workspace:*",
     "@thunderstore/cyberstorm-forms": "workspace:*",
