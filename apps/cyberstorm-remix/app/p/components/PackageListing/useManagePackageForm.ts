@@ -269,7 +269,7 @@ export function useManagePackageForm({
         useSession: true,
       });
       showSuccessToast(
-        listing.is_deprecated ? "Package published" : "Package deprecated"
+        listing.is_deprecated ? "Package undeprecated" : "Package deprecated"
       );
     } catch (error) {
       showErrorToast(toError(error));
