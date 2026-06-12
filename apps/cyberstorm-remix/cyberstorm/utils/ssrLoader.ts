@@ -54,10 +54,12 @@ export const noStoreHeaders: HeadersFunction = () => ({
 /**
  * Resolves the Cache-Control header for a thrown ApiError response.
  *
- * - 404/410 on a cacheable route are briefly CDN-cached so scrapers and bots
- *   hammering nonexistent resources are absorbed by the CDN instead of the
- *   origin. The short stale-while-revalidate window keeps newly-created
- *   resources from staying "missing" for long.
+ * - 404/410 on a cacheable route are briefly cached so scrapers and bots
+ *   hammering nonexistent resources are absorbed by the cache instead of the
+ *   origin. The caller's own CacheControlOptions are preserved (matching the
+ *   success path) — including `isPrivate`, so a private route's not-found stays
+ *   private rather than becoming a public CDN response — while defaulting to a
+ *   short stale-while-revalidate so a created/renamed resource surfaces quickly.
  * - Everything else (other 4xx, all 5xx, and any error on a non-cacheable
  *   route) is never stored by any cache.
  */
@@ -66,7 +68,11 @@ function errorCacheControl(
   cache: CacheControlOptions | boolean
 ): string {
   if (cache !== false && (status === 404 || status === 410)) {
-    return cacheControl({ staleWhileRevalidate: 60 })["Cache-Control"];
+    const cacheOptions = cache === true ? {} : cache;
+    // staleWhileRevalidate first so a caller-supplied value still overrides it.
+    return cacheControl({ staleWhileRevalidate: 60, ...cacheOptions })[
+      "Cache-Control"
+    ];
   }
   return "no-store";
 }

@@ -256,6 +256,61 @@ describe("ssrLoader error Cache-Control", () => {
     const response = await thrownResponse(() => loader(fakeLoaderArgs()));
     expect(response.headers.get("Cache-Control")).toBe("no-store");
   });
+
+  it("keeps a private route's 404 private (not public CDN-cacheable)", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createApiError(404, "Not Found");
+      },
+      { cache: { isPrivate: true } }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    const cacheControl = response.headers.get("Cache-Control") ?? "";
+    expect(cacheControl).toContain("private");
+    expect(cacheControl).not.toContain("public");
+    expect(cacheControl).not.toContain("s-maxage");
+  });
+
+  it("preserves caller browserMaxAge/cdnMaxAge on a 404", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createApiError(404, "Not Found");
+      },
+      { cache: { browserMaxAge: 120, cdnMaxAge: 30 } }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    const cacheControl = response.headers.get("Cache-Control") ?? "";
+    expect(cacheControl).toContain("max-age=120");
+    expect(cacheControl).toContain("s-maxage=30");
+  });
+
+  it("defaults a 404 to a short stale-while-revalidate, overridable by the caller", async () => {
+    const defaulted = ssrLoader(
+      async () => {
+        throw createApiError(404, "Not Found");
+      },
+      { cache: true }
+    );
+    const defaultedResponse = await thrownResponse(() =>
+      defaulted(fakeLoaderArgs())
+    );
+    expect(defaultedResponse.headers.get("Cache-Control")).toContain(
+      "stale-while-revalidate=60"
+    );
+
+    const overridden = ssrLoader(
+      async () => {
+        throw createApiError(404, "Not Found");
+      },
+      { cache: { staleWhileRevalidate: 300 } }
+    );
+    const overriddenResponse = await thrownResponse(() =>
+      overridden(fakeLoaderArgs())
+    );
+    expect(overriddenResponse.headers.get("Cache-Control")).toContain(
+      "stale-while-revalidate=300"
+    );
+  });
 });
 
 function headersArgs(overrides: Partial<HeadersArgs>): HeadersArgs {
