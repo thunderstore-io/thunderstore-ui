@@ -27,6 +27,7 @@ export function useScrollMenuIntoScrollParent({
     let cancelled = false;
     let scrollStarted = false;
     const timeoutIds: number[] = [];
+    const rafIds: number[] = [];
 
     const runScroll = () => {
       if (cancelled || scrollStarted) {
@@ -49,10 +50,15 @@ export function useScrollMenuIntoScrollParent({
       }
     };
 
+    // Wait two frames so the menu is laid out (and measurable) before we read
+    // its geometry; the 100ms retry covers menus whose size settles late (async
+    // content, fonts, transitions).
     const scheduleScroll = () => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(runScroll);
-      });
+      rafIds.push(
+        requestAnimationFrame(() => {
+          rafIds.push(requestAnimationFrame(runScroll));
+        })
+      );
     };
 
     scheduleScroll();
@@ -61,6 +67,7 @@ export function useScrollMenuIntoScrollParent({
     return () => {
       cancelled = true;
       timeoutIds.forEach((timeoutId) => window.clearTimeout(timeoutId));
+      rafIds.forEach((rafId) => cancelAnimationFrame(rafId));
     };
   }, [
     containerRef,

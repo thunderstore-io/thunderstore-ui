@@ -17,12 +17,13 @@ export function getScrollParent(element: HTMLElement): HTMLElement | null {
 
   while (parent) {
     const { overflowY } = getComputedStyle(parent);
+    const isScrollable =
+      overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay";
 
-    if (
-      overflowY === "auto" ||
-      overflowY === "scroll" ||
-      overflowY === "overlay"
-    ) {
+    // A scrollable overflow style with no overflowing content can't actually be
+    // scrolled, so skip it and keep walking up (ultimately to the window).
+    // Otherwise we'd target a non-scrolling ancestor and silently do nothing.
+    if (isScrollable && parent.scrollHeight > parent.clientHeight) {
       return parent;
     }
 
@@ -120,24 +121,36 @@ export function getMenuTargetScrollTop(
     return null;
   }
 
-  for (
-    let candidateScrollTop = scrollTop + 1;
-    candidateScrollTop <= maxScrollTop;
-    candidateScrollTop++
-  ) {
-    if (visibleHeightAt(candidateScrollTop) >= targetVisible) {
-      return candidateScrollTop;
-    }
+  const clamp = (value: number) => Math.max(0, Math.min(value, maxScrollTop));
+
+  // The viewport is shorter than the height we want visible, so no scroll
+  // position can reach the target. Show as much as possible by aligning the
+  // menu's top to the viewport top — but only if that actually improves things.
+  if (targetVisible > clientHeight) {
+    const bestEffort = clamp(menuTop);
+    return visibleHeightAt(bestEffort) > visibleHeightAt(scrollTop)
+      ? bestEffort
+      : null;
   }
 
-  for (
-    let candidateScrollTop = scrollTop - 1;
-    candidateScrollTop >= 0;
-    candidateScrollTop--
+  // visibleHeightAt() is piecewise-linear, so the scrollTop that first reaches
+  // targetVisible is closed-form — no scanning. Scroll down to bring the menu's
+  // bottom into view, or up to bring its top into view; prefer down. The
+  // visibleHeightAt() guards keep this correct under clamping/edge geometry.
+  const scrollDownTarget = clamp(menuTop + targetVisible - clientHeight);
+  if (
+    scrollDownTarget > scrollTop &&
+    visibleHeightAt(scrollDownTarget) >= targetVisible
   ) {
-    if (visibleHeightAt(candidateScrollTop) >= targetVisible) {
-      return candidateScrollTop;
-    }
+    return scrollDownTarget;
+  }
+
+  const scrollUpTarget = clamp(visibleBottomBound - targetVisible);
+  if (
+    scrollUpTarget < scrollTop &&
+    visibleHeightAt(scrollUpTarget) >= targetVisible
+  ) {
+    return scrollUpTarget;
   }
 
   return null;
@@ -191,8 +204,11 @@ export function scrollMenuIntoScrollParent(
     { minVisiblePx, shortMenuPaddingPx }
   );
 
+  // No scroll needed (already visible, or nothing better is reachable). Report
+  // it as "not scrolled" so the hook keeps its post-layout retry rather than
+  // treating an early "already visible" reading as done.
   if (targetScrollTop === null) {
-    return true;
+    return false;
   }
 
   scrollToTarget(scrollTarget, targetScrollTop, behavior);
