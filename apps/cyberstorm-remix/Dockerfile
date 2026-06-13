@@ -1,5 +1,5 @@
 # For running @thunderstore/cyberstorm-remix in Docker container.
-FROM node:24.14.0-alpine3.23
+FROM node:24.16.0-alpine3.23
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm@11.5.3
 
