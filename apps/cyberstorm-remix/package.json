@@ -14,7 +14,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "engines": {
-    "node": "24.14.0"
+    "node": "24.16.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.1.0",
