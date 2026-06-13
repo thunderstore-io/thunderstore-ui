@@ -214,6 +214,19 @@ def run_playwright():
     # try:
     run_command([NPM_PATH, "ci"], cwd=PLAYWRIGHT_DIR)
     run_command([NPX_PATH, "playwright", "install", "--with-deps"], cwd=PLAYWRIGHT_DIR)
+    # Node 24.16 + Percy's bundled extract-zip (yauzl) hangs while unpacking
+    # Percy's OWN Chromium: the download finishes, then extraction stalls forever
+    # (no Percy release fixes it — extract-zip 2.0.1 is the latest). Point Percy
+    # at the Chromium that Playwright (>=1.60) already installed and extracted, so
+    # Percy skips its own download/extract path entirely.
+    node = shutil.which("node")
+    chromium_exe = subprocess.check_output(
+        [node, "-e", "console.log(require('@playwright/test').chromium.executablePath())"],
+        cwd=PLAYWRIGHT_DIR,
+        text=True,
+    ).strip()
+    print(f"Using PERCY_BROWSER_EXECUTABLE={chromium_exe}")
+    os.environ["PERCY_BROWSER_EXECUTABLE"] = chromium_exe
     run_command([NPX_PATH, "percy", "exec", "--", "playwright", "test", "--reporter=list"], cwd=PLAYWRIGHT_DIR)
 
 
