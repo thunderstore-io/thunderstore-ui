@@ -14,6 +14,21 @@ interface SsrLoaderOptions {
   cache?: CacheControlOptions | boolean;
 }
 
+// react-router doesn't export a predicate for its `data()` return value, so
+// duck-type the tag the way the framework does internally.
+function isDataWithResponseInit(
+  value: unknown
+): value is { type: "DataWithResponseInit"; data: unknown; init: unknown } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    "data" in value &&
+    "init" in value &&
+    (value as { type?: unknown }).type === "DataWithResponseInit"
+  );
+}
+
 /**
  * Headers function to be exported from routes using ssrLoader with caching.
  *
@@ -131,7 +146,14 @@ export function ssrLoader<A extends LoaderFunctionArgs, T>(
     try {
       const result = await fn(args);
 
-      if (cache === false || result instanceof Response) {
+      if (
+        cache === false ||
+        result instanceof Response ||
+        isDataWithResponseInit(result)
+      ) {
+        // gatedSsr404 (and any Response/data() result) already carries its own
+        // status and headers; re-wrapping would drop the status and nest the
+        // payload, since React Router unwraps only one level. Pass it through.
         return result;
       }
 
