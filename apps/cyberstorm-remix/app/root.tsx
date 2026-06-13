@@ -96,6 +96,23 @@ const rootSeo = createSeo({
   ],
 });
 
+// Account/settings routes: user settings (`/settings`) and team management
+// (`/teams`). Declared once so the route checks below can't drift apart.
+// Entering these pages forces a current-user refetch + revalidation, and
+// analytics tracking is suppressed on them.
+const ACCOUNT_ROUTE_PREFIXES = ["/settings", "/teams"];
+
+const isAccountRoute = (pathname: string) =>
+  ACCOUNT_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+
+// Rybbit `skipPatterns` derived from the same prefixes. The matcher anchors
+// patterns as `^...$`, so each prefix needs both the exact route and a `/**`
+// glob to also cover its sub-routes (e.g. /settings/account, /teams/:id/members).
+const ANALYTICS_SKIP_PATTERNS = ACCOUNT_ROUTE_PREFIXES.flatMap((prefix) => [
+  prefix,
+  `${prefix}/**`,
+]);
+
 export async function loader() {
   return {
     publicEnvVariables: getPublicEnvVariables(ROOT_PUBLIC_ENV_VARIABLES),
@@ -125,10 +142,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 
   let forceUpdateCurrentUser = false;
   const url = new URL(request.url);
-  if (
-    url.pathname.startsWith("/teams") ||
-    url.pathname.startsWith("/settings")
-  ) {
+  if (isAccountRoute(url.pathname)) {
     forceUpdateCurrentUser = true;
   } else {
     // In all other cases check if actually need to fetch
@@ -168,11 +182,7 @@ export function shouldRevalidate({
     "VITE_API_URL",
     "VITE_COOKIE_DOMAIN",
   ]);
-  if (
-    nextUrl.pathname.startsWith("/teams") ||
-    nextUrl.pathname.startsWith("/settings")
-  )
-    return true;
+  if (isAccountRoute(nextUrl.pathname)) return true;
   runSessionValidationCheck(
     new StorageManager(SESSION_STORAGE_KEY),
     publicEnvVariables.VITE_API_URL || "",
@@ -383,7 +393,13 @@ function App() {
     const siteId = data?.publicEnvVariables.VITE_RYBBIT_SITE_ID;
     const analyticsHost = data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST;
     if (!siteId || !analyticsHost) return;
-    rybbit.init({ analyticsHost, siteId }).catch(console.error);
+    rybbit
+      .init({
+        analyticsHost,
+        siteId,
+        skipPatterns: ANALYTICS_SKIP_PATTERNS,
+      })
+      .catch(console.error);
   }, [
     data?.publicEnvVariables.VITE_RYBBIT_SITE_ID,
     data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST,
