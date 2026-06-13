@@ -32,6 +32,9 @@ export const SelectSearchMultiple = React.forwardRef<
     csModifiers,
     disabled = false,
     defaultOpen = false,
+    onMenuOpenChange,
+    scrollMenuIntoView,
+    scrollContainerSelector,
   } = props;
 
   const selectedValues = Array.isArray(value) ? value : [];
@@ -76,6 +79,9 @@ export const SelectSearchMultiple = React.forwardRef<
     excludeValues,
     disabled,
     defaultOpen,
+    onMenuOpenChange,
+    scrollMenuIntoView,
+    scrollContainerSelector,
     onOptionSelect: handleOptionSelect,
   });
 

@@ -1,4 +1,4 @@
-import type { HeadersArgs, LoaderFunctionArgs } from "react-router";
+import { type HeadersArgs, type LoaderFunctionArgs, data } from "react-router";
 import { describe, expect, it } from "vitest";
 
 import { ApiError } from "@thunderstore/thunderstore-api";
@@ -359,5 +359,48 @@ describe("noStoreHeaders", () => {
   it("always returns no-store", () => {
     const result = noStoreHeaders(headersArgs({}));
     expect(new Headers(result).get("Cache-Control")).toBe("no-store");
+  });
+});
+
+const isDataWithResponseInit = (value: unknown): boolean =>
+  typeof value === "object" &&
+  value !== null &&
+  "type" in value &&
+  "data" in value &&
+  "init" in value &&
+  (value as { type?: unknown }).type === "DataWithResponseInit";
+
+// gatedSsr404 returns a data() value (status 404), not a Response. ssrLoader
+// must pass it through; re-wrapping would drop the 404 and nest the payload.
+describe("ssrLoader with a data() result (e.g. gatedSsr404)", () => {
+  it("passes a DataWithResponseInit through without re-wrapping, preserving status and shape", async () => {
+    const gated = data(
+      { listing: undefined, __gatedSsr404: true },
+      { status: 404 }
+    );
+    const loader = ssrLoader(async () => gated, { cache: true });
+
+    const result = await loader(fakeLoaderArgs());
+
+    expect(result).toBe(gated);
+    expect(isDataWithResponseInit(result)).toBe(true);
+    // 404 preserved, payload not nested under .data.
+    expect((result as { init: { status?: number } }).init.status).toBe(404);
+    const inner = (result as { data: unknown }).data;
+    expect(isDataWithResponseInit(inner)).toBe(false);
+    expect((inner as { __gatedSsr404?: boolean }).__gatedSsr404).toBe(true);
+  });
+
+  it("still wraps a plain object result with public cache headers", async () => {
+    const loader = ssrLoader(async () => ({ hello: "world" }), { cache: true });
+    const result = await loader(fakeLoaderArgs());
+    expect(isDataWithResponseInit(result)).toBe(true);
+    const headers = new Headers(
+      (result as unknown as { init: { headers?: HeadersInit } }).init.headers
+    );
+    expect(headers.get("Cache-Control")).toContain("public");
+    expect((result as unknown as { data: { hello: string } }).data.hello).toBe(
+      "world"
+    );
   });
 });

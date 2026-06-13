@@ -198,10 +198,10 @@ function ManagePackageFormFooter({
         >
           {isTogglingDeprecation
             ? listing.is_deprecated
-              ? "Publishing…"
+              ? "Undeprecating…"
               : "Deprecating…"
             : listing.is_deprecated
-              ? "Publish"
+              ? "Undeprecate"
               : "Deprecate"}
         </NewButton>
       )}

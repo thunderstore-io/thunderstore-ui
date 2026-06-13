@@ -8,6 +8,11 @@ export type SelectSearchBaseProps = {
   placeholder?: string;
   csModifiers?: SelectSearchModifiers[];
   defaultOpen?: boolean;
+  onMenuOpenChange?: (open: boolean) => void;
+  /** Scroll the nearest scrollable ancestor when the menu opens. Default: true */
+  scrollMenuIntoView?: boolean;
+  /** Optional selector for the scroll container, resolved via closest() from the select root */
+  scrollContainerSelector?: string;
 };
 
 export type SelectSearchSingleProps = SelectSearchBaseProps & {
