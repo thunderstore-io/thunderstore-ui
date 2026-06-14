@@ -10,6 +10,7 @@ export default [
   index("./communities/communities.tsx", { id: "rootIndex" }),
   route("healthz", "./healthz.tsx"),
   route("robots.txt", "./robotsTxt.tsx"),
+  route("sitemap.xml", "./sitemap.tsx"),
 
   route("/communities", "./communities/communities.tsx"),
   route("/c/:communityId", "c/Community.tsx", [
