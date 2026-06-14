@@ -28,6 +28,57 @@ React Router has two methods for fetching data for "route components", i.e. comp
 ```typescript
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 ```
+
+## Granular, in-place errors (`FetchErrorState`)
+
+`RouteErrorBoundary` is all-or-nothing: a single failed fetch replaces the whole
+page. When a page is composed of several independent data sources, one failing
+source should not deadlock the rest of the page. Instead, render an in-place
+error — with a **retry** — only for the region whose data failed (TS-3397).
+
+The building block is
+[`FetchErrorState`](../app/commonComponents/FetchErrorState/FetchErrorState.tsx):
+an inline alert with a retry button. By default the retry calls
+`useRevalidator().revalidate()`, which re-runs the route loaders and re-resolves
+the deferred promise behind the nearest `<Await>`, letting the region recover
+without a full navigation. Pass a custom `onRetry` to re-fetch a single source.
+
+**This manual retry is the recovery path — the API client does not auto-retry.**
+`thunderstore-api`'s `apiFetch` makes exactly one network attempt and surfaces
+the failure (see the note in `packages/thunderstore-api/src/apiFetch.ts`). A
+blanket client-side retry was removed because it amplifies backend load during
+an outage (every client re-firing N times → accidental DDoS) and could duplicate
+non-idempotent writes. So a failed fetch fails fast and waits for the user (or a
+revalidation) to retry, rather than hammering the origin on its own.
+
+Two ways to use it:
+
+1. **As an `<Await errorElement>`** for a deferred fetch — the most common case:
+
+   ```tsx
+   <Suspense fallback={<SkeletonBox />}>
+     <Await
+       resolve={listings}
+       errorElement={<FetchErrorState message="Couldn't load packages." />}
+     >
+       {(resolved) => /* ... */}
+     </Await>
+   </Suspense>
+   ```
+
+   When several `<Await>`s resolve the **same** promise (e.g. a list plus its
+   count and pagination), give only the primary one a visible `FetchErrorState`
+   and the rest `errorElement={<></>}`, so a single failure doesn't stack
+   duplicate errors. (Omitting `errorElement` re-throws to the route boundary —
+   the white-screen we are trying to avoid — so always set it, even if empty.)
+
+2. **In place of a non-deferred region** whose data is optional/non-fatal. Make
+   the data non-fatal in the loader (catch the error and return a sentinel such
+   as `null`) so the route does not throw, then branch on it in the component.
+   `PackageSearch` does this for community filters: a failed `getCommunityFilters`
+   becomes `filters: null`, the package list still loads with the default
+   section, and the filters column renders a `FetchErrorState` with retry.
+
 ## About Hydration and Loaders
 
 Hydration in this context means the browser-side process where React/React-Router are attached to the static HTML snapshot returned by the server. This takes over e.g. DOM management and navigation, making the static HTML interactive. The flow of this process is as follows:
@@ -129,6 +180,5 @@ export default function Community() {
 
 - Use `RouteErrorBoundary` in route components
 - Consistently use `isApiError` instead of `instanceof ApiError`, as the latter doesn't work well with errors thrown by loaders
-- Add "retry buttons" (e.g. reloading the page on 500 series of errors)
-- As `RouteErrorBoundary` is all-or-nothing solution when it comes to rendering, consider if there's a need for more granular non-route component level error boundaries. We might not need or want to use them, as error boundaries are intended more for render-time errors, and any errors caused by user interaction should be handled by the component logic itself
-  - If it turns out we don't want other error boundaries, consider renaming `RouteErrorBoundary` to just `ErrorBoundary`
+- ~~Add "retry buttons"~~ — done via `FetchErrorState` (see "Granular, in-place errors" above); `RouteErrorBoundary` still reloads on its own for route-level errors
+- ~~Consider granular, non-route component-level error boundaries~~ — addressed by the deferred-fetch + `FetchErrorState` pattern (TS-3397). These are not React error boundaries (which only catch render-time errors); they handle rejected loader/`<Await>` promises in place. Remaining surfaces to migrate to this pattern as they come up: per-region fetches on the package, dependants and team pages.

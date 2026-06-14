@@ -1,3 +1,4 @@
+import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -85,9 +86,7 @@ export default function Changelog() {
     >
       <Await
         resolve={changelog}
-        errorElement={
-          <TabFetchState variant="danger" message="Failed to load changelog" />
-        }
+        errorElement={<FetchErrorState message="Failed to load changelog." />}
       >
         {(resolvedValue) =>
           resolvedValue ? (

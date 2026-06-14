@@ -1,7 +1,7 @@
+import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
-import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await } from "react-router";
@@ -42,23 +42,15 @@ export const loader = ssrLoader(
       };
     });
 
+    // No SEO here: the default tab inherits the parent packageListing's canonical
+    // title + real description. Overriding it templated the meta description that
+    // search engines snippet from (TS-3390).
     return {
       readme: await fetchReadmeSafe(
         dapper,
         params.namespaceId,
         params.packageId
       ),
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} Readme | Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Readme for ${params.namespaceId}-${params.packageId}`,
-          },
-        ],
-      }),
     };
   },
   { cache: true }
@@ -91,9 +83,7 @@ export default function Readme() {
     <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
       <Await
         resolve={readme}
-        errorElement={
-          <TabFetchState variant="danger" message="Failed to load readme" />
-        }
+        errorElement={<FetchErrorState message="Failed to load readme." />}
       >
         {(resolvedValue) =>
           resolvedValue && resolvedValue.html ? (

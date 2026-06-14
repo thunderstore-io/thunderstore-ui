@@ -1,7 +1,7 @@
 import { faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
-import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -137,10 +137,7 @@ export default function PackageVersionRequired() {
       <Await
         resolve={dependencies}
         errorElement={
-          <TabFetchState
-            variant="danger"
-            message="Error occurred while loading required dependencies"
-          />
+          <FetchErrorState message="Error occurred while loading required dependencies." />
         }
       >
         {(resolvedDependencies) =>

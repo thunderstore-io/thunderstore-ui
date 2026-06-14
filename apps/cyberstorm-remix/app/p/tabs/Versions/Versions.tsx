@@ -1,3 +1,4 @@
+import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -100,10 +101,7 @@ export default function Versions() {
       <Await
         resolve={versions}
         errorElement={
-          <TabFetchState
-            variant="danger"
-            message="Error occurred while loading versions"
-          />
+          <FetchErrorState message="Error occurred while loading versions." />
         }
       >
         {(resolvedValue) => (

@@ -6,7 +6,7 @@ import {
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
@@ -17,6 +17,7 @@ import {
   useSearchParams,
 } from "react-router";
 import { useDebounce } from "use-debounce";
+import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
 import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
@@ -91,7 +92,7 @@ export const loader = ssrLoader(
           { property: "og:type", content: "website" },
           {
             property: "og:url",
-            content: `${url.origin}/communities`,
+            content: getCanonicalUrl(request, "/communities"),
           },
           { property: "og:title", content: "Communities | Thunderstore" },
           {
@@ -209,7 +210,9 @@ export default function CommunitiesPage() {
           <Suspense fallback={<CommunitiesListSkeleton />}>
             <Await
               resolve={communities}
-              errorElement={<div>Error loading communities</div>}
+              errorElement={
+                <FetchErrorState message="Couldn't load communities." />
+              }
             >
               {(resolvedValue) => (
                 <CommunitiesList communitiesData={resolvedValue} />
