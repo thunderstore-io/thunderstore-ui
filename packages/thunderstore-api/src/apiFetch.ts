@@ -14,35 +14,9 @@ const BASE_HEADERS = {
   "Content-Type": "application/json",
 };
 
-const MAX_NB_RETRY = 5;
-const RETRY_DELAY_MS = 200;
-
-async function fetchRetry(
-  input: RequestInfo | URL,
-  init?: RequestInit | undefined
-) {
-  let retryLeft = MAX_NB_RETRY;
-  let latestErr = null;
-  while (retryLeft > 0) {
-    try {
-      return await fetch(input, init);
-    } catch (err) {
-      latestErr = err;
-      await sleep(RETRY_DELAY_MS);
-    } finally {
-      retryLeft -= 1;
-    }
-  }
-  if (latestErr !== null) {
-    throw latestErr;
-  } else {
-    throw new Error(`Too many retries`);
-  }
-}
-
-function sleep(delay: number) {
-  return new Promise((resolve) => setTimeout(resolve, delay));
-}
+// No auto-retry: a blanket client-side retry amplifies backend load during an
+// outage (self-inflicted DDoS) and can duplicate non-idempotent writes. Recovery
+// is explicit instead — FetchErrorState's Retry button and loader revalidation.
 
 export type apiFetchArgs<B, QP> = {
   config: () => RequestConfig;
@@ -92,7 +66,7 @@ export async function apiFetch(props: {
   // Look into furthering the ensuring of passing proper query params.
   const url = getUrl(usedConfig, path, queryParams);
 
-  const response = await fetchRetry(url, {
+  const response = await fetch(url, {
     ...(request ?? {}),
     headers: {
       ...BASE_HEADERS,
