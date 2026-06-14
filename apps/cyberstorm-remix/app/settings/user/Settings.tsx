@@ -1,5 +1,6 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
+import { getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { Outlet, useLocation, useOutletContext } from "react-router";
 import { Page } from "~/commonComponents/Page/Page";
@@ -31,7 +32,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
           content: "Manage your Thunderstore account settings",
         },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: url.href },
+        { property: "og:url", content: getCanonicalUrl(request) },
         { property: "og:title", content: "Settings | Thunderstore" },
         {
           property: "og:description",

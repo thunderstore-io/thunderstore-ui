@@ -12,7 +12,7 @@ import {
 } from "app/commonComponents/CommunityPromo/CommunityPromo";
 import { Page } from "app/commonComponents/Page/Page";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
@@ -57,24 +57,34 @@ export const loader = ssrLoader(
         };
       });
       const community = await dapper.getCommunity(params.communityId);
-      const url = new URL(request.url);
       return {
         community: community,
         seo: createSeo({
           descriptors: [
             { title: `The ${community.name} Mod Database` },
             { name: "description", content: `Mods for ${community.name}` },
-            { property: "og:image", content: community.cover_image_url ?? "" },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: getCanonicalUrl(request) },
             {
-              property: "og:url",
-              content: `${url.origin}${url.pathname}`,
+              property: "og:title",
+              content: `The ${community.name} Mod Database`,
             },
             {
               property: "og:description",
               content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
             },
-            { property: "og:image:width", content: "360" },
-            { property: "og:image:height", content: "480" },
+            // Only emit og:image when a cover image exists (no empty tag).
+            ...(community.cover_image_url
+              ? [
+                  {
+                    property: "og:image",
+                    content: community.cover_image_url,
+                  },
+                  { property: "og:image:width", content: "360" },
+                  { property: "og:image:height", content: "480" },
+                ]
+              : []),
+            { property: "og:site_name", content: "Thunderstore" },
           ],
         }),
       };

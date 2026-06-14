@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
+import { getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
@@ -78,7 +79,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
           content: `Teams of ${currentUser.username}`,
         },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: url.href },
+        { property: "og:url", content: getCanonicalUrl(request) },
         {
           property: "og:title",
           content: `Teams of ${currentUser.username} | Thunderstore`,

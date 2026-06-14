@@ -1,6 +1,6 @@
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
@@ -108,7 +108,7 @@ export const loader = ssrLoader(
               content: `Mods that depend on ${listing.name}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: request.url },
+            { property: "og:url", content: getCanonicalUrl(request) },
             {
               property: "og:title",
               content: `Dependants of ${formatToDisplayName(

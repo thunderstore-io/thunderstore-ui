@@ -13,7 +13,7 @@ import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { type OutletContextShape } from "app/root";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -117,7 +117,6 @@ export const loader = ssrLoader(
       dapper.getCommunity(communityId),
       dapper.getTeamDetails(namespaceId),
     ]);
-    const url = new URL(request.url);
 
     return {
       community,
@@ -137,7 +136,7 @@ export const loader = ssrLoader(
           },
           { name: "description", content: listing.description },
           { property: "og:type", content: "website" },
-          { property: "og:url", content: url.href },
+          { property: "og:url", content: getCanonicalUrl(request) },
           {
             property: "og:title",
             content: `${formatToDisplayName(listing.name)} by ${
@@ -257,7 +256,9 @@ export default function PackageListing() {
     if (currentUser?.username) {
       fetchAndSetRatedPackages();
     }
-  }, [currentUser]);
+    // Keyed on username, not the currentUser object (whose identity changes every
+    // revalidation), to avoid redundant refetches.
+  }, [currentUser?.username]);
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);

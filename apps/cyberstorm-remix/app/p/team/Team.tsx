@@ -1,5 +1,5 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -70,7 +70,7 @@ export const loader = ssrLoader(
               content: `Browse mods uploaded by ${params.namespaceId}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: request.url },
+            { property: "og:url", content: getCanonicalUrl(request) },
             {
               property: "og:title",
               content: `Mods by ${params.namespaceId} | Thunderstore`,
