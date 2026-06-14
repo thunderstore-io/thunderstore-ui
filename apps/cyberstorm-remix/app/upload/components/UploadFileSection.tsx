@@ -111,7 +111,7 @@ export function UploadFileSection({
                 <span className="drag-n-drop__main-text">
                   Choose or drag ZIP file here
                 </span>
-                <span className="drag-n-drop__sub-text">5GB max</span>
+                <span className="drag-n-drop__sub-text">10GB max</span>
               </>
             )}
           </div>
@@ -125,7 +125,7 @@ export function UploadFileSection({
             {file ? (
               <span className="drag-n-drop__sub-text">{file.name}</span>
             ) : null}
-            <span className="drag-n-drop__sub-text">5GB max</span>
+            <span className="drag-n-drop__sub-text">10GB max</span>
           </div>
         }
         onChange={(files) => {
