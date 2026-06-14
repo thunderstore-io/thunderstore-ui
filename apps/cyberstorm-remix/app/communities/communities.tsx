@@ -76,6 +76,7 @@ export const loader = ssrLoader(
         sessionId: undefined,
       };
     });
+    const origin = new URL(getCanonicalUrl(request, "/")).origin;
     return {
       communities: await dapper.getCommunities(
         page,
@@ -99,7 +100,40 @@ export const loader = ssrLoader(
             property: "og:description",
             content: "Browse all communities on Thunderstore",
           },
+          {
+            property: "og:image",
+            content: getCanonicalUrl(
+              request,
+              "/cyberstorm-static/images/communitygrid.png"
+            ),
+          },
           { property: "og:site_name", content: "Thunderstore" },
+          {
+            "script:ld+json": {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  name: "Thunderstore",
+                  url: origin,
+                  logo: `${origin}/android-chrome-512x512.png`,
+                },
+                {
+                  "@type": "WebSite",
+                  name: "Thunderstore",
+                  url: origin,
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: {
+                      "@type": "EntryPoint",
+                      urlTemplate: `${origin}/communities?search={search_term_string}`,
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+              ],
+            },
+          },
         ],
       }),
     };
