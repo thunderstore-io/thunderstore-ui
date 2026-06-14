@@ -7,6 +7,27 @@ export function Seo() {
 
   if (!match) return null;
 
+  // Derive a canonical link + Twitter Card tags from the merged Open Graph
+  // descriptors, so every route that already sets og:* gets them with no
+  // per-route boilerplate. A page with no og:url emits no canonical (correct
+  // for error pages, which should not be canonicalized).
+  const findContent = (key: "property" | "name", value: string) => {
+    const found = match.descriptors.find(
+      (d) =>
+        key in d &&
+        (d as Record<string, unknown>)[key] === value &&
+        typeof (d as Record<string, unknown>).content === "string"
+    );
+    return found
+      ? ((found as Record<string, unknown>).content as string)
+      : undefined;
+  };
+  const ogUrl = findContent("property", "og:url");
+  const ogTitle = findContent("property", "og:title");
+  const ogDescription = findContent("property", "og:description");
+  const ogImage = findContent("property", "og:image");
+  const hasTwitterData = Boolean(ogTitle || ogDescription || ogImage);
+
   return (
     <>
       {match.descriptors.map((descriptor, index) => {
@@ -90,6 +111,20 @@ export function Seo() {
         }
         return <meta key={index} {...descriptor} />;
       })}
+      {ogUrl ? <link rel="canonical" href={ogUrl} /> : null}
+      {hasTwitterData ? (
+        <>
+          <meta
+            name="twitter:card"
+            content={ogImage ? "summary_large_image" : "summary"}
+          />
+          {ogTitle ? <meta name="twitter:title" content={ogTitle} /> : null}
+          {ogDescription ? (
+            <meta name="twitter:description" content={ogDescription} />
+          ) : null}
+          {ogImage ? <meta name="twitter:image" content={ogImage} /> : null}
+        </>
+      ) : null}
     </>
   );
 }
