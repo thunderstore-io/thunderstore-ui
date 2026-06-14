@@ -14,6 +14,18 @@ Sentry.init({
 
 const ABORT_DELAY = 5_000;
 
+// Defense-in-depth security headers applied to every SSR HTML document response.
+// NOTE: Content-Security-Policy is intentionally NOT set here — enforcing a CSP
+// against the third-party ad/analytics stack needs a tuned, report-only rollout
+// first, so it is tracked separately rather than shipped blind. X-Frame-Options
+// is SAMEORIGIN (not DENY) to avoid breaking any first-party embedding.
+function applySecurityHeaders(headers: Headers) {
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("X-Frame-Options", "SAMEORIGIN");
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+}
+
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
@@ -82,6 +94,7 @@ function handleBotRequest(
           const stream = createReadableStreamFromReadable(body);
 
           responseHeaders.set("Content-Type", "text/html");
+          applySecurityHeaders(responseHeaders);
 
           resolve(
             new Response(stream, {
@@ -149,6 +162,7 @@ function handleBrowserRequest(
           const stream = createReadableStreamFromReadable(body);
 
           responseHeaders.set("Content-Type", "text/html");
+          applySecurityHeaders(responseHeaders);
 
           resolve(
             new Response(stream, {
