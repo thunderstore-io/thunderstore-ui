@@ -104,12 +104,10 @@ export type RenderedAdSlot = {
   options: NitroAdOptions;
 };
 
-// The current creatives must have existed at least this long — measured from
-// slot creation or the last navigation refresh, not from first paint — before
-// an SPA navigation may refresh them; 15s is plenty of time for a creative to
-// earn its click. Enforced in onNavigateNimbusAds and mirrored to NitroPay per
-// slot via `onNavigateMin`.
-const MIN_AD_LIFETIME_MS = 15000;
+// Minimum creative lifetime (since slot creation or last refresh) before an SPA
+// navigation may refresh ads — 30s favours viewability/CTR over churn. Enforced
+// in onNavigateNimbusAds and mirrored to NitroPay per slot via `onNavigateMin`.
+const MIN_AD_LIFETIME_MS = 30000;
 const ON_NAVIGATE_MIN = MIN_AD_LIFETIME_MS;
 
 // Set to true to render static placeholders instead of making real ad calls,
@@ -232,7 +230,8 @@ function displaySlot(slot: {
       format: "display",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      refreshTime: 30,
+      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
+      refreshTime: 300,
       onNavigateMin: ON_NAVIGATE_MIN,
       renderVisibleOnly: true,
       refreshVisibleOnly: true,
@@ -272,7 +271,8 @@ export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
       format: "video-nc",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      refreshTime: 30,
+      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
+      refreshTime: 300,
       onNavigateMin: ON_NAVIGATE_MIN,
       video: {
         // The rail keeps the player on screen; never detach into the floating
@@ -360,6 +360,18 @@ let adGeneration = 0;
 // navigation-driven refresh. Drives the MIN_AD_LIFETIME_MS guard.
 let adsLiveSince = 0;
 
+// Below-the-fold bottom-row slots are created lazily — their createAd call is
+// deferred until the slot scrolls within this margin of the viewport — so we
+// never run an auction for a slot the user may never reach. Above-the-fold rail
+// slots stay eager. (renderVisibleOnly/refreshVisibleOnly only gate NitroPay's
+// render+refresh; the slot is otherwise still created eagerly on load.)
+const IN_VIEW_ROOT_MARGIN = "200px";
+let adInViewObserver: IntersectionObserver | undefined;
+const pendingInViewSlots = new Map<
+  string,
+  { nitroAds: NitroAds; options: NitroAdOptions }
+>();
+
 function createNimbusAd(
   nitroAds: NitroAds,
   containerId: string,
@@ -389,16 +401,73 @@ function createNimbusAd(
   }
 }
 
-/** Create every Nimbus ad slot (right column incl. video, bottom row). */
+/**
+ * Create each slot lazily, once its container scrolls near the viewport. Slots
+ * that are `display: none` for the current breakpoint never intersect, so only
+ * the matching one is created (NitroPay's `mediaQuery` is the backstop). Falls
+ * back to eager creation when IntersectionObserver is unavailable.
+ */
+function createNimbusAdsInView(
+  nitroAds: NitroAds,
+  slots: RenderedAdSlot[]
+): void {
+  if (
+    typeof window === "undefined" ||
+    typeof IntersectionObserver === "undefined"
+  ) {
+    for (const slot of slots) {
+      createNimbusAd(nitroAds, slot.containerId, slot.options);
+    }
+    return;
+  }
+
+  if (!adInViewObserver) {
+    adInViewObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
+          const containerId = entry.target.id;
+          adInViewObserver?.unobserve(entry.target);
+          const pending = pendingInViewSlots.get(containerId);
+          pendingInViewSlots.delete(containerId);
+          if (pending) {
+            createNimbusAd(pending.nitroAds, containerId, pending.options);
+          }
+        }
+      },
+      { rootMargin: IN_VIEW_ROOT_MARGIN }
+    );
+  }
+
+  for (const slot of slots) {
+    const container = document.getElementById(slot.containerId);
+    if (!container) {
+      continue;
+    }
+    pendingInViewSlots.set(slot.containerId, {
+      nitroAds,
+      options: slot.options,
+    });
+    adInViewObserver.observe(container);
+  }
+}
+
+/**
+ * Create every Nimbus ad slot. The above-the-fold right-column rail is created
+ * eagerly; the below-the-fold bottom banner row is deferred until it scrolls
+ * into view (see createNimbusAdsInView).
+ */
 export function createAllNimbusAds(nitroAds: NitroAds): void {
   adsLiveSince = Date.now();
-  for (const slot of [
-    ...RIGHT_COLUMN_SLOTS,
-    ...BOTTOM_BANNER_AD_SLOTS,
-    ...BOTTOM_RIGHT_AD_SLOTS,
-  ]) {
+  for (const slot of RIGHT_COLUMN_SLOTS) {
     createNimbusAd(nitroAds, slot.containerId, slot.options);
   }
+  createNimbusAdsInView(nitroAds, [
+    ...BOTTOM_BANNER_AD_SLOTS,
+    ...BOTTOM_RIGHT_AD_SLOTS,
+  ]);
 }
 
 /**
@@ -437,4 +506,9 @@ export function onNavigateNimbusAds(): void {
 export function teardownNimbusAds(): void {
   adGeneration += 1;
   adRegistry.clear();
+  // Stop watching not-yet-created bottom slots so a pending lazy createAd can't
+  // fire against a torn-down container after unmount.
+  adInViewObserver?.disconnect();
+  adInViewObserver = undefined;
+  pendingInViewSlots.clear();
 }
