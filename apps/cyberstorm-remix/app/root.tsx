@@ -87,7 +87,7 @@ const rootSeo = createSeo({
     { title: "Thunderstore" },
     {
       name: "description",
-      content: "A ecosystem for sharing mods for games!",
+      content: "An ecosystem for sharing mods for games!",
     },
     { name: "msapplication-TileColor", content: "#29295b" },
     { name: "theme-color", content: "#29295b" },
