@@ -363,6 +363,7 @@ export function PackageSearch(props: Props) {
         <div className="package-search__search-wrapper">
           <NewTextInput
             placeholder="Search Mods..."
+            aria-label="Search mods"
             value={searchParamsBlob.search}
             onChange={(e) =>
               setParamsBlobValue(

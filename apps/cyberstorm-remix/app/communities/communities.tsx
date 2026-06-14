@@ -191,6 +191,7 @@ export default function CommunitiesPage() {
             onChange={(e) => setSearchValue(e.target.value)}
             value={searchValue}
             placeholder="Search communities..."
+            aria-label="Search communities"
             clearValue={() => setSearchValue("")}
             leftIcon={<FontAwesomeIcon icon={faSearch} />}
             type="search"
