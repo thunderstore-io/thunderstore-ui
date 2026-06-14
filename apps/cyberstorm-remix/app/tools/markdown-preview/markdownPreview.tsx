@@ -73,7 +73,7 @@ export default function MarkdownPreview() {
       setHTML(undefined);
       setValidation({
         status: "waiting",
-        message: "Waiting for manifest text",
+        message: "Waiting for input",
       });
     }
   }, [debouncedMarkdownPreviewInput]);
