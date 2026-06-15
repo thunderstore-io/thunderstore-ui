@@ -10,7 +10,7 @@ export async function fetchPackagePermissions(
   props: ApiEndpointProps<PackagePermissionsRequestParams, object, object>
 ): Promise<PackagePermissionsResponseData> {
   const { config, params } = props;
-  const path = `api/cyberstorm/package/${params.community_id}/${params.namespace_id}/${params.package_name}/permissions`;
+  const path = `api/cyberstorm/package/${params.community_id}/${params.namespace_id}/${params.package_name}/permissions/`;
   const request = { cache: "no-store" as RequestCache };
 
   return await apiFetch({
