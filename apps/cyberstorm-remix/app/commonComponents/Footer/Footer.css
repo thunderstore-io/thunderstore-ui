@@ -51,6 +51,7 @@
 
   .footer__logo > svg {
     height: var(--space-32);
+    color: #fff;
   }
 
   .footer__icon-links {
