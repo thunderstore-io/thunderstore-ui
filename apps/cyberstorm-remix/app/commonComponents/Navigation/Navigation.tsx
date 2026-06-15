@@ -24,7 +24,7 @@ import {
   buildAuthLoginUrl,
   buildLogoutUrl,
 } from "cyberstorm/utils/ThunderstoreAuth";
-import { useEffect } from "react";
+import { type CSSProperties, useEffect } from "react";
 import { useLocation } from "react-router";
 import { Island } from "~/commonComponents/Island/Island";
 
@@ -64,6 +64,58 @@ const closeMobileNavigationMenus = () => {
   hidePopoverById(DEVELOPERS_POPOVER_ID);
   hidePopoverById(NAVIGATION_POPOVER_ID);
 };
+
+// Full-page switch to the legacy Django site (old.<host>), preserving the path.
+// The new host is always the bare domain, so the legacy host is just "old."
+// prepended (thunderstore.io -> old.thunderstore.io, and the .dev/.localhost
+// envs likewise).
+function switchToLegacySite() {
+  if (typeof window === "undefined") return;
+  const { protocol, hostname, pathname } = window.location;
+  window.location.assign(`${protocol}//old.${hostname}${pathname}`);
+}
+
+const legacySwitchStyle: CSSProperties = {
+  display: "flex",
+  height: "30px",
+  padding: "0 12px",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "12px",
+  color: "#f5f5f6",
+  fontFamily: "Inter",
+  fontSize: "12px",
+  fontWeight: 700,
+  lineHeight: "normal",
+  fill: "#49b5f7",
+  background: "transparent",
+};
+
+// Rendered natively here rather than injected by beta-switch.js: feeding a
+// foreign <button> into a React-owned container that re-renders on every
+// navigation leaked event listeners. beta-switch.js now runs only on the legacy
+// site (via its DynamicHTML entry), where there is no React.
+function LegacySwitchButton({ className }: { className?: string }) {
+  return (
+    <button
+      type="button"
+      className={className}
+      style={legacySwitchStyle}
+      onClick={switchToLegacySite}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 448 512"
+        style={{ fill: "inherit", height: "16px", width: "16px" }}
+        aria-hidden="true"
+      >
+        <path d="M288 0L160 0 128 0C110.3 0 96 14.3 96 32s14.3 32 32 32l0 132.8c0 11.8-3.3 23.5-9.5 33.5L10.3 406.2C3.6 417.2 0 429.7 0 442.6C0 480.9 31.1 512 69.4 512l309.2 0c38.3 0 69.4-31.1 69.4-69.4c0-12.8-3.6-25.4-10.3-36.4L329.5 230.4c-6.2-10.1-9.5-21.7-9.5-33.5L320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32L288 0zM192 196.8L192 64l64 0 0 132.8c0 23.7 6.6 46.9 19 67.1L309.5 320l-171 0L173 263.9c12.4-20.2 19-43.4 19-67.1z" />
+      </svg>
+      Switch to legacy
+    </button>
+  );
+}
+
 export function Navigation(props: {
   // hydrationCheck: boolean;
   currentUser?: CurrentUser;
@@ -202,6 +254,7 @@ export function Navigation(props: {
           </div>
         </nav>
         <div className="navigation-header__user">
+          <LegacySwitchButton className="navigation-header__legacy-switch" />
           <div className="navigation-header__extra">
             <NewButton
               primitiveType="link"
@@ -373,8 +426,8 @@ export function DesktopLoginPopover() {
           </NewLink>{" "}
           and{" "}
           <NewLink
-            primitiveType="cyberstormLink"
-            linkId="PrivacyPolicy"
+            primitiveType="link"
+            href="https://pages.thunderstore.io/p/privacy-policy"
             csVariant="primary"
           >
             Privacy Policy
@@ -775,6 +828,9 @@ export function MobileNavigationMenu(props: {
           </NewLink>
         </section>
         <div className="mobile-navigation__divider" />
+        <section>
+          <LegacySwitchButton className="mobile-navigation__legacy-switch" />
+        </section>
         <section>
           <NewButton
             primitiveType="link"
