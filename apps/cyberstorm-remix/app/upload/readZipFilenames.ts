@@ -6,7 +6,7 @@
  * needs the entry names — never the file data — so this deliberately avoids a
  * full ZIP library. It reads just the tail of the file (the End Of Central
  * Directory record and the central directory itself) via `Blob.slice`, so it
- * stays cheap even for the 5GB maximum upload size.
+ * stays cheap even for the 10GB maximum upload size.
  *
  * Returns `null` when the archive can't be parsed (corrupt, unsupported, or
  * not actually a ZIP). Callers should treat `null` as "couldn't analyse" and
