@@ -52,12 +52,11 @@ export default function MarkdownPreview() {
     message?: string;
   }>({ status: "waiting", message: "Waiting for input" });
 
+  // Pure 1s debounce (no maxWait): while the user keeps typing the timer
+  // resets, so the API request only fires once they pause.
   const [debouncedMarkdownPreviewInput] = useDebounce(
     markdownPreviewInput,
-    300,
-    {
-      maxWait: 300,
-    }
+    1000
   );
 
   useEffect(() => {
