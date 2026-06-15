@@ -104,7 +104,7 @@ export const loader = ssrLoader(
             property: "og:image",
             content: getCanonicalUrl(
               request,
-              "/cyberstorm-static/images/communitygrid.png"
+              "/cyberstorm-static/images/icon.webp"
             ),
           },
           { property: "og:site_name", content: "Thunderstore" },
