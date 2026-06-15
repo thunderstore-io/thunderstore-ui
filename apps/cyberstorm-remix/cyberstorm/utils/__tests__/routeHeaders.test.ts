@@ -32,7 +32,9 @@ describe("every cached route forwards loader headers", () => {
 // Cache-Control, so these must explicitly opt out with noStoreHeaders to avoid
 // leaking the parent's public CDN caching.
 const noStoreRouteFiles = [
-  "app/c/tabs/PackageSearch/PackageSearch.tsx",
+  // NOTE: app/c/tabs/PackageSearch/PackageSearch.tsx used to live here, but the
+  // community landing page is now an anonymous, CDN-cached route (cache: true +
+  // forwardLoaderHeaders), so it is covered by the cached-route contract above.
   "app/p/tabs/Source/Source.tsx",
   "app/p/tabs/Wiki/WikiNewPage.tsx",
   "app/p/tabs/Wiki/WikiPageEdit.tsx",
