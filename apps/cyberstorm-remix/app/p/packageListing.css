@@ -152,7 +152,10 @@
 
   .package-listing-sidebar {
     position: sticky;
-    top: var(--header-height);
+
+    /* Offset below the sticky nav so the Install button clears it instead of
+       tucking under the header when a long changelog makes the sidebar stick. */
+    top: calc(var(--header-height) + var(--gap-md));
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
