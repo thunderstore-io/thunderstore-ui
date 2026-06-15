@@ -1,3 +1,4 @@
+import { getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { Outlet, useLocation, useOutletContext, useParams } from "react-router";
 import { Page } from "~/commonComponents/Page/Page";
@@ -12,7 +13,6 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const teamName = params.namespaceId ?? "";
-  const url = new URL(request.url);
 
   return {
     seo: createSeo({
@@ -20,7 +20,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         { title: `Team ${teamName} settings | Thunderstore` },
         { name: "description", content: `Manage ${teamName} team settings` },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: url.href },
+        { property: "og:url", content: getCanonicalUrl(request) },
         {
           property: "og:title",
           content: `Team ${teamName} settings | Thunderstore`,

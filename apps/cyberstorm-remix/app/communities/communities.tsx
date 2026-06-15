@@ -6,7 +6,7 @@ import {
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
@@ -17,6 +17,7 @@ import {
   useSearchParams,
 } from "react-router";
 import { useDebounce } from "use-debounce";
+import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
 import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
@@ -75,6 +76,7 @@ export const loader = ssrLoader(
         sessionId: undefined,
       };
     });
+    const origin = new URL(getCanonicalUrl(request, "/")).origin;
     return {
       communities: await dapper.getCommunities(
         page,
@@ -91,14 +93,47 @@ export const loader = ssrLoader(
           { property: "og:type", content: "website" },
           {
             property: "og:url",
-            content: `${url.origin}/communities`,
+            content: getCanonicalUrl(request, "/communities"),
           },
           { property: "og:title", content: "Communities | Thunderstore" },
           {
             property: "og:description",
             content: "Browse all communities on Thunderstore",
           },
+          {
+            property: "og:image",
+            content: getCanonicalUrl(
+              request,
+              "/cyberstorm-static/images/communitygrid.png"
+            ),
+          },
           { property: "og:site_name", content: "Thunderstore" },
+          {
+            "script:ld+json": {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  name: "Thunderstore",
+                  url: origin,
+                  logo: `${origin}/android-chrome-512x512.png`,
+                },
+                {
+                  "@type": "WebSite",
+                  name: "Thunderstore",
+                  url: origin,
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: {
+                      "@type": "EntryPoint",
+                      urlTemplate: `${origin}/communities?search={search_term_string}`,
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+              ],
+            },
+          },
         ],
       }),
     };
@@ -190,6 +225,7 @@ export default function CommunitiesPage() {
             onChange={(e) => setSearchValue(e.target.value)}
             value={searchValue}
             placeholder="Search communities..."
+            aria-label="Search communities"
             clearValue={() => setSearchValue("")}
             leftIcon={<FontAwesomeIcon icon={faSearch} />}
             type="search"
@@ -209,7 +245,9 @@ export default function CommunitiesPage() {
           <Suspense fallback={<CommunitiesListSkeleton />}>
             <Await
               resolve={communities}
-              errorElement={<div>Error loading communities</div>}
+              errorElement={
+                <FetchErrorState message="Couldn't load communities." />
+              }
             >
               {(resolvedValue) => (
                 <CommunitiesList communitiesData={resolvedValue} />

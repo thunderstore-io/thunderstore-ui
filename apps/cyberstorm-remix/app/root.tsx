@@ -87,7 +87,7 @@ const rootSeo = createSeo({
     { title: "Thunderstore" },
     {
       name: "description",
-      content: "A ecosystem for sharing mods for games!",
+      content: "An ecosystem for sharing mods for games!",
     },
     { name: "msapplication-TileColor", content: "#29295b" },
     { name: "theme-color", content: "#29295b" },
@@ -112,6 +112,11 @@ const ANALYTICS_SKIP_PATTERNS = ACCOUNT_ROUTE_PREFIXES.flatMap((prefix) => [
   prefix,
   `${prefix}/**`,
 ]);
+
+// Rybbit `maskPatterns`: keep the pageview but drop the query string (unlike
+// skipPatterns, which drops the pageview). /login carries a `returnUrl` that may
+// be sensitive.
+const ANALYTICS_MASK_PATTERNS = ["/login"];
 
 export async function loader() {
   return {
@@ -274,6 +279,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <style>
           {`@layer utils, colors, layout, components, overrides, theme, theme-utils, theme-colors, theme-layout, theme-components, theme-components-sizes, theme-components-colors, theme-components-layouts, theme-components-miscs, nimbus, nimbus-utils, nimbus-colors, nimbus-layout, nimbus-components, nimbus-components-sizes, nimbus-components-colors, nimbus-components-layouts, nimbus-components-miscs, nimbus-overrides;`}
         </style>
+        {/* Skip-to-content link: visually hidden until keyboard-focused. Kept
+            unlayered so it reliably wins over the design-system @layer styles. */}
+        <style>
+          {`.skip-to-content{position:absolute;left:-9999px;top:0;z-index:1000;padding:0.5rem 1rem;background:#29295b;color:#fff;border-bottom-right-radius:4px;}.skip-to-content:focus{left:0;}`}
+        </style>
         <Seo />
         <Meta />
         <link
@@ -298,6 +308,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <a className="skip-to-content" href="#main-content">
+          Skip to main content
+        </a>
         {shouldUpdatePublicEnvVars && (
           <script
             dangerouslySetInnerHTML={{
@@ -317,7 +330,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   communityId={communityId}
                 />
                 <IslandContainer direction="x">
-                  <Island rootClasses="layout__main flex--grow-1">
+                  <Island
+                    as="main"
+                    id="main-content"
+                    tabIndex={-1}
+                    rootClasses="layout__main flex--grow-1"
+                  >
                     <Container size="narrow">
                       <Breadcrumbs />
                       {children}
@@ -393,13 +411,45 @@ function App() {
     const siteId = data?.publicEnvVariables.VITE_RYBBIT_SITE_ID;
     const analyticsHost = data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST;
     if (!siteId || !analyticsHost) return;
+
+    // Rybbit auto-tracks outbound link clicks including the query string, and the
+    // /auth/* login/logout links carry a `next`/`returnUrl` that may be sensitive.
+    // Register our capture-phase listener before Rybbit's (added async in init
+    // below) and stopImmediatePropagation for auth-link clicks so Rybbit never
+    // sees them. No preventDefault, and these are plain <a href> with no onClick,
+    // so navigation and every other click are unaffected.
+    const suppressAnalyticsForAuthLinks = (event: MouseEvent) => {
+      const anchor =
+        event.target instanceof Element ? event.target.closest("a") : null;
+      if (!anchor) return;
+      let pathname: string;
+      try {
+        pathname = new URL(anchor.href, window.location.href).pathname;
+      } catch {
+        return;
+      }
+      if (pathname.startsWith("/auth/")) {
+        event.stopImmediatePropagation();
+      }
+    };
+    document.addEventListener("click", suppressAnalyticsForAuthLinks, true);
+
     rybbit
       .init({
         analyticsHost,
         siteId,
         skipPatterns: ANALYTICS_SKIP_PATTERNS,
+        maskPatterns: ANALYTICS_MASK_PATTERNS,
       })
       .catch(console.error);
+
+    return () => {
+      document.removeEventListener(
+        "click",
+        suppressAnalyticsForAuthLinks,
+        true
+      );
+    };
   }, [
     data?.publicEnvVariables.VITE_RYBBIT_SITE_ID,
     data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST,

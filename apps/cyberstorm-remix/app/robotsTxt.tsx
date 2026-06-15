@@ -9,7 +9,11 @@
  * allowed into the API docs. Per RFC 9309 the longest matching path takes
  * precedence, so the "Allow: /api/docs/" exception applies regardless of
  * rule order.
+ *
+ * A `Sitemap:` directive pointing at /sitemap.xml is appended per request so it
+ * carries the correct absolute (https) origin for the current host.
  */
+import type { LoaderFunctionArgs } from "react-router";
 
 const ROBOTS_TXT =
   [
@@ -19,8 +23,22 @@ const ROBOTS_TXT =
     "Disallow: /api/",
   ].join("\n") + "\n";
 
-export async function loader() {
-  return new Response(ROBOTS_TXT, {
+// Absolute https sitemap URL at the same origin the crawler used. We force https
+// for any non-local host (the SSR proxy forwards over http) and avoid importing
+// the public-env helper so this resource route stays import-light and unit
+// testable in isolation.
+function sitemapUrl(request: Request): string {
+  const url = new URL(request.url);
+  const host = url.hostname;
+  const isLocalHost =
+    host === "localhost" || host === "127.0.0.1" || host.endsWith(".localhost");
+  const protocol = isLocalHost ? url.protocol : "https:";
+  return `${protocol}//${url.host}/sitemap.xml`;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const body = `${ROBOTS_TXT}Sitemap: ${sitemapUrl(request)}\n`;
+  return new Response(body, {
     status: 200,
     headers: {
       "Content-Type": "text/plain; charset=utf-8",

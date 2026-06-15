@@ -31,10 +31,14 @@ export const loader = ssrLoader(
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const filters = await dapper.getCommunityFilters(params.communityId);
+      // Non-fatal filters: fall back to `null` on failure so the search still
+      // renders with an in-place filters error instead of throwing (TS-3397).
+      const filters = await dapper
+        .getCommunityFilters(params.communityId)
+        .catch(() => null);
       const community = await dapper.getCommunity(params.communityId);
 
-      const finalSection = getSectionDefault(section, filters.sections);
+      const finalSection = getSectionDefault(section, filters?.sections);
 
       return {
         filters: filters,
@@ -64,13 +68,14 @@ export const loader = ssrLoader(
       };
     }
     throw new Response("Community not found", { status: 404 });
-  }
+  },
+  { cache: true }
 );
 
-// The loader is anonymous, so this landing page could be CDN-cached, but the
-// listing's staleness window is a concern. Kept uncached (overriding the cached
-// Community parent's headers) for now; revisit caching it after QA.
-export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
+// The loader is anonymous (sessionId: undefined), so the community landing page
+// is CDN-cacheable. Listing freshness is bounded by the default cache window
+// (s-maxage=300, swr=600) — an acceptable lag for a mod list.
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({
   request,
@@ -95,10 +100,13 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
 
-    const filters = await dapper.getCommunityFilters(params.communityId);
+    // Non-fatal filters (see SSR loader above): fall back to `null` on failure.
+    const filters = await dapper
+      .getCommunityFilters(params.communityId)
+      .catch(() => null);
 
     const listingsPromise = (async () => {
-      const finalSection = getSectionDefault(section, filters.sections);
+      const finalSection = getSectionDefault(section, filters?.sections);
 
       return dapper.getPackageListings(
         {

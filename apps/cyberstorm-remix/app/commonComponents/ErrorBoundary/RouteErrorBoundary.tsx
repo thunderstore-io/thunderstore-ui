@@ -76,21 +76,27 @@ export function RouteErrorBoundary() {
     };
   }, [statusCode, location.pathname, location.search, location.hash, navigate]);
 
+  const errorTitle = errorTitles[statusCode] ?? "Unexpected error";
+
   return (
-    <div className="error-boundary">
-      <h1
-        className="error-boundary__flavor glitch layers"
-        data-text={statusCode}
-      >
-        <span>{statusCode}</span>
-      </h1>
-      <h2 className="error-boundary__title">
-        {errorTitles[statusCode] ?? "Unexpected error"}
-      </h2>
-      <p className="error-boundary__description">
-        {errorDescriptions[statusCode] ?? "Try again in a moment!"}
-      </p>
-    </div>
+    <>
+      {/* React 19 hoists these into <head>. Error pages must never be indexed,
+          and a real title beats the browser falling back to the raw URL. */}
+      <title>{`${errorTitle} | Thunderstore`}</title>
+      <meta name="robots" content="noindex, nofollow" />
+      <div className="error-boundary">
+        <h1
+          className="error-boundary__flavor glitch layers"
+          data-text={statusCode}
+        >
+          <span>{statusCode}</span>
+        </h1>
+        <h2 className="error-boundary__title">{errorTitle}</h2>
+        <p className="error-boundary__description">
+          {errorDescriptions[statusCode] ?? "Try again in a moment!"}
+        </p>
+      </div>
+    </>
   );
 }
 

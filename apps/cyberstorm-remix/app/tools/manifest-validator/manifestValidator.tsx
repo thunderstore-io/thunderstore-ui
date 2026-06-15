@@ -1,6 +1,8 @@
 import { Buffer } from "buffer";
+import { getCanonicalUrl } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router";
+import { type LoaderFunctionArgs, useOutletContext } from "react-router";
 import { useDebounce } from "use-debounce";
 import {
   FormSection,
@@ -23,6 +25,24 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { type OutletContextShape } from "../../root";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const description =
+    "Validate a Thunderstore package manifest (manifest.json) against the v1 schema.";
+  return {
+    seo: createSeo({
+      descriptors: [
+        { title: "Manifest Validator | Thunderstore" },
+        { name: "description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: getCanonicalUrl(request) },
+        { property: "og:title", content: "Manifest Validator | Thunderstore" },
+        { property: "og:description", content: description },
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
+  };
+}
 
 export default function ManifestValidator() {
   const outletContext = useOutletContext() as OutletContextShape;

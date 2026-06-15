@@ -22,23 +22,14 @@ export const loader = ssrLoader(
           sessionId: undefined,
         };
       });
+      // No SEO here: inherit the canonical title + description from the parent
+      // packageListingVersion route instead of templating them (TS-3390).
       return {
         readme: await dapper.getPackageReadme(
           params.namespaceId,
           params.packageId,
           params.packageVersion
         ),
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} ${params.packageVersion} Readme | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Readme for ${params.namespaceId}-${params.packageId} ${params.packageVersion}`,
-            },
-          ],
-        }),
       };
     }
     return {

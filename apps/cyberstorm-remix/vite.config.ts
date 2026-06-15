@@ -55,9 +55,11 @@ export default defineConfig((config) => {
         : null,
     ],
     build: {
-      // For building the assets under right path.
-      // TODO: Remove when moving fully under TS main domain.
-      assetsDir: "__remix",
+      // Hashed assets use Vite's default "assets" dir so the production server
+      // (@react-router/serve) applies its built-in immutable, 1-year cache to
+      // them — it only long-caches the "/assets" path. (Previously "__remix",
+      // which missed that rule and left hashed assets at Cache-Control:
+      // max-age=0.)
       cssCodeSplit: false,
     },
   };

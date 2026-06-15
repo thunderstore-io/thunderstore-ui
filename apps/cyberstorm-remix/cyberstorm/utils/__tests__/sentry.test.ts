@@ -95,7 +95,7 @@ describe("utils.sentry.beforeSend", () => {
                 { filename: "https://s.nitropay.com/ads-785.js" },
                 {
                   filename:
-                    "https://thunderstore.io/__remix/entry.client-abc.js",
+                    "https://thunderstore.io/assets/entry.client-abc.js",
                 },
               ],
             },

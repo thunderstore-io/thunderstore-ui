@@ -1,5 +1,5 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -35,10 +35,14 @@ export const loader = ssrLoader(
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const filters = await dapper.getCommunityFilters(params.communityId);
+      // Non-fatal filters: fall back to `null` on failure so the search still
+      // renders with an in-place filters error instead of throwing (TS-3397).
+      const filters = await dapper
+        .getCommunityFilters(params.communityId)
+        .catch(() => null);
       const community = await dapper.getCommunity(params.communityId);
 
-      const finalSection = getSectionDefault(section, filters.sections);
+      const finalSection = getSectionDefault(section, filters?.sections);
 
       return {
         teamId: params.namespaceId,
@@ -70,7 +74,7 @@ export const loader = ssrLoader(
               content: `Browse mods uploaded by ${params.namespaceId}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: request.url },
+            { property: "og:url", content: getCanonicalUrl(request) },
             {
               property: "og:title",
               content: `Mods by ${params.namespaceId} | Thunderstore`,
@@ -85,8 +89,13 @@ export const loader = ssrLoader(
       };
     }
     throw new Response("Community not found", { status: 404 });
-  }
+  },
+  { cache: true }
 );
+
+// The loader is anonymous, so this team listing page is CDN-cacheable, matching
+// the community and dependants PackageSearch routes.
+export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({
   request,
@@ -111,12 +120,14 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
 
-    const filters = await dapper.getCommunityFilters(params.communityId);
+    const filters = await dapper
+      .getCommunityFilters(params.communityId)
+      .catch(() => null);
     // Community is required for the breadcrumbs in the root layout
     const community = dapper.getCommunity(params.communityId);
 
     const listingsPromise = (async () => {
-      const finalSection = getSectionDefault(section, filters.sections);
+      const finalSection = getSectionDefault(section, filters?.sections);
 
       return dapper.getPackageListings(
         {

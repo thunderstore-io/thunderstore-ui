@@ -1,6 +1,6 @@
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
@@ -43,8 +43,10 @@ export const loader = ssrLoader(
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
+      // Filters are non-fatal: fall back to `null` so the search still renders
+      // with an in-place filters error instead of throwing (TS-3397).
       const [filters, listing] = await Promise.all([
-        dapper.getCommunityFilters(params.communityId),
+        dapper.getCommunityFilters(params.communityId).catch(() => null),
         getPublicListing(dapper, {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
@@ -69,7 +71,7 @@ export const loader = ssrLoader(
         });
       }
 
-      const finalSection = getSectionDefault(section, filters.sections);
+      const finalSection = getSectionDefault(section, filters?.sections);
 
       const [community, listings] = await Promise.all([
         dapper.getCommunity(params.communityId),
@@ -108,7 +110,7 @@ export const loader = ssrLoader(
               content: `Mods that depend on ${listing.name}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: request.url },
+            { property: "og:url", content: getCanonicalUrl(request) },
             {
               property: "og:title",
               content: `Dependants of ${formatToDisplayName(
@@ -155,7 +157,9 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
 
-    const filters = await dapper.getCommunityFilters(params.communityId);
+    const filters = await dapper
+      .getCommunityFilters(params.communityId)
+      .catch(() => null);
     const community = dapper.getCommunity(params.communityId);
     // Retries with the session attached when the anonymous request 404s,
     // so a permitted user (moderator / team member) sees the page; throws
@@ -167,7 +171,7 @@ export async function clientLoader({
     });
 
     const listingsPromise = (async () => {
-      const finalSection = getSectionDefault(section, filters.sections);
+      const finalSection = getSectionDefault(section, filters?.sections);
 
       return dapper.getPackageListings(
         {

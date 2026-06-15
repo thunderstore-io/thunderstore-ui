@@ -6,6 +6,7 @@ import { isPromise } from "cyberstorm/utils/typeChecks";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
 import { Await, useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
+import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
 
 import {
   CardPackage,
@@ -53,7 +54,9 @@ const PER_PAGE = 20;
 
 interface Props {
   listings: Promise<PackageListings> | PackageListings;
-  filters: Promise<CommunityFilters> | CommunityFilters;
+  // `null` = the filters fetch failed; the search still renders with an in-place
+  // filters error instead of throwing the route (TS-3397).
+  filters: Promise<CommunityFilters> | CommunityFilters | null;
   config: () => RequestConfig;
   currentUser?: CurrentUser;
   dapper: DapperTs;
@@ -71,7 +74,10 @@ export function PackageSearch(props: Props) {
   // This exists to resolve insert the initial sections and categories on server-side
   // so that we don't have to await the clientLoader to get the options, to then be able to
   // do the initial fetch
-  const possibleFilters = isPromise(filters) ? undefined : filters;
+  const possibleFilters = filters && !isPromise(filters) ? filters : undefined;
+
+  // `null` means the filters fetch failed — render an in-place error + retry.
+  const filtersErrored = filters === null;
 
   const [sortedSections, setSortedSections] = useState<
     CommunityFilters["sections"] | undefined
@@ -83,8 +89,10 @@ export function PackageSearch(props: Props) {
 
   const [categories, setCategories] = useState<CategorySelection[] | undefined>(
     possibleFilters?.package_categories
-      .sort((a, b) => a.slug.localeCompare(b.slug))
-      .map((c) => ({ ...c, selection: "off" }))
+      ? [...possibleFilters.package_categories]
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+          .map((c) => ({ ...c, selection: "off" }))
+      : undefined
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -98,36 +106,39 @@ export function PackageSearch(props: Props) {
     searchParams.get("page") ? Number(searchParams.get("page")) : 1
   );
 
-  const categoriesRef = useRef<
-    undefined | Awaited<Promise<CommunityFilters>>["package_categories"]
-  >(undefined);
-
+  // Seed the section + category lists once filters are available. `filters` may
+  // be a Promise (client), already resolved (SSR), or null (fetch failed). Only
+  // seeds while sortedSections is undefined: once on the happy path (the useState
+  // initialisers already seeded from SSR data) and again after a retry recovers
+  // from null. Clones before sorting to avoid mutating loader data; selections
+  // live in the URL, so re-seeding never drops the user's picks.
   useEffect(() => {
-    if (isPromise(filters)) {
-      // On mount, resolve filters promise and set sections and categories states
-      filters.then((resolvedFilters) => {
-        // Set sorted sections
-        const sections = resolvedFilters.sections.sort(
-          (a, b) => b.priority - a.priority
+    if (!filters || sortedSections !== undefined) return;
+    let cancelled = false;
+    const seed = (resolved: CommunityFilters) => {
+      if (cancelled) return;
+      const sections = [...resolved.sections].sort(
+        (a, b) => b.priority - a.priority
+      );
+      setSortedSections(sections);
+      if (sections.length !== 0) {
+        setSearchParamsBlob((prev) =>
+          prev.section === "" ? { ...prev, section: sections[0].uuid } : prev
         );
-        setSortedSections(sections);
-        if (sections.length !== 0) {
-          setSearchParamsBlob((prev) =>
-            prev.section === "" ? { ...prev, section: sections[0].uuid } : prev
-          );
-        }
-        if (resolvedFilters.package_categories !== categoriesRef.current) {
-          // Set current "initial" categories
-          const categories: CategorySelection[] =
-            resolvedFilters.package_categories
-              .sort((a, b) => a.slug.localeCompare(b.slug))
-              .map((c) => ({ ...c, selection: "off" }));
-          setCategories(categories);
-          categoriesRef.current = resolvedFilters.package_categories;
-        }
-      });
-    }
-  }, []);
+      }
+      setCategories(
+        [...resolved.package_categories]
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+          .map((c) => ({ ...c, selection: "off" }))
+      );
+    };
+    // A rejected promise is surfaced via the `filters === null` path, not here.
+    if (isPromise(filters)) filters.then(seed, () => undefined);
+    else seed(filters);
+    return () => {
+      cancelled = true;
+    };
+  }, [filters, sortedSections]);
 
   // Categories start
 
@@ -275,7 +286,9 @@ export function PackageSearch(props: Props) {
   });
   // WHOLE LIKE THING
 
-  const filtersContent = (
+  const filtersContent = filtersErrored ? (
+    <FetchErrorState message="Couldn't load filters." />
+  ) : (
     <>
       {sortedSections ? (
         <CollapsibleMenu headerTitle="Sections" defaultOpen>
@@ -350,6 +363,7 @@ export function PackageSearch(props: Props) {
         <div className="package-search__search-wrapper">
           <NewTextInput
             placeholder="Search Mods..."
+            aria-label="Search mods"
             value={searchParamsBlob.search}
             onChange={(e) =>
               setParamsBlobValue(
@@ -441,7 +455,8 @@ export function PackageSearch(props: Props) {
             </div>
             <div className="package-search__results">
               <Suspense fallback={<SkeletonBox />}>
-                <Await resolve={listings}>
+                {/* Silent on failure — the grid Await owns the visible error. */}
+                <Await resolve={listings} errorElement={<></>}>
                   {(resolvedValue) => (
                     <PackageCount
                       page={currentPage}
@@ -456,7 +471,12 @@ export function PackageSearch(props: Props) {
         </div>
         <div className="package-search__packages">
           <Suspense fallback={<PackageSearchPackagesSkeleton />}>
-            <Await resolve={listings}>
+            <Await
+              resolve={listings}
+              errorElement={
+                <FetchErrorState message="Couldn't load packages." />
+              }
+            >
               {(resolvedValue) => (
                 <>
                   {resolvedValue.results.length > 0 ? (
@@ -535,7 +555,7 @@ export function PackageSearch(props: Props) {
         </div>
         <div className="package-search__pagination">
           <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={listings}>
+            <Await resolve={listings} errorElement={<></>}>
               {(resolvedValue) => (
                 <NewPagination
                   currentPage={currentPage}
@@ -552,7 +572,7 @@ export function PackageSearch(props: Props) {
             </Await>
           </Suspense>
           <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={listings}>
+            <Await resolve={listings} errorElement={<></>}>
               {(resolvedValue) =>
                 resolvedValue.count > 0 ? (
                   <PackageCount

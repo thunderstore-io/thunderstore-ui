@@ -1,6 +1,9 @@
 {
-  "name": "Thunderstore.io",
-  "short_name": "Thunderstore.io",
+  "name": "Thunderstore",
+  "short_name": "Thunderstore",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
