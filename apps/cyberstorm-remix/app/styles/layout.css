@@ -149,6 +149,24 @@
     }
   }
 
+  /* Second bottom ad (the narrow companion beside the banner): show only the
+     heart in its unfilled fallback. Visually hidden, not display:none, so the
+     adblock notice stays in the accessibility tree (as on the slim rail slots
+     in AdContainer.css). The third companion keeps the full text. */
+  .layout__bottom-ads
+    .ad-container[data-cid="nimbus-bottom-ad-right"]
+    .ad-container__fallback-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
   /* Hidden by default; the matching band's media query below reveals exactly
      one banner. The box itself (980×250-class) is sized by the bottom-banner
      variant in AdContainer.css. */
