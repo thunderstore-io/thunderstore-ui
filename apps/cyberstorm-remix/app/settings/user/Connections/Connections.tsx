@@ -128,8 +128,8 @@ export default function Connections() {
             This information will not be shared outside of Thunderstore. Read
             more on our{" "}
             <NewLink
-              primitiveType="cyberstormLink"
-              linkId="PrivacyPolicy"
+              primitiveType="link"
+              href="https://pages.thunderstore.io/p/privacy-policy"
               csVariant="cyber"
             >
               Privacy Policy
