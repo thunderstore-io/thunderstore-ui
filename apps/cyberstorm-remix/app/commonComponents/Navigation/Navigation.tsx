@@ -65,14 +65,16 @@ const closeMobileNavigationMenus = () => {
   hidePopoverById(NAVIGATION_POPOVER_ID);
 };
 
-// Full-page switch to the legacy Django site (old.<host>), preserving the path.
-// The new host is always the bare domain, so the legacy host is just "old."
-// prepended (thunderstore.io -> old.thunderstore.io, and the .dev/.localhost
-// envs likewise).
+// Full-page switch to the legacy Django site, preserving the path. The React app
+// is served from either the base domain (thunderstore.io) or the beta subdomain
+// (new.thunderstore.io), so strip a leading new./old. before prepending old.;
+// otherwise new.thunderstore.io would map to the nonexistent
+// old.new.thunderstore.io.
 function switchToLegacySite() {
   if (typeof window === "undefined") return;
   const { protocol, hostname, pathname } = window.location;
-  window.location.assign(`${protocol}//old.${hostname}${pathname}`);
+  const baseHost = hostname.replace(/^(?:new|old)\./, "");
+  window.location.assign(`${protocol}//old.${baseHost}${pathname}`);
 }
 
 const legacySwitchStyle: CSSProperties = {
