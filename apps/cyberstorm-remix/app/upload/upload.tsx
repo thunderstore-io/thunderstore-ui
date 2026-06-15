@@ -5,9 +5,9 @@ import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { Link, useLoaderData, useOutletContext } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 
-import { NewAlert } from "@thunderstore/cyberstorm";
+import { NewAlert, NewLink } from "@thunderstore/cyberstorm";
 import {
   DapperTs,
   postPackageSubmissionMetadata,
@@ -286,13 +286,24 @@ export default function Upload() {
           </p>
           <p className="upload__helper-text">
             Review your readme before upload using the{" "}
-            <Link to="/tools/markdown-preview">markdown preview tool</Link>.
+            <NewLink
+              primitiveType="cyberstormLink"
+              csVariant="cyber"
+              linkId="MarkdownPreview"
+            >
+              markdown preview tool
+            </NewLink>
+            .
           </p>
           <p className="upload__helper-text">
             Uploading a large file? Check your package manifest first with the{" "}
-            <Link to="/tools/manifest-validator">
+            <NewLink
+              primitiveType="cyberstormLink"
+              csVariant="cyber"
+              linkId="ManifestValidator"
+            >
               package manifest validator
-            </Link>
+            </NewLink>
             .
           </p>
         </NewAlert>

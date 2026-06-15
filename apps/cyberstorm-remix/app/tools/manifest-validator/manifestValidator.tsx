@@ -62,13 +62,11 @@ export default function ManifestValidator() {
     message?: string;
   }>({ status: "waiting", message: "Waiting for input" });
 
-  const [debouncedTeamInput] = useDebounce(teamInput, 300, {
-    maxWait: 300,
-  });
+  // Pure 1s debounce (no maxWait): while the user keeps typing the timer
+  // resets, so the API request only fires once they pause.
+  const [debouncedTeamInput] = useDebounce(teamInput, 1000);
 
-  const [debouncedManifestInput] = useDebounce(manifestInput, 300, {
-    maxWait: 300,
-  });
+  const [debouncedManifestInput] = useDebounce(manifestInput, 1000);
 
   useEffect(() => {
     if (debouncedTeamInput !== "") {

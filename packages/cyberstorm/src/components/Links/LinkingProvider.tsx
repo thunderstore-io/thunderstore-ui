@@ -125,8 +125,6 @@ export interface LinkLibrary {
   ) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
-  /** Privacy policy */
-  PrivacyPolicy: NoRequiredProps;
   /** Settings */
   Settings: NoRequiredProps;
   /** Settings Account page */
@@ -181,7 +179,6 @@ const library: LinkLibrary = {
   PackageVersionWithoutCommunityRequired: noop,
   PackageVersionWithoutCommunityVersions: noop,
   PackageUpload: noop,
-  PrivacyPolicy: noop,
   User: noop,
   Settings: noop,
   SettingsAccount: noop,

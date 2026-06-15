@@ -114,10 +114,9 @@ export function Seo() {
       {ogUrl ? <link rel="canonical" href={ogUrl} /> : null}
       {hasTwitterData ? (
         <>
-          <meta
-            name="twitter:card"
-            content={ogImage ? "summary_large_image" : "summary"}
-          />
+          {/* Always the compact card; large_image embeds are too intrusive
+              when links are shared (e.g. community pages with a tall cover). */}
+          <meta name="twitter:card" content="summary" />
           {ogTitle ? <meta name="twitter:title" content={ogTitle} /> : null}
           {ogDescription ? (
             <meta name="twitter:description" content={ogDescription} />

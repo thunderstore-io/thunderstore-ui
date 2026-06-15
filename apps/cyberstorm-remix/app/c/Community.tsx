@@ -73,15 +73,15 @@ export const loader = ssrLoader(
               property: "og:description",
               content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
             },
-            // Only emit og:image when a cover image exists (no empty tag).
-            ...(community.cover_image_url
+            // Only emit og:image when a community icon exists (no empty tag).
+            ...(community.community_icon_url
               ? [
                   {
                     property: "og:image",
-                    content: community.cover_image_url,
+                    content: community.community_icon_url,
                   },
-                  { property: "og:image:width", content: "360" },
-                  { property: "og:image:height", content: "480" },
+                  { property: "og:image:width", content: "88" },
+                  { property: "og:image:height", content: "88" },
                 ]
               : []),
             { property: "og:site_name", content: "Thunderstore" },

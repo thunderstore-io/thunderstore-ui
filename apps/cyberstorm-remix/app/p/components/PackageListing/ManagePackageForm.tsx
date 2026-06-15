@@ -125,7 +125,7 @@ function ManagePackageFormBody({
             csSize="small"
             csVariant={listing.is_deprecated ? "yellow" : "green"}
           >
-            {listing.is_deprecated ? "Deprecated" : "Active"}
+            {listing.is_deprecated ? "Deprecated" : "Not deprecated"}
           </NewTag>
         </section>
       )}

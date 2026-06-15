@@ -154,8 +154,8 @@ export function Footer(props: { domain: string }) {
               Thunderstore Mod Manager
             </Heading>
             <p className="manager-ad__description">
-              You are prepared. Download Thunderstore Mod Manager for desktop
-              and enter a world of Thunder{" "}
+              Download Thunderstore Mod Manager for Windows to easily install,
+              update, and manage your mods.{" "}
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faBoltLightning} />
               </NewIcon>
