@@ -273,8 +273,8 @@ export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
       format: "video-nc",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
-      refreshTime: 300,
+      // 30s auto-refresh for the video slot (display slots stay at 300s).
+      refreshTime: 30,
       onNavigateMin: ON_NAVIGATE_MIN,
       video: {
         // The rail keeps the player on screen; never detach into the floating
