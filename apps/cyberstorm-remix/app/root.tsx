@@ -279,11 +279,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <style>
           {`@layer utils, colors, layout, components, overrides, theme, theme-utils, theme-colors, theme-layout, theme-components, theme-components-sizes, theme-components-colors, theme-components-layouts, theme-components-miscs, nimbus, nimbus-utils, nimbus-colors, nimbus-layout, nimbus-components, nimbus-components-sizes, nimbus-components-colors, nimbus-components-layouts, nimbus-components-miscs, nimbus-overrides;`}
         </style>
-        {/* Skip-to-content link: visually hidden until keyboard-focused. Kept
-            unlayered so it reliably wins over the design-system @layer styles. */}
-        <style>
-          {`.skip-to-content{position:absolute;left:-9999px;top:0;z-index:1000;padding:0.5rem 1rem;background:#29295b;color:#fff;border-bottom-right-radius:4px;}.skip-to-content:focus{left:0;}`}
-        </style>
         <Seo />
         <Meta />
         <link
@@ -308,9 +303,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <a className="skip-to-content" href="#main-content">
-          Skip to main content
-        </a>
         {shouldUpdatePublicEnvVars && (
           <script
             dangerouslySetInnerHTML={{
