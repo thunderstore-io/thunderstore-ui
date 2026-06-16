@@ -103,11 +103,8 @@
     display: flex;
     gap: var(--gap-md);
     padding: var(--space-6) var(--space-16);
-    cursor: unset;
-  }
-
-  .navigation-header__avatar[data-highlighted] {
-    --dropdown-item-background-color: var(--dropdown-item-bg-color--default);
+    text-decoration: none;
+    cursor: pointer;
   }
 
   .navigation-header__dropdown-details {

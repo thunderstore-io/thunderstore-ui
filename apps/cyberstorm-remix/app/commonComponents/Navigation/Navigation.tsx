@@ -448,6 +448,13 @@ export function DesktopUserDropdown(props: {
   const { user, domain, communityId } = props;
 
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
+  const defaultTeam = user.teams[0];
+  const profileContent = (
+    <div>
+      <NewAvatar src={avatar} username={user.username} csSize="small" />
+      <p className="navigation-header__dropdown-details">{user.username}</p>
+    </div>
+  );
 
   // REMIX TODO: Turn this into a popover
   return (
@@ -462,14 +469,31 @@ export function DesktopUserDropdown(props: {
         </button>
       }
     >
-      <NewDropDownItem
-        rootClasses="navigation-header__avatar"
-        onSelect={(event) => event.preventDefault()}
-      >
-        <div>
-          <NewAvatar src={avatar} username={user.username} csSize="small" />
-          <p className="navigation-header__dropdown-details">{user.username}</p>
-        </div>
+      {/* The profile entry opens your default (first) team, mirroring the
+          legacy Django nav: its package listing in the current community, or
+          the teams list when off-community or teamless (TS-3945). */}
+      <NewDropDownItem asChild>
+        {defaultTeam && communityId ? (
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Team"
+            community={communityId}
+            team={defaultTeam}
+            rootClasses="navigation-header__avatar"
+            title="View your default team"
+          >
+            {profileContent}
+          </NewLink>
+        ) : (
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            rootClasses="navigation-header__avatar"
+            title="View your teams"
+          >
+            {profileContent}
+          </NewLink>
+        )}
       </NewDropDownItem>
       <NewDropDownDivider />
       <NewDropDownItem asChild>
@@ -559,6 +583,7 @@ export function MobileUserMenu(props: {
 }) {
   const { user, domain, communityId } = props;
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
+  const defaultTeam = user.teams[0];
 
   return (
     <Menu
@@ -595,10 +620,23 @@ export function MobileUserMenu(props: {
       }
     >
       <nav className="mobile-navigation__popover" aria-label="Mobile user menu">
-        <div className="mobile-navigation__avatar">
+        {/* Opens your default (first) team, mirroring the legacy Django nav
+            (TS-3945). */}
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId={defaultTeam && communityId ? "Team" : "Teams"}
+          community={defaultTeam && communityId ? communityId : undefined}
+          team={defaultTeam && communityId ? defaultTeam : undefined}
+          rootClasses="mobile-navigation__avatar"
+          title={
+            defaultTeam && communityId
+              ? "View your default team"
+              : "View your teams"
+          }
+        >
           <NewAvatar src={avatar} username={user.username} csSize="medium" />
           <div className="mobile-navigation__user-details">{user.username}</div>
-        </div>
+        </NewLink>
         <div className="mobile-navigation__divider" />
         <section>
           <NewLink
