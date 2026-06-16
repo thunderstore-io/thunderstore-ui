@@ -64,6 +64,11 @@ import { Seo } from "./commonComponents/Seo/Seo";
 
 config.autoAddCss = false;
 
+// Bottom ad row disabled (TS-3954) due to poor viewability, pending
+// reassessment. Flip to true to bring the full-width bottom banner + its
+// companions back; the slot config and CSS are left intact for an easy revert.
+const BOTTOM_ADS_ENABLED = false;
+
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -347,7 +352,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </Island>
                   )}
                 </IslandContainer>
-                {shouldShowAds ? (
+                {shouldShowAds && BOTTOM_ADS_ENABLED ? (
                   <Island rootClasses="flex--x layout__bottom-ads">
                     <div className="layout__bottom-ads-banners">
                       {BOTTOM_BANNER_AD_SLOTS.map((slot) => (
