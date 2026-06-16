@@ -32,7 +32,7 @@ export default function handleRequest(
   responseHeaders: Headers,
   reactRouterContext: EntryContext
 ) {
-  if (responseStatusCode >= 400) {
+  if (responseStatusCode >= 400 && !responseHeaders.has("Cache-Control")) {
     responseHeaders.set("Cache-Control", "no-store");
   }
 
