@@ -4,3 +4,61 @@
   width: 100%;
   overflow: auto;
 }
+
+/* nimbus-components wins over the `components` layer that owns .modal__content,
+   so this fullscreen variant reliably overrides the centered modal sizing. */
+@layer nimbus-components {
+  .code-box-html__container {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Expand control, pinned to the top-right of the box, just left of the
+     CodeBox copy button (which sits at right: var(--space-8)). Stays put while
+     the code scrolls because it lives on the non-scrolling container. */
+  .code-box-html__expand {
+    position: absolute;
+    top: var(--space-8);
+    right: var(--space-48);
+    z-index: 11;
+  }
+
+  /* Fullscreen codebox: fill the viewport leaving a uniform margin on every
+     edge (matching the Analysis page gutter), instead of the centered modal. */
+  .modal__content.code-box-html__fullscreen {
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    padding: var(--space-16);
+    transform: none;
+    animation: none;
+    inset: var(--space-16);
+  }
+
+  .code-box-html__fullscreen-inner {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  /* The modal close button defaults to position: fixed (screen corner); anchor
+     it to the inset content instead. */
+  .code-box-html__fullscreen .modal__button {
+    position: absolute;
+  }
+
+  /* Accessible dialog title kept out of view (Radix requires a title); overrides
+     the default 60px .modal__title box. */
+  .code-box-html__sr-only.modal__title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+}
