@@ -277,11 +277,21 @@ export default function PackageListing() {
       return;
     }
 
+    // Backend rollout compat: prefer the new date fields, fall back to the
+    // legacy ones the old backend still returns (see PackageListingDetails).
+    const lastUpdatedTime = listing.version_created ?? listing.last_updated;
+    const firstUploadedTime =
+      listing.package_created ?? listing.datetime_created;
+
     setLastUpdated(
-      <RelativeTime time={listing.last_updated} suppressHydrationWarning />
+      lastUpdatedTime ? (
+        <RelativeTime time={lastUpdatedTime} suppressHydrationWarning />
+      ) : undefined
     );
     setFirstUploaded(
-      <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
+      firstUploadedTime ? (
+        <RelativeTime time={firstUploadedTime} suppressHydrationWarning />
+      ) : undefined
     );
   }, []);
   // END: For sidebar meta dates
