@@ -34,6 +34,7 @@ export const getFakeCurrentUser = async () => {
         member_count: faker.number.int({ min: 1, max: 100 }),
       },
     ],
+    is_staff: true,
   };
 };
 

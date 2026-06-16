@@ -102,6 +102,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -239,6 +240,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: ["team1"],
         teams_full: [],
+        is_staff: false,
       };
 
       storeCurrentUser(storage, testUser);
@@ -259,6 +261,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
       assert.isNotNull(storage.safeGetJsonValue(CURRENT_USER_KEY));
@@ -306,6 +309,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -328,6 +332,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -463,6 +468,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: ["team1"],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
       setSessionStale(storage, false);

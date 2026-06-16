@@ -7,6 +7,7 @@ import {
   faGamepad,
   faLongArrowLeft,
   faUpload,
+  faUserShield,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -560,6 +561,22 @@ export function DesktopUserDropdown(props: {
           </NewLink>
         </NewDropDownItem>
       )}
+      {/* Django admin, only for staff users — mirrors the legacy nav's
+          {% if request.user.is_staff %} Admin link (TS-3952). */}
+      {user.is_staff ? (
+        <NewDropDownItem asChild>
+          <NewLink
+            primitiveType="link"
+            href="/djangoadmin/"
+            rootClasses="dropdown__item navigation-header__dropdown-item"
+          >
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faUserShield} />
+            </NewIcon>
+            Admin
+          </NewLink>
+        </NewDropDownItem>
+      ) : null}
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
@@ -679,6 +696,19 @@ export function MobileUserMenu(props: {
         </section>
         <div className="mobile-navigation__divider" />
         <section>
+          {/* Django admin, staff only — mirrors the legacy nav (TS-3952). */}
+          {user.is_staff ? (
+            <NewLink
+              primitiveType="link"
+              href="/djangoadmin/"
+              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faUserShield} />
+              </NewIcon>
+              Admin
+            </NewLink>
+          ) : null}
           <NewLink
             primitiveType="link"
             href={buildLogoutUrl()}
