@@ -48,12 +48,9 @@ export const loader = ssrLoader(
 
     return {
       changelog,
-      seo: createSeo({
-        descriptors: [
-          { title: `Changelog for ${params.packageId} | Thunderstore` },
-          { name: "description", content: `Changelog for ${params.packageId}` },
-        ],
-      }),
+      // Inherit the package page's descriptive title; just prefix the tab name
+      // (the old title dropped the author, colliding across packages) (TS-3948).
+      seo: createSeo({ prefix: "Changelog", descriptors: [] }),
     };
   },
   { cache: true }

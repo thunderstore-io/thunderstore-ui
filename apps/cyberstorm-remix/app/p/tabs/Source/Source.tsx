@@ -37,17 +37,9 @@ export async function loader({ params }: Route.LoaderArgs) {
       status: null,
       source: undefined,
       message: undefined,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Source code for ${params.namespaceId}-${params.packageId}`,
-          },
-        ],
-      }),
+      // Inherit the package page's descriptive title; just prefix the tab name
+      // (the tab is labelled "Analysis" in the UI) (TS-3948).
+      seo: createSeo({ prefix: "Analysis", descriptors: [] }),
     };
   }
   return {

@@ -63,17 +63,9 @@ export const loader = ssrLoader(
         packageId: params.packageId,
         slug: params.slug,
         permissions: undefined,
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} Wiki | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Wiki for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
+        // Inherit the package page's descriptive title; just prefix the tab
+        // name so it reads e.g. "Wiki | Mod | Thunderstore - ..." (TS-3948).
+        seo: createSeo({ prefix: "Wiki", descriptors: [] }),
       };
     } else {
       throw new Error("Namespace ID or Package ID is missing");

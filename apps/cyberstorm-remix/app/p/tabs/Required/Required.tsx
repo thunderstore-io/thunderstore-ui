@@ -67,15 +67,9 @@ export const loader = ssrLoader(
         version,
         getPageFromUrl(request.url)
       ),
-      seo: createSeo({
-        descriptors: [
-          { title: `${namespaceId}-${packageId} Dependencies | Thunderstore` },
-          {
-            name: "description",
-            content: `Dependencies for ${namespaceId}-${packageId}`,
-          },
-        ],
-      }),
+      // Inherit the package page's descriptive title; just prefix the tab name
+      // so it reads e.g. "Required | Mod | Thunderstore - ..." (TS-3948).
+      seo: createSeo({ prefix: "Required", descriptors: [] }),
     };
   },
   { cache: true }
