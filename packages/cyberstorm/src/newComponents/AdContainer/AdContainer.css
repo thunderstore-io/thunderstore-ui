@@ -14,13 +14,14 @@
     display: inline-flex;
     flex-direction: column;
     border: 1px solid #1f1f42;
-    overflow: hidden;
 
-    /* Layout + paint containment: whatever the ad script renders or positions
-       (oversized iframes, absolutely/fixed-positioned helpers) stays clipped
-       inside the slot's box and can never overlap site content. Also isolates
-       the slot's layout/paint work from the rest of the page. */
-    contain: layout paint;
+    /* Don't clip to the slot box: NitroPay draws the "Report Ad" chip over the
+       creative's corner, and overflow:hidden / contain:paint cut it off because
+       the box is sized exactly to the creative (TS-3940). Keep `contain: layout`
+       to isolate the slot's layout work; the creative itself is bounded by the
+       iframe max-size cap below, so it still can't overlap site content. */
+    overflow: visible;
+    contain: layout;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-lg);
@@ -111,6 +112,14 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+  }
+
+  /* Now that the slot no longer clips (see .ad-container), bound the creative
+     itself to the reserved box so an oversized iframe can't overlap the page,
+     while the report chip (a sibling overlay) stays free to show at the corner. */
+  .ad-container__content iframe {
+    max-width: 100%;
+    max-height: 100%;
   }
 
   /* Slim and narrow slots can't fit the adblock notice — show only the heart

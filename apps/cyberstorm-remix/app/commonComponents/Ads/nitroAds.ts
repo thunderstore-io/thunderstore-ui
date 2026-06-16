@@ -114,9 +114,9 @@ const ON_NAVIGATE_MIN = MIN_AD_LIFETIME_MS;
 // so the layout can be inspected without dashboard-configured slots.
 const AD_DEMO_MODE = false;
 
-// Report-button placements overlay the ad's corner (inside the slot box) so
-// the button is always visible and clickable — never rendered outside the box
-// above/below the creative, where the containers would clip it.
+// Report-button placements overlay the ad's corner. The slot container no
+// longer clips its box (AdContainer.css, TS-3940), so the chip stays visible
+// and clickable at the corner instead of being cut off by the box edge.
 const DISPLAY_REPORT: NitroReport = {
   enabled: true,
   wording: "Report Ad",
