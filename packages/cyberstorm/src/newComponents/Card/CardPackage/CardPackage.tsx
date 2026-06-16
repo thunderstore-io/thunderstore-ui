@@ -1,7 +1,6 @@
 import {
   faBan,
   faClockRotateLeft,
-  faCodeMerge,
   faDownload,
   faThumbTack,
   faThumbsUp,
@@ -64,10 +63,6 @@ export function CardPackage(props: Props) {
       new Date(packageData.last_updated).toLocaleString(navigator.languages)
     );
   }, [packageData.last_updated]);
-
-  const updateTime = Date.parse(packageData.last_updated);
-  const updateTimeDelta = Math.round((Date.now() - updateTime) / 86400000);
-  const isUpdated = updateTimeDelta < 3;
 
   const tags = (
     <div className="card-package__tags">
@@ -201,8 +196,7 @@ export function CardPackage(props: Props) {
         {csVariant === "card" &&
         (packageData.is_pinned ||
           packageData.is_nsfw ||
-          packageData.is_deprecated ||
-          isUpdated) ? (
+          packageData.is_deprecated) ? (
           <div className="card-package__image-tags">
             {packageData.is_pinned ? (
               <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
@@ -226,14 +220,6 @@ export function CardPackage(props: Props) {
                   <FontAwesomeIcon icon={faWarning} />
                 </NewIcon>
                 Deprecated
-              </NewTag>
-            ) : null}
-            {isUpdated ? (
-              <NewTag csSize="small" csVariant="green">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faCodeMerge} />
-                </NewIcon>
-                Updated
               </NewTag>
             ) : null}
           </div>
