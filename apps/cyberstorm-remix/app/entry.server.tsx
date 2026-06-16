@@ -92,6 +92,12 @@ function handleBotRequest(
         // abortDelay={ABORT_DELAY}
       />,
       {
+        // React 19.2 outlines any Suspense boundary past progressiveChunkSize
+        // (~12.8KB) into a hidden block revealed by an inline $RC script, so
+        // no-JS crawlers see only the fallback skeleton. Bots already wait for
+        // onAllReady, so disable chunking to keep all content inline and
+        // in-place for SEO. See facebook/react#35460.
+        progressiveChunkSize: Number.MAX_SAFE_INTEGER,
         onAllReady() {
           shellRendered = true;
           const body = new PassThrough();
@@ -160,6 +166,13 @@ function handleBrowserRequest(
         // abortDelay={ABORT_DELAY}
       />,
       {
+        // Mirror the bot path: stop React 19.2 from outlining large but
+        // synchronously-ready Suspense content into hidden, $RC-revealed blocks,
+        // so no-JS visitors (and any crawler isbot misses) still get real
+        // content in place. Genuinely-async boundaries (unawaited promises)
+        // still stream normally — progressiveChunkSize only governs size-based
+        // chunking of already-resolved content. See facebook/react#35460.
+        progressiveChunkSize: Number.MAX_SAFE_INTEGER,
         onShellReady() {
           shellRendered = true;
           const body = new PassThrough();
