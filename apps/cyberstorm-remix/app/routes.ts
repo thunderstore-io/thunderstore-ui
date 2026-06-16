@@ -95,6 +95,11 @@ export default [
 
   route("/login", "login/login.tsx"),
 
+  route(
+    "/moderation/review-queue/packages",
+    "moderation/reviewQueuePackages.tsx"
+  ),
+
   route("/settings", "settings/user/Settings.tsx", [
     route("", "settings/user/Connections/Connections.tsx", {
       index: true,

@@ -45,6 +45,7 @@ export type CyberstormLinkIds =
   | "PackageVersionWithoutCommunityRequired"
   | "PackageVersionWithoutCommunityVersions"
   | "PackageUpload"
+  | "ModerationReviewQueue"
   | "Settings"
   | "SettingsAccount"
   | "Team"

@@ -125,6 +125,8 @@ export interface LinkLibrary {
   ) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
+  /** Moderation package review queue */
+  ModerationReviewQueue: NoRequiredProps;
   /** Settings */
   Settings: NoRequiredProps;
   /** Settings Account page */
@@ -180,6 +182,7 @@ const library: LinkLibrary = {
   PackageVersionWithoutCommunityVersions: noop,
   PackageUpload: noop,
   User: noop,
+  ModerationReviewQueue: noop,
   Settings: noop,
   SettingsAccount: noop,
   Team: noop,
