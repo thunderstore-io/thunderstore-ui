@@ -32,6 +32,10 @@ export default function handleRequest(
   responseHeaders: Headers,
   reactRouterContext: EntryContext
 ) {
+  if (responseStatusCode >= 400) {
+    responseHeaders.set("Cache-Control", "no-store");
+  }
+
   const prohibitOutOfOrderStreaming =
     isBotRequest(request.headers.get("user-agent")) ||
     reactRouterContext.isSpaMode;
