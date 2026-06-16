@@ -14,6 +14,10 @@ const BASE_HEADERS = {
   "Content-Type": "application/json",
 };
 
+// Cap SSR API requests so a slow backend can't hang the whole page render.
+// Server-only (no window); the browser owns client-side request timing.
+const SSR_API_TIMEOUT_MS = 500;
+
 // No auto-retry: a blanket client-side retry amplifies backend load during an
 // outage (self-inflicted DDoS) and can duplicate non-idempotent writes. Recovery
 // is explicit instead — FetchErrorState's Retry button and loader revalidation.
@@ -72,6 +76,9 @@ export async function apiFetch(props: {
       ...BASE_HEADERS,
       ...getAuthHeaders(usedConfig),
     },
+    ...(typeof window === "undefined"
+      ? { signal: AbortSignal.timeout(SSR_API_TIMEOUT_MS) }
+      : {}),
   });
 
   if (!response.ok) {
