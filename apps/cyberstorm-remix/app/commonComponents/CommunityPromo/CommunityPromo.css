@@ -14,10 +14,17 @@
     border-radius: var(--radius-md);
     text-decoration: none;
     background-color: var(--color-accent-purple-1);
+    transition: border-color 120ms ease;
   }
 
-  .community-promo:hover {
-    border-color: var(--color-cyber-green-7);
+  /* Subtle hover: lighten the purple border instead of flipping it to a loud
+     cyber-green, keeping the click affordance without shouting (TS-3942).
+     Guarded so touch devices don't get a sticky hover state. */
+  @media (hover: hover) and (pointer: fine) {
+    .community-promo:hover {
+      border-color: var(--color-accent-purple-7);
+      color: inherit;
+    }
   }
 
   /* The "AD" marker hangs on the container's top-left corner (the container's
