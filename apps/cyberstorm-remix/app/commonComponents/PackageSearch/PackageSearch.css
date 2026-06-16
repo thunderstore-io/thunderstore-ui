@@ -21,6 +21,14 @@
     scrollbar-width: none;
   }
 
+  /* The filter list scrolls when sections/categories overflow; keep the
+     scrollbar hidden at rest and reveal a thin one on hover or keyboard
+     focus (TS-3955). */
+  .package-search__sidebar:hover,
+  .package-search__sidebar:focus-within {
+    scrollbar-width: thin;
+  }
+
   .package-search__search {
     flex: 1;
     width: 100%;
