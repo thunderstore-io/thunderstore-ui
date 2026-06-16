@@ -53,7 +53,12 @@ export function useReportPackage(formProps: {
 
   async function awaitAndSetProps() {
     if (!props) {
-      setProps(await formProps.formPropsPromise);
+      const resolved = await formProps.formPropsPromise;
+      setProps(resolved);
+      // Preselect the version the user has open once the version list resolves.
+      setFormInputs((prev) =>
+        prev.version ? prev : { ...prev, version: resolved.defaultVersion }
+      );
     }
   }
 

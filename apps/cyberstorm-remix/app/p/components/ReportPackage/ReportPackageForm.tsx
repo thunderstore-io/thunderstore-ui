@@ -37,6 +37,10 @@ export interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
+  // Available version_numbers (newest first) and the one to preselect (the
+  // version the user currently has open).
+  versions: string[];
+  defaultVersion: string;
 }
 
 interface ReportPackageFormFullProps extends ReportPackageFormProps {
@@ -66,8 +70,17 @@ export function ReportPackageForm(
     formInputs,
     updateFormInput,
     resetFormInputs,
+    versions,
+    // defaultVersion seeds the form state in useReportPackage; not used here.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    defaultVersion,
     ...requestParams
   } = props;
+
+  const versionOptions: SelectOption<string>[] = versions.map((v) => ({
+    value: v,
+    label: v,
+  }));
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
 
@@ -80,7 +93,11 @@ export function ReportPackageForm(
       config: config,
       params: requestParams,
       queryParams: {},
-      data: { reason: data.reason, description: data.description },
+      data: {
+        reason: data.reason,
+        description: data.description,
+        version: data.version ?? undefined,
+      },
     });
   }
 
@@ -126,6 +143,23 @@ export function ReportPackageForm(
   return (
     <>
       <Modal.Body>
+        {versionOptions.length > 0 && (
+          <div className="report-package__block">
+            <label htmlFor="version" className="report-package__label">
+              Version
+            </label>
+            <NewSelect
+              id="version"
+              name="version"
+              options={versionOptions}
+              value={formInputs.version || undefined}
+              onChange={(value) => {
+                updateFormInput("version", value);
+              }}
+              csSize="small"
+            />
+          </div>
+        )}
         <div className="report-package__block">
           <label htmlFor="reason" className="report-package__label">
             Reason

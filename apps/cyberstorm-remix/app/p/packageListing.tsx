@@ -235,11 +235,23 @@ export default function PackageListing() {
   const toast = useToast();
 
   const { ReportPackageButton, ReportPackageModal } = useReportPackage({
-    formPropsPromise: Promise.resolve({
-      community: community_identifier,
-      namespace: namespace_id,
-      package: package_id,
-    }),
+    formPropsPromise: (async () => {
+      const versionsData = await dapper.getPackageVersions(
+        namespace_id,
+        package_id
+      );
+      return {
+        community: community_identifier,
+        namespace: namespace_id,
+        package: package_id,
+        versions: versionsData.map((v) => v.version_number),
+        // On the package page the open version is the latest one.
+        defaultVersion:
+          listing?.latest_version_number ??
+          versionsData[0]?.version_number ??
+          "",
+      };
+    })(),
     config: config,
   });
 

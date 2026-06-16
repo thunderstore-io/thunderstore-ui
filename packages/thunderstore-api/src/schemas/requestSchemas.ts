@@ -471,7 +471,7 @@ export type PackageListingReportRequestParams = z.infer<
 >;
 
 export const packageListingReportRequestDataSchema = z.object({
-  version: z.number().optional(), // TODO: use SemVer string
+  version: z.string().optional(), // SemVer version_number of the reported version
   reason: z.enum([
     "Spam",
     "Malware",
