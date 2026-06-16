@@ -70,7 +70,7 @@ export function CardPackage(props: Props) {
         ? packageData.categories.map((c, index) => (
             <NewTag
               csMode="link"
-              href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
+              href={`/c/${packageData.community_identifier}/?includedCategories=${c.slug}`}
               key={`category_${c}_${index}`}
               csVariant="primary"
               csSize="xsmall"

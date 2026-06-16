@@ -558,7 +558,7 @@ function packageTags(
         csMode="cyberstormLink"
         linkId="Community"
         community={community.identifier}
-        queryParams={`includedCategories=${category.id}`}
+        queryParams={`includedCategories=${category.slug}`}
         csSize="small"
         csVariant="primary"
       >

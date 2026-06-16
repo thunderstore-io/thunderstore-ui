@@ -79,9 +79,9 @@ export function parseCategories(
   const iCArr = includedCategories.split(",");
   const eCArr = excludedCategories.split(",");
   return categories.map((c) =>
-    iCArr.includes(c.id)
+    iCArr.includes(c.slug)
       ? { ...c, selection: "include" }
-      : eCArr.includes(c.id)
+      : eCArr.includes(c.slug)
         ? { ...c, selection: "exclude" }
         : c
   );
@@ -111,7 +111,7 @@ export const setParamsBlobCategories = (
   const newSearchParams = { ...oldBlob };
   const includedCategories = v
     .filter((c) => c.selection === "include")
-    .map((c) => c.id);
+    .map((c) => c.slug);
   if (includedCategories.length === 0) {
     newSearchParams.includedCategories = "";
   } else {
@@ -119,7 +119,7 @@ export const setParamsBlobCategories = (
   }
   const excludedCategories = v
     .filter((c) => c.selection === "exclude")
-    .map((c) => c.id);
+    .map((c) => c.slug);
   if (excludedCategories.length === 0) {
     newSearchParams.excludedCategories = "";
   } else {
@@ -200,7 +200,7 @@ export function synchronizeSearchParams(
     if (
       debouncedSearchParamsBlob.section === "" ||
       sortedSections.length === 0 ||
-      debouncedSearchParamsBlob.section === sortedSections[0]?.uuid
+      debouncedSearchParamsBlob.section === sortedSections[0]?.slug
     ) {
       searchParams.delete("section");
     } else {

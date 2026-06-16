@@ -20,13 +20,13 @@ describe("searchParamsToBlob", () => {
       uuid: "section-1",
       name: "Section 1",
       priority: 1,
-      slug: "",
+      slug: "section-1",
     },
     {
       uuid: "section-2",
       name: "Section 2",
       priority: 0,
-      slug: "",
+      slug: "section-2",
     },
   ];
 
@@ -142,21 +142,21 @@ describe("parseCategories", () => {
   });
 
   test("maps inclusion strings to selection: 'include'", () => {
-    const result = parseCategories("1", "", categories);
+    const result = parseCategories("cat-1", "", categories);
     expect(result.find((c) => c.id === "1")?.selection).toBe("include");
     expect(result.find((c) => c.id === "2")?.selection).toBe("off");
     expect(result.find((c) => c.id === "3")?.selection).toBe("off");
   });
 
   test("maps exclusion strings to selection: 'exclude'", () => {
-    const result = parseCategories("", "2,3", categories);
+    const result = parseCategories("", "cat-2,cat-3", categories);
     expect(result.find((c) => c.id === "1")?.selection).toBe("off");
     expect(result.find((c) => c.id === "2")?.selection).toBe("exclude");
     expect(result.find((c) => c.id === "3")?.selection).toBe("exclude");
   });
 
   test("maps both inclusion and exclusion alongside each other", () => {
-    const result = parseCategories("1", "3", categories);
+    const result = parseCategories("cat-1", "cat-3", categories);
     expect(result.find((c) => c.id === "1")?.selection).toBe("include");
     expect(result.find((c) => c.id === "2")?.selection).toBe("off");
     expect(result.find((c) => c.id === "3")?.selection).toBe("exclude");
@@ -212,18 +212,18 @@ describe("setParamsBlobCategories", () => {
   test("sets included and excluded categories by joining with commas", () => {
     const setter = vi.fn();
     const categories: CategorySelection[] = [
-      { id: "1", name: "", slug: "", selection: "include" },
-      { id: "2", name: "", slug: "", selection: "include" },
-      { id: "3", name: "", slug: "", selection: "exclude" },
-      { id: "4", name: "", slug: "", selection: "off" },
+      { id: "1", name: "", slug: "cat-1", selection: "include" },
+      { id: "2", name: "", slug: "cat-2", selection: "include" },
+      { id: "3", name: "", slug: "cat-3", selection: "exclude" },
+      { id: "4", name: "", slug: "cat-4", selection: "off" },
     ];
 
     setParamsBlobCategories(setter, baseBlob, categories);
 
     expect(setter).toHaveBeenCalledWith({
       ...baseBlob,
-      includedCategories: "1,2",
-      excludedCategories: "3",
+      includedCategories: "cat-1,cat-2",
+      excludedCategories: "cat-3",
     });
   });
 
@@ -267,13 +267,13 @@ describe("synchronizeSearchParams", () => {
       uuid: "default-section",
       name: "Default",
       priority: 1,
-      slug: "",
+      slug: "default-section",
     },
     {
       uuid: "other-section",
       name: "Other",
       priority: 0,
-      slug: "",
+      slug: "other-section",
     },
   ];
 
@@ -488,7 +488,7 @@ describe("resetParams", () => {
         uuid: "section-X",
         name: "Sec X",
         priority: 1,
-        slug: "",
+        slug: "section-X",
       },
     ];
 
