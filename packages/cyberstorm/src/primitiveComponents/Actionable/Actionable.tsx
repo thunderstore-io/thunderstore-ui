@@ -34,6 +34,9 @@ export interface ActionableCyberstormLinkProps
   linkId: CyberstormLinkIds;
   queryParams?: string;
   disabled?: boolean;
+  // Forwarded to the underlying React Router <Link>; when true, navigating via
+  // this link does not reset scroll to the top (e.g. package page tab switches).
+  preventScrollReset?: boolean;
   ref?: React.Ref<HTMLAnchorElement>;
 }
 
