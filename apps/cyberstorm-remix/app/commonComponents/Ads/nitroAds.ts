@@ -264,28 +264,31 @@ export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
     sizes: FISHSTICK_SIZES,
     mediaQuery: RIGHT_COLUMN_MQ,
   }),
-  {
-    containerId: RAIL_VIDEO_ID,
-    sizeVariant: "video",
-    options: {
-      format: "video-nc",
-      demo: AD_DEMO_MODE,
-      refreshLimit: 0,
-      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
-      refreshTime: 300,
-      onNavigateMin: ON_NAVIGATE_MIN,
-      video: {
-        // The rail keeps the player on screen; never detach into the floating
-        // (docked) player, which otherwise covers the footer on tall layouts.
-        float: "never",
-      },
-      report: {
-        ...TOP_LEFT_REPORT,
-        icon: true,
-      },
-      mediaQuery: RIGHT_COLUMN_MQ,
-    },
-  },
+  // Video ad disabled — was causing issues. Re-add this slot to restore it;
+  // RAIL_VIDEO_ID, the onNavigateNimbusAds guard, and the layout.css rule are
+  // left in place so it's a one-spot revert.
+  // {
+  //   containerId: RAIL_VIDEO_ID,
+  //   sizeVariant: "video",
+  //   options: {
+  //     format: "video-nc",
+  //     demo: AD_DEMO_MODE,
+  //     refreshLimit: 0,
+  //     // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
+  //     refreshTime: 300,
+  //     onNavigateMin: ON_NAVIGATE_MIN,
+  //     video: {
+  //       // The rail keeps the player on screen; never detach into the floating
+  //       // (docked) player, which otherwise covers the footer on tall layouts.
+  //       float: "never",
+  //     },
+  //     report: {
+  //       ...TOP_LEFT_REPORT,
+  //       icon: true,
+  //     },
+  //     mediaQuery: RIGHT_COLUMN_MQ,
+  //   },
+  // },
   displaySlot({
     containerId: "nimbus-right-column-narrow",
     sizeVariant: "narrow-dynamic",
