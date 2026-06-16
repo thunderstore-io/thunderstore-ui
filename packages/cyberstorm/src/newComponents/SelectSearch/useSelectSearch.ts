@@ -26,6 +26,21 @@ export function getSelectSearchOptionId(menuId: string, index: number): string {
   return `${menuId}-option-${index}`;
 }
 
+// A mousedown on an element's scrollbar reports offsetX/offsetY beyond the
+// content box (clientWidth/clientHeight). When the select menu opens inside a
+// scrolling container (e.g. a modal body), that container's scrollbar sits
+// outside the select's containerRef, so without this check dragging it would
+// be treated as an outside click and dismiss the menu (TS-3947).
+function isScrollbarMouseDown(event: MouseEvent): boolean {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return false;
+  const onVerticalScrollbar =
+    target.clientWidth > 0 && event.offsetX > target.clientWidth;
+  const onHorizontalScrollbar =
+    target.clientHeight > 0 && event.offsetY > target.clientHeight;
+  return onVerticalScrollbar || onHorizontalScrollbar;
+}
+
 export function mergeRefs<T>(
   ...refs: Array<React.Ref<T> | undefined>
 ): React.RefCallback<T> {
@@ -217,7 +232,8 @@ export function useSelectSearch({
         containerRef.current &&
         !containerRef.current.contains(event.target as Node) &&
         isVisible &&
-        !disabled
+        !disabled &&
+        !isScrollbarMouseDown(event)
       ) {
         closeMenu();
       }
