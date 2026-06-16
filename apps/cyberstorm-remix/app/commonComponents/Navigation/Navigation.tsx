@@ -71,11 +71,22 @@ const closeMobileNavigationMenus = () => {
 // (new.thunderstore.io), so strip a leading new./old. before prepending old.;
 // otherwise new.thunderstore.io would map to the nonexistent
 // old.new.thunderstore.io.
+// Nimbus adds package sub-routes (required, wiki, changelog, versions, source,
+// dependants, v/<version>/...) that the legacy Django site doesn't have, so
+// switching from one would land on a 404. Collapse any package path down to its
+// detail page so the legacy switch always reaches a valid page (TS-3941).
+function toLegacyPath(pathname: string): string {
+  const packageDetail = pathname.match(/^(\/c\/[^/]+\/p\/[^/]+\/[^/]+\/)/);
+  return packageDetail ? packageDetail[1] : pathname;
+}
+
 function switchToLegacySite() {
   if (typeof window === "undefined") return;
   const { protocol, hostname, pathname } = window.location;
   const baseHost = hostname.replace(/^(?:new|old)\./, "");
-  window.location.assign(`${protocol}//old.${baseHost}${pathname}`);
+  window.location.assign(
+    `${protocol}//old.${baseHost}${toLegacyPath(pathname)}`
+  );
 }
 
 const legacySwitchStyle: CSSProperties = {
