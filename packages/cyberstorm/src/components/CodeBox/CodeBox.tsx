@@ -9,6 +9,8 @@ export interface CodeBoxProps {
   inline?: boolean;
   language?: string;
   allowCopy?: boolean;
+  /** Render a line-number gutter alongside the code (block mode only). */
+  showLineNumbers?: boolean;
 }
 
 /**
@@ -20,6 +22,7 @@ export function CodeBox(props: CodeBoxProps) {
     inline = false,
     language = "text",
     allowCopy = true,
+    showLineNumbers = false,
   } = props;
 
   return (
@@ -29,6 +32,13 @@ export function CodeBox(props: CodeBoxProps) {
       <SyntaxHighlighter
         language={language}
         style={nightOwl}
+        showLineNumbers={!inline && showLineNumbers}
+        lineNumberStyle={{
+          minWidth: "3ch",
+          paddingRight: "var(--space-16)",
+          color: "var(--color-text-tertiary)",
+          userSelect: "none",
+        }}
         customStyle={{
           alignSelf: "stretch",
           width: inline ? "auto" : "100%",
