@@ -40,17 +40,10 @@ export const loader = ssrLoader(
           params.namespaceId,
           params.packageId
         ),
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
-            },
-            {
-              name: "description",
-              content: `Versions for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
+        // Inherit the package page's descriptive title and just prefix the tab
+        // name, so the browser tab reads e.g. "Versions | Mod | Thunderstore -
+        // The X Mod Database" instead of a generic slug-based title (TS-3948).
+        seo: createSeo({ prefix: "Versions", descriptors: [] }),
       };
     }
     return {
@@ -79,12 +72,27 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      // Mirror the loader's SEO so the tab title stays consistent on client-side
+      // navigation and after hydration (clientLoader.hydrate would otherwise
+      // drop it).
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
+          },
+          {
+            name: "description",
+            content: `Versions for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
+    seo: createSeo({ descriptors: [{ title: "Versions Not Found" }] }),
   };
 }
 
