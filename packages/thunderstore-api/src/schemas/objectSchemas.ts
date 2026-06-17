@@ -355,6 +355,10 @@ export const emptyUserSchema = z.object({
   }),
   teams: z.array(z.string()),
   teams_full: z.array(userTeamSchema),
+  // Optional w/ default so previously-cached sessions (pre-is_staff) still parse.
+  // TODO: tighten to `z.boolean()` once the backend always returns is_staff and
+  // every cached pre-is_staff session has expired.
+  is_staff: z.boolean().optional().default(false),
 });
 
 export type EmptyUser = z.infer<typeof emptyUserSchema>;
@@ -368,6 +372,10 @@ export const userSchema = z.object({
   }),
   teams: z.array(z.string()),
   teams_full: z.array(userTeamSchema),
+  // Optional w/ default so previously-cached sessions (pre-is_staff) still parse.
+  // TODO: tighten to `z.boolean()` once the backend always returns is_staff and
+  // every cached pre-is_staff session has expired.
+  is_staff: z.boolean().optional().default(false),
 });
 
 export type User = z.infer<typeof userSchema>;

@@ -102,6 +102,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -239,6 +240,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: ["team1"],
         teams_full: [],
+        is_staff: false,
       };
 
       storeCurrentUser(storage, testUser);
@@ -259,6 +261,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
       assert.isNotNull(storage.safeGetJsonValue(CURRENT_USER_KEY));
@@ -306,6 +309,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -328,6 +332,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: [],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -463,6 +468,7 @@ describe("SessionContext", () => {
         subscription: { expires: null },
         teams: ["team1"],
         teams_full: [],
+        is_staff: false,
       };
       storeCurrentUser(storage, testUser);
       setSessionStale(storage, false);
@@ -472,6 +478,28 @@ describe("SessionContext", () => {
       assert.strictEqual(result.username, "storedUser");
       assert.deepEqual(result.capabilities, ["cap1"]);
       assert.deepEqual(result.teams, ["team1"]);
+    });
+
+    it("should default is_staff to false for a legacy cached user missing the field", async () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      // Simulate a session cached before is_staff existed: the object is valid
+      // except that it lacks the is_staff field entirely.
+      const legacyUser = {
+        username: "legacyUser",
+        capabilities: ["cap1"],
+        connections: [],
+        subscription: { expires: null },
+        teams: ["team1"],
+        teams_full: [],
+      };
+      storage.setJsonValue(CURRENT_USER_KEY, legacyUser);
+      setSessionStale(storage, false);
+
+      const result = await getSessionCurrentUser(storage, false);
+
+      // Compatibility guarantee: the missing field is backfilled, not rejected.
+      assert.strictEqual(result.username, "legacyUser");
+      assert.strictEqual(result.is_staff, false);
     });
 
     it("should return empty user and clear storage when stored user is invalid", async () => {
