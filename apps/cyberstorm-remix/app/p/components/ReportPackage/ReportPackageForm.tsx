@@ -37,6 +37,10 @@ export interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
+  // Available version_numbers (newest first) and the one to preselect (the
+  // version the user currently has open).
+  versions: string[];
+  defaultVersion: string;
 }
 
 interface ReportPackageFormFullProps extends ReportPackageFormProps {
@@ -66,8 +70,29 @@ export function ReportPackageForm(
     formInputs,
     updateFormInput,
     resetFormInputs,
+    versions,
+    defaultVersion,
     ...requestParams
   } = props;
+
+  const versionOptions: SelectOption<string>[] = versions.map((v) => ({
+    value: v,
+    label: v,
+  }));
+
+  // The version to submit (and, when the list loaded, the one the select shows
+  // as selected). With a loaded list, only submit a value that's a real option,
+  // so the displayed selection and the submitted value stay in sync. With no
+  // list — the versions fetch failed, so no selector is rendered — fall back to
+  // the seeded default (the version the user has open) so the report still
+  // records a version.
+  const selectedVersionNumber =
+    versions.length === 0
+      ? formInputs.version_number || defaultVersion || undefined
+      : formInputs.version_number &&
+          versions.includes(formInputs.version_number)
+        ? formInputs.version_number
+        : undefined;
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
 
@@ -80,7 +105,11 @@ export function ReportPackageForm(
       config: config,
       params: requestParams,
       queryParams: {},
-      data: { reason: data.reason, description: data.description },
+      data: {
+        reason: data.reason,
+        description: data.description,
+        version_number: selectedVersionNumber,
+      },
     });
   }
 
@@ -126,6 +155,22 @@ export function ReportPackageForm(
   return (
     <>
       <Modal.Body>
+        {versionOptions.length > 0 && (
+          <div className="report-package__block">
+            {/* NewSelect doesn't forward id/name to a focusable element, so a
+                <label htmlFor> wouldn't associate — name it via aria-label. */}
+            <span className="report-package__label">Version</span>
+            <NewSelect
+              aria-label="Version"
+              options={versionOptions}
+              value={selectedVersionNumber}
+              onChange={(value) => {
+                updateFormInput("version_number", value);
+              }}
+              csSize="small"
+            />
+          </div>
+        )}
         <div className="report-package__block">
           <label htmlFor="reason" className="report-package__label">
             Reason

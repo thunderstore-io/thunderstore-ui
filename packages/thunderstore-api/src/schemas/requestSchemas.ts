@@ -471,7 +471,13 @@ export type PackageListingReportRequestParams = z.infer<
 >;
 
 export const packageListingReportRequestDataSchema = z.object({
-  version: z.number().optional(), // TODO: use SemVer string
+  // SemVer version_number of the reported version. Nonempty: the backend rejects
+  // an empty string during semver parsing, so the UI always sends a real version.
+  // Named `version_number` (not `version`): the previously deployed backend typed
+  // `version` as a PK and 400s on a semver string. A distinct field name lets an
+  // old backend ignore it (it drops unknown fields), so this frontend can deploy
+  // before the matching backend does.
+  version_number: z.string().min(1).optional(),
   reason: z.enum([
     "Spam",
     "Malware",
