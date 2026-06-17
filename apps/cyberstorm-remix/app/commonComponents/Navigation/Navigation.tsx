@@ -3,6 +3,7 @@ import {
   faBars,
   faCaretDown,
   faCaretRight,
+  faClipboardCheck,
   faCog,
   faGamepad,
   faLongArrowLeft,
@@ -446,7 +447,7 @@ export function DesktopUserDropdown(props: {
   domain: string;
   communityId?: string;
 }) {
-  const { user, domain, communityId } = props;
+  const { user, communityId } = props;
 
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
@@ -537,6 +538,23 @@ export function DesktopUserDropdown(props: {
           </NewLink>
         </NewDropDownItem>
       )}
+      {/* Moderation hub, for community moderators/owners and global moderators
+          (TS-3946). is_moderator covers per-community moderators; the page/API
+          enforce real permissions regardless. */}
+      {user.is_moderator || user.is_staff ? (
+        <NewDropDownItem asChild>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Moderation"
+            rootClasses="dropdown__item navigation-header__dropdown-item"
+          >
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faClipboardCheck} />
+            </NewIcon>
+            Moderation
+          </NewLink>
+        </NewDropDownItem>
+      ) : null}
       {/* Django admin, only for staff users — mirrors the legacy nav's
           {% if request.user.is_staff %} Admin link (TS-3952). */}
       {user.is_staff ? (
@@ -574,7 +592,7 @@ export function MobileUserMenu(props: {
   domain: string;
   communityId?: string;
 }) {
-  const { user, domain, communityId } = props;
+  const { user, communityId } = props;
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
   return (
@@ -658,6 +676,20 @@ export function MobileUserMenu(props: {
         </section>
         <div className="mobile-navigation__divider" />
         <section>
+          {/* Moderation hub, for community moderators and global moderators
+              (TS-3946). */}
+          {user.is_moderator || user.is_staff ? (
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="Moderation"
+              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faClipboardCheck} />
+              </NewIcon>
+              Moderation
+            </NewLink>
+          ) : null}
           {/* Django admin, staff only — mirrors the legacy nav (TS-3952). */}
           {user.is_staff ? (
             <NewLink

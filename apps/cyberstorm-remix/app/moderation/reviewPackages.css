@@ -1,0 +1,306 @@
+@layer nimbus-components {
+  .review-queue__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+    align-items: flex-end;
+    margin-bottom: var(--space-16);
+  }
+
+  .review-queue__search-group {
+    display: flex;
+    flex: 1 1 18rem;
+    gap: var(--gap-sm);
+    align-items: center;
+    max-width: 32rem;
+  }
+
+  .review-queue__search {
+    flex: 1 1 auto;
+    min-width: 8rem;
+    height: 2.25rem;
+    padding: 0 var(--space-12);
+    border: 1px solid var(--color-surface-8);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-1);
+  }
+
+  .review-queue__filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    min-width: 11rem;
+  }
+
+  /* Keep the community/status filters anchored to the right of the row so the
+     search box doesn't stretch across the whole width. */
+  .review-queue__filters .review-queue__filter-field:first-of-type {
+    margin-left: auto;
+  }
+
+  .review-queue__bulk-select {
+    flex: 0 0 11rem;
+  }
+
+  .review-queue__summary {
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  /* Bulk action bar: selection info on the left, actions on the right. It picks
+     up an accent once at least one package is selected. */
+  .review-queue__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-16);
+    padding: var(--space-12) var(--space-16);
+    border: 1px solid var(--color-surface-4);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-2);
+  }
+
+  .review-queue__toolbar--active {
+    border-color: var(--color-cyber-green-7);
+    background-color: var(--color-surface-3);
+  }
+
+  .review-queue__toolbar-selection,
+  .review-queue__toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+    align-items: center;
+  }
+
+  .review-queue__toolbar-actions {
+    flex-wrap: nowrap;
+    gap: var(--gap-sm);
+  }
+
+  .review-queue__select-all {
+    display: flex;
+    gap: var(--gap-xs);
+    align-items: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+    white-space: nowrap;
+  }
+
+  .review-queue__selected-count {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .review-queue__table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid var(--color-surface-4);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .review-queue__item {
+    border-bottom: 1px solid var(--color-surface-4);
+  }
+
+  .review-queue__item:last-child {
+    border-bottom: none;
+  }
+
+  .review-queue__row {
+    display: grid;
+    grid-template-areas: "check icon package meta actions";
+    grid-template-columns: 1.5rem 2.5rem minmax(0, 1fr) auto auto;
+    gap: var(--gap-md);
+    align-items: center;
+    padding: var(--space-12) var(--space-16);
+  }
+
+  .review-queue__cell-check {
+    grid-area: check;
+  }
+
+  .review-queue__icon {
+    grid-area: icon;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    background-color: var(--color-surface-4);
+  }
+
+  .review-queue__package {
+    display: flex;
+    flex-direction: column;
+    grid-area: package;
+    min-width: 0;
+  }
+
+  .review-queue__package-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .review-queue__package-namespace {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .review-queue__meta {
+    display: flex;
+    grid-area: meta;
+    gap: var(--gap-md);
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .review-queue__community {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .review-queue__row-actions {
+    display: flex;
+    grid-area: actions;
+    gap: var(--gap-xs);
+    align-items: center;
+  }
+
+  .review-queue__icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+  }
+
+  .review-queue__icon-button:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-4);
+  }
+
+  .review-queue__checkbox {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--color-cyber-green-7);
+    cursor: pointer;
+  }
+
+  .review-queue__expanded {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    padding: 0 var(--space-16) var(--space-16) calc(4rem + var(--gap-md));
+  }
+
+  .review-queue__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .review-queue__notes-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .review-queue__field-label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .review-queue__field-hint {
+    margin-left: var(--space-8);
+    color: var(--color-text-tertiary);
+  }
+
+  .review-queue__textarea {
+    width: 100%;
+    min-height: 8rem;
+    padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--color-surface-8);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-family: inherit;
+    background-color: var(--color-surface-1);
+    resize: vertical;
+  }
+
+  .review-queue__row-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-sm);
+    align-items: center;
+  }
+
+  .review-queue__pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-16);
+  }
+
+  /* Mobile: stack the filters and bulk bar, and reflow each row so the
+     community/status meta drops below the package name. */
+  @media (width <= 48rem) {
+    .review-queue__filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    /* In the stacked layout the flex-basis would otherwise become a tall
+       fixed height, so let the search box size to its content. */
+    .review-queue__search-group {
+      flex: 0 1 auto;
+      max-width: none;
+    }
+
+    .review-queue__filter-field {
+      min-width: 0;
+    }
+
+    .review-queue__filters .review-queue__filter-field:first-of-type {
+      margin-left: 0;
+    }
+
+    .review-queue__bulk-select {
+      flex: 0 0 auto;
+    }
+
+    .review-queue__toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .review-queue__toolbar-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .review-queue__row {
+      grid-template-areas:
+        "check icon package actions"
+        "check icon meta    meta";
+      grid-template-columns: 1.5rem 2.5rem minmax(0, 1fr) auto;
+      gap: var(--gap-xs) var(--gap-sm);
+      align-items: start;
+    }
+
+    .review-queue__meta {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .review-queue__expanded {
+      padding-left: var(--space-16);
+    }
+  }
+}

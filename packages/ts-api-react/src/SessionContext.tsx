@@ -238,6 +238,7 @@ const emptyCurrentUser: EmptyUser = {
   teams: [],
   teams_full: [],
   is_staff: false,
+  is_moderator: false,
 };
 
 export const getSessionCurrentUser = async (

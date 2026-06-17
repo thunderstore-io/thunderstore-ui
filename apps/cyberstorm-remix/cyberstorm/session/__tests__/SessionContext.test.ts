@@ -103,6 +103,7 @@ describe("SessionContext", () => {
         teams: [],
         teams_full: [],
         is_staff: false,
+        is_moderator: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -241,6 +242,7 @@ describe("SessionContext", () => {
         teams: ["team1"],
         teams_full: [],
         is_staff: false,
+        is_moderator: false,
       };
 
       storeCurrentUser(storage, testUser);
@@ -262,6 +264,7 @@ describe("SessionContext", () => {
         teams: [],
         teams_full: [],
         is_staff: false,
+        is_moderator: false,
       };
       storeCurrentUser(storage, testUser);
       assert.isNotNull(storage.safeGetJsonValue(CURRENT_USER_KEY));
@@ -310,6 +313,7 @@ describe("SessionContext", () => {
         teams: [],
         teams_full: [],
         is_staff: false,
+        is_moderator: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -333,6 +337,7 @@ describe("SessionContext", () => {
         teams: [],
         teams_full: [],
         is_staff: false,
+        is_moderator: false,
       };
       storeCurrentUser(storage, testUser);
 
@@ -469,6 +474,7 @@ describe("SessionContext", () => {
         teams: ["team1"],
         teams_full: [],
         is_staff: false,
+        is_moderator: false,
       };
       storeCurrentUser(storage, testUser);
       setSessionStale(storage, false);

@@ -203,6 +203,10 @@ const library: LinkLibrary = {
   PackageUpload: (p) => (
     <Link {...p} url={"/package/create/"} ref={p.customRef} />
   ),
+  Moderation: (p) => <Link {...p} url={"/moderation"} ref={p.customRef} />,
+  ModerationReviewPackages: (p) => (
+    <Link {...p} url={"/moderation/review/packages"} ref={p.customRef} />
+  ),
   Settings: (p) => <Link {...p} url={`/settings/`} ref={p.customRef} />,
   SettingsAccount: (p) => (
     <Link {...p} url={`/settings/account/`} ref={p.customRef} />

@@ -1,0 +1,40 @@
+@layer nimbus-components {
+  .moderation-hub {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--gap-md);
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .moderation-hub__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+    padding: var(--space-16);
+    border: 1px solid var(--color-surface-8);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-2);
+  }
+
+  .moderation-hub__card:hover {
+    background-color: var(--color-surface-3);
+  }
+
+  .moderation-hub__card-icon {
+    align-self: flex-start;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-text-accent);
+  }
+
+  .moderation-hub__card-title {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .moderation-hub__card-description {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+}
