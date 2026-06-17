@@ -1,9 +1,9 @@
-// Calculates the final section UUID based on an optionally requested section
+// Calculates the final section slug based on an optionally requested section
 // and the community filters, defaulting to the highest priority section or
 // an empty string if "all" is explicitly passed.
 export function getSectionDefault(
   section: string | null,
-  sections?: { uuid: string; priority: number }[]
+  sections?: { slug: string; priority: number }[]
 ): string {
   if (section) {
     return section === "all" ? "" : section;
@@ -16,7 +16,7 @@ export function getSectionDefault(
         maxPrioritySection = sections[i];
       }
     }
-    return maxPrioritySection.uuid;
+    return maxPrioritySection.slug;
   }
 
   return "";

@@ -540,11 +540,11 @@ function packageTags(
   return listing.categories.map((category) => {
     return (
       <NewTag
-        key={category.name}
+        key={category.slug}
         csMode="cyberstormLink"
         linkId="Community"
         community={community.identifier}
-        queryParams={`includedCategories=${category.id}`}
+        queryParams={`includedCategories=${encodeURIComponent(category.slug)}`}
         csSize="small"
         csVariant="primary"
       >
