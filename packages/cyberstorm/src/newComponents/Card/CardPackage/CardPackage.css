@@ -12,7 +12,7 @@
   }
 
   .card-package:has(:focus-visible) {
-    outline: var(--card-package-focus-outline-offset);
+    outline: var(--card-package-focus-outline);
     outline-offset: var(--card-package-focus-outline-offset);
   }
 

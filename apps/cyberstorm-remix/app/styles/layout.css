@@ -22,6 +22,14 @@
     min-width: 0;
   }
 
+  /* #main-content is a tabindex=-1 target focused programmatically (skip link /
+     route changes) for screen-reader context, not a control the user tabs to —
+     so suppress the global focus ring that would otherwise outline the whole
+     content area. */
+  .layout__main:focus-visible {
+    outline: none;
+  }
+
   /* Right ad rail beside the content, ending above the full-width bottom ad
      row. The island spans the content row's height (background column); the
      stack inside is a sticky, viewport-fitted flex column: fishstick / dynamic
