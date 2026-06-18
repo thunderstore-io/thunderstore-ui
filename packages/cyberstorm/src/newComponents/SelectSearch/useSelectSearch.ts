@@ -30,10 +30,13 @@ export function getSelectSearchOptionId(menuId: string, index: number): string {
 // content box (clientWidth/clientHeight). When the select menu opens inside a
 // scrolling container (e.g. a modal body), that container's scrollbar sits
 // outside the select's containerRef, so without this check dragging it would
-// be treated as an outside click and dismiss the menu (TS-3947).
+// be treated as an outside click and dismiss the menu (TS-3947). The cyberstorm
+// OverlayScrollbar renders its thumb as a separate floating element the offset
+// check can't see, so match it by class too.
 function isScrollbarMouseDown(event: MouseEvent): boolean {
   const target = event.target;
   if (!(target instanceof HTMLElement)) return false;
+  if (target.closest(".cs-scrollbar-thumb")) return true;
   const onVerticalScrollbar =
     target.clientWidth > 0 && event.offsetX > target.clientWidth;
   const onHorizontalScrollbar =
