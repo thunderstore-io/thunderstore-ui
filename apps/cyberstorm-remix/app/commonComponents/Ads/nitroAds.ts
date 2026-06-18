@@ -105,9 +105,9 @@ export type RenderedAdSlot = {
 };
 
 // Minimum creative lifetime (since slot creation or last refresh) before an SPA
-// navigation may refresh ads — 30s favours viewability/CTR over churn. Enforced
+// navigation may refresh ads — 45s favours viewability/CTR over churn. Enforced
 // in onNavigateNimbusAds and mirrored to NitroPay per slot via `onNavigateMin`.
-const MIN_AD_LIFETIME_MS = 30000;
+const MIN_AD_LIFETIME_MS = 45000;
 const ON_NAVIGATE_MIN = MIN_AD_LIFETIME_MS;
 
 // Set to true to render static placeholders instead of making real ad calls,
@@ -231,7 +231,7 @@ function displaySlot(slot: {
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
       // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
-      refreshTime: 300,
+      refreshTime: 90,
       onNavigateMin: ON_NAVIGATE_MIN,
       renderVisibleOnly: true,
       refreshVisibleOnly: true,
@@ -273,8 +273,8 @@ export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
       format: "video-nc",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
-      refreshTime: 300,
+      // 30s auto-refresh for the video slot (display slots stay at 90s).
+      refreshTime: 30,
       onNavigateMin: ON_NAVIGATE_MIN,
       video: {
         // The rail keeps the player on screen; never detach into the floating
