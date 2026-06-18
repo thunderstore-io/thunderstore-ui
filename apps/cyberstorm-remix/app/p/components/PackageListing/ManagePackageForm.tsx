@@ -180,6 +180,7 @@ function ManagePackageFormFooter({
   listing,
   permissions,
   isTogglingDeprecation,
+  deprecationConfirming,
   isActionInProgress,
   hasCategoryChanges,
   isSavingCategories,
@@ -200,9 +201,13 @@ function ManagePackageFormFooter({
             ? listing.is_deprecated
               ? "Undeprecating…"
               : "Deprecating…"
-            : listing.is_deprecated
-              ? "Undeprecate"
-              : "Deprecate"}
+            : deprecationConfirming
+              ? listing.is_deprecated
+                ? "Confirm undeprecate"
+                : "Confirm deprecate"
+              : listing.is_deprecated
+                ? "Undeprecate"
+                : "Deprecate"}
         </NewButton>
       )}
       {hasCategoryChanges ? (

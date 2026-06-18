@@ -16,7 +16,7 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import { type getPrivateListing } from "../../listingUtils";
 
-const UNLIST_CONFIRM_TIMEOUT_MS = 5000;
+const ACTION_CONFIRM_TIMEOUT_MS = 5000;
 const TOAST_SUCCESS_DURATION_MS = 4000;
 const TOAST_ERROR_DURATION_MS = 8000;
 
@@ -46,6 +46,7 @@ export interface ManagePackageFormFooterProps {
   listing: Listing;
   permissions: Permissions;
   isTogglingDeprecation: boolean;
+  deprecationConfirming: boolean;
   isActionInProgress: boolean;
   hasCategoryChanges: boolean;
   isSavingCategories: boolean;
@@ -128,6 +129,7 @@ export function useManagePackageForm({
   >(null);
   const [unlistConfirming, setUnlistConfirming] = useState(false);
   const [isUnlisting, setIsUnlisting] = useState(false);
+  const [deprecationConfirming, setDeprecationConfirming] = useState(false);
 
   const isUnlistingRef = useRef(false);
   const isTogglingDeprecationRef = useRef(false);
@@ -153,6 +155,7 @@ export function useManagePackageForm({
   const clearDeprecationInFlight = () => {
     isTogglingDeprecationRef.current = false;
     setIsTogglingDeprecation(false);
+    setDeprecationConfirming(false);
     syncActionInProgressRef();
   };
 
@@ -182,11 +185,13 @@ export function useManagePackageForm({
   useEffect(() => {
     if (!enabled) {
       clearUnlistInFlight();
+      clearDeprecationInFlight();
       return;
     }
     setCategories(initialCategories);
     setCategoriesErrorMessage(null);
     clearUnlistInFlight();
+    clearDeprecationInFlight();
   }, [enabled, initialCategories]);
 
   useEffect(() => {
@@ -233,10 +238,19 @@ export function useManagePackageForm({
     if (!unlistConfirming || isUnlisting) return;
     const timeout = setTimeout(
       () => setUnlistConfirming(false),
-      UNLIST_CONFIRM_TIMEOUT_MS
+      ACTION_CONFIRM_TIMEOUT_MS
     );
     return () => clearTimeout(timeout);
   }, [unlistConfirming, isUnlisting]);
+
+  useEffect(() => {
+    if (!deprecationConfirming || isTogglingDeprecation) return;
+    const timeout = setTimeout(
+      () => setDeprecationConfirming(false),
+      ACTION_CONFIRM_TIMEOUT_MS
+    );
+    return () => clearTimeout(timeout);
+  }, [deprecationConfirming, isTogglingDeprecation]);
 
   const deprecateToggleAction = ApiAction({
     endpoint: packageDeprecate,
@@ -252,6 +266,13 @@ export function useManagePackageForm({
 
   const handleToggleDeprecation = async () => {
     if (isTogglingDeprecationRef.current) return;
+    // Require a second, deliberate click before changing the public package
+    // status — the category select menu overlaps the footer, so the first click
+    // is easy to trigger by accident. Mirrors the unlist confirm flow.
+    if (!deprecationConfirming) {
+      setDeprecationConfirming(true);
+      return;
+    }
 
     isTogglingDeprecationRef.current = true;
     setIsTogglingDeprecation(true);
@@ -362,6 +383,7 @@ export function useManagePackageForm({
     listing,
     permissions,
     isTogglingDeprecation,
+    deprecationConfirming,
     isSavingCategories,
     isActionInProgress,
     hasCategoryChanges,
