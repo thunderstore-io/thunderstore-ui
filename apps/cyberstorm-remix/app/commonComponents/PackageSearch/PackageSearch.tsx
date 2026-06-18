@@ -18,6 +18,7 @@ import {
   NewIcon,
   NewPagination,
   NewTextInput,
+  OverlayScrollbar,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
@@ -70,6 +71,9 @@ export function PackageSearch(props: Props) {
   const { listings, filters, config, currentUser, dapper, teamName } = props;
 
   const navigationType = useNavigationType();
+
+  // The sidebar is the scroll container; OverlayScrollbar floats a thumb over it.
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   // This exists to resolve insert the initial sections and categories on server-side
   // so that we don't have to await the clientLoader to get the options, to then be able to
@@ -355,9 +359,14 @@ export function PackageSearch(props: Props) {
 
   return (
     <div className="package-search">
-      <div className="package-search__sidebar">
-        <div className="package-search__filters">{filtersContent}</div>
-      </div>
+      <OverlayScrollbar
+        scrollRef={sidebarRef}
+        wrapperClassName="package-search__sidebar-overlay"
+      >
+        <div className="package-search__sidebar cs-scroll" ref={sidebarRef}>
+          <div className="package-search__filters">{filtersContent}</div>
+        </div>
+      </OverlayScrollbar>
 
       <div className="package-search__content">
         <div className="package-search__search-wrapper">
