@@ -19,7 +19,6 @@ interface PageButtonProps {
   page: number;
   onClick: () => void;
   isCurrent?: boolean;
-  label?: React.ReactNode;
 }
 
 export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
@@ -51,6 +50,12 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     const showFirstPage = leftmostSibling > 1;
     const showLastPage = rightmostSibling < totalPageCount;
 
+    // An ellipsis is shown when one or more pages are skipped between the
+    // first/last page and the window. When the window sits right next to the
+    // first/last page (no gap), no ellipsis is rendered.
+    const showLeftEllipsis = leftmostSibling > 2;
+    const showRightEllipsis = rightmostSibling < totalPageCount - 1;
+
     return (
       <nav aria-label="Pagination" ref={forwardedRef} className="pagination">
         {currentPage > 1 && (
@@ -64,21 +69,18 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           <PageButton page={1} onClick={() => onPageChange(1)} />
         )}
 
+        {showLeftEllipsis && <Ellipsis />}
+
         {range(leftmostSibling, rightmostSibling).map((page) => (
           <PageButton
             key={`page-${page}`}
             page={page}
             isCurrent={page === currentPage}
-            label={getSiblingLabel({
-              page,
-              currentPage,
-              leftmostSibling,
-              rightmostSibling,
-              totalPageCount,
-            })}
             onClick={() => onPageChange(page)}
           />
         ))}
+
+        {showRightEllipsis && <Ellipsis />}
 
         {showLastPage && (
           <PageButton
@@ -100,7 +102,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
 Pagination.displayName = "Pagination";
 
-function PageButton({ page, onClick, isCurrent, label }: PageButtonProps) {
+function PageButton({ page, onClick, isCurrent }: PageButtonProps) {
   return (
     <Actionable
       primitiveType="button"
@@ -110,7 +112,7 @@ function PageButton({ page, onClick, isCurrent, label }: PageButtonProps) {
         isCurrent ? "pagination__item--selected" : undefined
       )}
     >
-      {label ?? page}
+      {page}
     </Actionable>
   );
 }
@@ -141,34 +143,14 @@ function NavButton({ direction, onClick }: NavButtonProps) {
   );
 }
 
-/**
- * Preserves the existing label behaviour: the sibling that borders a hidden
- * range is shown as an ellipsis instead of its page number.
- */
-function getSiblingLabel(args: {
-  page: number;
-  currentPage: number;
-  leftmostSibling: number;
-  rightmostSibling: number;
-  totalPageCount: number;
-}): React.ReactNode {
-  const {
-    page,
-    currentPage,
-    leftmostSibling,
-    rightmostSibling,
-    totalPageCount,
-  } = args;
-
-  const isLeftBoundary =
-    page === leftmostSibling &&
-    currentPage !== leftmostSibling &&
-    leftmostSibling > 1;
-
-  const isRightBoundary =
-    page === rightmostSibling &&
-    currentPage !== rightmostSibling &&
-    rightmostSibling < totalPageCount;
-
-  return isLeftBoundary || isRightBoundary ? "…" : page;
+/** Non-interactive indicator for a range of skipped pages. */
+function Ellipsis() {
+  return (
+    <span
+      className="pagination__item pagination__item--ellipsis"
+      aria-hidden="true"
+    >
+      …
+    </span>
+  );
 }

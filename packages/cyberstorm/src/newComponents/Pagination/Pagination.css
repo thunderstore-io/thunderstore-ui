@@ -28,3 +28,9 @@
   font-weight: var(--pagination-item-font-weight);
   background: var(--pagination-item-background);
 }
+
+/* Skipped-pages indicator: looks like an item but isn't interactive. */
+.pagination__item--ellipsis {
+  background: none;
+  pointer-events: none;
+}
