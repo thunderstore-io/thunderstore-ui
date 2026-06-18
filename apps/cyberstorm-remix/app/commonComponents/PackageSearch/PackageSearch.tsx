@@ -249,15 +249,21 @@ export function PackageSearch(props: Props) {
           )
         ) {
           const isOnlyPageChange = !resetPage && newPage !== currentPage;
-          const preventScrollReset = !isOnlyPageChange;
 
+          // Suppress ScrollRestoration on every navigation; on a page change we
+          // scroll to the top ourselves so it's instant instead of being
+          // animated by the global `scroll-behavior: smooth`.
           if (useReplace) {
             setSearchParams(searchParams, {
               replace: true,
-              preventScrollReset,
+              preventScrollReset: true,
             });
           } else {
-            setSearchParams(searchParams, { preventScrollReset });
+            setSearchParams(searchParams, { preventScrollReset: true });
+          }
+
+          if (isOnlyPageChange) {
+            window.scrollTo({ top: 0, behavior: "instant" });
           }
         }
         searchParamsBlobRef.current = debouncedSearchParamsBlob;
