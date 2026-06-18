@@ -97,6 +97,10 @@ export {
 export { Menu } from "./newComponents/Menu/Menu";
 export { MetaItem as NewMetaItem } from "./newComponents/MetaItem/MetaItem";
 export { Modal, type ModalProps } from "./newComponents/Modal/Modal";
+export {
+  OverlayScrollbar,
+  WindowOverlayScrollbar,
+} from "./newComponents/OverlayScrollbar";
 export { Pagination as NewPagination } from "./newComponents/Pagination/Pagination";
 export type { PaginationProps } from "./newComponents/Pagination/Pagination";
 export {
