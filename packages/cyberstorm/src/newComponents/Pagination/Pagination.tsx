@@ -15,6 +15,13 @@ export interface PaginationProps {
   siblingCount: number;
 }
 
+interface PageButtonProps {
+  page: number;
+  onClick: () => void;
+  isCurrent?: boolean;
+  label?: React.ReactNode;
+}
+
 export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
   (props: PaginationProps, forwardedRef) => {
     const {
@@ -33,100 +40,59 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       totalCount / (pageSize > 0 ? pageSize : 1)
     );
 
-    const buttons = [];
-
+    // The window of pages rendered around the current page.
     const leftmostSibling = Math.max(currentPage - siblingCount, 1);
     const rightmostSibling = Math.min(
       currentPage + siblingCount,
       totalPageCount
     );
 
-    // START Add buttons
-    if (currentPage > 1) {
-      buttons.push(
-        <Actionable
-          key="page-previous"
-          primitiveType="button"
-          onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
-          rootClasses="pagination__item"
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </NewIcon>
-          Prev
-        </Actionable>
-      );
-    }
-    if (leftmostSibling > 1) {
-      buttons.push(
-        <Actionable
-          key="page-1"
-          primitiveType="button"
-          onClick={() => onPageChange(1)}
-          rootClasses="pagination__item"
-        >
-          1
-        </Actionable>
-      );
-    }
-    range(leftmostSibling, rightmostSibling).forEach((pageNumber) => {
-      buttons.push(
-        <Actionable
-          key={`page-${pageNumber}`}
-          primitiveType="button"
-          onClick={() => onPageChange(pageNumber)}
-          rootClasses={classnames(
-            "pagination__item",
-            currentPage === pageNumber
-              ? "pagination__item--selected"
-              : undefined
-          )}
-        >
-          {(pageNumber === leftmostSibling &&
-            currentPage !== leftmostSibling &&
-            leftmostSibling > 1) ||
-          (pageNumber === rightmostSibling &&
-            currentPage !== rightmostSibling &&
-            rightmostSibling < totalPageCount)
-            ? "…"
-            : pageNumber}
-        </Actionable>
-      );
-    });
-    if (rightmostSibling < totalPageCount) {
-      buttons.push(
-        <Actionable
-          key={`page-${totalPageCount}`}
-          primitiveType="button"
-          onClick={() => onPageChange(totalPageCount)}
-          rootClasses="pagination__item"
-        >
-          {totalPageCount}
-        </Actionable>
-      );
-    }
-    if (currentPage !== totalPageCount) {
-      buttons.push(
-        <Actionable
-          key="page-next"
-          primitiveType="button"
-          onClick={() =>
-            onPageChange(increaseCurrentPage(currentPage, totalPageCount))
-          }
-          rootClasses="pagination__item"
-        >
-          Next
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faArrowRight} />
-          </NewIcon>
-        </Actionable>
-      );
-    }
-    // END Add buttons
+    // The first/last page get their own buttons when they fall outside the window.
+    const showFirstPage = leftmostSibling > 1;
+    const showLastPage = rightmostSibling < totalPageCount;
 
     return (
       <nav aria-label="Pagination" ref={forwardedRef} className="pagination">
-        {buttons}
+        {currentPage > 1 && (
+          <NavButton
+            direction="previous"
+            onClick={() => onPageChange(currentPage - 1)}
+          />
+        )}
+
+        {showFirstPage && (
+          <PageButton page={1} onClick={() => onPageChange(1)} />
+        )}
+
+        {range(leftmostSibling, rightmostSibling).map((page) => (
+          <PageButton
+            key={`page-${page}`}
+            page={page}
+            isCurrent={page === currentPage}
+            label={getSiblingLabel({
+              page,
+              currentPage,
+              leftmostSibling,
+              rightmostSibling,
+              totalPageCount,
+            })}
+            onClick={() => onPageChange(page)}
+          />
+        ))}
+
+        {showLastPage && (
+          <PageButton
+            page={totalPageCount}
+            onClick={() => onPageChange(totalPageCount)}
+          />
+        )}
+
+        {currentPage < totalPageCount && (
+          <NavButton
+            direction="next"
+            onClick={() => onPageChange(currentPage + 1)}
+          />
+        )}
       </nav>
     );
   }
@@ -134,12 +100,75 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
 Pagination.displayName = "Pagination";
 
-function decreaseCurrentPage(currentPage: number) {
-  const newPage = currentPage - 1;
-  return newPage > 0 ? newPage : 1;
+function PageButton({ page, onClick, isCurrent, label }: PageButtonProps) {
+  return (
+    <Actionable
+      primitiveType="button"
+      onClick={onClick}
+      rootClasses={classnames(
+        "pagination__item",
+        isCurrent ? "pagination__item--selected" : undefined
+      )}
+    >
+      {label ?? page}
+    </Actionable>
+  );
 }
 
-function increaseCurrentPage(currentPage: number, totalPageCount: number) {
-  const newPage = currentPage + 1;
-  return newPage <= totalPageCount ? newPage : totalPageCount;
+interface NavButtonProps {
+  direction: "previous" | "next";
+  onClick: () => void;
+}
+
+function NavButton({ direction, onClick }: NavButtonProps) {
+  const isPrevious = direction === "previous";
+  const icon = (
+    <NewIcon csMode="inline" noWrapper>
+      <FontAwesomeIcon icon={isPrevious ? faArrowLeft : faArrowRight} />
+    </NewIcon>
+  );
+
+  return (
+    <Actionable
+      primitiveType="button"
+      onClick={onClick}
+      rootClasses="pagination__item"
+    >
+      {isPrevious && icon}
+      {isPrevious ? "Prev" : "Next"}
+      {!isPrevious && icon}
+    </Actionable>
+  );
+}
+
+/**
+ * Preserves the existing label behaviour: the sibling that borders a hidden
+ * range is shown as an ellipsis instead of its page number.
+ */
+function getSiblingLabel(args: {
+  page: number;
+  currentPage: number;
+  leftmostSibling: number;
+  rightmostSibling: number;
+  totalPageCount: number;
+}): React.ReactNode {
+  const {
+    page,
+    currentPage,
+    leftmostSibling,
+    rightmostSibling,
+    totalPageCount,
+  } = args;
+
+  const isLeftBoundary =
+    page === leftmostSibling &&
+    currentPage !== leftmostSibling &&
+    leftmostSibling > 1;
+
+  const isRightBoundary =
+    page === rightmostSibling &&
+    currentPage !== rightmostSibling &&
+    rightmostSibling < totalPageCount;
+
+  return isLeftBoundary || isRightBoundary ? "…" : page;
 }
