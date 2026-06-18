@@ -268,6 +268,9 @@ export default function PackageListing() {
   const [firstUploaded, setFirstUploaded] = useState<
     ReactElement | undefined
   >();
+  const [hasWiki, setHasWiki] = useState(false);
+  const [hasWikiEditPermissions, setHasWikiEditPermissions] = useState(false);
+  const [hasSource, setHasSource] = useState(false);
 
   // This will be loaded 2 times in development because of:
   // https://react.dev/reference/react/StrictMode
@@ -283,7 +286,42 @@ export default function PackageListing() {
     setFirstUploaded(
       <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
     );
+
+    const tools = getSessionTools();
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: tools?.getConfig().apiHost,
+        sessionId: tools?.getConfig().sessionId,
+      };
+    });
+
+    dapper
+      .getPackagePermissions(
+        listing.community_identifier,
+        listing.namespace,
+        listing.name
+      )
+      .then((res) => {
+        setHasWikiEditPermissions(res?.permissions.can_manage_wiki || false);
+      })
+      .catch(() => setHasWikiEditPermissions(false));
+
+    dapper
+      .getPackageWiki(listing.namespace, listing.name)
+      .then((res) => {
+        setHasWiki(res.pages.length > 0);
+      })
+      .catch(() => setHasWiki(false));
+
+    dapper
+      .getPackageSource(listing.namespace, listing.name)
+      .then((res) => {
+        setHasSource((res?.decompilations?.length ?? 0) > 0);
+      })
+      .catch(() => setHasSource(false));
   }, []);
+
+
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[6] || "details";
@@ -430,6 +468,7 @@ export default function PackageListing() {
                   namespace={listing.namespace}
                   package={listing.name}
                   aria-current={currentTab === "wiki"}
+                  disabled={!(hasWiki || hasWikiEditPermissions)}
                   rootClasses={`tabs-item${
                     currentTab === "wiki" ? " tabs-item--current" : ""
                   }`}
@@ -476,6 +515,7 @@ export default function PackageListing() {
                   namespace={listing.namespace}
                   package={listing.name}
                   aria-current={currentTab === "source"}
+                  disabled={!hasSource}
                   rootClasses={`tabs-item${
                     currentTab === "source" ? " tabs-item--current" : ""
                   }`}
