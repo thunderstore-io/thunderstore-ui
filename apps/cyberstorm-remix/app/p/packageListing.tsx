@@ -53,6 +53,7 @@ import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/packageListing";
+import { ModeratorNotes } from "./components/PackageListing/ModeratorNotes";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageListingManagement } from "./components/PackageListing/PackageListingManagement";
 import {
@@ -323,6 +324,8 @@ export default function PackageListing() {
           toast={toast}
           requestConfig={config}
         />
+
+        <ModeratorNotes note={listing.moderator_note} />
 
         <div className="package-listing__main">
           <section className="package-listing__package-content-section">

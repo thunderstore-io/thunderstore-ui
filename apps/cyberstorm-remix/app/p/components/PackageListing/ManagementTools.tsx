@@ -15,6 +15,7 @@ import {
 
 import { type getPrivateListing } from "../../listingUtils";
 import { ManagePackageForm } from "./ManagePackageForm";
+import { ModeratorNotesForm } from "./ModeratorNotesForm";
 import { ReviewPackageForm } from "./ReviewPackageForm";
 
 type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
@@ -54,6 +55,19 @@ export function ManagementTools({
           <ManagePackageForm
             listing={listing}
             permissions={permissions}
+            toast={toast}
+            config={requestConfig}
+          />
+        </Island>
+      ) : null}
+
+      {permissions.can_moderate ? (
+        <Island variant="special">
+          <ModeratorNotesForm
+            communityId={listing.community_identifier}
+            namespaceId={listing.namespace}
+            packageId={listing.name}
+            note={listing.moderator_note}
             toast={toast}
             config={requestConfig}
           />
