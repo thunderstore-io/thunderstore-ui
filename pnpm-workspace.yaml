@@ -2,6 +2,10 @@ packages:
   - "apps/*"
   - "packages/*"
 
+registries:
+  default: https://registry.npmjs.org/
+  "@fortawesome": https://npm.fontawesome.com/
+
 # ---------------------------------------------------------------------------
 # Build scripts (supply-chain hardening)
 #
