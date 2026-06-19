@@ -43,6 +43,18 @@ export type UsermediaCompletedPart = z.infer<
   typeof usermediaCompletedPartSchema
 >;
 
+export const moderatorNoteSchema = z.object({
+  id: z.number().int(),
+  target_type: z.enum(["community", "listing", "version"]),
+  content: z.string(),
+  version_number: z.string().nullable(),
+  is_active: z.boolean(),
+  datetime_created: z.string().datetime(),
+  datetime_updated: z.string().datetime(),
+});
+
+export type ModeratorNote = z.infer<typeof moderatorNoteSchema>;
+
 export const communitySchema = z.object({
   name: z.string().min(1),
   identifier: z.string().min(1),
@@ -57,6 +69,9 @@ export const communitySchema = z.object({
   community_icon_url: z.string().nullable(),
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
+  // Single active note; only present on the community detail endpoint, never
+  // the list.
+  moderator_note: moderatorNoteSchema.nullable().optional(),
 });
 
 export type Community = z.infer<typeof communitySchema>;
@@ -179,6 +194,7 @@ export const packageListingDetailsSchema = packageListingSchema
     install_url: z.string(),
     latest_version_number: z.string().min(1),
     listing_admin_url: z.string().nullable().optional(),
+    moderator_note: moderatorNoteSchema.nullable(),
     package_admin_url: z.string().nullable().optional(),
     team: packageTeamSchema,
     website_url: z.string().nullable(),

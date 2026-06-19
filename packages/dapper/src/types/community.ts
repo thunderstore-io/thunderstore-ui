@@ -1,4 +1,8 @@
-import { type PackageCategory, type PaginatedList } from "./shared";
+import {
+  type ModeratorNote,
+  type PackageCategory,
+  type PaginatedList,
+} from "./shared";
 
 export interface Community {
   name: string;
@@ -14,6 +18,9 @@ export interface Community {
   community_icon_url: string | null;
   total_download_count: number;
   total_package_count: number;
+  // Single active note; only present on the community detail endpoint, never
+  // the list.
+  moderator_note?: ModeratorNote | null;
 }
 
 export type Communities = PaginatedList<Community>;
