@@ -1,0 +1,25 @@
+/*
+ * Co-located styles for the public moderator-notes banner. The banner renders on
+ * the listing, version and community pages, so its styles live with the component
+ * (not packageListing.css) to render correctly wherever it is mounted.
+ */
+@layer nimbus-layout {
+  .moderator-notes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-self: stretch;
+  }
+
+  .moderator-notes__content {
+    margin-block: var(--space-8);
+    font: inherit;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .moderator-notes__meta {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+}

@@ -15,7 +15,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
-import { Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
   Await,
@@ -34,9 +34,12 @@ import {
   NewLink,
   SkeletonBox,
   classnames,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
+import { ModeratorNotes } from "../p/components/PackageListing/ModeratorNotes";
+import { ModeratorNotesEntry } from "../p/components/PackageListing/ModeratorNotesEntry";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/Community";
 import "./Community.css";
@@ -151,8 +154,10 @@ function CommunityMainHeroBackground({
 
 function CommunityMainHeader({
   resolvedCommunity,
+  moderatorNotes,
 }: {
   resolvedCommunity: ResolvedCommunity;
+  moderatorNotes?: ReactNode;
 }) {
   return (
     <div className="community__header">
@@ -219,18 +224,21 @@ function CommunityMainHeader({
             </div>
           </div>
         </div>
-        <NewButton
-          csSize="big"
-          csVariant="secondary"
-          primitiveType="cyberstormLink"
-          linkId="PackageUpload"
-          rootClasses="community__upload-button"
-        >
-          <NewIcon noWrapper csMode="inline">
-            <FontAwesomeIcon icon={faDownload} />
-          </NewIcon>
-          Upload package
-        </NewButton>
+        <div className="community__header-actions">
+          {moderatorNotes}
+          <NewButton
+            csSize="big"
+            csVariant="secondary"
+            primitiveType="cyberstormLink"
+            linkId="PackageUpload"
+            rootClasses="community__upload-button"
+          >
+            <NewIcon noWrapper csMode="inline">
+              <FontAwesomeIcon icon={faDownload} />
+            </NewIcon>
+            Upload package
+          </NewButton>
+        </div>
       </div>
     </div>
   );
@@ -253,6 +261,15 @@ function CommunityMainPage({
 }) {
   const communityId = useParams().communityId;
   const showCommunityPromo = communityHasPromo(communityId);
+  const toast = useToast();
+
+  const moderatorNotes =
+    communityId != null ? (
+      <ModeratorNotesEntry
+        target={{ type: "community", communityId }}
+        toast={toast}
+      />
+    ) : null;
 
   return (
     <Page
@@ -264,7 +281,13 @@ function CommunityMainPage({
       <Suspense fallback={<CommunityMainHeaderSkeleton />}>
         <Await resolve={community}>
           {(resolvedCommunity) => (
-            <CommunityMainHeader resolvedCommunity={resolvedCommunity} />
+            <>
+              <CommunityMainHeader
+                resolvedCommunity={resolvedCommunity}
+                moderatorNotes={moderatorNotes}
+              />
+              <ModeratorNotes notes={resolvedCommunity.moderator_notes} />
+            </>
           )}
         </Await>
       </Suspense>

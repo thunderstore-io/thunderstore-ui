@@ -1,0 +1,54 @@
+/*
+ * Co-located styles for the moderator notes modal. The modal is opened from the
+ * listing, version and community pages, so its styles live with the component
+ * (not packageListing.css) to render correctly wherever it is mounted.
+ */
+@layer nimbus-layout {
+  .moderator-note-form__body {
+    align-items: stretch;
+  }
+
+  .moderator-note-form__block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+  }
+
+  .moderator-note-form__label {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
+  }
+
+  .moderator-note-form__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    align-self: stretch;
+    padding: var(--space-16);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-default);
+  }
+
+  .moderator-note-form__text {
+    align-self: stretch;
+    font: inherit;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .moderator-note-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-sm);
+  }
+
+  .moderator-note-form__textarea {
+    > textarea {
+      width: 100%;
+      height: 8rem;
+    }
+  }
+}

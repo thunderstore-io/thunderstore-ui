@@ -684,3 +684,67 @@ export const packageSourceRequestParamsSchema = z.object({
 export type PackageSourceRequestParams = z.infer<
   typeof packageSourceRequestParamsSchema
 >;
+
+// ModeratorNote create (content is shared between all targets)
+export const moderatorNoteWriteRequestDataSchema = z.object({
+  content: z.string().min(1),
+});
+
+export type ModeratorNoteWriteRequestData = z.infer<
+  typeof moderatorNoteWriteRequestDataSchema
+>;
+
+// ModeratorNote update is a partial update: edit the text and/or toggle active.
+export const moderatorNoteUpdateRequestDataSchema = z.object({
+  content: z.string().min(1).optional(),
+  is_active: z.boolean().optional(),
+});
+
+export type ModeratorNoteUpdateRequestData = z.infer<
+  typeof moderatorNoteUpdateRequestDataSchema
+>;
+
+export const communityModeratorNoteCreateRequestParamsSchema = z.object({
+  community: z.string(),
+});
+
+export type CommunityModeratorNoteCreateRequestParams = z.infer<
+  typeof communityModeratorNoteCreateRequestParamsSchema
+>;
+
+export const listingModeratorNoteCreateRequestParamsSchema = z.object({
+  community: z.string(),
+  namespace: z.string(),
+  package: z.string(),
+});
+
+export type ListingModeratorNoteCreateRequestParams = z.infer<
+  typeof listingModeratorNoteCreateRequestParamsSchema
+>;
+
+export const versionModeratorNoteCreateRequestParamsSchema = z.object({
+  community: z.string(),
+  namespace: z.string(),
+  package: z.string(),
+  version_number: z.string(),
+});
+
+export type VersionModeratorNoteCreateRequestParams = z.infer<
+  typeof versionModeratorNoteCreateRequestParamsSchema
+>;
+
+export const moderatorNoteDetailRequestParamsSchema = z.object({
+  note_id: z.number().int(),
+});
+
+export type ModeratorNoteDetailRequestParams = z.infer<
+  typeof moderatorNoteDetailRequestParamsSchema
+>;
+
+export const communityPermissionsRequestParamsSchema = z.object({
+  community: z.string(),
+});
+
+export type CommunityPermissionsRequestParams = z.infer<
+  typeof communityPermissionsRequestParamsSchema
+>;

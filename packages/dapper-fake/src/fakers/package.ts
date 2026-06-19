@@ -171,6 +171,18 @@ export const getFakePackageListingDetails = async (
     install_url: `ror2mm://v1/install/thunderstore.io/${namespace}/${name}/${ver}/`,
     latest_version_number: getVersionNumber(),
     package_created: packageCreated.toISOString(),
+    moderator_notes: Array.from(
+      { length: faker.number.int({ min: 0, max: 2 }) },
+      () => ({
+        id: faker.number.int({ min: 1, max: 100000 }),
+        target_type: "listing" as const,
+        content: faker.lorem.sentence(),
+        version_number: null,
+        is_active: true,
+        datetime_created: faker.date.recent({ days: 30 }).toISOString(),
+        datetime_updated: faker.date.recent({ days: 30 }).toISOString(),
+      })
+    ),
     team: {
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),

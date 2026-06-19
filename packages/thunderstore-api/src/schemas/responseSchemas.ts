@@ -6,6 +6,7 @@ import {
   currentUserTeamPermissionsSchema,
   emptyUserSchema,
   markdownRenderSchema,
+  moderatorNoteSchema,
   packageListingDetailsSchema,
   packageListingSchema,
   packageListingStatusSchema,
@@ -157,6 +158,27 @@ export const packagePermissionsResponseDataSchema = packagePermissionsSchema;
 
 export type PackagePermissionsResponseData = z.infer<
   typeof packagePermissionsResponseDataSchema
+>;
+
+// ModeratorNoteListResponse: all of a resource's notes (incl. inactive), wrapped
+// so the body is always a valid JSON object (mirrors the embedded list field).
+export const moderatorNoteListResponseDataSchema = z.object({
+  moderator_notes: z.array(moderatorNoteSchema),
+});
+
+export type ModeratorNoteListResponseData = z.infer<
+  typeof moderatorNoteListResponseDataSchema
+>;
+
+// CommunityPermissionsResponse: the current user's community-level permissions.
+export const communityPermissionsResponseDataSchema = z.object({
+  permissions: z.object({
+    can_moderate: z.boolean(),
+  }),
+});
+
+export type CommunityPermissionsResponseData = z.infer<
+  typeof communityPermissionsResponseDataSchema
 >;
 
 // PackageSourceResponse

@@ -1,4 +1,8 @@
-import { type PackageCategory, type PaginatedList } from "./shared";
+import {
+  type ModeratorNote,
+  type PackageCategory,
+  type PaginatedList,
+} from "./shared";
 import { type TeamMember } from "./team";
 
 export interface PackageListing {
@@ -39,6 +43,7 @@ export interface PackageListingDetails
   install_url: string;
   latest_version_number: string;
   listing_admin_url?: string | null;
+  moderator_notes: ModeratorNote[];
   package_admin_url?: string | null;
   team: PackageTeam;
   website_url: string | null;

@@ -16,6 +16,7 @@ export interface ApiEndpointProps<Params, QueryParams, Data> {
 
 export const BASE_LISTING_PATH = "api/cyberstorm/listing/";
 
+export * from "./delete/moderatorNote";
 export * from "./delete/packageWiki";
 export * from "./delete/teamDisband";
 export * from "./delete/teamRemoveMember";
@@ -28,6 +29,7 @@ export * from "./get/communityList";
 export * from "./get/communityPackageListings";
 export * from "./get/currentUser";
 export * from "./get/dynamicHTML";
+export * from "./get/moderatorNote";
 export * from "./get/namespacePackageListings";
 export * from "./get/package";
 export * from "./get/packageChangelog";
@@ -44,9 +46,11 @@ export * from "./get/packageSource";
 export * from "./get/teamDetails";
 export * from "./get/teamMembers";
 export * from "./get/teamServiceAccounts";
+export * from "./patch/moderatorNote";
 export * from "./patch/teamDetailsEdit";
 export * from "./patch/teamEditMember";
 export * from "./post/frontend";
+export * from "./post/moderatorNote";
 export * from "./post/package";
 export * from "./post/packageListing";
 export * from "./post/packageWiki";

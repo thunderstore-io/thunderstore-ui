@@ -1,8 +1,13 @@
 import { apiFetch } from "../apiFetch";
 import type { ApiEndpointProps } from "../index";
-import type { CommunityRequestParams } from "../schemas/requestSchemas";
+import type {
+  CommunityPermissionsRequestParams,
+  CommunityRequestParams,
+} from "../schemas/requestSchemas";
 import {
+  type CommunityPermissionsResponseData,
   type CommunityResponseData,
+  communityPermissionsResponseDataSchema,
   communityResponseDataSchema,
 } from "../schemas/responseSchemas";
 
@@ -20,5 +25,26 @@ export async function fetchCommunity(
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: communityResponseDataSchema,
+  });
+}
+
+// The current user's community-level permissions; used to gate moderator UI on
+// the community page. Session + no-store (user-specific, never cached).
+export async function fetchCommunityPermissions(
+  props: ApiEndpointProps<CommunityPermissionsRequestParams, object, object>
+): Promise<CommunityPermissionsResponseData> {
+  const { config, params } = props;
+  const path = `/api/cyberstorm/community/${params.community}/permissions/`;
+
+  return await apiFetch({
+    args: {
+      config,
+      path,
+      request: { cache: "no-store" as RequestCache },
+      useSession: true,
+    },
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
+    responseSchema: communityPermissionsResponseDataSchema,
   });
 }

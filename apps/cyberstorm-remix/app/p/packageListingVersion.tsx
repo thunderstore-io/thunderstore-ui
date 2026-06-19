@@ -32,11 +32,14 @@ import {
   formatFileSize,
   formatInteger,
   formatToDisplayName,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { PackageListingDetails } from "@thunderstore/dapper/types";
 
 import type { Route } from "./+types/packageListingVersion";
+import { ModeratorNotes } from "./components/PackageListing/ModeratorNotes";
+import { ModeratorNotesEntry } from "./components/PackageListing/ModeratorNotesEntry";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import {
   getPrivateListing,
@@ -183,6 +186,7 @@ export default function PackageListingVersion() {
 
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
+  const toast = useToast();
   const currentTab = location.pathname.split("/")[8] || "details";
 
   // listing is missing only for gated SSR data; the clientLoader refetches
@@ -209,6 +213,19 @@ export default function PackageListingVersion() {
                 View Latest Version
               </NewLink>
             </NewAlert>
+
+            <ModeratorNotesEntry
+              target={{
+                type: "version",
+                communityId: listing.community_identifier,
+                namespaceId: listing.namespace,
+                packageId: listing.name,
+                versionNumber: packageVersion,
+              }}
+              toast={toast}
+            />
+
+            <ModeratorNotes notes={listing.moderator_notes} />
 
             <PageHeader
               headingLevel="1"
