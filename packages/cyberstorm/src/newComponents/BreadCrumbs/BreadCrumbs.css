@@ -46,6 +46,14 @@
     &:focus-visible {
       background-color: var(--breadcrumb-item-bg-color--hover);
       outline: none;
+
+      /* In forced-colors mode the system overrides the background, so the
+         indicator above vanishes. Restore an outline there — rectangular is
+         fine; visible focus matters more than following the skew. */
+      @media (forced-colors: active) {
+        outline: 2px solid;
+        outline-offset: -2px;
+      }
     }
   }
 
