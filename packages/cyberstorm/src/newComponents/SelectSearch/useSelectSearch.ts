@@ -26,8 +26,9 @@ export function getSelectSearchOptionId(menuId: string, index: number): string {
   return `${menuId}-option-${index}`;
 }
 
-// A mousedown on an element's scrollbar reports offsetX/offsetY beyond the
-// content box (clientWidth/clientHeight). When the select menu opens inside a
+// clientWidth/clientHeight span the padding box but exclude the scrollbar
+// gutter (and borders), so a mousedown on an element's scrollbar reports
+// offsetX/offsetY past them. When the select menu opens inside a
 // scrolling container (e.g. a modal body), that container's scrollbar sits
 // outside the select's containerRef, so without this check dragging it would
 // be treated as an outside click and dismiss the menu (TS-3947). The cyberstorm
