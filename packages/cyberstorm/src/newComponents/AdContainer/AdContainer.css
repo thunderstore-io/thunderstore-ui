@@ -65,6 +65,23 @@
     max-height: calc(600px + 2px);
   }
 
+  /* Right-rail display units — fixed boxes (336 wide). Each is a distinct
+     per-config slot (see Nimbus layout.css / nitroAds.ts): "square" is 336x300,
+     "double" is 336x600 (twice as tall). */
+  .ad-container[data-size="rail-square"] {
+    display: flex;
+    flex: none;
+    width: calc(336px + 2px);
+    height: calc(300px + 2px);
+  }
+
+  .ad-container[data-size="rail-double"] {
+    display: flex;
+    flex: none;
+    width: calc(336px + 2px);
+    height: calc(600px + 2px);
+  }
+
   /* The mid-width rail band's only placement: a 160px-wide column that fills
      the available rail height. */
   .ad-container[data-size="narrow-dynamic"] {
