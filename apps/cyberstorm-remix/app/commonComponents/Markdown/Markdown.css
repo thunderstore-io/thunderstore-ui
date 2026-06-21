@@ -1,6 +1,5 @@
 @layer nimbus-utils {
   .markdown-wrapper {
-    display: flex;
     max-width: 100%;
     overflow-x: scroll;
     scrollbar-width: none;
@@ -12,7 +11,6 @@
     font: var(--font-body);
     font-weight: var(--font-weight-regular);
     line-height: 160%;
-    word-break: break-word;
 
     a {
       color: var(--color-text-a--default);
@@ -196,13 +194,14 @@
       border-right: var(--border-width--px) solid var(--color-surface-a8);
       border-bottom: var(--border-width--px) solid var(--color-surface-a8);
       color: var(--color-text-primary);
+      word-break: auto-phrase;
     }
 
     table tr th {
       border-top: solid var(--border-width--px) var(--color-surface-a8);
       color: var(--color-text-tertiary);
-      white-space: nowrap;
       text-align: left;
+      word-break: auto-phrase;
       background: var(--color-surface-5);
 
       * {
