@@ -302,6 +302,13 @@ export function useOverlayScrollbar(
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
       rafRef.current = null;
       hideTimerRef.current = null;
+      // If we unmount (or `enabled` flips false) mid-drag, pointerup never
+      // fires, so clear the drag flag + drag class here. Otherwise the global
+      // `user-select: none` / grabbing cursor stays stuck on <html> until reload.
+      if (draggingRef.current) {
+        draggingRef.current = false;
+        document.documentElement.classList.remove("cs-scrollbar-dragging");
+      }
     };
   }, [
     enabled,

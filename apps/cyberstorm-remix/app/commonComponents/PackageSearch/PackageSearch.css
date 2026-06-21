@@ -18,9 +18,11 @@
     top: calc(var(--header-height) + 1rem);
   }
 
-  /* Bounded scroll box for the filter list. OverlayScrollbar adds `cs-scroll`
-     after hydration to swap the native bar for a floating thumb; no-JS/touch keep
-     the native bar. min-height: 0 lets the max-height cap clip so it can scroll. */
+  /* Bounded scroll box for the filter list. `cs-scroll` is in the markup
+     statically, so the native bar is hidden from first paint; OverlayScrollbar's
+     floating thumb (post-hydration, fine pointers only) replaces it. no-JS/touch
+     get no visible bar, just wheel/keyboard. min-height: 0 lets the max-height
+     cap clip so it can scroll. */
   .package-search__sidebar {
     display: flex;
     flex-direction: column;

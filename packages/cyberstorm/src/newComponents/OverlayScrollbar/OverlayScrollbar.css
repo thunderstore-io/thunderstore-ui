@@ -11,8 +11,11 @@
     min-height: 0;
   }
 
-  /* Opt-in: hide the native bar + reclaim its gutter on a CONTAINER. Added by
-     <OverlayScrollbar> after hydration so SSR/no-JS keeps a real native bar.
+  /* Opt-in: hide the native bar + reclaim its gutter on a CONTAINER. The caller
+     puts this class in the markup statically (e.g. PackageSearch), so the native
+     bar is hidden from first paint — the floating thumb (rendered only after
+     hydration, fine pointers only) replaces it with zero layout shift. Trade-off:
+     no-JS / coarse-pointer scrollers get no visible bar, just wheel/keyboard.
      Scoped to this class so it never touches the repo's intentional
      scrollbar-width:none strips (Tabs, Drawer, markdown, etc.) or the global
      `* > * { scrollbar-width: thin }` rule. The element keeps overflow:auto. */
@@ -27,8 +30,10 @@
     height: 0;
   }
 
-  /* Opt-in: hide the native PAGE bar. Added to <html> by
-     <WindowOverlayScrollbar> after hydration. */
+  /* Opt-in: hide the native PAGE bar. Applied to <html> statically in root.tsx
+     markup (not on hydration), so the bar is hidden from first paint and the
+     fixed window thumb (post-hydration, fine pointers only) replaces it with no
+     layout shift. Trade-off: no-JS / coarse-pointer pages get no visible bar. */
   html.cs-custom-scrollbars,
   html.cs-custom-scrollbars body {
     scrollbar-width: none;
@@ -66,6 +71,17 @@
   }
 
   .cs-scrollbar-thumb.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Keep the container thumb visible while the scroll box is hovered or holds
+     keyboard focus, so it stays put even if the JS idle timer fires mid-hover
+     (TS-3955). Only renders when overflowing, so this can't show a thumb with no
+     overflow. Scoped to the container variant; the window thumb sits outside
+     .cs-scroll-overlay and uses its own edge hot-zone reveal. */
+  .cs-scroll-overlay:hover .cs-scrollbar-thumb--container,
+  .cs-scroll-overlay:focus-within .cs-scrollbar-thumb--container {
     opacity: 1;
     pointer-events: auto;
   }
