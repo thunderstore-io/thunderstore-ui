@@ -35,6 +35,7 @@ export const getFakeCurrentUser = async () => {
       },
     ],
     is_staff: true,
+    is_moderator: true,
   };
 };
 

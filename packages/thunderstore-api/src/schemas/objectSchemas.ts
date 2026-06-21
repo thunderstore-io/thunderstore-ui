@@ -359,6 +359,9 @@ export const emptyUserSchema = z.object({
   // TODO: tighten to `z.boolean()` once the backend always returns is_staff and
   // every cached pre-is_staff session has expired.
   is_staff: z.boolean().optional().default(false),
+  // Optional w/ default so sessions cached before community-moderator gating
+  // still parse. True when the user can moderate at least one community.
+  is_moderator: z.boolean().optional().default(false),
 });
 
 export type EmptyUser = z.infer<typeof emptyUserSchema>;
@@ -376,6 +379,9 @@ export const userSchema = z.object({
   // TODO: tighten to `z.boolean()` once the backend always returns is_staff and
   // every cached pre-is_staff session has expired.
   is_staff: z.boolean().optional().default(false),
+  // Optional w/ default so sessions cached before community-moderator gating
+  // still parse. True when the user can moderate at least one community.
+  is_moderator: z.boolean().optional().default(false),
 });
 
 export type User = z.infer<typeof userSchema>;

@@ -58,6 +58,10 @@ export function Breadcrumbs() {
     (m) => m.id === "tools/markdown-preview/markdownPreview"
   );
   const loginPage = matches.find((m) => m.id === "login/login");
+  const moderationPage = matches.find((m) => m.id === "moderation/moderation");
+  const reviewPackagesPage = matches.find(
+    (m) => m.id === "moderation/reviewPackages"
+  );
 
   const communityBreadcrumb = useMemo(
     () =>
@@ -256,6 +260,28 @@ export function Breadcrumbs() {
     return <NewBreadCrumbsItem>Log in</NewBreadCrumbsItem>;
   }, [loginPage]);
 
+  const moderationBreadcrumb = useMemo(() => {
+    if (!moderationPage && !reviewPackagesPage) return null;
+    return (
+      <>
+        {reviewPackagesPage ? (
+          <NewBreadCrumbsLink
+            primitiveType="cyberstormLink"
+            linkId="Moderation"
+            csVariant="cyber"
+          >
+            Moderation
+          </NewBreadCrumbsLink>
+        ) : (
+          <NewBreadCrumbsItem>Moderation</NewBreadCrumbsItem>
+        )}
+        {reviewPackagesPage ? (
+          <NewBreadCrumbsItem>Package review</NewBreadCrumbsItem>
+        ) : null}
+      </>
+    );
+  }, [moderationPage, reviewPackagesPage]);
+
   return (
     <NewBreadCrumbs>
       {userSettingsBreadcrumb}
@@ -269,6 +295,7 @@ export function Breadcrumbs() {
       {miscPackageBreadcrumb}
       {toolsBreadcrumb}
       {loginBreadcrumb}
+      {moderationBreadcrumb}
     </NewBreadCrumbs>
   );
 }

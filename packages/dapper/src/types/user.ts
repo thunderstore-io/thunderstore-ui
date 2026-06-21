@@ -14,6 +14,7 @@ export interface CurrentUser {
     member_count: number;
   }[];
   is_staff: boolean;
+  is_moderator: boolean;
 }
 
 export interface User {

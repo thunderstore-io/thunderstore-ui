@@ -95,6 +95,11 @@ export default [
 
   route("/login", "login/login.tsx"),
 
+  // Moderation lives under /moderation as plain child paths (not nested
+  // <Outlet>s) — like communities -> community — so each is its own full page.
+  route("/moderation", "moderation/moderation.tsx"),
+  route("/moderation/review/packages", "moderation/reviewPackages.tsx"),
+
   route("/settings", "settings/user/Settings.tsx", [
     route("", "settings/user/Connections/Connections.tsx", {
       index: true,
