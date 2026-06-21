@@ -12,13 +12,12 @@ import type { AdContainerSizeVariant } from "@thunderstore/cyberstorm";
  * `nimbus-v<AD_SLOT_VERSION>-<config>-<position>-<type>`), so a slot is never reused at
  * two sizes. The rail is 336px wide on large viewports and a single 160px fill
  * slot on mid-width ones. NitroPay measures each slot's container and only loads
- * sizes that fit it. Because the reveal is a CSS container query (not a viewport
- * media query), each rail slot is created lazily — only once its container is
- * actually on-screen (see createNimbusAdsInView) — so a slot the current config
- * hides is never instantiated. Each rail slot's `mediaQuery` carries the width
- * regime (full 336px vs 160px narrow rail) AND its config's window-height band,
- * so NitroPay also gates each config by viewport height. All slot ids must be
- * configured in the NitroPay dashboard before they fill.
+ * sizes that fit it. Rail slots are created eagerly; each carries its config's
+ * `mediaQuery` (the width regime — full 336px vs 160px narrow rail — AND its
+ * config's window-height band), so NitroPay serves only the config matching the
+ * current window while CSS hides the rest. The visual reveal is the CSS
+ * container query (layout.css); the mediaQuery keeps NitroPay in step. All slot
+ * ids must be configured in the NitroPay dashboard before they fill.
  *
  * Types are derived from the NitroPay API docs (api-docs.nitropay.com):
  * `createAd` returns a `NitroAd` (or a promise of one/an array), whose
@@ -268,8 +267,11 @@ function displaySlot(slot: {
       // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
       refreshTime: 90,
       onNavigateMin: ON_NAVIGATE_MIN,
-      renderVisibleOnly: true,
-      refreshVisibleOnly: true,
+      // Demo placeholders render immediately (not gated on the slot scrolling
+      // into view) so the layout is easy to inspect; production stays
+      // viewport-gated for viewability/CTR.
+      renderVisibleOnly: !AD_DEMO_MODE,
+      refreshVisibleOnly: !AD_DEMO_MODE,
       sizes: slot.sizes,
       report: slot.report ?? DISPLAY_REPORT,
       mediaQuery: slot.mediaQuery,
@@ -538,18 +540,22 @@ function createNimbusAdsInView(
 }
 
 /**
- * Create every Nimbus ad slot. Each slot is created lazily, once its container
- * is actually on-screen (see createNimbusAdsInView). The rail's slots are
- * revealed by CSS container queries (layout.css), so a slot hidden for the
- * current rail height has no box, never intersects, and is never instantiated;
- * each slot's mediaQuery (width regime + its config's window-height band) is the
- * belt-and-braces gate inside NitroPay. The rail sits in the initial viewport,
- * so its visible slots still create on first paint.
+ * Create every Nimbus ad slot. Rail slots are created EAGERLY: each carries its
+ * config's mediaQuery (width regime + window-height band), so NitroPay serves
+ * only the config matching the current window and CSS hides the rest — there's
+ * no need to gate creation on scroll/intersection. With AD_DEMO_MODE on, each
+ * slot is created with `demo: true` so NitroPay paints its own demo placeholders
+ * (NitroPay's demo is unreliable for the larger units / backgrounded tabs). The
+ * below-the-fold bottom banner row stays lazy, created only once it scrolls near
+ * the viewport (see createNimbusAdsInView).
  */
 export function createAllNimbusAds(nitroAds: NitroAds): void {
   adsLiveSince = Date.now();
+
+  for (const slot of RIGHT_COLUMN_SLOTS) {
+    createNimbusAd(nitroAds, slot.containerId, slot.options);
+  }
   createNimbusAdsInView(nitroAds, [
-    ...RIGHT_COLUMN_SLOTS,
     ...BOTTOM_BANNER_AD_SLOTS,
     ...BOTTOM_RIGHT_AD_SLOTS,
   ]);
