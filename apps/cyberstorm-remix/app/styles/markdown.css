@@ -177,7 +177,7 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      overflow: auto;
+      overflow-x: scroll;
     }
 
     tbody tr:nth-child(even) {
@@ -194,13 +194,13 @@
       border-right: var(--border-width--px) solid var(--color-surface-a8);
       border-bottom: var(--border-width--px) solid var(--color-surface-a8);
       color: var(--color-text-primary);
+      min-width: 15em;
     }
 
     table tr th {
       border-top: solid var(--border-width--px) var(--color-surface-a8);
       color: var(--color-text-tertiary);
       white-space: nowrap;
-      text-align: left;
       background: var(--color-surface-5);
 
       * {
