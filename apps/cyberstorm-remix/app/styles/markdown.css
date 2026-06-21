@@ -194,7 +194,6 @@
       border-right: var(--border-width--px) solid var(--color-surface-a8);
       border-bottom: var(--border-width--px) solid var(--color-surface-a8);
       color: var(--color-text-primary);
-      min-width: 15em;
     }
 
     table tr th {
@@ -202,7 +201,8 @@
       color: var(--color-text-tertiary);
       white-space: nowrap;
       background: var(--color-surface-5);
-
+      min-width: 15em;
+      
       * {
         white-space: inherit;
       }
