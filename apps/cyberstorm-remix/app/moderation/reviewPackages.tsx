@@ -100,7 +100,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     apiHost: tools.getConfig().apiHost,
     sessionId: tools.getConfig().sessionId,
   });
-  const page = Number(url.searchParams.get("page")) || 1;
+  const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
   const q = url.searchParams.get("q") ?? undefined;
   const reviewStatusParam = url.searchParams.get("review_status") ?? "";
   const reviewStatus = isReviewStatus(reviewStatusParam)
@@ -166,7 +166,7 @@ export default function ReviewPackages() {
 
   const activeFilter = searchParams.get("review_status") ?? "all";
   const activeCommunity = searchParams.get("community") ?? "all";
-  const currentPage = Number(searchParams.get("page")) || 1;
+  const currentPage = Math.max(1, Number(searchParams.get("page")) || 1);
   const totalCount = queue?.count ?? results.length;
 
   const communityFilterOptions: SelectOption<string>[] = [
@@ -220,8 +220,8 @@ export default function ReviewPackages() {
             : {
                 ...d,
                 [item.id]: {
-                  notes: item.internal_notes,
-                  reason: item.rejection_reason,
+                  notes: item.internal_notes ?? "",
+                  reason: item.rejection_reason ?? "",
                 },
               }
         );
@@ -340,8 +340,8 @@ export default function ReviewPackages() {
 
   async function applyRow(item: ReviewListing, rowStatus: BulkStatus) {
     const draft = drafts[item.id] ?? {
-      notes: item.internal_notes,
-      reason: item.rejection_reason,
+      notes: item.internal_notes ?? "",
+      reason: item.rejection_reason ?? "",
     };
     if (rowStatus === "rejected" && !draft.reason.trim()) {
       toast.addToast({
@@ -389,8 +389,8 @@ export default function ReviewPackages() {
   function renderRow(item: ReviewListing) {
     const isOpen = expanded.has(item.id);
     const draft = drafts[item.id] ?? {
-      notes: item.internal_notes,
-      reason: item.rejection_reason,
+      notes: item.internal_notes ?? "",
+      reason: item.rejection_reason ?? "",
     };
     const busy = rowBusy.has(item.id);
     const packageUrl = `/c/${item.community_identifier}/p/${item.namespace}/${item.name}/`;

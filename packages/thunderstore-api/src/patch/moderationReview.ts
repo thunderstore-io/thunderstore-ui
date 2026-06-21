@@ -27,6 +27,7 @@ export async function moderationReviewBulkUpdate(props: {
         cache: "no-store",
         body: JSON.stringify(data),
       },
+      bodyRaw: data,
       useSession: true,
     },
     requestSchema: reviewBulkUpdateDataSchema,

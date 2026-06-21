@@ -13,8 +13,8 @@ export const reviewListingSchema = z.object({
   is_review_requested: z.boolean(),
   last_updated: z.string().datetime(),
   icon_url: z.string().nullable(),
-  rejection_reason: z.string(),
-  internal_notes: z.string(),
+  rejection_reason: z.string().nullable().optional(),
+  internal_notes: z.string().nullable().optional(),
 });
 
 export const reviewCommunitySchema = z.object({
