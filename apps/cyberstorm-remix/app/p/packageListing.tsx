@@ -37,6 +37,7 @@ import {
   CopyButton,
   Drawer,
   Heading,
+  NewAlert,
   NewIcon,
   NewLink,
   NewTag,
@@ -315,6 +316,13 @@ export default function PackageListing() {
 
         <div className="package-listing__main">
           <section className="package-listing__package-content-section">
+            {listing.is_deprecated ? (
+              <NewAlert csVariant="warning">
+                This package has been deprecated and may no longer be
+                maintained. We recommend looking for an alternative.
+              </NewAlert>
+            ) : null}
+
             <PageHeader
               headingLevel="1"
               headingSize="3"
