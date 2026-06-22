@@ -38,6 +38,23 @@
         background-color: var(--breadcrumb-item-bg-color--hover);
       }
     }
+
+    /* Segments are skewed parallelograms with rounded end-caps, so a default
+       rectangular outline sits askew of the visible shape. Use the hover
+       background as the keyboard-focus indicator instead — it follows the
+       skew and caps exactly. */
+    &:focus-visible {
+      background-color: var(--breadcrumb-item-bg-color--hover);
+      outline: none;
+
+      /* In forced-colors mode the system overrides the background, so the
+         indicator above vanishes. Restore an outline there — rectangular is
+         fine; visible focus matters more than following the skew. */
+      @media (forced-colors: active) {
+        outline: 2px solid;
+        outline-offset: -2px;
+      }
+    }
   }
 
   .breadcrumbs__item-content {
@@ -92,6 +109,11 @@
       &:hover::before {
         background-color: var(--breadcrumb-item-bg-color--hover);
       }
+    }
+
+    /* Keep the rounded home cap in sync with the focus background. */
+    &:focus-visible::before {
+      background-color: var(--breadcrumb-item-bg-color--hover);
     }
   }
 
