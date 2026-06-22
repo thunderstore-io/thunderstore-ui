@@ -71,11 +71,55 @@ const closeMobileNavigationMenus = () => {
 // (new.thunderstore.io), so strip a leading new./old. before prepending old.;
 // otherwise new.thunderstore.io would map to the nonexistent
 // old.new.thunderstore.io.
+// Several Nimbus routes don't share a path with their legacy Django equivalent,
+// so a path-preserving switch would 404. Translate the known mismatches down to
+// a valid legacy page (TS-3941):
+//  - Package pages: both sites share the same /c/<c>/p/<n>/<p>/ paths, so the
+//    tabs map 1:1 (changelog, versions, wiki, dependants, source). The one
+//    package tab legacy has no page for is "required" → collapse it to the
+//    package detail. A /v/<version>/ view is a single page on legacy (no
+//    sub-tabs), so collapse any sub-tab to that version detail.
+//  - Teams: Nimbus serves them at /teams[/<name>/...] but the legacy site mounts
+//    them under /settings/teams/, and the per-team sub-tabs (members,
+//    service-accounts, settings) are a single page there → collapse to the team
+//    detail path.
+//  - User settings: Nimbus uses /settings[/account], but the legacy settings
+//    landing is /settings/linked-accounts/ (bare /settings/ has no view).
+function toLegacyPath(pathname: string): string {
+  // Package pages exist at the same path on legacy, so keep it — except the two
+  // cases legacy has no page for (see the comment above). Django wants a trailing
+  // slash, so normalise that on the way out.
+  if (/^\/c\/[^/]+\/p\/[^/]+\/[^/]+/.test(pathname)) {
+    // A version view is a single page on legacy; drop any sub-tab off it.
+    const versionView = pathname.match(
+      /^(\/c\/[^/]+\/p\/[^/]+\/[^/]+\/v\/[^/]+)/
+    );
+    if (versionView) return `${versionView[1]}/`;
+    // "required" is the only other package tab with no legacy page.
+    const legacy = pathname.replace(/\/required\/?$/, "/");
+    return legacy.endsWith("/") ? legacy : `${legacy}/`;
+  }
+
+  const team = pathname.match(/^\/teams\/([^/]+)/);
+  if (team) return `/settings/teams/${team[1]}/`;
+  if (pathname === "/teams" || pathname === "/teams/") {
+    return "/settings/teams/";
+  }
+
+  if (pathname === "/settings" || pathname.startsWith("/settings/")) {
+    return "/settings/linked-accounts/";
+  }
+
+  return pathname;
+}
+
 function switchToLegacySite() {
   if (typeof window === "undefined") return;
   const { protocol, hostname, pathname } = window.location;
   const baseHost = hostname.replace(/^(?:new|old)\./, "");
-  window.location.assign(`${protocol}//old.${baseHost}${pathname}`);
+  window.location.assign(
+    `${protocol}//old.${baseHost}${toLegacyPath(pathname)}`
+  );
 }
 
 const legacySwitchStyle: CSSProperties = {
