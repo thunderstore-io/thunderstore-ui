@@ -107,7 +107,10 @@ overrides:
 # pnpm settings (pnpm 10+ reads them from this file)
 # ---------------------------------------------------------------------------
 
-# Enforce the exact Node version from engines, like Yarn 1 did by default.
+# Enforce the engines.node range at install time, like Yarn 1 did by default.
+# engines.node is ^24.16.0 (any 24.x >= 24.16), so local dev tracks Node minor
+# updates freely; CI/Docker still pin the range floor (24.16.0) via
+# .github/actions/get-node-version, which installs semver.minVersion(engines.node).
 engineStrict: true
 
 # Quarantine newly published dependency versions for 3 days (minutes) before

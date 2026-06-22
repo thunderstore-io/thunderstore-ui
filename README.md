@@ -23,7 +23,8 @@ serves the API in local development.
 
 ### Prerequisites
 
-- **Node `24.16.0`** (pinned in `engines`) and **pnpm `11.5.3`** (pinned in the
+- **Node `^24.16.0`** (any 24.x from 24.16 up, set in `engines`; CI/Docker pin
+  the 24.16.0 floor) and **pnpm `11.5.3`** (pinned in the
   `packageManager` field of the root `package.json`). Either enable
   [Corepack](https://nodejs.org/api/corepack.html) (`corepack enable`), which
   picks up the pinned version automatically, or install pnpm globally
