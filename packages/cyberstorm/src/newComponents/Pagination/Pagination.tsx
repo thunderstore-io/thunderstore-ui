@@ -107,6 +107,7 @@ function PageButton({ page, onClick, isCurrent }: PageButtonProps) {
     <Actionable
       primitiveType="button"
       onClick={onClick}
+      aria-current={isCurrent ? "page" : undefined}
       rootClasses={classnames(
         "pagination__item",
         isCurrent ? "pagination__item--selected" : undefined

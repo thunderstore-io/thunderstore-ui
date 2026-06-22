@@ -263,7 +263,11 @@ export function PackageSearch(props: Props) {
           }
 
           if (isOnlyPageChange) {
-            window.scrollTo({ top: 0, behavior: "instant" });
+            const root = document.documentElement;
+            const previousScrollBehavior = root.style.scrollBehavior;
+            root.style.scrollBehavior = "auto";
+            window.scrollTo(0, 0);
+            root.style.scrollBehavior = previousScrollBehavior;
           }
         }
         searchParamsBlobRef.current = debouncedSearchParamsBlob;
