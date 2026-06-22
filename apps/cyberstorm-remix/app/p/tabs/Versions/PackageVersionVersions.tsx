@@ -10,6 +10,7 @@ import { useLoaderData } from "react-router";
 
 import {
   Heading,
+  LocalDateTime,
   NewLink,
   NewTable,
   NewTableSort,
@@ -140,7 +141,7 @@ export default function Versions() {
                     sortValue: v.version_number,
                   },
                   {
-                    value: new Date(v.datetime_created).toUTCString(),
+                    value: <LocalDateTime time={v.datetime_created} />,
                     sortValue: v.datetime_created,
                   },
                   {
