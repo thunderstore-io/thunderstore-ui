@@ -1,0 +1,47 @@
+name: "FontAwesome Pro optional"
+
+# Proves the open-source contributor path: with no FontAwesome Pro token, the free
+# icons install from the public registry, the Pro packages (optionalDependencies of
+# @thunderstore/icons) are skipped, and the project typechecks against placeholder
+# icons. This also guards against importing an icon from @thunderstore/icons that has
+# neither a Pro entry nor a free-set placeholder.
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  tokenless:
+    name: Install + typecheck without a Pro token
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - name: Get Node version
+        id: get-node-version
+        uses: ./.github/actions/get-node-version
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ steps.get-node-version.outputs.node-version }}
+      # Deliberately NO "Set fontawesome token" step — that is the whole point.
+      - name: Install dependencies (no Pro token)
+        run: pnpm install --frozen-lockfile
+      - name: Assert placeholder mode is active
+        run: |
+          active=packages/icons/src/_generated/active.ts
+          if grep -q "Mode: placeholder" "$active"; then
+            echo "@thunderstore/icons is in placeholder mode, as expected."
+          else
+            echo "::error::Expected @thunderstore/icons placeholder mode without a Pro token."
+            cat "$active"
+            exit 1
+          fi
+      - name: Typecheck against placeholder icons
+        run: pnpm run tsc

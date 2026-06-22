@@ -1,9 +1,9 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { EmptyState } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
+import { faSearch } from "@thunderstore/icons";
 
 const meta = {
   title: "Cyberstorm/EmptyState",

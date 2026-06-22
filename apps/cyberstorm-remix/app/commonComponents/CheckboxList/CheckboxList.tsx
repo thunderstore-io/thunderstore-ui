@@ -1,14 +1,10 @@
-import {
-  faBan,
-  faSquare,
-  faSquareCheck,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo, useId } from "react";
 import { type TRISTATE } from "~/commonComponents/types";
 
 import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm";
+import { faBan, faSquare, faSquareCheck } from "@thunderstore/icons";
 
 type typeA<B> = (v: B) => void;
 

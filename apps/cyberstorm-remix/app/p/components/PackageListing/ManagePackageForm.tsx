@@ -1,4 +1,3 @@
-import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
 
@@ -11,6 +10,7 @@ import {
   NewTag,
   useToast,
 } from "@thunderstore/cyberstorm";
+import { faCog } from "@thunderstore/icons";
 import {
   type RequestConfig,
   fetchPackagePermissions,

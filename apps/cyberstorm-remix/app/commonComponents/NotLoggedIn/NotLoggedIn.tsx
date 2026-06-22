@@ -1,4 +1,3 @@
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import {
@@ -13,6 +12,7 @@ import {
   OverwolfLogo,
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm";
+import { faDiscord, faGithub } from "@thunderstore/icons";
 
 import "./NotLoggedIn.css";
 

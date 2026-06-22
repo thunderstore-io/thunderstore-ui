@@ -1,4 +1,3 @@
-import { faPeopleGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
@@ -28,6 +27,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { postTeamCreate } from "@thunderstore/dapper-ts";
+import { faPeopleGroup, faPlus } from "@thunderstore/icons";
 import {
   type RequestConfig,
   type TeamCreateRequestData,

@@ -1,4 +1,3 @@
-import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
@@ -8,6 +7,7 @@ import {
   NewBreadCrumbsLink,
 } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
+import { faGamepad } from "@thunderstore/icons";
 
 import catHeim from "../assets/catheim.png";
 

@@ -1,8 +1,8 @@
-import { faBan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
 import { NewButton, NewIcon, NewTag } from "@thunderstore/cyberstorm";
+import { faBan, faXmark } from "@thunderstore/icons";
 
 import { type CategorySelection, TRISTATE_STATES } from "../../../types";
 

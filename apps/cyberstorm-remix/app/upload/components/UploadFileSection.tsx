@@ -1,13 +1,13 @@
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import {
-  faCircleXmark,
-  faFileZip,
-  faTreasureChest,
-} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { RefObject } from "react";
 
 import { NewAlert, NewIcon, classnames } from "@thunderstore/cyberstorm";
+import {
+  faCheckCircle,
+  faCircleXmark,
+  faFileZip,
+  faTreasureChest,
+} from "@thunderstore/icons";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import type { IBaseUploadHandle } from "@thunderstore/ts-uploader";
 

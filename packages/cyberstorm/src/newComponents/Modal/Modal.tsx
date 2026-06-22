@@ -1,4 +1,3 @@
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
@@ -15,6 +14,7 @@ import {
 
 import { type ModalVariants } from "@thunderstore/cyberstorm-theme";
 import { type ModalSizes } from "@thunderstore/cyberstorm-theme";
+import { faXmarkLarge } from "@thunderstore/icons";
 
 import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import { classnames, componentClasses } from "../../utils/utils";

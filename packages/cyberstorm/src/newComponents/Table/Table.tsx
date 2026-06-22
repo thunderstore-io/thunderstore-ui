@@ -1,8 +1,3 @@
-import {
-  faSort,
-  faSortDown,
-  faSortUp,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type CSSProperties, type ReactNode, useState } from "react";
 import React from "react";
@@ -12,6 +7,7 @@ import {
   type TableSizes,
   type TableVariants,
 } from "@thunderstore/cyberstorm-theme";
+import { faSort, faSortDown, faSortUp } from "@thunderstore/icons";
 
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";

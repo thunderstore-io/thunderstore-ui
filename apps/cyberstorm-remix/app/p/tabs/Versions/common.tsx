@@ -1,4 +1,3 @@
-import { faDownload } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
@@ -8,6 +7,7 @@ import {
   NewIcon,
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm";
+import { faDownload } from "@thunderstore/icons";
 
 import "./common.css";
 

@@ -1,9 +1,3 @@
-import {
-  faArrowLeftLong,
-  faArrowRightLong,
-  faCalendarDay,
-  faEdit,
-} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Suspense, memo } from "react";
 import { Await } from "react-router";
@@ -15,6 +9,12 @@ import {
   NewIcon,
   RelativeTime,
 } from "@thunderstore/cyberstorm";
+import {
+  faArrowLeftLong,
+  faArrowRightLong,
+  faCalendarDay,
+  faEdit,
+} from "@thunderstore/icons";
 import { type PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
 
 import "./Wiki.css";

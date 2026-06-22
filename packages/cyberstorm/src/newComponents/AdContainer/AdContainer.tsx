@@ -1,5 +1,6 @@
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faHeart } from "@thunderstore/icons";
 
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./AdContainer.css";

@@ -1,4 +1,3 @@
-import { faArrowUpRight, faUsers } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -10,6 +9,7 @@ import {
   NewTag,
 } from "@thunderstore/cyberstorm";
 import { type PackageSubmissionResult } from "@thunderstore/dapper/types";
+import { faArrowUpRight, faUsers } from "@thunderstore/icons";
 
 import { Island } from "../../commonComponents/Island/Island";
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";

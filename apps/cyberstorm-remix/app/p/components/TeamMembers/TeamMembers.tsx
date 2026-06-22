@@ -1,4 +1,3 @@
-import { faCaretRight, faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Heading, NewAvatar, NewIcon, NewLink } from "@thunderstore/cyberstorm";
@@ -6,6 +5,7 @@ import {
   type PackageListingDetails,
   type TeamMember,
 } from "@thunderstore/dapper/types";
+import { faCaretRight, faCrown } from "@thunderstore/icons";
 
 import "./TeamMembers.css";
 

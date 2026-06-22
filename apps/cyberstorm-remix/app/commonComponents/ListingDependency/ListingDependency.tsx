@@ -1,6 +1,5 @@
-import { faBan } from "@fortawesome/free-solid-svg-icons";
-
 import { Image, NewLink, formatToDisplayName } from "@thunderstore/cyberstorm";
+import { faBan } from "@thunderstore/icons";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
 
 export interface ListingDependencyProps {

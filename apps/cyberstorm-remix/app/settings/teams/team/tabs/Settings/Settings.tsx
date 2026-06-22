@@ -1,4 +1,3 @@
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
@@ -24,6 +23,7 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
+import { faTrashCan } from "@thunderstore/icons";
 import {
   type RequestConfig,
   type TeamDisbandRequestData,

@@ -1,6 +1,3 @@
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Island, IslandContainer } from "~/commonComponents/Island/Island";
 
@@ -11,6 +8,12 @@ import {
   NewLink,
   ThunderstoreLogoHorizontal,
 } from "@thunderstore/cyberstorm";
+import {
+  faArrowUpRight,
+  faBoltLightning,
+  faDiscord,
+  faGithub,
+} from "@thunderstore/icons";
 
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.webp";
 const DISCORD_URL = "https://discord.thunderstore.io/";
