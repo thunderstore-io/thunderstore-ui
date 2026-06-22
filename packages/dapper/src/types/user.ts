@@ -13,6 +13,7 @@ export interface CurrentUser {
     role: string;
     member_count: number;
   }[];
+  is_staff: boolean;
 }
 
 export interface User {
