@@ -28,9 +28,15 @@
     min-width: 15rem;
     max-width: 39rem;
 
+    /* Never taller than the viewport (leave a vertical top/bottom margin), so
+       the title and footer stay on screen at any display/font scaling; the
+       body scrolls within (TS-3949). */
+    max-height: calc(100vh - 4rem);
+
     /* padding: var(--modal-content-padding); */
     border: var(--modal-border);
     border-radius: var(--modal-border-radius);
+    overflow: hidden;
     color: var(--modal-color);
     background: var(--modal-background);
 
@@ -71,6 +77,10 @@
     gap: var(--gap-md);
     align-items: flex-start;
     align-self: stretch;
+
+    /* min-height:0 lets the body shrink below its content height inside the
+       viewport-capped content, so it (not the whole modal) is what scrolls. */
+    min-height: 0;
     max-height: 800px;
     padding: var(--space-32);
     overflow-y: auto;
