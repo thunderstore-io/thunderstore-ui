@@ -1,4 +1,3 @@
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Children, type PropsWithChildren, type ReactNode, memo } from "react";
 
@@ -7,6 +6,7 @@ import {
   type BreadCrumbsSizes,
   type BreadCrumbsVariants,
 } from "@thunderstore/cyberstorm-theme";
+import { faHouse } from "@thunderstore/icons";
 
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";

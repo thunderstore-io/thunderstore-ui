@@ -1,4 +1,3 @@
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Content,
@@ -15,6 +14,7 @@ import {
   type SelectSizes,
   type SelectVariants,
 } from "@thunderstore/cyberstorm-theme";
+import { faCaretDown } from "@thunderstore/icons";
 
 import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import type { SelectOption } from "../../utils/types";

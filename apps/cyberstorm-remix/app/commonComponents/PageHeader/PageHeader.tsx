@@ -1,8 +1,8 @@
-import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { type PropsWithChildren, type ReactElement, memo } from "react";
 
 import { Heading, Image, classnames } from "@thunderstore/cyberstorm";
 import type { HeadingSizes } from "@thunderstore/cyberstorm-theme";
+import { faBan, faGamepad } from "@thunderstore/icons";
 
 export interface PageHeaderProps extends PropsWithChildren {
   image?: string | null;

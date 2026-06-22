@@ -1,4 +1,3 @@
-import { faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
@@ -12,6 +11,7 @@ import { Await, useLoaderData } from "react-router";
 
 import { EmptyState, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { faGhost } from "@thunderstore/icons";
 
 import type { Route } from "./+types/Required";
 

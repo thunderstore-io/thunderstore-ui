@@ -1,9 +1,3 @@
-import {
-  faArrowsRotate,
-  faCircleCheck,
-  faPenToSquare,
-  faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { type ReactNode } from "react";
 
@@ -12,6 +6,12 @@ import {
   type CodeInputSizes,
   type CodeInputVariants,
 } from "@thunderstore/cyberstorm-theme";
+import {
+  faArrowsRotate,
+  faCircleCheck,
+  faPenToSquare,
+  faTriangleExclamation,
+} from "@thunderstore/icons";
 
 import {
   Input,

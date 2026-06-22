@@ -1,14 +1,14 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { memo } from "react";
+
+import { type Community } from "@thunderstore/dapper/types";
 import {
   faBoxOpen,
   faDownload,
   faFire,
   faGamepad,
-} from "@fortawesome/free-solid-svg-icons";
-import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { memo } from "react";
-
-import { type Community } from "@thunderstore/dapper/types";
+  faSparkles,
+} from "@thunderstore/icons";
 
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import { formatInteger } from "../../../utils/utils";

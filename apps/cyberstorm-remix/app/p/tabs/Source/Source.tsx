@@ -1,4 +1,3 @@
-import { faClock, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
@@ -17,6 +16,7 @@ import {
   TooltipWrapper,
 } from "@thunderstore/cyberstorm";
 import { DapperTs, getPackageSource } from "@thunderstore/dapper-ts";
+import { faClock, faDownload } from "@thunderstore/icons";
 
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
 import type { Route } from "./+types/Source";

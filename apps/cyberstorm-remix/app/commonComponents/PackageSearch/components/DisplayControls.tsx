@@ -1,10 +1,4 @@
 import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCaretDown,
-  faList,
-  faSquare,
-} from "@fortawesome/free-solid-svg-icons";
-import { faGrid, faRectangleWide } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -14,6 +8,13 @@ import {
   NewIcon,
   classnames,
 } from "@thunderstore/cyberstorm";
+import {
+  faCaretDown,
+  faGrid,
+  faList,
+  faRectangleWide,
+  faSquare,
+} from "@thunderstore/icons";
 
 import "./DisplayControls.css";
 

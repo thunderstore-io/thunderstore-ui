@@ -1,4 +1,3 @@
-import { faScaleBalanced } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
 
@@ -12,6 +11,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { type PackageListingStatus } from "@thunderstore/dapper/types";
+import { faScaleBalanced } from "@thunderstore/icons";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
 
 import {

@@ -1,6 +1,7 @@
-import { faCaretDown, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+
+import { faCaretDown, faXmark } from "@thunderstore/icons";
 
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import type { SelectOption } from "../../utils/types";

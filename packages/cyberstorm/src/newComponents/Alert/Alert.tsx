@@ -1,9 +1,3 @@
-import {
-  faCheckCircle,
-  faExclamationCircle,
-  faExclamationTriangle,
-} from "@fortawesome/free-solid-svg-icons";
-import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -11,6 +5,12 @@ import {
   type AlertSizes,
   type AlertVariants,
 } from "@thunderstore/cyberstorm-theme";
+import {
+  faCheckCircle,
+  faExclamationCircle,
+  faExclamationTriangle,
+  faOctagonExclamation,
+} from "@thunderstore/icons";
 
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";

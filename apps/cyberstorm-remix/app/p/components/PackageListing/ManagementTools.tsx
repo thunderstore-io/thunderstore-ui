@@ -1,4 +1,3 @@
-import { faBoxOpen, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
@@ -7,6 +6,7 @@ import { Island } from "~/commonComponents/Island/Island";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
+import { faBoxOpen, faListUl } from "@thunderstore/icons";
 import {
   type RequestConfig,
   fetchPackagePermissions,

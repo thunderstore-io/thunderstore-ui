@@ -1,12 +1,13 @@
 // TODO: Turn into non-module css
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type ReactNode } from "react";
+
 import {
   faArrowsRotate,
   faCircleCheck,
   faPenToSquare,
   faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ReactNode } from "react";
+} from "@thunderstore/icons";
 
 import { Icon as NewIcon } from "../../newComponents/Icon/Icon";
 import { classnames } from "../../utils/utils";

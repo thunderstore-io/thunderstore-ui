@@ -1,14 +1,14 @@
-import {
-  faDownload,
-  faHandHoldingHeart,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode, Suspense, memo } from "react";
 import { Await } from "react-router";
 
 import { NewButton, NewIcon, ThunderstoreLogo } from "@thunderstore/cyberstorm";
 import type { CurrentUser } from "@thunderstore/dapper/types";
+import {
+  faDownload,
+  faHandHoldingHeart,
+  faThumbsUp,
+} from "@thunderstore/icons";
 
 import "./PackageActions.css";
 

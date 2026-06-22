@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Runs the cyberstorm-remix dev server together with the build watchers for the
-// three workspace packages that are consumed as built `dist` rather than source
-// (they are excluded from preconstruct's source linking in the root
-// package.json): @thunderstore/cyberstorm-theme, @thunderstore/cyberstorm and
-// @thunderstore/ts-uploader.
+// four workspace packages that are built with Vite rather than linked from source
+// by preconstruct (they are excluded from preconstruct in the root package.json):
+// @thunderstore/icons, @thunderstore/cyberstorm-theme, @thunderstore/cyberstorm
+// and @thunderstore/ts-uploader.
 //
 // Editing the remix app reflects instantly via Vite HMR. Editing one of the
 // three packages triggers its watcher to rebuild dist (~1-2s), which the remix
@@ -20,6 +20,12 @@ const isWindows = process.platform === "win32";
 
 // Packages consumed as dist; each needs its watcher running for edits to show.
 const DIST_PACKAGES = [
+  {
+    name: "@thunderstore/icons",
+    label: "icons",
+    dist: "packages/icons/dist",
+    color: "34",
+  },
   {
     name: "@thunderstore/cyberstorm-theme",
     label: "theme",

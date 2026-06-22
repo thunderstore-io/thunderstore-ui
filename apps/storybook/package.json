@@ -16,7 +16,6 @@
   "dependencies": {
     "@eslint/js": "9.39.2",
     "@fortawesome/fontawesome-svg-core": "7.1.0",
-    "@fortawesome/free-solid-svg-icons": "7.1.0",
     "@fortawesome/react-fontawesome": "3.1.0",
     "@radix-ui/react-tooltip": "1.2.8",
     "@storybook/addon-docs": "10.4.2",
@@ -24,6 +23,7 @@
     "@storybook/react-vite": "10.4.2",
     "@thunderstore/cyberstorm": "workspace:*",
     "@thunderstore/cyberstorm-theme": "workspace:*",
+    "@thunderstore/icons": "workspace:*",
     "@types/react": "19.2.8",
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "5.0.3",

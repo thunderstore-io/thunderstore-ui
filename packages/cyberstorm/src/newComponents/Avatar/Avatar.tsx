@@ -1,10 +1,10 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   type AvatarSizes,
   type AvatarVariants,
 } from "@thunderstore/cyberstorm-theme";
+import { faUser } from "@thunderstore/icons";
 
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";

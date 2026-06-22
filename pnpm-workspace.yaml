@@ -4,7 +4,16 @@ packages:
 
 registries:
   default: https://registry.npmjs.org/
-  "@fortawesome": https://npm.fontawesome.com/
+  # FontAwesome Pro is OPTIONAL — see packages/icons. The free @fortawesome/* packages
+  # resolve from the public registry above; the Pro packages (@fortawesome/pro-*-svg-icons)
+  # are optionalDependencies of @thunderstore/icons and are skipped (404) without a token,
+  # falling back to free-set placeholder icons so the project still builds and runs.
+  #
+  # Maintainers/CI with a Pro token route the scope to the Pro registry via their OWN npm
+  # config — NOT here, so the default contributor install stays tokenless. Put this in a
+  # user ~/.npmrc or the git-ignored build-secrets/.npmrc:
+  #   @fortawesome:registry=https://npm.fontawesome.com/
+  #   //npm.fontawesome.com/:_authToken=<token>
 
 # ---------------------------------------------------------------------------
 # Build scripts (supply-chain hardening)
