@@ -377,15 +377,17 @@ export default function PackageListingVersion() {
 }
 
 function packageMeta(listing: PackageListingDetails) {
+  // Backend rollout compat: the new backend returns version_created; the old
+  // one still returns datetime_created (see PackageListingDetails).
+  const dateUploaded = listing.version_created ?? listing.datetime_created;
   return (
     <div className="package-listing-sidebar__meta">
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Date Uploaded</div>
         <div className="package-listing-sidebar__content">
-          <RelativeTime
-            time={listing.datetime_created}
-            suppressHydrationWarning
-          />
+          {dateUploaded ? (
+            <RelativeTime time={dateUploaded} suppressHydrationWarning />
+          ) : null}
         </div>
       </div>
       <div className="package-listing-sidebar__item">

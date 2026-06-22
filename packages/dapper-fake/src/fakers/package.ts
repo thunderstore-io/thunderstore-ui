@@ -138,11 +138,30 @@ export const getFakePackageListingDetails = async (
   const ver = version ?? getVersionNumber();
   const dependencies = await getFakeDependencies(community, namespace, name);
 
+  // The fake models the new backend, which returns package_created +
+  // version_created and no last_updated; drop last_updated from the spread (via
+  // rest destructuring). PackageListingDetails keeps it optional only for
+  // backend rollout compat.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { last_updated, ...listing } = getFakePackageListing(
+    community,
+    namespace,
+    name
+  );
+
+  // A version can't predate the package it belongs to, so anchor
+  // version_created to package_created instead of drawing the two
+  // independently (which let version_created land earlier).
+  const packageCreated = faker.date.past({ years: 2 });
+  const versionCreated = faker.date.between({
+    from: packageCreated,
+    to: new Date(),
+  });
+
   return {
-    ...getFakePackageListing(community, namespace, name),
+    ...listing,
 
     community_name: faker.word.sample(),
-    datetime_created: faker.date.past({ years: 2 }).toISOString(),
     dependant_count: faker.number.int({ min: 0, max: 2000 }),
     dependencies,
     dependency_count: dependencies.length,
@@ -151,10 +170,12 @@ export const getFakePackageListingDetails = async (
     has_changelog: true,
     install_url: `ror2mm://v1/install/thunderstore.io/${namespace}/${name}/${ver}/`,
     latest_version_number: getVersionNumber(),
+    package_created: packageCreated.toISOString(),
     team: {
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),
     },
+    version_created: versionCreated.toISOString(),
     website_url:
       faker.helpers.maybe(faker.internet.url, { probability: 0.9 }) ?? null,
   };

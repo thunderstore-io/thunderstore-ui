@@ -27,9 +27,9 @@ export interface PackageListingStatus {
   package_admin_url: string | null; // This is actually just a path
 }
 
-export interface PackageListingDetails extends PackageListing {
+export interface PackageListingDetails
+  extends Omit<PackageListing, "last_updated"> {
   community_name: string;
-  datetime_created: string;
   dependant_count: number;
   dependencies: PackageListingDependency[];
   dependency_count: number;
@@ -42,6 +42,14 @@ export interface PackageListingDetails extends PackageListing {
   package_admin_url?: string | null;
   team: PackageTeam;
   website_url: string | null;
+  // Backend rollout compat — see packageListingDetailsSchema. The old backend
+  // returns datetime_created + last_updated; the new one returns
+  // package_created + version_created. All four are optional until the backend
+  // ships, so consumers must prefer the new field and fall back to the legacy.
+  datetime_created?: string;
+  last_updated?: string;
+  package_created?: string;
+  version_created?: string;
 }
 
 export interface PackageListingDependency {

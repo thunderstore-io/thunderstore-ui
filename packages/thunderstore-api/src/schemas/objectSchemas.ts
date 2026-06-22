@@ -166,22 +166,33 @@ export type PackageListingDependency = z.infer<
   typeof packageListingDependencySchema
 >;
 
-export const packageListingDetailsSchema = packageListingSchema.extend({
-  community_name: z.string().min(1),
-  datetime_created: z.string().datetime(),
-  dependant_count: z.number().int(),
-  dependencies: z.array(packageListingDependencySchema),
-  dependency_count: z.number().int(),
-  download_url: z.string(),
-  full_version_name: z.string().min(1),
-  has_changelog: z.boolean(),
-  install_url: z.string(),
-  latest_version_number: z.string().min(1),
-  listing_admin_url: z.string().nullable().optional(),
-  package_admin_url: z.string().nullable().optional(),
-  team: packageTeamSchema,
-  website_url: z.string().nullable(),
-});
+export const packageListingDetailsSchema = packageListingSchema
+  .omit({ last_updated: true })
+  .extend({
+    community_name: z.string().min(1),
+    dependant_count: z.number().int(),
+    dependencies: z.array(packageListingDependencySchema),
+    dependency_count: z.number().int(),
+    download_url: z.string(),
+    full_version_name: z.string().min(1),
+    has_changelog: z.boolean(),
+    install_url: z.string(),
+    latest_version_number: z.string().min(1),
+    listing_admin_url: z.string().nullable().optional(),
+    package_admin_url: z.string().nullable().optional(),
+    team: packageTeamSchema,
+    website_url: z.string().nullable(),
+    // Backend rollout compat: the frontend deploys before the backend, so for a
+    // window the API still returns the legacy date fields (datetime_created +
+    // last_updated) before switching to the new ones (package_created +
+    // version_created). All four stay optional so parsing accepts either shape.
+    // Once the backend is deployed, drop the legacy pair and make the new pair
+    // required again.
+    datetime_created: z.string().datetime().optional(),
+    last_updated: z.string().datetime().optional(),
+    package_created: z.string().datetime().optional(),
+    version_created: z.string().datetime().optional(),
+  });
 
 export type PackageListingDetails = z.infer<typeof packageListingDetailsSchema>;
 
