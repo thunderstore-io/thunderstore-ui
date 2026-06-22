@@ -126,3 +126,13 @@ engineStrict: true
 # they are eligible for installation; nearly all malicious npm releases are
 # detected and pulled within hours-to-days.
 minimumReleaseAge: 4320
+
+# The FontAwesome Pro packages live only on npm.fontawesome.com. A tokenless
+# install (open-source contributors, the fontawesome-optional CI job) routes the
+# @fortawesome scope to the public registry, where they 404 — so pnpm cannot fetch
+# their release age and the check above aborts the whole install. They are optional
+# dependencies of @thunderstore/icons and skipped without a token anyway, so exempt
+# them from the age check. Everything else stays quarantined.
+minimumReleaseAgeExclude:
+  - "@fortawesome/pro-solid-svg-icons"
+  - "@fortawesome/pro-light-svg-icons"
