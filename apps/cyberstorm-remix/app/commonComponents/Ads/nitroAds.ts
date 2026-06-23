@@ -3,19 +3,21 @@ import type { AdContainerSizeVariant } from "@thunderstore/cyberstorm";
 /**
  * NitroPay integration config + SPA lifecycle helpers for Nimbus.
  *
- * The ad surface (publisher 785): a right-column rail — a slim "fishstick"
- * banner above and below one dynamic display slot that fills whatever rail
- * height is left (max 600px, the tallest unit in the inventory), with an
- * in-content video player (`video-nc`) at the rail's bottom — plus a
- * responsive bottom banner row. The rail is 336px wide (the widest unit
- * NitroPay serves) on large viewports and 160px on mid-width ones, and its
- * sticky stack keeps the video on screen while scrolling. NitroPay measures
- * the slot's container and only loads sizes that fit it, so the dynamic
- * slot's creative is picked by the CSS-driven container height. Slot ids are
- * `nimbus`-prefixed and must be configured in the NitroPay dashboard before
- * they fill. Each slot's `mediaQuery` mirrors a reveal breakpoint in
- * `app/styles/layout.css` so NitroPay never instantiates a slot CSS hides —
- * keep the two in sync.
+ * The ad surface (publisher 785): a right-column rail plus a responsive bottom
+ * banner row. The rail's CONFIGURATION is chosen by HEIGHT via CSS container
+ * queries (see `app/styles/layout.css`): shortest to tallest, 2 fishsticks ->
+ * fishstick + square -> + fishstick -> double -> + fishstick -> + square ->
+ * + double, with the video in every config and always pinned to the
+ * bottom. Each configuration owns its OWN fixed-size slots (ids
+ * `nimbus-v<AD_SLOT_VERSION>-<config>-<position>-<type>`), so a slot is never reused at
+ * two sizes. The rail is 336px wide on large viewports and a single 160px fill
+ * slot on mid-width ones. NitroPay measures each slot's container and only loads
+ * sizes that fit it. Rail slots are created eagerly; each carries its config's
+ * `mediaQuery` (the width regime — full 336px vs 160px narrow rail — AND its
+ * config's window-height band), so NitroPay serves only the config matching the
+ * current window while CSS hides the rest. The visual reveal is the CSS
+ * container query (layout.css); the mediaQuery keeps NitroPay in step. All slot
+ * ids must be configured in the NitroPay dashboard before they fill.
  *
  * Types are derived from the NitroPay API docs (api-docs.nitropay.com):
  * `createAd` returns a `NitroAd` (or a promise of one/an array), whose
@@ -107,7 +109,7 @@ export type RenderedAdSlot = {
 // Minimum creative lifetime (since slot creation or last refresh) before an SPA
 // navigation may refresh ads — 45s favours viewability/CTR over churn. Enforced
 // in onNavigateNimbusAds and mirrored to NitroPay per slot via `onNavigateMin`.
-const MIN_AD_LIFETIME_MS = 45000;
+const MIN_AD_LIFETIME_MS = 40000;
 const ON_NAVIGATE_MIN = MIN_AD_LIFETIME_MS;
 
 // Set to true to render static placeholders instead of making real ad calls,
@@ -181,9 +183,12 @@ function sizesThatFit(maxWidth: number, maxHeight: number): string[][] {
   );
 }
 
-// Right rail: the slim fishstick boxes and the viewport-sized dynamic slot.
+// Right rail: the slim fishstick boxes, the two display boxes — "square"
+// (336x300) and "double" (336x600, twice as tall) — and the 160-wide
+// narrow-rail fill slot.
 const FISHSTICK_SIZES = sizesThatFit(336, 60);
-const RIGHT_DYNAMIC_SIZES = sizesThatFit(336, 600);
+const RIGHT_SQUARE_SIZES = sizesThatFit(336, 300);
+const RIGHT_DOUBLE_SIZES = sizesThatFit(336, 600);
 const RIGHT_NARROW_SIZES = sizesThatFit(160, 600);
 
 // Bottom row: capped at 980 wide (there is almost no bidding pressure above
@@ -201,18 +206,53 @@ const BOTTOM_RIGHT_SIZES = BOTTOM_VERY_WIDE_SIZES;
 
 // --- Slot inventory ---
 
-// Rail bands (mirror the reveal breakpoints in layout.css): the full 336px
-// rail down to 1484px viewports (the old Django site's rail breakpoint), then
-// a 160px narrow rail down to 1214px; below that the bottom banner row is the
-// only ad surface.
-const RIGHT_COLUMN_MQ = "(min-width: 1484px) and (min-height: 600px)";
-const RIGHT_COLUMN_NARROW_MQ =
-  "(min-width: 1214px) and (max-width: 1483.98px) and (min-height: 600px)";
+// Rail WIDTH regimes: full 336px rail at >= 1484px (the old Django site's rail
+// breakpoint); a 160px narrow rail from 1214px to 1483.98px; below 1214px the
+// bottom banner row is the only ad surface.
+const RIGHT_COLUMN_MQ = "(min-width: 1484px)";
+const RIGHT_COLUMN_NARROW_MQ = "(min-width: 1214px) and (max-width: 1483.98px)";
 
-// The in-content video player at the rail's bottom. Excluded from onNavigate
+// Chrome reserved above + below the sticky rail stack, mirroring layout.css's
+// stack height calc: --header-height (3.5rem) + --gap-2xs top + --gap-2xs bottom
+// (0.25rem each). layout.css reveals a config by the rail's own (container)
+// height; NitroPay's mediaQuery is a viewport query, so viewport height = rail
+// (container) height + this chrome. Kept in rem (not a hardcoded 64px) so a
+// non-default root font size scales it the same way layout.css does, keeping the
+// two in step.
+const RAIL_CHROME_REM = 3.5 + 0.25 + 0.25;
+
+// A config's NitroPay mediaQuery: the 336px-rail width regime plus that config's
+// rail-height band expressed as VIEWPORT height, so NitroPay only serves the
+// config's slots at the window heights where layout.css shows them. The px band
+// and the rem chrome are summed with calc() so the viewport threshold tracks the
+// root font size. These bands MUST mirror the @container bands in layout.css.
+function railHeightMq(minRail: number, maxRail: number | null): string {
+  const parts = [
+    RIGHT_COLUMN_MQ,
+    `(min-height: calc(${minRail}px + ${RAIL_CHROME_REM}rem))`,
+  ];
+  if (maxRail !== null) {
+    parts.push(
+      `(max-height: calc(${maxRail}px + ${RAIL_CHROME_REM}rem - 0.02px))`
+    );
+  }
+  return parts.join(" and ");
+}
+
+// Per-config rail mediaQueries; all of a config's slots share one.
+const RAIL_MQ_1 = railHeightMq(331, 571);
+const RAIL_MQ_2 = railHeightMq(571, 641);
+const RAIL_MQ_3 = railHeightMq(641, 871);
+const RAIL_MQ_4 = railHeightMq(871, 941);
+const RAIL_MQ_5 = railHeightMq(941, 1181);
+const RAIL_MQ_6 = railHeightMq(1181, 1481);
+const RAIL_MQ_7 = railHeightMq(1481, null);
+
+// Rail video slot ids all end with this suffix (one per configuration that
+// includes a video — see RIGHT_COLUMN_SLOTS). They're excluded from onNavigate
 // refreshes (see onNavigateNimbusAds) so an in-progress impression isn't torn
 // down on every route change — the rail persists across navigations.
-export const RAIL_VIDEO_ID = "nimbus-right-column-video";
+const RAIL_VIDEO_ID_SUFFIX = "-video";
 
 // Shared knobs for every display placement; per-slot config is just the box
 // (sizes), the reveal breakpoint, and the report-button corner.
@@ -230,11 +270,14 @@ function displaySlot(slot: {
       format: "display",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
-      refreshTime: 90,
+      // 60s auto-refresh for display slots (the video slot uses 30s).
+      refreshTime: 60,
       onNavigateMin: ON_NAVIGATE_MIN,
-      renderVisibleOnly: true,
-      refreshVisibleOnly: true,
+      // Demo placeholders render immediately (not gated on the slot scrolling
+      // into view) so the layout is easy to inspect; production stays
+      // viewport-gated for viewability/CTR.
+      renderVisibleOnly: !AD_DEMO_MODE,
+      refreshVisibleOnly: !AD_DEMO_MODE,
       sizes: slot.sizes,
       report: slot.report ?? DISPLAY_REPORT,
       mediaQuery: slot.mediaQuery,
@@ -242,54 +285,100 @@ function displaySlot(slot: {
   };
 }
 
-// Top-to-bottom rail order: fishstick, dynamic display, fishstick, video. The
-// bottom fishstick + video pin to the sticky stack's end (see layout.css).
-// The narrow slot is the 160px rail band's only placement.
-export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
-  displaySlot({
-    containerId: "nimbus-right-column-fishstick-top",
+// Bump AD_SLOT_VERSION whenever the ad slot layout or inventory changes: every
+// slot id (rail + bottom row) is `nimbus-v<N>-...`, so analytics can cleanly
+// filter each iteration by the id prefix. This is the ONLY place to change it —
+// layout.css matches slots by their version-independent suffix, not the prefix.
+const AD_SLOT_VERSION = 1;
+const AD_PREFIX = `nimbus-v${AD_SLOT_VERSION}`;
+
+// Rail slot builders — each configuration owns fixed-size slots (see the
+// progression + breakpoints in layout.css). Each takes its config's mediaQuery
+// (width regime + the config's window-height band) so all of a config's slots
+// share the same reveal condition.
+
+function railFishstick(id: string, mediaQuery: string): RenderedAdSlot {
+  return displaySlot({
+    containerId: id,
     sizeVariant: "fishstick",
     sizes: FISHSTICK_SIZES,
-    mediaQuery: RIGHT_COLUMN_MQ,
-  }),
-  displaySlot({
-    containerId: "nimbus-right-column-dynamic",
-    sizeVariant: "dynamic",
-    sizes: RIGHT_DYNAMIC_SIZES,
-    mediaQuery: RIGHT_COLUMN_MQ,
-  }),
-  displaySlot({
-    containerId: "nimbus-right-column-fishstick-bottom",
-    sizeVariant: "fishstick",
-    sizes: FISHSTICK_SIZES,
-    mediaQuery: RIGHT_COLUMN_MQ,
-  }),
-  // In-content video player at the rail's bottom. Re-enabled (TS-3954) after
-  // NitroPay blocked the rubiconproject requests that were causing issues.
-  {
-    containerId: RAIL_VIDEO_ID,
+    mediaQuery,
+  });
+}
+
+// Display slots come in two heights, named in the id: `-square` (336x300) and
+// `-double` (336x600, twice as tall). The id's size token drives the box.
+function railDisplay(id: string, mediaQuery: string): RenderedAdSlot {
+  const square = id.endsWith("-square");
+  return displaySlot({
+    containerId: id,
+    sizeVariant: square ? "rail-square" : "rail-double",
+    sizes: square ? RIGHT_SQUARE_SIZES : RIGHT_DOUBLE_SIZES,
+    mediaQuery,
+  });
+}
+
+// In-content video player; pinned to the rail's bottom in every config. Re-
+// enabled (TS-3954) after NitroPay blocked the rubiconproject requests.
+function railVideo(id: string, mediaQuery: string): RenderedAdSlot {
+  return {
+    containerId: id,
     sizeVariant: "video",
     options: {
       format: "video-nc",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      // 30s auto-refresh for the video slot (display slots stay at 90s).
+      // 30s auto-refresh for the video slot (display slots use 60s).
       refreshTime: 30,
       onNavigateMin: ON_NAVIGATE_MIN,
-      video: {
-        // The rail keeps the player on screen; never detach into the floating
-        // (docked) player, which otherwise covers the footer on tall layouts.
-        float: "never",
-      },
-      report: {
-        ...TOP_LEFT_REPORT,
-        icon: true,
-      },
-      mediaQuery: RIGHT_COLUMN_MQ,
+      // The rail keeps the player on screen; never detach into the floating
+      // (docked) player, which otherwise covers the footer on tall layouts.
+      video: { float: "never" },
+      report: { ...TOP_LEFT_REPORT, icon: true },
+      mediaQuery,
     },
-  },
+  };
+}
+
+// One fixed-size slot per ad per configuration (ids <config>-<position>-<type>).
+// CSS container queries (layout.css) show exactly one config's slots per rail
+// height; the narrow slot is the 160px width regime's only placement.
+export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
+  // 1 — fishstick + fishstick + video
+  railFishstick(`${AD_PREFIX}-1-1-fishstick`, RAIL_MQ_1),
+  railFishstick(`${AD_PREFIX}-1-2-fishstick`, RAIL_MQ_1),
+  railVideo(`${AD_PREFIX}-1-3-video`, RAIL_MQ_1),
+  // 2 — fishstick + square + video
+  railFishstick(`${AD_PREFIX}-2-1-fishstick`, RAIL_MQ_2),
+  railDisplay(`${AD_PREFIX}-2-2-square`, RAIL_MQ_2),
+  railVideo(`${AD_PREFIX}-2-3-video`, RAIL_MQ_2),
+  // 3 — fishstick + square + fishstick + video
+  railFishstick(`${AD_PREFIX}-3-1-fishstick`, RAIL_MQ_3),
+  railDisplay(`${AD_PREFIX}-3-2-square`, RAIL_MQ_3),
+  railFishstick(`${AD_PREFIX}-3-3-fishstick`, RAIL_MQ_3),
+  railVideo(`${AD_PREFIX}-3-4-video`, RAIL_MQ_3),
+  // 4 — fishstick + double + video
+  railFishstick(`${AD_PREFIX}-4-1-fishstick`, RAIL_MQ_4),
+  railDisplay(`${AD_PREFIX}-4-2-double`, RAIL_MQ_4),
+  railVideo(`${AD_PREFIX}-4-3-video`, RAIL_MQ_4),
+  // 5 — fishstick + double + fishstick + video
+  railFishstick(`${AD_PREFIX}-5-1-fishstick`, RAIL_MQ_5),
+  railDisplay(`${AD_PREFIX}-5-2-double`, RAIL_MQ_5),
+  railFishstick(`${AD_PREFIX}-5-3-fishstick`, RAIL_MQ_5),
+  railVideo(`${AD_PREFIX}-5-4-video`, RAIL_MQ_5),
+  // 6 — fishstick + double + square + video
+  railFishstick(`${AD_PREFIX}-6-1-fishstick`, RAIL_MQ_6),
+  railDisplay(`${AD_PREFIX}-6-2-double`, RAIL_MQ_6),
+  railDisplay(`${AD_PREFIX}-6-3-square`, RAIL_MQ_6),
+  railVideo(`${AD_PREFIX}-6-4-video`, RAIL_MQ_6),
+  // 7 — fishstick + double + double + video
+  railFishstick(`${AD_PREFIX}-7-1-fishstick`, RAIL_MQ_7),
+  railDisplay(`${AD_PREFIX}-7-2-double`, RAIL_MQ_7),
+  railDisplay(`${AD_PREFIX}-7-3-double`, RAIL_MQ_7),
+  railVideo(`${AD_PREFIX}-7-4-video`, RAIL_MQ_7),
+  // Narrow (160px) width regime — single fill slot.
   displaySlot({
-    containerId: "nimbus-right-column-narrow",
+    containerId: `${AD_PREFIX}-narrow`,
     sizeVariant: "narrow-dynamic",
     sizes: RIGHT_NARROW_SIZES,
     mediaQuery: RIGHT_COLUMN_NARROW_MQ,
@@ -300,25 +389,25 @@ export const RIGHT_COLUMN_SLOTS: RenderedAdSlot[] = [
 // footer); only the breakpoint-matching banner reveals.
 export const BOTTOM_BANNER_AD_SLOTS: RenderedAdSlot[] = [
   displaySlot({
-    containerId: "nimbus-bottom-ad-very-narrow",
+    containerId: `${AD_PREFIX}-bottom-ad-very-narrow`,
     sizeVariant: "bottom-banner",
     sizes: BOTTOM_VERY_NARROW_SIZES,
     mediaQuery: "(max-width: 767.98px)",
   }),
   displaySlot({
-    containerId: "nimbus-bottom-ad-narrow",
+    containerId: `${AD_PREFIX}-bottom-ad-narrow`,
     sizeVariant: "bottom-banner",
     sizes: BOTTOM_NARROW_SIZES,
     mediaQuery: "(min-width: 768px) and (max-width: 991.98px)",
   }),
   displaySlot({
-    containerId: "nimbus-bottom-ad-wide",
+    containerId: `${AD_PREFIX}-bottom-ad-wide`,
     sizeVariant: "bottom-banner",
     sizes: BOTTOM_WIDE_SIZES,
     mediaQuery: "(min-width: 992px) and (max-width: 1199.98px)",
   }),
   displaySlot({
-    containerId: "nimbus-bottom-ad-very-wide",
+    containerId: `${AD_PREFIX}-bottom-ad-very-wide`,
     sizeVariant: "bottom-banner",
     sizes: BOTTOM_VERY_WIDE_SIZES,
     mediaQuery: "(min-width: 1200px)",
@@ -331,14 +420,14 @@ export const BOTTOM_BANNER_AD_SLOTS: RenderedAdSlot[] = [
 // viewports, the third at 2×982 + 90 + gaps = 2118px.
 export const BOTTOM_RIGHT_AD_SLOTS: RenderedAdSlot[] = [
   displaySlot({
-    containerId: "nimbus-bottom-ad-right",
+    containerId: `${AD_PREFIX}-bottom-ad-right`,
     sizeVariant: "bottom-right",
     sizes: BOTTOM_RIGHT_SIZES,
     mediaQuery: "(min-width: 1120px)",
     report: TOP_LEFT_REPORT,
   }),
   displaySlot({
-    containerId: "nimbus-bottom-ad-third",
+    containerId: `${AD_PREFIX}-bottom-ad-third`,
     sizeVariant: "bottom-right",
     sizes: BOTTOM_RIGHT_SIZES,
     mediaQuery: "(min-width: 2118px)",
@@ -457,12 +546,18 @@ function createNimbusAdsInView(
 }
 
 /**
- * Create every Nimbus ad slot. The above-the-fold right-column rail is created
- * eagerly; the below-the-fold bottom banner row is deferred until it scrolls
- * into view (see createNimbusAdsInView).
+ * Create every Nimbus ad slot. Rail slots are created EAGERLY: each carries its
+ * config's mediaQuery (width regime + window-height band), so NitroPay serves
+ * only the config matching the current window and CSS hides the rest — there's
+ * no need to gate creation on scroll/intersection. With AD_DEMO_MODE on, each
+ * slot is created with `demo: true` so NitroPay paints its own demo placeholders
+ * (NitroPay's demo is unreliable for the larger units / backgrounded tabs). The
+ * below-the-fold bottom banner row stays lazy, created only once it scrolls near
+ * the viewport (see createNimbusAdsInView).
  */
 export function createAllNimbusAds(nitroAds: NitroAds): void {
   adsLiveSince = Date.now();
+
   for (const slot of RIGHT_COLUMN_SLOTS) {
     createNimbusAd(nitroAds, slot.containerId, slot.options);
   }
@@ -488,7 +583,7 @@ export function onNavigateNimbusAds(): void {
   }
   adsLiveSince = now;
   adRegistry.forEach((ad, id) => {
-    if (id === RAIL_VIDEO_ID) {
+    if (id.endsWith(RAIL_VIDEO_ID_SUFFIX)) {
       return;
     }
     try {
