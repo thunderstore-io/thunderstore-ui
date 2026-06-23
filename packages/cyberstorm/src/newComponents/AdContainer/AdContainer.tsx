@@ -9,7 +9,7 @@ export type AdContainerSizeVariant =
   | "fishstick"
   | "dynamic"
   // Right-rail display units — fixed boxes: "square" (336x300) and "double"
-  // (336x600, twice as tall); one per per-config slot in the Nimbus ad rail.
+  // (336x600, twice as tall) used in the rail's per-config slots.
   | "rail-square"
   | "rail-double"
   | "narrow-dynamic"

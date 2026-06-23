@@ -109,7 +109,7 @@ export type RenderedAdSlot = {
 // Minimum creative lifetime (since slot creation or last refresh) before an SPA
 // navigation may refresh ads — 45s favours viewability/CTR over churn. Enforced
 // in onNavigateNimbusAds and mirrored to NitroPay per slot via `onNavigateMin`.
-const MIN_AD_LIFETIME_MS = 45000;
+const MIN_AD_LIFETIME_MS = 40000;
 const ON_NAVIGATE_MIN = MIN_AD_LIFETIME_MS;
 
 // Set to true to render static placeholders instead of making real ad calls,
@@ -212,23 +212,29 @@ const BOTTOM_RIGHT_SIZES = BOTTOM_VERY_WIDE_SIZES;
 const RIGHT_COLUMN_MQ = "(min-width: 1484px)";
 const RIGHT_COLUMN_NARROW_MQ = "(min-width: 1214px) and (max-width: 1483.98px)";
 
-// Chrome reserved above + below the sticky rail stack (mirrors the height calc
-// in layout.css: header + gap-2xs top + gap-2xs bottom). layout.css reveals a
-// config by the rail's own (container) height; NitroPay's mediaQuery is a
-// viewport query, so viewport height = rail (container) height + this.
-const RAIL_CHROME_PX = 64;
+// Chrome reserved above + below the sticky rail stack, mirroring layout.css's
+// stack height calc: --header-height (3.5rem) + --gap-2xs top + --gap-2xs bottom
+// (0.25rem each). layout.css reveals a config by the rail's own (container)
+// height; NitroPay's mediaQuery is a viewport query, so viewport height = rail
+// (container) height + this chrome. Kept in rem (not a hardcoded 64px) so a
+// non-default root font size scales it the same way layout.css does, keeping the
+// two in step.
+const RAIL_CHROME_REM = 3.5 + 0.25 + 0.25;
 
 // A config's NitroPay mediaQuery: the 336px-rail width regime plus that config's
 // rail-height band expressed as VIEWPORT height, so NitroPay only serves the
-// config's slots at the window heights where layout.css shows them. These bands
-// MUST mirror the @container bands in layout.css.
+// config's slots at the window heights where layout.css shows them. The px band
+// and the rem chrome are summed with calc() so the viewport threshold tracks the
+// root font size. These bands MUST mirror the @container bands in layout.css.
 function railHeightMq(minRail: number, maxRail: number | null): string {
   const parts = [
     RIGHT_COLUMN_MQ,
-    `(min-height: ${minRail + RAIL_CHROME_PX}px)`,
+    `(min-height: calc(${minRail}px + ${RAIL_CHROME_REM}rem))`,
   ];
   if (maxRail !== null) {
-    parts.push(`(max-height: ${maxRail + RAIL_CHROME_PX - 0.02}px)`);
+    parts.push(
+      `(max-height: calc(${maxRail}px + ${RAIL_CHROME_REM}rem - 0.02px))`
+    );
   }
   return parts.join(" and ");
 }
@@ -264,8 +270,8 @@ function displaySlot(slot: {
       format: "display",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      // 300s (5 min) auto-refresh: longer dwell for better viewability/CTR.
-      refreshTime: 90,
+      // 60s auto-refresh for display slots (the video slot uses 30s).
+      refreshTime: 60,
       onNavigateMin: ON_NAVIGATE_MIN,
       // Demo placeholders render immediately (not gated on the slot scrolling
       // into view) so the layout is easy to inspect; production stays
@@ -322,7 +328,7 @@ function railVideo(id: string, mediaQuery: string): RenderedAdSlot {
       format: "video-nc",
       demo: AD_DEMO_MODE,
       refreshLimit: 0,
-      // 30s auto-refresh for the video slot (display slots stay at 90s).
+      // 30s auto-refresh for the video slot (display slots use 60s).
       refreshTime: 30,
       onNavigateMin: ON_NAVIGATE_MIN,
       // The rail keeps the player on screen; never detach into the floating

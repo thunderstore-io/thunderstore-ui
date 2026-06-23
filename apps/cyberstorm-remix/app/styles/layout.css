@@ -83,9 +83,10 @@
        [1181 - 1481)  6  fishstick + double + square + video
        [1481 -  inf)  7  fishstick + double + double + video
 
-     NitroPay stays in step because each slot is created only once it is actually
-     on-screen (nitroAds.ts createAllNimbusAds), so a hidden config's slots are
-     never instantiated — no viewport height media query required. */
+     NitroPay stays in step because every rail slot is created eagerly with its
+     config's mediaQuery — a viewport-height band mirroring these container bands
+     plus the rail chrome (see railHeightMq in nitroAds.ts) — so NitroPay serves
+     only the matching config while CSS hides the rest. */
 
   /* Hide every rail slot; the matching band (and the narrow width regime below)
      shows exactly one config's slots. */
@@ -158,6 +159,18 @@
      fill slot from 1214-1483.98px; below 1214px the rail is hidden and the
      bottom banner row is the only ad surface. */
   @media (width <= 1213.98px) {
+    .layout__ads {
+      display: none;
+    }
+  }
+
+  /* Below the shortest config's band the rail can show nothing (every slot stays
+     display:none), so hide the column instead of reserving an empty 336px
+     gutter. Threshold = band 1's 331px rail height + the rail chrome
+     (--header-height + 2× --gap-2xs = 4rem); custom properties aren't allowed in
+     media conditions, so the 4rem is inlined. Only the full-width rail regime is
+     height-banded — the narrow fill slot below isn't, so it's left untouched. */
+  @media (width >= 1484px) and (height < calc(331px + 4rem)) {
     .layout__ads {
       display: none;
     }
