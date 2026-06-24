@@ -8,6 +8,7 @@ import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunityPromo } from "app/commonComponents/CommunityPromo/CommunityPromo";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import type { ReportPackageFormProps } from "app/p/components/ReportPackage/ReportPackageForm";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { type OutletContextShape } from "app/root";
@@ -20,6 +21,7 @@ import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import {
   type ReactElement,
   Suspense,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -234,12 +236,36 @@ export default function PackageListing() {
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
 
+  // Lazily fetch the report form's version list: the factory runs only when the
+  // modal first opens, not on every package page view. It's memoized on the
+  // package identity so it stays stable across re-renders but is recreated (and
+  // the cached versions reset) when navigating to a different package. A failed
+  // versions fetch falls back to an empty list so the form still renders.
+  const latestVersionNumber = listing?.latest_version_number;
+  const formPropsFactory = useCallback(
+    async (): Promise<ReportPackageFormProps> => {
+      const versionsData = await dapper
+        .getPackageVersions(namespace_id, package_id)
+        .catch(() => []);
+      return {
+        community: community_identifier,
+        namespace: namespace_id,
+        package: package_id,
+        versions: versionsData.map((v) => v.version_number),
+        // On the package page the open version is the latest one.
+        defaultVersion:
+          latestVersionNumber ?? versionsData[0]?.version_number ?? "",
+      };
+    },
+    // Keyed on the package identity only. `dapper` is intentionally omitted: it
+    // is reconstructed on every root render (see App in root.tsx), so including
+    // it would recreate the factory every render and defeat the lazy/cached
+    // fetch. Its behavior is fixed by the config + the identity args listed here.
+    [community_identifier, namespace_id, package_id, latestVersionNumber]
+  );
+
   const { ReportPackageButton, ReportPackageModal } = useReportPackage({
-    formPropsPromise: Promise.resolve({
-      community: community_identifier,
-      namespace: namespace_id,
-      package: package_id,
-    }),
+    formPropsFactory,
     config: config,
   });
 
