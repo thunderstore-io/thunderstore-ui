@@ -35,9 +35,9 @@ export const CategoryTagCloud = memo(function CategoryTagCloud(props: Props) {
     return null;
   }
 
-  const clearCategory = (id: string) =>
+  const clearCategory = (slug: string) =>
     setCategories(
-      categories.map((c) => (c.id === id ? { ...c, selection: OFF } : c))
+      categories.map((c) => (c.slug === slug ? { ...c, selection: OFF } : c))
     );
 
   return (
@@ -59,7 +59,7 @@ export const CategoryTagCloud = memo(function CategoryTagCloud(props: Props) {
         <NewTag
           csMode="button"
           key={c.slug}
-          onClick={() => clearCategory(c.id)}
+          onClick={() => clearCategory(c.slug)}
           csVariant={c.selection === "exclude" ? "red" : "primary"}
           csSize="medium"
           csModifiers={

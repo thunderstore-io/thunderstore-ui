@@ -31,8 +31,15 @@ export const searchParamsToBlob = (
   const initialDeprecated = searchParams.get("deprecated");
   const initialNsfw = searchParams.get("nsfw");
   const initialPage = searchParams.get("page");
-  const initialIncludedCategories = searchParams.get("includedCategories");
-  const initialExcludedCategories = searchParams.get("excludedCategories");
+  // Accept both our comma-joined form (?includedCategories=a,b) and Django's
+  // repeated-key form (?includedCategories=a&includedCategories=b) so URLs
+  // round-trip when switching between the legacy site and Nimbus.
+  const initialIncludedCategories = searchParams
+    .getAll("includedCategories")
+    .join(",");
+  const initialExcludedCategories = searchParams
+    .getAll("excludedCategories")
+    .join(",");
 
   return {
     search: initialSearch,
@@ -63,10 +70,8 @@ export const searchParamsToBlob = (
       Number.isSafeInteger(Number.parseInt(initialPage))
         ? Math.max(1, Number.parseInt(initialPage))
         : 1,
-    includedCategories:
-      initialIncludedCategories !== null ? initialIncludedCategories : "",
-    excludedCategories:
-      initialExcludedCategories !== null ? initialExcludedCategories : "",
+    includedCategories: initialIncludedCategories,
+    excludedCategories: initialExcludedCategories,
   };
 };
 
@@ -79,9 +84,9 @@ export function parseCategories(
   const iCArr = includedCategories.split(",");
   const eCArr = excludedCategories.split(",");
   return categories.map((c) =>
-    iCArr.includes(c.id)
+    iCArr.includes(c.slug)
       ? { ...c, selection: "include" }
-      : eCArr.includes(c.id)
+      : eCArr.includes(c.slug)
         ? { ...c, selection: "exclude" }
         : c
   );
@@ -111,7 +116,7 @@ export const setParamsBlobCategories = (
   const newSearchParams = { ...oldBlob };
   const includedCategories = v
     .filter((c) => c.selection === "include")
-    .map((c) => c.id);
+    .map((c) => c.slug);
   if (includedCategories.length === 0) {
     newSearchParams.includedCategories = "";
   } else {
@@ -119,7 +124,7 @@ export const setParamsBlobCategories = (
   }
   const excludedCategories = v
     .filter((c) => c.selection === "exclude")
-    .map((c) => c.id);
+    .map((c) => c.slug);
   if (excludedCategories.length === 0) {
     newSearchParams.excludedCategories = "";
   } else {
@@ -200,7 +205,7 @@ export function synchronizeSearchParams(
     if (
       debouncedSearchParamsBlob.section === "" ||
       sortedSections.length === 0 ||
-      debouncedSearchParamsBlob.section === sortedSections[0]?.uuid
+      debouncedSearchParamsBlob.section === sortedSections[0]?.slug
     ) {
       searchParams.delete("section");
     } else {

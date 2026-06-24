@@ -30,8 +30,15 @@ export const loader = ssrLoader(
         searchParams.get("ordering") ?? PackageOrderOptions.Updated;
       const page = searchParams.get("page");
       const search = searchParams.get("search");
-      const includedCategories = searchParams.get("includedCategories");
-      const excludedCategories = searchParams.get("excludedCategories");
+      // Accept both the comma-joined form (?includedCategories=a,b) and Django's
+      // repeated-key form (?includedCategories=a&includedCategories=b) so the
+      // initial load filters correctly, matching searchParamsToBlob.
+      const includedCategories = searchParams
+        .getAll("includedCategories")
+        .flatMap((v) => v.split(","));
+      const excludedCategories = searchParams
+        .getAll("excludedCategories")
+        .flatMap((v) => v.split(","));
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
@@ -58,8 +65,8 @@ export const loader = ssrLoader(
           ordering ?? "",
           page === null ? undefined : Number(page),
           search ?? "",
-          includedCategories?.split(",") ?? undefined,
-          excludedCategories?.split(",") ?? undefined,
+          includedCategories,
+          excludedCategories,
           finalSection,
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
@@ -114,8 +121,15 @@ export async function clientLoader({
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
     const page = searchParams.get("page");
     const search = searchParams.get("search");
-    const includedCategories = searchParams.get("includedCategories");
-    const excludedCategories = searchParams.get("excludedCategories");
+    // Accept both the comma-joined form (?includedCategories=a,b) and Django's
+    // repeated-key form (?includedCategories=a&includedCategories=b) so the
+    // initial load filters correctly, matching searchParamsToBlob.
+    const includedCategories = searchParams
+      .getAll("includedCategories")
+      .flatMap((v) => v.split(","));
+    const excludedCategories = searchParams
+      .getAll("excludedCategories")
+      .flatMap((v) => v.split(","));
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
@@ -138,8 +152,8 @@ export async function clientLoader({
         ordering ?? "",
         page === null ? undefined : Number(page),
         search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
+        includedCategories,
+        excludedCategories,
         finalSection,
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
