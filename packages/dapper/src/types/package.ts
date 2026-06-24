@@ -77,7 +77,7 @@ export interface PackageVersion {
 
 export interface PackageVersionDependency {
   description: string;
-  icon_url: string;
+  icon_url: string | null;
   is_active: boolean;
   name: string;
   namespace: string;
