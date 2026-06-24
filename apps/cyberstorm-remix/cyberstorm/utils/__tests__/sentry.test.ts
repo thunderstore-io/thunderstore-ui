@@ -1,7 +1,12 @@
 import type { ErrorEvent } from "@sentry/react-router";
 import { assert, describe, expect, it } from "vitest";
 
-import { beforeSend, denyUrls, isExpectedRouteError } from "../sentry";
+import {
+  beforeSend,
+  denyUrls,
+  isExpectedRouteError,
+  toReportableError,
+} from "../sentry";
 
 // This attempts to match how Sentry does things.
 // https://docs.sentry.io/platforms/javascript/configuration/options/#denyUrls
@@ -275,5 +280,43 @@ describe("utils.sentry.isExpectedRouteError", () => {
     expect(
       isExpectedRouteError({ status: 404, statusText: "", data: null })
     ).toBe(false);
+  });
+});
+
+describe("utils.sentry.toReportableError", () => {
+  const routeErrorResponse = (status: number, statusText = "") => ({
+    status,
+    statusText,
+    internal: true,
+    data: null,
+    error: new Error(statusText),
+  });
+
+  it("wraps a route ErrorResponse in a named Error grouped by status", () => {
+    const result = toReportableError(
+      routeErrorResponse(500, "Internal Server Error")
+    );
+    expect(result).toBeInstanceOf(Error);
+    expect((result as Error).name).toBe("RouteErrorResponse");
+    expect((result as Error).message).toBe(
+      "RouteErrorResponse 500 Internal Server Error"
+    );
+  });
+
+  it("omits trailing whitespace when statusText is empty", () => {
+    const result = toReportableError(routeErrorResponse(502));
+    expect((result as Error).message).toBe("RouteErrorResponse 502");
+  });
+
+  it("passes ApiError and plain Errors through unchanged", () => {
+    const apiError = {
+      message: "500: ",
+      response: { headers: {}, status: 500, statusText: "", url: "" },
+      responseJson: undefined,
+    };
+    expect(toReportableError(apiError)).toBe(apiError);
+
+    const plain = new Error("boom");
+    expect(toReportableError(plain)).toBe(plain);
   });
 });

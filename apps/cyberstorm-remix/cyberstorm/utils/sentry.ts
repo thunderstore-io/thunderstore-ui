@@ -22,6 +22,27 @@ export function isExpectedRouteError(error: unknown): boolean {
   return false;
 }
 
+/**
+ * react-router serializes loader-thrown Responses into ErrorResponse *objects*
+ * ({ status, statusText, internal, data }), not Error instances. Passing one
+ * straight to Sentry.captureException yields a useless "Object captured as
+ * exception with keys: data, internal, status, statusText" event — no message,
+ * and every route response lumped into one group. Wrap it in a real Error so
+ * the (only 5xx, after isExpectedRouteError) route errors group by status and
+ * read clearly. ApiError and plain Errors already carry a message + stack, so
+ * they pass through unchanged.
+ */
+export function toReportableError(error: unknown): unknown {
+  if (isRouteErrorResponse(error)) {
+    const reportable = new Error(
+      `RouteErrorResponse ${error.status} ${error.statusText}`.trim()
+    );
+    reportable.name = "RouteErrorResponse";
+    return reportable;
+  }
+  return error;
+}
+
 // For filtering out Sentry errors based on source URL.
 // Use strings for contains-style matching and regexp for more complex cases.
 export const denyUrls: (string | RegExp)[] = [
