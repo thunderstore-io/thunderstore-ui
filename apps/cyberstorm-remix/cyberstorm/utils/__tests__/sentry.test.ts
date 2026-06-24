@@ -202,6 +202,68 @@ describe("utils.sentry.beforeSend", () => {
       denyUrls.splice(denyUrls.indexOf(pattern), 1);
     }
   });
+
+  it("drops a Maximum call stack RangeError with no real-file frames", () => {
+    // Extension-injected recursive property traps overflow entirely within
+    // anonymous/native frames.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "RangeError",
+            value: "Maximum call stack size exceeded",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "<anonymous>" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("drops a frameless Maximum call stack RangeError", () => {
+    const event = {
+      exception: {
+        values: [
+          { type: "RangeError", value: "Maximum call stack size exceeded" },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("keeps a Maximum call stack overflow that runs through our bundle", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "RangeError",
+            value: "Maximum call stack size exceeded",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "https://thunderstore.io/assets/index-abc.js" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("keeps a frameless RangeError that is not a stack overflow", () => {
+    const event = {
+      exception: {
+        values: [{ type: "RangeError", value: "Invalid array length" }],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
 });
 
 describe("utils.sentry.isExpectedRouteError", () => {

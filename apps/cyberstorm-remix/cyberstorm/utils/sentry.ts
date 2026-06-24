@@ -100,7 +100,36 @@ function isAdScriptError(event: ErrorEvent): boolean {
   return values.some((v) => matchesDenyUrl(v.value ?? ""));
 }
 
+/**
+ * Browser extensions (anti-fingerprinting, ad blockers, page translators)
+ * install recursive getOwnPropertyDescriptor / Proxy traps that overflow the
+ * stack entirely within their own injected code: the event is a "Maximum call
+ * stack size exceeded" RangeError whose frames are all anonymous with no
+ * filename. Drop those. A genuine recursion in our code leaves our bundle on
+ * the stack (a frame with a real filename), so it is still captured.
+ */
+function isExtensionStackOverflow(event: ErrorEvent): boolean {
+  const values = event.exception?.values ?? [];
+
+  const isStackOverflow = values.some(
+    (v) =>
+      v.type === "RangeError" &&
+      (v.value ?? "").includes("Maximum call stack size exceeded")
+  );
+  if (!isStackOverflow) return false;
+
+  const hasOwnCodeFrame = values
+    .flatMap((v) => v.stacktrace?.frames ?? [])
+    .some((f) => {
+      const filename = f.filename ?? "";
+      return filename !== "" && filename !== "<anonymous>";
+    });
+
+  return !hasOwnCodeFrame;
+}
+
 export function beforeSend(event: ErrorEvent): ErrorEvent | null {
   if (isAdScriptError(event)) return null;
+  if (isExtensionStackOverflow(event)) return null;
   return event;
 }
