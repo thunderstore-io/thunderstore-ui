@@ -289,6 +289,7 @@ export default function PackageVersion() {
                     <Tabs>
                       <NewLink
                         key="description"
+                        preventScrollReset
                         primitiveType="cyberstormLink"
                         linkId="PackageVersionWithoutCommunity"
                         namespace={resolvedValue.namespace}
@@ -303,6 +304,7 @@ export default function PackageVersion() {
                       </NewLink>
                       <NewLink
                         key="required"
+                        preventScrollReset
                         primitiveType="cyberstormLink"
                         linkId="PackageVersionWithoutCommunityRequired"
                         namespace={resolvedValue.namespace}
@@ -317,6 +319,7 @@ export default function PackageVersion() {
                       </NewLink>
                       <NewLink
                         key="versions"
+                        preventScrollReset
                         primitiveType="cyberstormLink"
                         linkId="PackageVersionWithoutCommunityVersions"
                         namespace={resolvedValue.namespace}

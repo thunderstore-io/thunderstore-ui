@@ -298,6 +298,7 @@ export default function PackageListingVersion() {
             <Tabs>
               <NewLink
                 key="description"
+                preventScrollReset
                 primitiveType="cyberstormLink"
                 linkId="PackageVersion"
                 community={listing.community_identifier}
@@ -313,6 +314,7 @@ export default function PackageListingVersion() {
               </NewLink>
               <NewLink
                 key="required"
+                preventScrollReset
                 primitiveType="cyberstormLink"
                 linkId="PackageVersionRequired"
                 community={listing.community_identifier}
@@ -328,6 +330,7 @@ export default function PackageListingVersion() {
               </NewLink>
               <NewLink
                 key="versions"
+                preventScrollReset
                 primitiveType="cyberstormLink"
                 linkId="PackageVersionVersions"
                 community={listing.community_identifier}

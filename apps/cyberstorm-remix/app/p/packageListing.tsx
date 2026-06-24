@@ -438,6 +438,7 @@ export default function PackageListing() {
               <Tabs>
                 <NewLink
                   key="description"
+                  preventScrollReset
                   primitiveType="cyberstormLink"
                   linkId="Package"
                   community={listing.community_identifier}
@@ -453,6 +454,7 @@ export default function PackageListing() {
 
                 <NewLink
                   key="required"
+                  preventScrollReset
                   primitiveType="cyberstormLink"
                   linkId="PackageRequired"
                   community={listing.community_identifier}
@@ -468,6 +470,7 @@ export default function PackageListing() {
 
                 <NewLink
                   key="wiki"
+                  preventScrollReset
                   primitiveType="cyberstormLink"
                   linkId="PackageWiki"
                   community={listing.community_identifier}
@@ -483,6 +486,7 @@ export default function PackageListing() {
 
                 <NewLink
                   key="changelog"
+                  preventScrollReset
                   primitiveType="cyberstormLink"
                   linkId="PackageChangelog"
                   community={listing.community_identifier}
@@ -499,6 +503,7 @@ export default function PackageListing() {
 
                 <NewLink
                   key="versions"
+                  preventScrollReset
                   primitiveType="cyberstormLink"
                   linkId="PackageVersions"
                   community={listing.community_identifier}
@@ -514,6 +519,7 @@ export default function PackageListing() {
 
                 <NewLink
                   key="source"
+                  preventScrollReset
                   primitiveType="cyberstormLink"
                   linkId="PackageSource"
                   community={listing.community_identifier}

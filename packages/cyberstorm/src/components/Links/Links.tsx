@@ -63,6 +63,9 @@ interface CyberstormLinkProps
   linkId: CyberstormLinkIds;
   className?: string;
   forwardedProps?: object;
+  // Forwarded to the underlying React Router <Link>; when true, navigating via
+  // this link does not reset scroll to the top (e.g. package page tab switches).
+  preventScrollReset?: boolean;
 }
 
 // TODO: Move to primitives
