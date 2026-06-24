@@ -127,6 +127,7 @@
       padding: var(--space-16);
       border: var(--border-width--px) solid var(--color-surface-8);
       border-radius: var(--radius-md);
+      overflow-x: scroll;
       background: var(--color-surface-1);
     }
 
@@ -147,7 +148,6 @@
     }
 
     pre code {
-      display: block;
       padding: 0;
       border: 0;
       border-radius: 0;
