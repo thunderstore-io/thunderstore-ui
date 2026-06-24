@@ -37,17 +37,9 @@ export async function loader({ params }: Route.LoaderArgs) {
       status: null,
       source: undefined,
       message: undefined,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Source code for ${params.namespaceId}-${params.packageId}`,
-          },
-        ],
-      }),
+      // Inherit the package page's descriptive title; just prefix the tab name
+      // (the tab is labelled "Analysis" in the UI) (TS-3948).
+      seo: createSeo({ prefix: "Analysis", descriptors: [] }),
     };
   }
   return {
@@ -71,10 +63,27 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
+    // Mirror the loader's SEO so the tab title stays consistent on client-side
+    // navigation and after hydration (clientLoader.hydrate is true).
+    const okSeo = createSeo({
+      descriptors: [
+        {
+          title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
+        },
+        {
+          name: "description",
+          content: `Source code for ${params.namespaceId}-${params.packageId}`,
+        },
+      ],
+    });
+    const errorSeo = createSeo({
+      descriptors: [{ title: "Source Not Found" }],
+    });
     let result: ResultType = {
       status: null,
       source: undefined,
       message: undefined,
+      seo: okSeo,
     };
     try {
       const source = dapper.getPackageSource(
@@ -85,12 +94,14 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
         status: null,
         source: source,
         message: undefined,
+        seo: okSeo,
       };
     } catch (error) {
       result = {
         status: "error",
         source: undefined,
         message: "Analysis not available",
+        seo: errorSeo,
       };
       throw error;
     }
@@ -100,6 +111,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     status: "error",
     message: "Analysis not available",
     source: undefined,
+    seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
   };
 }
 
