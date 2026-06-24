@@ -1,16 +1,25 @@
 import type { ErrorEvent } from "@sentry/react-router";
 import { isRouteErrorResponse } from "react-router";
 
+import { isApiError } from "@thunderstore/thunderstore-api";
+
 /**
- * Expected 4xx route-level responses — router-internal 404s for unmatched
- * URLs (bots, typos, ACME probes), 405s for invalid methods or POSTs
- * without an action, and 4xx ApiErrors converted to Responses by
- * ssrLoader — are user/bot-facing outcomes rather than bugs and should
- * not be reported to Sentry. 5xx route errors and non-Response errors
- * are real failures and must still be captured.
+ * Expected 4xx errors — router-internal 404s for unmatched URLs (bots,
+ * typos, ACME probes), 405s for invalid methods or POSTs without an action,
+ * and 4xx ApiErrors converted to Responses by ssrLoader — are user/bot-facing
+ * outcomes rather than bugs and should not be reported to Sentry. 5xx errors
+ * and non-HTTP errors are real failures and must still be captured.
+ *
+ * clientLoaders throw ApiError directly (it is not converted to a Response on
+ * the client), so 4xx ApiErrors — 401/403/404/429, e.g. a Cloudflare 403 on a
+ * deep listing page — are matched here too, not just thrown Responses.
  */
 export function isExpectedRouteError(error: unknown): boolean {
-  return isRouteErrorResponse(error) && error.status < 500;
+  if (isRouteErrorResponse(error)) return error.status < 500;
+  if (isApiError(error)) {
+    return error.response.status >= 400 && error.response.status < 500;
+  }
+  return false;
 }
 
 // For filtering out Sentry errors based on source URL.

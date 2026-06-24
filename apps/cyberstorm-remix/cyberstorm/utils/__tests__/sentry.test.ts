@@ -246,6 +246,25 @@ describe("utils.sentry.isExpectedRouteError", () => {
     expect(isExpectedRouteError(new Error("loader exploded"))).toBe(false);
   });
 
+  // clientLoaders throw ApiError directly rather than a Response, matching what
+  // isApiError() recognizes (message + response.status + responseJson key).
+  const apiError = (status: number) => ({
+    message: `${status}: `,
+    response: { headers: {}, status, statusText: "", url: "" },
+    responseJson: undefined,
+  });
+
+  it.each([401, 403, 404, 429])(
+    "returns true for %i ApiErrors thrown by clientLoaders",
+    (status) => {
+      expect(isExpectedRouteError(apiError(status))).toBe(true);
+    }
+  );
+
+  it.each([500, 502, 503, 504])("returns false for %i ApiErrors", (status) => {
+    expect(isExpectedRouteError(apiError(status))).toBe(false);
+  });
+
   it("returns false for null and undefined", () => {
     expect(isExpectedRouteError(null)).toBe(false);
     expect(isExpectedRouteError(undefined)).toBe(false);
