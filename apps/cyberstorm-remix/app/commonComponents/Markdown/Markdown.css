@@ -127,8 +127,8 @@
       padding: var(--space-16);
       border: var(--border-width--px) solid var(--color-surface-8);
       border-radius: var(--radius-md);
-      background: var(--color-surface-1);
       overflow-x: scroll;
+      background: var(--color-surface-1);
     }
 
     code {
