@@ -272,7 +272,10 @@ export const packageVersionExperimentalSchema = z.object({
 
 export const packageVersionDependencySchema = z.object({
   description: z.string(),
-  icon_url: z.string(),
+  // Nullable: the API returns null when a dependency has no icon (e.g. a
+  // deactivated or iconless package), matching the sibling dependency/listing
+  // schemas. A non-nullable string here threw ParseError in production.
+  icon_url: z.string().nullable(),
   is_active: z.boolean(),
   name: z.string().min(1),
   namespace: z.string().min(1),
