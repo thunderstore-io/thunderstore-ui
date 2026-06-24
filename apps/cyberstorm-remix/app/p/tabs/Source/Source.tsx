@@ -143,10 +143,14 @@ export default function Source() {
                       />
                     </div>
                   </div>
-                  <DownloadButton
-                    download_url={decompilation.url}
-                    packageSize={decompilation.result_size}
-                  />
+                  {decompilation.url ? (
+                    <div className="package-source__header-actions">
+                      <DownloadButton
+                        url={decompilation.url}
+                        size={decompilation.result_size}
+                      />
+                    </div>
+                  ) : null}
                 </div>
                 {decompilation.is_truncated && (
                   <Alert csVariant="warning">
@@ -171,6 +175,43 @@ export default function Source() {
     </Suspense>
   );
 }
+
+/** Derive a leading-dot file ending (e.g. ".blob") from a download URL. */
+function fileEndingFromUrl(url?: string): string | null {
+  if (!url) return null;
+  try {
+    const segment = new URL(url, "https://localhost").pathname.split("/").pop();
+    const dot = segment ? segment.lastIndexOf(".") : -1;
+    return dot > 0 ? (segment as string).slice(dot) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Download link for a decompiled file, labelled "<ending> (<size>)". */
+const DownloadButton = (props: { url: string; size?: string }) => {
+  const fileEnding = fileEndingFromUrl(props.url);
+  let label = "Download";
+  if (fileEnding) {
+    label = props.size ? `${fileEnding} (${props.size})` : fileEnding;
+  }
+
+  return (
+    <NewButton
+      csVariant="secondary"
+      csSize="small"
+      primitiveType="link"
+      href={props.url}
+      tooltipText="Download"
+      aria-label="Download file"
+    >
+      <NewIcon csMode="inline" noWrapper>
+        <FontAwesomeIcon icon={faDownload} />
+      </NewIcon>
+      {label}
+    </NewButton>
+  );
+};
 
 const DecompilationDateDisplay = (props: {
   lastDecompilationDate: string | null | undefined;
@@ -197,24 +238,4 @@ const DecompilationDateDisplay = (props: {
       </p>
     </div>
   );
-};
-
-const DownloadButton = (props: {
-  download_url: string | undefined;
-  packageSize: string | undefined;
-}) => {
-  return props.download_url ? (
-    <NewButton
-      csVariant="secondary"
-      csSize="medium"
-      primitiveType="link"
-      href={props.download_url}
-    >
-      <NewIcon noWrapper csMode="inline">
-        <FontAwesomeIcon icon={faDownload} />
-      </NewIcon>
-      Download
-      {props.packageSize ? ` (${props.packageSize})` : ""}
-    </NewButton>
-  ) : null;
 };
