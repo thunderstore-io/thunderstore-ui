@@ -128,6 +128,7 @@
       border: var(--border-width--px) solid var(--color-surface-8);
       border-radius: var(--radius-md);
       background: var(--color-surface-1);
+      overflow-x: scroll;
     }
 
     code {
@@ -147,7 +148,6 @@
     }
 
     pre code {
-      display: block;
       padding: 0;
       border: 0;
       border-radius: 0;
