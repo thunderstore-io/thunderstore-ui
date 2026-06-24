@@ -30,28 +30,44 @@ export const denyUrls: (string | RegExp)[] = [
   "id5-sync.com",
   "2mdn.net",
   "p7cloud.net",
+  "imasdk.googleapis.com", // Google IMA SDK (ima3.js)
+  "ftUtils.js", // Freestar/ad placement util, served without a stable host
+  "cpx.to", // CPX survey/pixel
 ];
 
+function matchesDenyUrl(text: string): boolean {
+  return denyUrls.some((pattern) =>
+    typeof pattern === "string" ? text.includes(pattern) : pattern.test(text)
+  );
+}
+
 /**
- * Returns true when any stack frame comes from an ad-network origin.
- * Used in beforeSend to suppress ad-script errors that slip past denyUrls,
- * including cases where ad scripts call through our XHR/fetch wrappers,
- * leaving our bundle files at the bottom of the stack trace.
+ * Returns true when an event originates from an ad-network script.
+ * Used in beforeSend to suppress ad-script errors that slip past Sentry's
+ * denyUrls, including cases where ad scripts call through our XHR/fetch
+ * wrappers, leaving our bundle files at the bottom of the stack trace.
+ *
+ * Two signals:
+ * 1. Any stack frame from an ad-network origin.
+ * 2. For frameless events only — cross-origin ad rejections (e.g.
+ *    "NetworkError when attempting to fetch resource. (diagnostics.id5-sync.com)")
+ *    carry no stack because the browser strips frames for opaque origins, so
+ *    fall back to matching the ad domain in the exception message. This is
+ *    gated on having no usable frames to avoid dropping a genuine app error
+ *    that merely mentions an ad domain in its text.
  */
 function isAdScriptError(event: ErrorEvent): boolean {
-  const frames =
-    event.exception?.values?.flatMap((v) => v.stacktrace?.frames ?? []) ?? [];
+  const values = event.exception?.values ?? [];
 
-  const nonEmptyFrames = frames.filter((f) => f.filename);
-  if (nonEmptyFrames.length === 0) return false;
+  const namedFrames = values
+    .flatMap((v) => v.stacktrace?.frames ?? [])
+    .filter((f) => f.filename);
 
-  return nonEmptyFrames.some((frame) =>
-    denyUrls.some((pattern) =>
-      typeof pattern === "string"
-        ? (frame.filename ?? "").includes(pattern)
-        : pattern.test(frame.filename ?? "")
-    )
-  );
+  if (namedFrames.length > 0) {
+    return namedFrames.some((frame) => matchesDenyUrl(frame.filename ?? ""));
+  }
+
+  return values.some((v) => matchesDenyUrl(v.value ?? ""));
 }
 
 export function beforeSend(event: ErrorEvent): ErrorEvent | null {
