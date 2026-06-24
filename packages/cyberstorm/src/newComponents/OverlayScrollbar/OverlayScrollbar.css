@@ -1,0 +1,122 @@
+@layer components {
+  /* Non-scrolling positioned layer wrapping a scroll container. The thumb is an
+     absolute child of THIS element (which does not scroll), so it floats over
+     the content and stays pinned to the visible box instead of scrolling away
+     with the content. display:contents would collapse the positioning context,
+     so it is a real block that simply does not change the child's layout. */
+  .cs-scroll-overlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  /* Opt-in: hide the native bar + reclaim its gutter on a CONTAINER. The caller
+     puts this class in the markup statically (e.g. PackageSearch), so the native
+     bar is hidden from first paint — the floating thumb (rendered only after
+     hydration, fine pointers only) replaces it with zero layout shift. Trade-off:
+     no-JS / coarse-pointer scrollers get no visible bar, just wheel/keyboard.
+     Scoped to this class so it never touches the repo's intentional
+     scrollbar-width:none strips (Tabs, Drawer, markdown, etc.) or the global
+     `* > * { scrollbar-width: thin }` rule. The element keeps overflow:auto. */
+  .cs-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .cs-scroll::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Opt-in: hide the native PAGE bar. Applied to <html> statically in root.tsx
+     markup (not on hydration), so the bar is hidden from first paint and the
+     fixed window thumb (post-hydration, fine pointers only) replaces it with no
+     layout shift. Trade-off: no-JS / coarse-pointer pages get no visible bar. */
+  html.cs-custom-scrollbars,
+  html.cs-custom-scrollbars body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html.cs-custom-scrollbars::-webkit-scrollbar,
+  html.cs-custom-scrollbars body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* The floating thumb. Hidden at rest; pointer-events off while invisible so
+     it never intercepts clicks/hover on the content underneath. Position +
+     height are written via JS (transform: translate3d / height) — the JS
+     `minThumb` clamp is the single source of truth for the floor, so NO CSS
+     min-height here (a CSS floor would desync the drag math). NEVER transition
+     transform/height — only opacity, and only when motion is allowed. */
+  .cs-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    right: var(--space-2);
+    z-index: 1;
+    width: var(--space-6);
+    border-radius: var(--radius-full);
+    background-color: var(--color-surface-a8);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .cs-scrollbar-thumb:hover {
+    background-color: var(--color-surface-a10);
+  }
+
+  .cs-scrollbar-thumb.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Keep the container thumb visible while the scroll box is hovered or holds
+     keyboard focus, so it stays put even if the JS idle timer fires mid-hover
+     (TS-3955). Only renders when overflowing, so this can't show a thumb with no
+     overflow. Scoped to the container variant; the window thumb sits outside
+     .cs-scroll-overlay and uses its own edge hot-zone reveal. */
+  .cs-scroll-overlay:hover .cs-scrollbar-thumb--container,
+  .cs-scroll-overlay:focus-within .cs-scrollbar-thumb--container {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Window variant: fixed to the viewport. z-index sits ABOVE the sticky nav
+     header (999) and page content, but BELOW the Radix Modal overlay/content
+     (1000, a portaled non-top-layer element) so the thumb never paints over an
+     open dialog. The Drawer/MobileNavigation use the native top layer and are
+     immune to z-index regardless. */
+  .cs-scrollbar-thumb--window {
+    position: fixed;
+    top: 0;
+    right: var(--space-2);
+    z-index: 990;
+  }
+
+  /* While dragging, never let the page select text under the cursor, and force
+     INSTANT scroll so the page can't smooth-animate behind the thumb (reset.css
+     sets `html:focus-within { scroll-behavior: smooth }`). */
+  html.cs-scrollbar-dragging {
+    scroll-behavior: auto !important;
+  }
+
+  html.cs-scrollbar-dragging,
+  html.cs-scrollbar-dragging * {
+    cursor: grabbing !important;
+    user-select: none !important;
+  }
+
+  /* Fade is additive and motion-gated: default is no transition (reduced-motion
+     safe — show/hide is instant), the tween only applies when the user allows
+     motion. Mirrors the reset.css idiom for scroll-behavior. */
+  @media (prefers-reduced-motion: no-preference) {
+    .cs-scrollbar-thumb {
+      transition: opacity 150ms ease;
+    }
+  }
+}

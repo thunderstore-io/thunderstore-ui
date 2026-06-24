@@ -34,6 +34,7 @@ import {
   Container,
   LinkingProvider,
   ToastProvider,
+  WindowOverlayScrollbar,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
@@ -273,7 +274,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }, [location.pathname, location.search]);
 
   return (
-    <html lang="en">
+    // cs-custom-scrollbars hides the native page scrollbar from the very first
+    // SSR paint (not on hydration), so the custom overlay thumb can take over
+    // with zero layout shift. No-JS keeps a scrollable (wheel/keyboard) page
+    // without a visible bar.
+    <html lang="en" className="cs-custom-scrollbars">
       <head>
         {/*
           We define CSS layers inline at the very top of the head to guarantee they are registered
@@ -378,6 +383,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </TooltipProvider>
           </ToastProvider>
         </LinkingProvider>
+        <WindowOverlayScrollbar />
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -29,6 +29,13 @@
           opacity: 0;
           pointer-events: none;
         }
+
+        /* Keyboard focus must reveal it too — opacity: 0 alone leaves the
+           focused exclude button invisible. */
+        .checkbox-list__exclude-button:focus-visible {
+          opacity: 1;
+          pointer-events: auto;
+        }
       }
 
       &.checkbox-list__label--off {
