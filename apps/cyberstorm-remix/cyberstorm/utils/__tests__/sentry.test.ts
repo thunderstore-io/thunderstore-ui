@@ -32,8 +32,12 @@ describe("utils.sentry.denyUrls", () => {
     ["https://adnxs.com/prebid/creative", true],
     ["https://doubleclick.net/pagead/js/foo.js", true],
     ["https://googlesyndication.com/pagead/js/foo.js", true],
+    ["https://imasdk.googleapis.com/js/sdkloader/ima3.js", true],
+    ["https://a.pub.network/ftUtils.js", true],
+    ["https://s.cpx.to/p/20023/px.js", true],
     ["/app/apps/cyberstorm-remix/build/server/index.js", false],
     ["https://thunderstore.io/api/cyberstorm/listing/riskofrain2/", false],
+    ["https://thunderstore.io/assets/entry.client-abc.js", false],
   ])("correctly classifies %s", (url, expectedToMatch) => {
     for (const stringOrRegExp of denyUrls) {
       const matches = matchesStringOrRegExp(url, stringOrRegExp);
@@ -104,6 +108,58 @@ describe("utils.sentry.beforeSend", () => {
       },
     } as ErrorEvent;
     expect(beforeSend(event)).toBeNull();
+  });
+
+  it("drops frameless cross-origin ad rejections matched by message", () => {
+    // Browsers strip the stack for opaque-origin fetch rejections, so these
+    // arrive frameless with the ad host only in the message text.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value:
+              "NetworkError when attempting to fetch resource. (diagnostics.id5-sync.com)",
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("passes through frameless events whose message is unrelated", () => {
+    const event = {
+      exception: {
+        values: [
+          { type: "TypeError", value: "Cannot read properties of null" },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("keeps an app error that only mentions an ad domain but has app frames", () => {
+    // Message-matching is gated on being frameless: a real app error with a
+    // usable stack must not be dropped just because its text names an ad host.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "Error",
+            value: "Failed near id5-sync.com integration",
+            stacktrace: {
+              frames: [
+                {
+                  filename:
+                    "https://thunderstore.io/assets/entry.client-abc.js",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
   });
 
   it("passes through events where exception is null", () => {
