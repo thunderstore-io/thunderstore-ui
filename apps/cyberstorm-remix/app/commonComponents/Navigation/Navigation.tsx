@@ -113,13 +113,25 @@ function toLegacyPath(pathname: string): string {
   return pathname;
 }
 
-function switchToLegacySite() {
-  if (typeof window === "undefined") return;
-  const { protocol, hostname, pathname } = window.location;
-  const baseHost = hostname.replace(/^(?:new|old)\./, "");
-  window.location.assign(
-    `${protocol}//old.${baseHost}${toLegacyPath(pathname)}`
-  );
+// Absolute URL of the legacy Django site for the given in-app path. Built from
+// the configured site origin (`domain` = VITE_API_URL) so the href is filled in
+// during SSR — that's what lets the link be middle-clicked / opened in a new tab
+// before any JS runs. The new site is served from the base domain or the `new.`
+// subdomain and the legacy site lives at `old.<base>`, so strip a leading
+// new./old. label and prepend `old.`. Falls back to the live origin when the env
+// var is missing, and to a relative path as a last resort.
+function toLegacyUrl(domain: string, pathname: string): string {
+  const legacyPath = toLegacyPath(pathname);
+  const origin =
+    domain || (typeof window !== "undefined" ? window.location.origin : "");
+  if (!origin) return legacyPath;
+  try {
+    const { protocol, host } = new URL(origin);
+    const legacyHost = host.replace(/^(?:new|old)\./, "");
+    return `${protocol}//old.${legacyHost}${legacyPath}`;
+  } catch {
+    return legacyPath;
+  }
 }
 
 const legacySwitchStyle: CSSProperties = {
@@ -136,19 +148,28 @@ const legacySwitchStyle: CSSProperties = {
   lineHeight: "normal",
   fill: "#49b5f7",
   background: "transparent",
+  textDecoration: "none",
 };
 
 // Rendered natively here rather than injected by beta-switch.js: feeding a
-// foreign <button> into a React-owned container that re-renders on every
+// foreign element into a React-owned container that re-renders on every
 // navigation leaked event listeners. beta-switch.js now runs only on the legacy
 // site (via its DynamicHTML entry), where there is no React.
-function LegacySwitchButton({ className }: { className?: string }) {
+// A real <a> (not a <button>) so it behaves like a link: middle-click and
+// ctrl/cmd-click open the legacy site in a new tab, and the URL shows on hover.
+function LegacySwitchButton({
+  className,
+  domain,
+}: {
+  className?: string;
+  domain: string;
+}) {
+  const { pathname } = useLocation();
   return (
-    <button
-      type="button"
+    <a
       className={className}
       style={legacySwitchStyle}
-      onClick={switchToLegacySite}
+      href={toLegacyUrl(domain, pathname)}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +180,7 @@ function LegacySwitchButton({ className }: { className?: string }) {
         <path d="M288 0L160 0 128 0C110.3 0 96 14.3 96 32s14.3 32 32 32l0 132.8c0 11.8-3.3 23.5-9.5 33.5L10.3 406.2C3.6 417.2 0 429.7 0 442.6C0 480.9 31.1 512 69.4 512l309.2 0c38.3 0 69.4-31.1 69.4-69.4c0-12.8-3.6-25.4-10.3-36.4L329.5 230.4c-6.2-10.1-9.5-21.7-9.5-33.5L320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32L288 0zM192 196.8L192 64l64 0 0 132.8c0 23.7 6.6 46.9 19 67.1L309.5 320l-171 0L173 263.9c12.4-20.2 19-43.4 19-67.1z" />
       </svg>
       Switch to legacy
-    </button>
+    </a>
   );
 }
 
@@ -301,7 +322,10 @@ export function Navigation(props: {
           </div>
         </nav>
         <div className="navigation-header__user">
-          <LegacySwitchButton className="navigation-header__legacy-switch" />
+          <LegacySwitchButton
+            className="navigation-header__legacy-switch"
+            domain={domain}
+          />
           <div className="navigation-header__extra">
             <NewButton
               primitiveType="link"
@@ -490,7 +514,7 @@ export function DesktopUserDropdown(props: {
   domain: string;
   communityId?: string;
 }) {
-  const { user, domain, communityId } = props;
+  const { user, communityId } = props;
 
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
@@ -618,7 +642,7 @@ export function MobileUserMenu(props: {
   domain: string;
   communityId?: string;
 }) {
-  const { user, domain, communityId } = props;
+  const { user, communityId } = props;
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
   return (
@@ -905,7 +929,10 @@ export function MobileNavigationMenu(props: {
         </section>
         <div className="mobile-navigation__divider" />
         <section>
-          <LegacySwitchButton className="mobile-navigation__legacy-switch" />
+          <LegacySwitchButton
+            className="mobile-navigation__legacy-switch"
+            domain={domain}
+          />
         </section>
         <section>
           <NewButton
