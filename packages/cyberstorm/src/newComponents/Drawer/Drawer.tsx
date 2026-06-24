@@ -1,4 +1,3 @@
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode, memo, useState } from "react";
 
@@ -6,6 +5,7 @@ import {
   type DrawerSizes,
   type DrawerVariants,
 } from "@thunderstore/cyberstorm-theme";
+import { faXmarkLarge } from "@thunderstore/icons";
 
 import {
   Frame,

@@ -1,0 +1,51 @@
+{
+  "name": "@thunderstore/icons",
+  "version": "0.1.0",
+  "description": "Central FontAwesome icon surface for Thunderstore, with optional Pro icons and free-set placeholders",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/icons",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/thunderstore-icons.cjs",
+    "module": "dist/thunderstore-icons.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/thunderstore-icons.js",
+        "default": "./dist/thunderstore-icons.cjs"
+      },
+      "./package.json": "./package.json"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "generate": "node scripts/generate-icons.mjs"
+  },
+  "engines": {
+    "node": "^24.16.0"
+  },
+  "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "7.1.0",
+    "@fortawesome/free-solid-svg-icons": "7.1.0"
+  },
+  "optionalDependencies": {
+    "@fortawesome/pro-light-svg-icons": "7.1.0",
+    "@fortawesome/pro-solid-svg-icons": "7.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.12.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.5",
+    "vite-plugin-dts": "4.5.4"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  }
+}

@@ -7,9 +7,10 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "preconstruct dev && manypkg check",
+    "postinstall": "node packages/icons/scripts/generate-icons.mjs && preconstruct dev && manypkg check",
+    "generate:icons": "node packages/icons/scripts/generate-icons.mjs",
     "dev": "node tools/scripts/dev.mjs",
-    "build": "preconstruct build && pnpm --filter @thunderstore/cyberstorm-theme run build && pnpm --filter @thunderstore/cyberstorm run build && pnpm --filter @thunderstore/ts-uploader run build",
+    "build": "preconstruct build && pnpm --filter @thunderstore/icons run build && pnpm --filter @thunderstore/cyberstorm-theme run build && pnpm --filter @thunderstore/cyberstorm run build && pnpm --filter @thunderstore/ts-uploader run build",
     "plop": "plop",
     "validate:exports": "node tools/scripts/validate_package_exports.mjs",
     "test": "vitest run",
@@ -58,7 +59,7 @@
   },
   "preconstruct": {
     "packages": [
-      "packages/!(cyberstorm|ts-uploader|cyberstorm-theme)"
+      "packages/!(cyberstorm|ts-uploader|cyberstorm-theme|icons)"
     ]
   },
   "packageManager": "pnpm@11.5.3"

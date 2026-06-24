@@ -1,9 +1,3 @@
-import {
-  faArrowDownAZ,
-  faSearch,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
-import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
@@ -30,6 +24,13 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { Communities } from "@thunderstore/dapper/types";
+import {
+  faArrowDownAZ,
+  faFire,
+  faGhost,
+  faSearch,
+  faStar,
+} from "@thunderstore/icons";
 
 import type { Route } from "./+types/communities";
 import "./Communities.css";

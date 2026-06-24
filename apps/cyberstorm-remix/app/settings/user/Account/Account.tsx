@@ -1,4 +1,3 @@
-import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
@@ -18,6 +17,7 @@ import {
   SkeletonBox,
   useToast,
 } from "@thunderstore/cyberstorm";
+import { faTrashCan } from "@thunderstore/icons";
 import { userDelete } from "@thunderstore/thunderstore-api";
 
 import "./Account.css";

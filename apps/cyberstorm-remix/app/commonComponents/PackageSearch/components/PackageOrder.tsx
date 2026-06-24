@@ -1,12 +1,12 @@
-import {
-  faClockRotateLeft,
-  faDownload,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
-import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { NewSelect } from "@thunderstore/cyberstorm";
+import {
+  faClockRotateLeft,
+  faDownload,
+  faSparkles,
+  faThumbsUp,
+} from "@thunderstore/icons";
 
 import {
   PackageOrderOptions,

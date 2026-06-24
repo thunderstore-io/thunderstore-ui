@@ -1,6 +1,3 @@
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
@@ -35,6 +32,12 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { PackageListingDetails } from "@thunderstore/dapper/types";
+import {
+  faArrowUpRight,
+  faCaretRight,
+  faGithub,
+  faUsers,
+} from "@thunderstore/icons";
 
 import type { Route } from "./+types/packageListingVersion";
 import { PackageActions } from "./components/PackageListing/PackageActions";

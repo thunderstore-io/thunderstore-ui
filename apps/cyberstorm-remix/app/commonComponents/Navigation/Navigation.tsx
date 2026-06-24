@@ -1,24 +1,3 @@
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import {
-  faBars,
-  faCaretDown,
-  faCaretRight,
-  faCog,
-  faGamepad,
-  faLongArrowLeft,
-  faUpload,
-  faUserShield,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  faArrowRightToBracket,
-  faSignOut,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  faArrowUpRight,
-  faCodeSimple,
-  faXmark,
-} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import {
@@ -48,6 +27,24 @@ import {
   classnames,
 } from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
+import {
+  faArrowRightToBracket,
+  faArrowUpRight,
+  faBars,
+  faCaretDown,
+  faCaretRight,
+  faCodeSimple,
+  faCog,
+  faDiscord,
+  faGamepad,
+  faGithub,
+  faLongArrowLeft,
+  faSignOut,
+  faUpload,
+  faUserShield,
+  faUsers,
+  faXmark,
+} from "@thunderstore/icons";
 
 const NAVIGATION_POPOVER_ID = "mobileNavMenu";
 const DEVELOPERS_POPOVER_ID = "mobileNavMenuDevelopers";

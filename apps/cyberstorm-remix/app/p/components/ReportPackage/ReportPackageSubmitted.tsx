@@ -1,7 +1,7 @@
-import { faFaceSaluting } from "@fortawesome/pro-light-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Modal, NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import { faFaceSaluting } from "@thunderstore/icons";
 
 export function ReportPackageSubmitted(props: { closeModal: () => void }) {
   return (

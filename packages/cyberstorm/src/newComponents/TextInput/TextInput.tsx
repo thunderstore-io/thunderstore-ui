@@ -1,4 +1,3 @@
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { type ReactElement, memo } from "react";
 
@@ -7,6 +6,7 @@ import {
   type TextInputSizes,
   type TextInputVariants,
 } from "@thunderstore/cyberstorm-theme";
+import { faXmarkLarge } from "@thunderstore/icons";
 
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import { Frame } from "../../primitiveComponents/Frame/Frame";

@@ -1,5 +1,3 @@
-import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
@@ -26,6 +24,7 @@ import {
   type CurrentUser,
   type PackageListings,
 } from "@thunderstore/dapper/types";
+import { faFilterList, faGhost, faSearch } from "@thunderstore/icons";
 import {
   type CommunityFilters,
   type RequestConfig,

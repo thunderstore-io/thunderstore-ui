@@ -10,6 +10,7 @@
     { "path": "packages/ts-api-react-forms" },
     { "path": "packages/typed-event-emitter" },
     { "path": "packages/use-promise" },
+    { "path": "packages/icons" },
     { "path": "packages/react-dnd" },
     { "path": "packages/ts-uploader" },
     { "path": "packages/ts-uploader-react" },

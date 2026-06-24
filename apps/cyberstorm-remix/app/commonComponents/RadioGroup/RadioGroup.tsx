@@ -1,10 +1,10 @@
-import { faCircle, faCircleDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixRadioGroup from "@radix-ui/react-radio-group";
 import { memo } from "react";
 
 import { NewIcon, classnames } from "@thunderstore/cyberstorm";
 import { type Section } from "@thunderstore/dapper/types";
+import { faCircle, faCircleDot } from "@thunderstore/icons";
 
 interface Props {
   sections: Section[];
