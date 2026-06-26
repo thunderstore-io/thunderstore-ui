@@ -40,6 +40,7 @@
     --card-package--description-line-height: var(
       --card-package-shared--description-line-height
     );
+    --card-package--description-overflow-wrap: anywhere;
     --card-package--tags-gap: var(--card-package-shared--tags-gap);
     --card-package--footer-gap: var(--card-package-shared--footer-gap);
   }
