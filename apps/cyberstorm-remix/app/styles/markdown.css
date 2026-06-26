@@ -197,7 +197,7 @@
     }
 
     table tr th {
-      min-width: 15em;
+      min-width: 9em;
       border-top: solid var(--border-width--px) var(--color-surface-a8);
       color: var(--color-text-tertiary);
       white-space: nowrap;
