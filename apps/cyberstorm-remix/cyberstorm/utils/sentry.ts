@@ -72,6 +72,18 @@ function matchesDenyUrl(text: string): boolean {
 }
 
 /**
+ * A stack frame only attributes an error to a real script if it has a concrete
+ * filename. Browser extensions and opaque cross-origin scripts surface as
+ * anonymous (or filename-less) frames, so they don't count as "usable" — both
+ * the ad-script and stack-overflow checks fall back to other signals when every
+ * frame is anonymous.
+ */
+function hasUsableFilename(frame: { filename?: string }): boolean {
+  const filename = frame.filename ?? "";
+  return filename !== "" && filename !== "<anonymous>";
+}
+
+/**
  * Returns true when an event originates from an ad-network script.
  * Used in beforeSend to suppress ad-script errors that slip past Sentry's
  * denyUrls, including cases where ad scripts call through our XHR/fetch
@@ -79,19 +91,19 @@ function matchesDenyUrl(text: string): boolean {
  *
  * Two signals:
  * 1. Any stack frame from an ad-network origin.
- * 2. For frameless events only — cross-origin ad rejections (e.g.
- *    "NetworkError when attempting to fetch resource. (diagnostics.id5-sync.com)")
- *    carry no stack because the browser strips frames for opaque origins, so
- *    fall back to matching the ad domain in the exception message. This is
- *    gated on having no usable frames to avoid dropping a genuine app error
- *    that merely mentions an ad domain in its text.
+ * 2. When no frame has a usable filename (all anonymous/native, e.g. opaque
+ *    cross-origin ad rejections like "NetworkError when attempting to fetch
+ *    resource. (diagnostics.id5-sync.com)" whose frames the browser strips) —
+ *    fall back to matching the ad domain in the exception message. Gated on
+ *    having no usable frames so a genuine app error that merely mentions an ad
+ *    domain in its text, but has a real stack, is still captured.
  */
 function isAdScriptError(event: ErrorEvent): boolean {
   const values = event.exception?.values ?? [];
 
   const namedFrames = values
     .flatMap((v) => v.stacktrace?.frames ?? [])
-    .filter((f) => f.filename);
+    .filter(hasUsableFilename);
 
   if (namedFrames.length > 0) {
     return namedFrames.some((frame) => matchesDenyUrl(frame.filename ?? ""));
@@ -120,10 +132,7 @@ function isExtensionStackOverflow(event: ErrorEvent): boolean {
 
   const hasOwnCodeFrame = values
     .flatMap((v) => v.stacktrace?.frames ?? [])
-    .some((f) => {
-      const filename = f.filename ?? "";
-      return filename !== "" && filename !== "<anonymous>";
-    });
+    .some(hasUsableFilename);
 
   return !hasOwnCodeFrame;
 }
