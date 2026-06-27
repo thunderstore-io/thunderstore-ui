@@ -4,7 +4,7 @@
     flex: 0 1 auto;
     width: min(100%, var(--container-max-width));
     margin-inline: auto;
-    padding: var(--space-16) var(--space-16) 4rem;
+    padding: var(--space-16) var(--space-16);
   }
 
   .container:where([data-size="wide"]) {

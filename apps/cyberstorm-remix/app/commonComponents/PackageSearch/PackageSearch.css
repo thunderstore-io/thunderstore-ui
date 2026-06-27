@@ -73,7 +73,7 @@
     align-items: center;
     align-self: stretch;
     justify-content: center;
-    padding: var(--space-48) 0;
+    padding: var(--space-16) 0;
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
 
