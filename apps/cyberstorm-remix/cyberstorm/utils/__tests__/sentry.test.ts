@@ -167,6 +167,50 @@ describe("utils.sentry.beforeSend", () => {
     expect(beforeSend(event)).toBe(event);
   });
 
+  it("drops an ad rejection whose only frames are anonymous (matched by message)", () => {
+    // Opaque cross-origin ad errors can arrive with anonymous/native frames
+    // rather than truly frameless; those frames aren't usable for attribution,
+    // so the message fallback must still run.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value:
+              "NetworkError when attempting to fetch resource. (diagnostics.id5-sync.com)",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "<anonymous>" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("keeps an anonymous-only-frame error whose message is unrelated to ads", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Cannot read properties of null",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "<anonymous>" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
   it("passes through events where exception is null", () => {
     const event = { exception: null } as unknown as ErrorEvent;
     expect(beforeSend(event)).toBe(event);

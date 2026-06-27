@@ -1,11 +1,9 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { hardenDomAgainstTranslation } from "../hardenDom";
-
-// Minimal stand-in for the DOM Node, so the prototype guards can be exercised
-// in a node environment (the real Node global only exists in the browser).
-// removeChild/insertBefore mimic the DOM by throwing when the node/reference
-// is not actually a child — the crash hardenDomAgainstTranslation prevents.
+// Minimal stand-in for the DOM Node so the prototype guards can be exercised
+// without relying on the real browser Node. removeChild/insertBefore mimic the
+// DOM by throwing when the node/reference is not actually a child — the crash
+// hardenDomAgainstTranslation prevents.
 class FakeNode {
   parentNode: FakeNode | null = null;
   childNodes: FakeNode[] = [];
@@ -29,17 +27,36 @@ class FakeNode {
   }
 }
 
+// These tests swap the global Node for a FakeNode. Under Vitest's browser mode
+// Node is the real DOM constructor, so snapshot and restore it (never leave it
+// deleted, which would leak a missing Node into other tests) and reset the
+// module registry each test so hardenDom's one-shot `patched` guard — and any
+// patch it applied to a previous Node — doesn't carry over.
 describe("hardenDomAgainstTranslation", () => {
-  afterEach(() => {
-    delete (globalThis as { Node?: unknown }).Node;
+  const hadNode = "Node" in globalThis;
+  const originalNode = (globalThis as { Node?: unknown }).Node;
+
+  beforeEach(() => {
+    vi.resetModules();
   });
 
-  it("is a no-op when there is no DOM (SSR)", () => {
+  afterEach(() => {
+    if (hadNode) {
+      (globalThis as { Node?: unknown }).Node = originalNode;
+    } else {
+      delete (globalThis as { Node?: unknown }).Node;
+    }
+  });
+
+  it("is a no-op when there is no DOM (SSR)", async () => {
+    delete (globalThis as { Node?: unknown }).Node;
+    const { hardenDomAgainstTranslation } = await import("../hardenDom");
     expect(() => hardenDomAgainstTranslation()).not.toThrow();
   });
 
-  it("guards removeChild/insertBefore against foreign-parent crashes", () => {
+  it("guards removeChild/insertBefore against foreign-parent crashes", async () => {
     (globalThis as { Node?: unknown }).Node = FakeNode;
+    const { hardenDomAgainstTranslation } = await import("../hardenDom");
     hardenDomAgainstTranslation();
 
     const parent = new FakeNode();
