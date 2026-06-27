@@ -4,6 +4,7 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { initializeClientDapper } from "cyberstorm/utils/dapperSingleton";
+import { hardenDomAgainstTranslation } from "cyberstorm/utils/hardenDom";
 import {
   beforeSend,
   denyUrls,
@@ -81,6 +82,10 @@ try {
 } catch (error) {
   Sentry.captureException(error);
 }
+
+// Translators/extensions mutate the DOM React owns; harden node removal
+// before hydration so that does not white-screen the app.
+hardenDomAgainstTranslation();
 
 startTransition(() => {
   hydrateRoot(

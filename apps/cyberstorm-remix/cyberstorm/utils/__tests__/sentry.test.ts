@@ -1,7 +1,12 @@
 import type { ErrorEvent } from "@sentry/react-router";
 import { assert, describe, expect, it } from "vitest";
 
-import { beforeSend, denyUrls, isExpectedRouteError } from "../sentry";
+import {
+  beforeSend,
+  denyUrls,
+  isExpectedRouteError,
+  toReportableError,
+} from "../sentry";
 
 // This attempts to match how Sentry does things.
 // https://docs.sentry.io/platforms/javascript/configuration/options/#denyUrls
@@ -32,8 +37,12 @@ describe("utils.sentry.denyUrls", () => {
     ["https://adnxs.com/prebid/creative", true],
     ["https://doubleclick.net/pagead/js/foo.js", true],
     ["https://googlesyndication.com/pagead/js/foo.js", true],
+    ["https://imasdk.googleapis.com/js/sdkloader/ima3.js", true],
+    ["https://a.pub.network/ftUtils.js", true],
+    ["https://s.cpx.to/p/20023/px.js", true],
     ["/app/apps/cyberstorm-remix/build/server/index.js", false],
     ["https://thunderstore.io/api/cyberstorm/listing/riskofrain2/", false],
+    ["https://thunderstore.io/assets/entry.client-abc.js", false],
   ])("correctly classifies %s", (url, expectedToMatch) => {
     for (const stringOrRegExp of denyUrls) {
       const matches = matchesStringOrRegExp(url, stringOrRegExp);
@@ -106,6 +115,102 @@ describe("utils.sentry.beforeSend", () => {
     expect(beforeSend(event)).toBeNull();
   });
 
+  it("drops frameless cross-origin ad rejections matched by message", () => {
+    // Browsers strip the stack for opaque-origin fetch rejections, so these
+    // arrive frameless with the ad host only in the message text.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value:
+              "NetworkError when attempting to fetch resource. (diagnostics.id5-sync.com)",
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("passes through frameless events whose message is unrelated", () => {
+    const event = {
+      exception: {
+        values: [
+          { type: "TypeError", value: "Cannot read properties of null" },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("keeps an app error that only mentions an ad domain but has app frames", () => {
+    // Message-matching is gated on being frameless: a real app error with a
+    // usable stack must not be dropped just because its text names an ad host.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "Error",
+            value: "Failed near id5-sync.com integration",
+            stacktrace: {
+              frames: [
+                {
+                  filename:
+                    "https://thunderstore.io/assets/entry.client-abc.js",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("drops an ad rejection whose only frames are anonymous (matched by message)", () => {
+    // Opaque cross-origin ad errors can arrive with anonymous/native frames
+    // rather than truly frameless; those frames aren't usable for attribution,
+    // so the message fallback must still run.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value:
+              "NetworkError when attempting to fetch resource. (diagnostics.id5-sync.com)",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "<anonymous>" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("keeps an anonymous-only-frame error whose message is unrelated to ads", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Cannot read properties of null",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "<anonymous>" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
   it("passes through events where exception is null", () => {
     const event = { exception: null } as unknown as ErrorEvent;
     expect(beforeSend(event)).toBe(event);
@@ -140,6 +245,68 @@ describe("utils.sentry.beforeSend", () => {
     } finally {
       denyUrls.splice(denyUrls.indexOf(pattern), 1);
     }
+  });
+
+  it("drops a Maximum call stack RangeError with no real-file frames", () => {
+    // Extension-injected recursive property traps overflow entirely within
+    // anonymous/native frames.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "RangeError",
+            value: "Maximum call stack size exceeded",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "<anonymous>" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("drops a frameless Maximum call stack RangeError", () => {
+    const event = {
+      exception: {
+        values: [
+          { type: "RangeError", value: "Maximum call stack size exceeded" },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("keeps a Maximum call stack overflow that runs through our bundle", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "RangeError",
+            value: "Maximum call stack size exceeded",
+            stacktrace: {
+              frames: [
+                { filename: "<anonymous>" },
+                { filename: "https://thunderstore.io/assets/index-abc.js" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("keeps a frameless RangeError that is not a stack overflow", () => {
+    const event = {
+      exception: {
+        values: [{ type: "RangeError", value: "Invalid array length" }],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
   });
 });
 
@@ -190,6 +357,25 @@ describe("utils.sentry.isExpectedRouteError", () => {
     expect(isExpectedRouteError(new Error("loader exploded"))).toBe(false);
   });
 
+  // clientLoaders throw ApiError directly rather than a Response, matching what
+  // isApiError() recognizes (message + response.status + responseJson key).
+  const apiError = (status: number) => ({
+    message: `${status}: `,
+    response: { headers: {}, status, statusText: "", url: "" },
+    responseJson: undefined,
+  });
+
+  it.each([401, 403, 404, 429])(
+    "returns true for %i ApiErrors thrown by clientLoaders",
+    (status) => {
+      expect(isExpectedRouteError(apiError(status))).toBe(true);
+    }
+  );
+
+  it.each([500, 502, 503, 504])("returns false for %i ApiErrors", (status) => {
+    expect(isExpectedRouteError(apiError(status))).toBe(false);
+  });
+
   it("returns false for null and undefined", () => {
     expect(isExpectedRouteError(null)).toBe(false);
     expect(isExpectedRouteError(undefined)).toBe(false);
@@ -200,5 +386,43 @@ describe("utils.sentry.isExpectedRouteError", () => {
     expect(
       isExpectedRouteError({ status: 404, statusText: "", data: null })
     ).toBe(false);
+  });
+});
+
+describe("utils.sentry.toReportableError", () => {
+  const routeErrorResponse = (status: number, statusText = "") => ({
+    status,
+    statusText,
+    internal: true,
+    data: null,
+    error: new Error(statusText),
+  });
+
+  it("wraps a route ErrorResponse in a named Error grouped by status", () => {
+    const result = toReportableError(
+      routeErrorResponse(500, "Internal Server Error")
+    );
+    expect(result).toBeInstanceOf(Error);
+    expect((result as Error).name).toBe("RouteErrorResponse");
+    expect((result as Error).message).toBe(
+      "RouteErrorResponse 500 Internal Server Error"
+    );
+  });
+
+  it("omits trailing whitespace when statusText is empty", () => {
+    const result = toReportableError(routeErrorResponse(502));
+    expect((result as Error).message).toBe("RouteErrorResponse 502");
+  });
+
+  it("passes ApiError and plain Errors through unchanged", () => {
+    const apiError = {
+      message: "500: ",
+      response: { headers: {}, status: 500, statusText: "", url: "" },
+      responseJson: undefined,
+    };
+    expect(toReportableError(apiError)).toBe(apiError);
+
+    const plain = new Error("boom");
+    expect(toReportableError(plain)).toBe(plain);
   });
 });
