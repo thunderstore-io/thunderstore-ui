@@ -1,0 +1,21 @@
+@layer nimbus-components {
+  .footer-socials {
+    --logo-height: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+
+    @container footer (width >= 60rem) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .footer-socials__links {
+    display: flex;
+    gap: 2rem;
+  }
+}

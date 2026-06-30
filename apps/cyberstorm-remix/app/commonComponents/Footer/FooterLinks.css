@@ -1,0 +1,33 @@
+@layer nimbus-components {
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    @container footer (width >= 60rem) {
+      flex: 1;
+    }
+  }
+
+  .footer-links__section {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1.5rem;
+
+    min-width: 20ch;
+
+    @container footer (width >= 60rem) {
+      flex: 1;
+    }
+  }
+
+  .footer-links__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}

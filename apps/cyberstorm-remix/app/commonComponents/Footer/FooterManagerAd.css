@@ -1,0 +1,29 @@
+@layer nimbus-components {
+  .footer-manager {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    justify-content: end;
+    width: 100%;
+  }
+
+  .footer-manager__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: start;
+  }
+
+  .footer-manager__desc {
+    margin-block-end: 1rem;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-xl);
+  }
+
+  .footer-manager__media {
+    width: 40rem;
+    max-height: 16rem;
+    aspect-ratio: 2 / 1;
+    filter: drop-shadow(-36px -36px 40px rgb(0 0 0 / 0.35));
+  }
+}

@@ -333,7 +333,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     tabIndex={-1}
                     rootClasses="layout__main flex--grow-1"
                   >
-                    <Container size="narrow">
+                    <Container size="default">
                       <Breadcrumbs />
                       {children}
                     </Container>

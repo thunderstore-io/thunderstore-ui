@@ -1,0 +1,22 @@
+@layer nimbus-components {
+  .footer-copyright {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+    font-size: 0.75rem;
+    text-align: center;
+
+    @container footer (width >= 60rem) {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: start;
+    }
+  }
+
+  .footer-copyright__links {
+    display: flex;
+    gap: 2rem;
+  }
+}
