@@ -2,16 +2,17 @@
   .container {
     container-type: inline-size;
     flex: 0 1 auto;
-    width: min(100%, var(--container-max-width));
+    width: min(100%, var(--container-width));
     margin-inline: auto;
-    padding: var(--space-16) var(--space-16) 4rem;
+    padding-inline: var(--container-padding);
+    padding-bottom: 4rem;
   }
 
   .container:where([data-size="wide"]) {
-    --container-max-width: 120rem;
+    --container-width: 120rem;
   }
 
-  .container:where([data-size="narrow"]) {
-    --container-max-width: 90rem;
+  .container:where([data-size="default"]) {
+    --container-width: 90rem;
   }
 }
