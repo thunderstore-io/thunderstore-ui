@@ -5,12 +5,17 @@ import { classnames } from "../../utils/utils";
 import "./Container.css";
 
 export interface ContainerProps extends PrimitiveComponentDefaultProps {
-  size?: "narrow" | "wide";
+  size?: "default" | "wide";
 }
 
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   (props: ContainerProps, forwardedRef) => {
-    const { children, rootClasses, size = "narrow", ...forwardedProps } = props;
+    const {
+      children,
+      rootClasses,
+      size = "default",
+      ...forwardedProps
+    } = props;
 
     return (
       <div
