@@ -73,6 +73,10 @@ export {
   type CodeInputProps,
 } from "./newComponents/CodeInput/CodeInput";
 export {
+  CommunityNotifications,
+  type CommunityNotificationsProps,
+} from "./newComponents/CommunityNotifications/CommunityNotifications";
+export {
   Container,
   type ContainerProps,
 } from "./newComponents/Container/Container";
