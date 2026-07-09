@@ -115,8 +115,7 @@
   }
 
   .package-wiki-content__body {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 2rem;
     align-items: flex-start;
     align-self: stretch;
