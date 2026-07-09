@@ -5,7 +5,6 @@
     grid-template-rows: auto 1fr;
     gap: var(--gap-md);
     align-items: start;
-    align-self: stretch;
     container-type: inline-size;
   }
 
@@ -119,7 +118,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
-    align-items: flex-start;
     justify-content: center;
     padding-top: var(--gap-xl);
   }
@@ -129,8 +127,6 @@
     flex: 1 0 0;
     flex-direction: column;
     gap: var(--gap-2xs);
-    align-items: flex-start;
-    align-self: stretch;
     min-width: 60%;
 
     > h1 {

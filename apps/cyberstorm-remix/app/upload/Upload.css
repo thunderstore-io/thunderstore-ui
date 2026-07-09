@@ -16,7 +16,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
-    align-self: stretch;
   }
 
   .upload__helper-text {
@@ -44,8 +43,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);
-    align-items: flex-start;
-    align-self: stretch;
   }
 
   .upload__category-label {
@@ -104,7 +101,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);
-    align-self: stretch;
   }
 
   .upload__upload-indicator-label {
