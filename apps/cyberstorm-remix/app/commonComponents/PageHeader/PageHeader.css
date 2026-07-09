@@ -88,7 +88,6 @@
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-lg);
     line-height: var(--line-height-md);
-    text-shadow: var(--textshadow-default);
     word-break: break-word;
   }
 
@@ -100,7 +99,6 @@
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-lg);
-    text-shadow: var(--textshadow-default);
     word-break: break-all;
 
     svg {
