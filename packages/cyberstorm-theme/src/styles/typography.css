@@ -28,17 +28,17 @@
 
     scrollbar-color: var(--color-surface-a8) var(--color-surface-a1);
 
-    --font-body: normal var(--font-size-body-lg) var(--font-family--inter);
-    --font-heading: normal var(--font-size-body-lg) var(--font-family--hubot);
+    --font-body: var(--font-family--inter);
+    --font-heading: var(--font-family--hubot);
     --font-family-monospace: sfmono-regular, menlo, consolas, courier, monospace;
     --fa-fw-width: 1em;
   }
 
   body {
     color: var(--color-text-primary);
-    font: var(--font-body);
+    font-family: var(--font-body);
     text-underline-position: from-font;
-    line-height: normal;
+    line-height: 1.6;
     background-color: var(--body-bg-color);
   }
 }
