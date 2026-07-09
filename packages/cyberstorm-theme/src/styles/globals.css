@@ -63,5 +63,10 @@
     --animation-duration-sm: 120ms;
     --animation-duration-md: 150ms;
     --animation-duration-lg: 300ms;
+
+    /* Shared variables for layout */
+    --container-padding: clamp(1rem, 3.75vw, 4rem);
+    --container-width: 90rem;
+    --island-gap: 0.25rem;
   }
 }

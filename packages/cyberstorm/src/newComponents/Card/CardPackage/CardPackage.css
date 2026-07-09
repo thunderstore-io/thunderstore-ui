@@ -74,7 +74,6 @@
   .card-package__info {
     display: flex;
     flex-direction: column;
-
     gap: var(--card-package--info-gap);
     align-items: flex-start;
     align-self: var(--card-package--info-align-self);
@@ -86,7 +85,6 @@
   /* Title */
   .card-package__title {
     width: 100%;
-
     overflow: hidden;
     color: var(--card-package--title-color);
     font-weight: var(--font-weight-bold);
@@ -143,7 +141,6 @@
     display: flex;
     flex: 0 1 auto;
     flex-wrap: wrap;
-
     gap: var(--card-package--tags-gap);
     place-content: var(--card-package--tags-align-content)
       var(--card-package--tags-justify-content);
