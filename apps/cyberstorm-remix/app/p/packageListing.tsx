@@ -10,7 +10,6 @@ import { CommunityPromo } from "app/commonComponents/CommunityPromo/CommunityPro
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import type { ReportPackageFormProps } from "app/p/components/ReportPackage/ReportPackageForm";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
-import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { type OutletContextShape } from "app/root";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
@@ -230,7 +229,6 @@ export default function PackageListing() {
   const outletContext = useOutletContext() as OutletContextShape;
   const currentUser = outletContext.currentUser;
   const config = outletContext.requestConfig;
-  const domain = outletContext.domain;
   const dapper = outletContext.dapper;
 
   const [isLiked, setIsLiked] = useState(false);
@@ -418,7 +416,6 @@ export default function PackageListing() {
                     firstUploaded={firstUploaded}
                     listing={listing}
                     community={community}
-                    domain={domain}
                   />
                 }
                 isLiked={isLiked}
@@ -564,7 +561,7 @@ export default function PackageListing() {
             <Suspense>
               <Await resolve={community}>
                 {(resolvedCommunity) =>
-                  packageBoxes(listing, resolvedCommunity, domain)
+                  packageBoxes(listing, resolvedCommunity)
                 }
               </Await>
             </Suspense>
@@ -605,9 +602,8 @@ function PackageDetailsNarrow(props: {
   community:
     | Promise<Awaited<ReturnType<DapperTsInterface["getCommunity"]>>>
     | Awaited<ReturnType<DapperTsInterface["getCommunity"]>>;
-  domain: string;
 }) {
-  const { lastUpdated, firstUploaded, listing, community, domain } = props;
+  const { lastUpdated, firstUploaded, listing, community } = props;
 
   return (
     <>
@@ -635,9 +631,7 @@ function PackageDetailsNarrow(props: {
 
         <Suspense fallback={<p>Loading...</p>}>
           <Await resolve={community}>
-            {(resolvedCommunity) =>
-              packageBoxes(listing, resolvedCommunity, domain)
-            }
+            {(resolvedCommunity) => packageBoxes(listing, resolvedCommunity)}
           </Await>
         </Suspense>
       </Drawer>
@@ -647,8 +641,7 @@ function PackageDetailsNarrow(props: {
 
 function packageBoxes(
   listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
-  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>,
-  domain: string
+  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>
 ) {
   const pt = packageTags(listing, community);
 
@@ -689,9 +682,6 @@ function packageBoxes(
             </div>
           ) : null}
         </div>
-      ) : null}
-      {listing.team.members.length > 0 ? (
-        <TeamMembers listing={listing} domain={domain} />
       ) : null}
     </>
   );
