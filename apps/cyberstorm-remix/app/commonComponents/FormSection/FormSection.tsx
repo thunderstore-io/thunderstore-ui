@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { classnames } from "@thunderstore/cyberstorm";
+import { Heading, classnames } from "@thunderstore/cyberstorm";
 
 export interface FormSectionsProps {
   children: ReactNode;
@@ -29,16 +29,20 @@ export function FormSection({
   rootClasses,
 }: FormSectionProps) {
   return (
-    <div className={classnames("form-section", rootClasses)}>
-      <div className="form-section__meta">
-        <p className="form-section__title">{title}</p>
-        {description ? (
-          <div className="form-section__description">{description}</div>
-        ) : null}
+    <section className={classnames("form-section", rootClasses)}>
+      <header className="form-section__header">
+        <div className="form-section__header-texts">
+          <Heading csLevel="3" csVariant="primary">
+            {title}
+          </Heading>
+          {description ? (
+            <div className="form-section__description">{description}</div>
+          ) : null}
+        </div>
         {metaExtra}
-      </div>
+      </header>
       <div className="form-section__content">{children}</div>
-    </div>
+    </section>
   );
 }
 

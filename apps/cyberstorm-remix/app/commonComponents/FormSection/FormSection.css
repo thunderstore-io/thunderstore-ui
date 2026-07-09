@@ -1,7 +1,6 @@
 @layer nimbus-layout {
   .form-sections {
     --form-section-meta-width: 21rem;
-    --form-section-column-gap: var(--gap-form-column);
 
     display: flex;
     flex: 1 1 0;
@@ -9,11 +8,16 @@
     gap: var(--gap-7xl);
     min-width: 0;
     max-width: 100%;
+    container: form-sections / inline-size;
+
+    @container container (width < 625px) {
+      gap: 1.5rem;
+    }
   }
 
   .form-section__separator {
     width: 100%;
-    height: 0.063rem;
+    height: 1px;
     margin: 0;
     background: var(--border-default);
   }
@@ -23,30 +27,30 @@
     grid-template-columns:
       minmax(0, var(--form-section-meta-width))
       minmax(0, 1fr);
-    gap: var(--gap-md) var(--form-section-column-gap);
+    gap: 3rem;
     align-items: start;
     min-width: 0;
     max-width: 100%;
+
+    @container form-sections (width < 625px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 
-  .form-section__meta {
+  .form-section__header {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xs);
-    align-items: flex-start;
-    align-self: stretch;
+    gap: 1.5rem;
   }
 
-  .form-section__title {
-    align-self: stretch;
-    color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-lg);
-    line-height: var(--line-height-md);
+  .form-section__header-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .form-section__description {
-    align-self: stretch;
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
@@ -54,30 +58,21 @@
   }
 
   .form-section__content {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--gap-md);
-    align-items: stretch;
     min-width: 0;
     max-width: 100%;
     container: form-section-content / inline-size;
+
+    @container (width < 625px) {
+      width: 100%;
+    }
   }
 
   @media (width <= 960px) {
     .form-sections {
       --form-section-meta-width: 13rem;
-    }
-  }
-
-  @media (width <= 48rem) {
-    .form-section {
-      grid-template-columns: 1fr;
-      gap: var(--gap-md);
-    }
-
-    .form-section__content {
-      width: 100%;
     }
   }
 }
