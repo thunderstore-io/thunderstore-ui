@@ -1,11 +1,11 @@
 @layer components {
   .container {
-    container-type: inline-size;
+    container: container / inline-size;
     flex: 0 1 auto;
     width: min(100%, var(--container-width));
     margin-inline: auto;
     padding-inline: var(--container-padding);
-    padding-bottom: 4rem;
+    padding-block: 1rem 4rem;
   }
 
   .container:where([data-size="wide"]) {
