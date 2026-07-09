@@ -282,7 +282,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           our layer system.
         */}
         <style>
-          {`@layer utils, colors, layout, components, overrides, theme, theme-utils, theme-colors, theme-layout, theme-components, theme-components-sizes, theme-components-colors, theme-components-layouts, theme-components-miscs, nimbus, nimbus-utils, nimbus-colors, nimbus-layout, nimbus-components, nimbus-components-sizes, nimbus-components-colors, nimbus-components-layouts, nimbus-components-miscs, nimbus-overrides;`}
+          {`@layer utils, colors, layout, components, overrides, theme, theme-utils, theme-colors, theme-layout, theme-components, theme-components-sizes, theme-components-colors, theme-components-miscs, nimbus, nimbus-utils, nimbus-colors, nimbus-layout, nimbus-components, nimbus-components-sizes, nimbus-components-colors, nimbus-components-layouts, nimbus-components-miscs, nimbus-overrides;`}
         </style>
         <Seo />
         <Meta />

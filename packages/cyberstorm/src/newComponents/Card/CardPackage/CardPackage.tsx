@@ -9,9 +9,7 @@ import {
 import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import ago from "s-ago";
 
-import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme";
 import {
   type CardPackageModifiers,
   type CardPackageSizes,
@@ -37,7 +35,6 @@ interface Props {
   packageData: PackageListing;
   isLiked: boolean;
   packageLikeAction?: () => void;
-  csVariant?: CardPackageVariants;
   csSize?: CardPackageSizes;
   csModifiers?: CardPackageModifiers;
   rootClasses?: string;
@@ -48,7 +45,6 @@ export function CardPackage(props: Props) {
     packageData,
     isLiked,
     packageLikeAction,
-    csVariant = "card",
     csSize = "medium",
     csModifiers,
     rootClasses,
@@ -64,121 +60,16 @@ export function CardPackage(props: Props) {
     );
   }, [packageData.last_updated]);
 
-  const tags = (
-    <div className="card-package__tags">
-      {packageData.categories.length
-        ? packageData.categories.map((c, index) => (
-            <NewTag
-              csMode="link"
-              href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
-              key={`category_${c}_${index}`}
-              csVariant="primary"
-              csSize="xsmall"
-              csModifiers={["dark", "hoverable"]}
-            >
-              <span>{c.name}</span>
-            </NewTag>
-          ))
-        : null}
-    </div>
-  );
-
-  const description = (
-    <p className="card-package__description">{packageData.description}</p>
-  );
-
-  const meta = (
-    <div className="card-package__meta">
-      <TooltipWrapper
-        tooltipText={`${formatInteger(
-          packageData.download_count,
-          "standard"
-        )} Downloads`}
-      >
-        <NewMetaItem csSize="12">
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faDownload} />
-          </NewIcon>
-          {formatInteger(packageData.download_count)}
-        </NewMetaItem>
-      </TooltipWrapper>
-      <TooltipWrapper
-        tooltipText={`${formatInteger(
-          packageData.rating_count,
-          "standard"
-        )} Likes`}
-      >
-        <NewMetaItem
-          csSize="12"
-          primitiveType="metaItemActionable"
-          onClick={packageLikeAction}
-        >
-          <NewIcon
-            csMode="inline"
-            noWrapper
-            rootClasses={isLiked ? "card-package--is-liked" : undefined}
-          >
-            <FontAwesomeIcon icon={faThumbsUp} />
-          </NewIcon>
-          {formatInteger(packageData.rating_count)}
-        </NewMetaItem>
-      </TooltipWrapper>
-      {/* <TooltipWrapper
-      tooltipText={`Latest version: TODO ADD FIELD TO ENDPOINT`}
-    >
-      <div className="card-package__footer__metaitem">
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faCodeBranch} />
-        </NewIcon>
-        TODO
-      </div>
-    </TooltipWrapper> */}
-      {csVariant === "fullWidth" ? (
-        <TooltipWrapper
-          tooltipText={`Last updated: ${ago(
-            new Date(packageData.last_updated)
-          )}`}
-        >
-          <NewMetaItem csSize="12">
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faClockRotateLeft} />
-            </NewIcon>
-            {ago(new Date(packageData.last_updated))}
-          </NewMetaItem>
-        </TooltipWrapper>
-      ) : null}
-    </div>
-  );
-
-  const cardFooter = (
-    <div className="card-package__footer">
-      {csVariant === "fullWidth" ? tags : null}
-
-      {csVariant === "card" ? (
-        <>
-          {meta}
-          <TooltipWrapper tooltipText={tooltipText}>
-            <span className="card-package__updated" aria-label="Last Updated">
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faClockRotateLeft} />
-              </NewIcon>
-              <RelativeTime
-                time={packageData.last_updated}
-                suppressHydrationWarning
-                disableTitle
-              />
-            </span>
-          </TooltipWrapper>
-        </>
-      ) : null}
-    </div>
-  );
+  const hasDescription = packageData.description.trim().length > 0;
+  const hasCategories = packageData.categories.length > 0;
+  const hasImageTags =
+    packageData.is_pinned || packageData.is_nsfw || packageData.is_deprecated;
 
   return (
     <div
       className={classnames(
         "card-package",
-        ...componentClasses("card-package", csVariant, csSize, csModifiers),
+        ...componentClasses("card-package", "card", csSize, csModifiers),
         rootClasses
       )}
     >
@@ -192,11 +83,9 @@ export function CardPackage(props: Props) {
         title={`${formatToDisplayName(packageData.name)} by ${
           packageData.namespace
         }`}
+        rootClasses="card-package__media"
       >
-        {csVariant === "card" &&
-        (packageData.is_pinned ||
-          packageData.is_nsfw ||
-          packageData.is_deprecated) ? (
+        {hasImageTags ? (
           <div className="card-package__image-tags">
             {packageData.is_pinned ? (
               <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
@@ -264,16 +153,78 @@ export function CardPackage(props: Props) {
           </div>
         </div>
 
-        {["card", "featured", "fullWidth"].includes(csVariant)
-          ? description
-          : null}
+        {hasDescription ? (
+          <p className="card-package__description">{packageData.description}</p>
+        ) : null}
 
-        {["card", "featured"].includes(csVariant) ? tags : null}
-        {csVariant === "featured" ? meta : null}
+        {hasCategories ? (
+          <div className="card-package__tags">
+            {packageData.categories.map((c, index) => (
+              <NewTag
+                csMode="link"
+                href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
+                key={`category_${c}_${index}`}
+                csVariant="primary"
+                csSize="xsmall"
+                csModifiers={["dark", "hoverable"]}
+              >
+                <span>{c.name}</span>
+              </NewTag>
+            ))}
+          </div>
+        ) : null}
 
-        {csVariant === "card" ? cardFooter : null}
+        <div className="card-package__footer">
+          <div className="card-package__meta">
+            <TooltipWrapper
+              tooltipText={`${formatInteger(
+                packageData.download_count,
+                "standard"
+              )} Downloads`}
+            >
+              <NewMetaItem csSize="12">
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faDownload} />
+                </NewIcon>
+                {formatInteger(packageData.download_count)}
+              </NewMetaItem>
+            </TooltipWrapper>
+            <TooltipWrapper
+              tooltipText={`${formatInteger(
+                packageData.rating_count,
+                "standard"
+              )} Likes`}
+            >
+              <NewMetaItem
+                csSize="12"
+                primitiveType="metaItemActionable"
+                onClick={packageLikeAction}
+              >
+                <NewIcon
+                  csMode="inline"
+                  noWrapper
+                  rootClasses={isLiked ? "card-package--is-liked" : undefined}
+                >
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                </NewIcon>
+                {formatInteger(packageData.rating_count)}
+              </NewMetaItem>
+            </TooltipWrapper>
+          </div>
+          <TooltipWrapper tooltipText={tooltipText}>
+            <span className="card-package__updated" aria-label="Last Updated">
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faClockRotateLeft} />
+              </NewIcon>
+              <RelativeTime
+                time={packageData.last_updated}
+                suppressHydrationWarning
+                disableTitle
+              />
+            </span>
+          </TooltipWrapper>
+        </div>
       </div>
-      {csVariant === "fullWidth" ? cardFooter : null}
     </div>
   );
 }
