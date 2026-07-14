@@ -134,6 +134,7 @@
     font-family: var(--card-package--description-font-family);
     font-style: var(--card-package--description-font-style);
     line-height: var(--card-package--description-line-height);
+    overflow-wrap: anywhere;
   }
 
   /* Tags */
