@@ -414,6 +414,42 @@ describe("utils.sentry.toReportableError", () => {
     expect((result as Error).message).toBe("RouteErrorResponse 502");
   });
 
+  it("adopts the underlying error's stack and keeps it as cause", () => {
+    // Internal 5xx responses carry the Error the loader actually threw on
+    // `.error`; its stack points at the real failure, not this wrapper.
+    const original = new Error("db connection refused");
+    original.stack =
+      "Error: db connection refused\n    at load (app/routes/team.tsx:42:11)";
+    const result = toReportableError({
+      status: 500,
+      statusText: "Internal Server Error",
+      internal: true,
+      data: original.toString(),
+      error: original,
+    }) as Error & { cause?: unknown };
+
+    // Message/name still drive grouping...
+    expect(result.name).toBe("RouteErrorResponse");
+    expect(result.message).toBe("RouteErrorResponse 500 Internal Server Error");
+    // ...but the real stack and original error are preserved for debugging.
+    expect(result.stack).toBe(original.stack);
+    expect(result.cause).toBe(original);
+  });
+
+  it("wraps a route ErrorResponse with no underlying Error without a cause", () => {
+    // Deserialized (non-internal) responses have no `.error`; wrapping must not
+    // throw and leaves the wrapper's own stack in place.
+    const result = toReportableError({
+      status: 503,
+      statusText: "Service Unavailable",
+      internal: false,
+      data: "{}",
+    }) as Error & { cause?: unknown };
+
+    expect(result.message).toBe("RouteErrorResponse 503 Service Unavailable");
+    expect(result.cause).toBeUndefined();
+  });
+
   it("passes ApiError and plain Errors through unchanged", () => {
     const apiError = {
       message: "500: ",

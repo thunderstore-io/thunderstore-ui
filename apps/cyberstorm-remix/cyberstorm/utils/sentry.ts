@@ -29,7 +29,13 @@ export function isExpectedRouteError(error: unknown): boolean {
  * exception with keys: data, internal, status, statusText" event — no message,
  * and every route response lumped into one group. Wrap it in a real Error so
  * the (only 5xx, after isExpectedRouteError) route errors group by status and
- * read clearly. ApiError and plain Errors already carry a message + stack, so
+ * read clearly.
+ *
+ * For internal errors (a loader/action that threw a non-Response Error), the
+ * router keeps the original Error it caught on the response's `.error` field.
+ * Adopt that Error's stack — and keep it as `cause` — so Sentry points at the
+ * real failure site instead of this wrapper; the name/message we set still
+ * drive grouping. ApiError and plain Errors already carry a message + stack, so
  * they pass through unchanged.
  */
 export function toReportableError(error: unknown): unknown {
@@ -38,6 +44,16 @@ export function toReportableError(error: unknown): unknown {
       `RouteErrorResponse ${error.status} ${error.statusText}`.trim()
     );
     reportable.name = "RouteErrorResponse";
+    // `.error` isn't on the public ErrorResponse type but is present at runtime
+    // for internal errors (react-router's ErrorResponseImpl stores the caught
+    // Error there).
+    const original = (error as { error?: unknown }).error;
+    if (original instanceof Error) {
+      if (original.stack) {
+        reportable.stack = original.stack;
+      }
+      (reportable as { cause?: unknown }).cause = original;
+    }
     return reportable;
   }
   return error;
