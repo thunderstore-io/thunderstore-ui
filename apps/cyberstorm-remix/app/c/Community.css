@@ -16,6 +16,16 @@
     grid-template-rows: auto auto 1fr;
   }
 
+  /* Holds the community notifications above the routed content (package list)
+     as a single grid child, so .community's row template needs no extra row. */
+  .community__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-self: stretch;
+    min-inline-size: 0;
+  }
+
   .community__header {
     display: grid;
     grid-template-rows: auto auto;

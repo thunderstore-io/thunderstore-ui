@@ -43,6 +43,13 @@ export type UsermediaCompletedPart = z.infer<
   typeof usermediaCompletedPartSchema
 >;
 
+export const communityNotificationSchema = z.object({
+  type: z.enum(["critical", "warning", "info"]),
+  content: z.string(),
+});
+
+export type CommunityNotification = z.infer<typeof communityNotificationSchema>;
+
 export const communitySchema = z.object({
   name: z.string().min(1),
   identifier: z.string().min(1),
@@ -57,6 +64,7 @@ export const communitySchema = z.object({
   community_icon_url: z.string().nullable(),
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
+  notifications: z.array(communityNotificationSchema).default([]),
 });
 
 export type Community = z.infer<typeof communitySchema>;

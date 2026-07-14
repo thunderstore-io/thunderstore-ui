@@ -27,6 +27,7 @@ import {
 } from "react-router";
 
 import {
+  CommunityNotifications,
   Heading,
   Image,
   NewButton,
@@ -271,7 +272,20 @@ function CommunityMainPage({
       {showCommunityPromo ? (
         <CommunityPromo variant="bar" communityId={communityId} />
       ) : null}
-      <Outlet context={outletContext} />
+      {/* Notifications and the routed content share one grid row so the
+          community grid template stays unchanged (see .community__body). */}
+      <div className="community__body">
+        <Suspense fallback={null}>
+          <Await resolve={community}>
+            {(resolvedCommunity) => (
+              <CommunityNotifications
+                notifications={resolvedCommunity.notifications}
+              />
+            )}
+          </Await>
+        </Suspense>
+        <Outlet context={outletContext} />
+      </div>
     </Page>
   );
 }
