@@ -16,6 +16,18 @@
     grid-template-rows: auto auto 1fr;
   }
 
+  /* Same idea for the hard-coded community alerts (see CommunityAlerts), which
+     sit at the very top, above the header. Children render in the order
+     alerts → header → promo → content, so each present banner needs its own
+     `auto` row ahead of the content's `1fr`. */
+  .community--with-alerts {
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .community--with-promo.community--with-alerts {
+    grid-template-rows: auto auto auto 1fr;
+  }
+
   .community__header {
     display: grid;
     grid-template-rows: auto auto;
