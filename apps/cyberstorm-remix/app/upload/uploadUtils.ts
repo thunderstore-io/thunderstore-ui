@@ -1,9 +1,14 @@
 import type { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 import type { UploadProgress } from "@thunderstore/ts-uploader";
 
-/** Value for `<input type="file" accept="...">` — MIME types plus `.zip` for file picker UX. */
-export const PACKAGE_ZIP_ACCEPT =
-  ".zip,application/zip,application/x-zip-compressed,application/x-zip,multipart/x-zip";
+/**
+ * Value for `<input type="file" accept="...">`. Extension-only on purpose:
+ * MIME types here make Chromium resolve them against the Windows registry when
+ * opening the picker, which lags the dialog and renders duplicate
+ * "*.zip;*.zip;*.zip" filter entries. File-type validation is handled by
+ * {@link isPackageZipFile}, not by this picker hint.
+ */
+export const PACKAGE_ZIP_ACCEPT = ".zip";
 
 const PACKAGE_ZIP_MIME_TYPES = new Set([
   "application/zip",
