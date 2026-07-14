@@ -174,29 +174,169 @@ describe("evaluateZipContents", () => {
     );
   });
 
-  it("detects wrong-case required files inside a subfolder", () => {
+  it("does not flag wrong-case copies nested in a subfolder when the root files are correct", () => {
+    // A BepInEx-style package: correctly cased files at the root, plus a
+    // bundled dependency under plugins/ whose own files use arbitrary casing.
+    const result = evaluateZipContents("package.zip", [
+      "manifest.json",
+      "icon.png",
+      "README.md",
+      "plugins/Manifest.json",
+      "plugins/Readme.md",
+      "plugins/Icon.PNG",
+    ]);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("ignores the casing of nested required files; only the not-at-root error applies", () => {
     const result = evaluateZipContents("package.zip", [
       "MyMod/Manifest.json",
       "MyMod/icon.png",
       "MyMod/README.md",
     ]);
-    expect(result.errors).toContain(
+    // Casing of nested files is irrelevant — they aren't the package's root files.
+    expect(result.errors).not.toContain(
       "The file names of manifest.json, icon.png, and README.md are case-sensitive."
     );
+    // They are still misplaced, so the at-root guidance fires.
     expect(result.errors).toContain(
       "Your manifest, icon, and README files should be at the root of the .zip file. You can prevent this by compressing the contents of a folder, rather than the folder itself."
     );
   });
 
-  it("detects a wrong extension inside a subfolder", () => {
+  it.each([
+    ["Manifest.json", "icon.png", "README.md"],
+    ["manifest.json", "Icon.PNG", "README.md"],
+    ["manifest.json", "icon.png", "readme.md"],
+    ["MaNiFeSt.JsOn", "iCoN.pNg", "rEaDmE.mD"],
+    ["MANIFEST.JSON", "ICON.PNG", "README.MD"],
+    ["manifest.JSON", "icon.PnG", "ReadMe.Md"],
+  ])(
+    "flags mixed-case root files as case-sensitive (%s, %s, %s)",
+    (manifest, icon, readme) => {
+      const result = evaluateZipContents("package.zip", [
+        manifest,
+        icon,
+        readme,
+      ]);
+      expect(result.errors).toEqual([
+        "The file names of manifest.json, icon.png, and README.md are case-sensitive.",
+      ]);
+    }
+  );
+
+  it("ignores deeply nested mixed-case copies when the root files are correct", () => {
     const result = evaluateZipContents("package.zip", [
       "manifest.json",
       "icon.png",
-      "MyMod/readme.txt",
+      "README.md",
+      "BepInEx/plugins/Author-Mod/MaNiFeSt.JsOn",
+      "BepInEx/plugins/Author-Mod/iCoN.pNg",
+      "BepInEx/plugins/Author-Mod/rEaDmE.mD",
+    ]);
+    expect(result.errors).toEqual([]);
+  });
+
+  it.each([
+    [["icon.png", "README.md", "MANIFEST.TXT"]],
+    [["icon.png", "README.md", "MaNiFeSt.TxT"]],
+    [["manifest.json", "README.md", "ICON.JPG"]],
+    [["manifest.json", "README.md", "icon.JPEG"]],
+    [["manifest.json", "README.md", "Icon.Jpeg"]],
+    [["manifest.json", "icon.png", "README.TXT"]],
+    [["manifest.json", "icon.png", "ReAdMe.TxT"]],
+  ])(
+    "flags a wrong extension at the root when the correct file is absent (%s)",
+    (entries) => {
+      const result = evaluateZipContents("package.zip", entries);
+      expect(result.errors).toContain(
+        "Your manifest.json, icon.png, and README.md files must have the correct file extensions."
+      );
+    }
+  );
+
+  it("ignores wrong-extension files at the root when the correct file is present", () => {
+    // x753: when the correctly named file exists at the root, extra files
+    // alongside it (a leftover icon.jpg, a readme.txt) are harmless — the
+    // server reads the correct file and ignores the rest.
+    const result = evaluateZipContents("package.zip", [
+      "manifest.json",
+      "icon.png",
+      "README.md",
+      "icon.jpg",
+      "readme.txt",
+      "manifest.txt",
+    ]);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("ignores wrong-case files at the root when the correct file is present", () => {
+    const result = evaluateZipContents("package.zip", [
+      "manifest.json",
+      "icon.png",
+      "README.md",
+      "Manifest.json",
+      "Icon.PNG",
+      "readme.md",
+    ]);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("never reports errors when the three correct root files are present, whatever else the zip holds", () => {
+    // Capstone guarantee: the server only needs the exact-named files at the
+    // root; once they're there, nothing else in the archive can make the
+    // client block. (BepInEx.dll etc. still produce advisory warnings.)
+    const result = evaluateZipContents("package.zip", [
+      "manifest.json",
+      "icon.png",
+      "README.md",
+      // Every wrong-case / wrong-extension / extension-less sibling at root.
+      "Manifest.json",
+      "manifest.txt",
+      "manifest",
+      "Icon.PNG",
+      "icon.jpg",
+      "icon.jpeg",
+      "icon",
+      "readme.md",
+      "README.MD",
+      "readme.txt",
+      "readme",
+      // Bundled mods that carry their own required files, nested.
+      "BepInEx/plugins/Author-Mod/manifest.json",
+      "BepInEx/plugins/Author-Mod/Icon.PNG",
+      "BepInEx/plugins/Author-Mod/readme.txt",
+      "BepInEx.dll",
+    ]);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("flags a mixed-case extension-less required file", () => {
+    const result = evaluateZipContents("package.zip", [
+      "MaNiFeSt",
+      "icon.png",
+      "README.md",
     ]);
     expect(result.errors).toContain(
-      "Your manifest.json, icon.png, and README.md files must have the correct file extensions."
+      "Your manifest.json, icon.png, or README.md file is missing its file extension."
     );
+    expect(result.errors).toContain(
+      "Your package is missing a manifest.json file!"
+    );
+  });
+
+  it("ignores wrong extensions and extension-less files nested in a subfolder", () => {
+    const result = evaluateZipContents("package.zip", [
+      "manifest.json",
+      "icon.png",
+      "README.md",
+      "MyMod/readme.txt",
+      "MyMod/icon.jpg",
+      "MyMod/manifest",
+    ]);
+    // Files bundled under a subfolder aren't the package's required files, so
+    // their extensions are irrelevant — only the root files are validated.
+    expect(result.errors).toEqual([]);
   });
 
   it("flags missing required files individually", () => {
@@ -292,6 +432,21 @@ describe("validatePackageZip", () => {
     expect(result.errors).toContain(
       "Your package is missing a manifest.json file!"
     );
+  });
+
+  it("does not block a real zip with correct root files alongside wrong-named siblings", async () => {
+    // The x753 scenario, exercised end-to-end through the real ZIP reader.
+    const result = await validatePackageZip(
+      zipFile([
+        "manifest.json",
+        "icon.png",
+        "README.md",
+        "icon.jpg",
+        "readme.txt",
+        "BepInEx/plugins/Mod/Manifest.json",
+      ])
+    );
+    expect(result.errors).toEqual([]);
   });
 
   it("does not block when the archive cannot be read", async () => {

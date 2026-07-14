@@ -62,20 +62,20 @@ export function evaluateZipContents(
   let hasBepInEx = false;
   let hasAssemblyCSharp = false;
   let maybeModpack = false;
+
+  // Presence anywhere in the archive (any case, any folder). Drives the
+  // "missing file" and "not at root" guidance below.
   let hasManifest = false;
-  let rootManifest = false;
   let hasIcon = false;
-  let rootIcon = false;
   let hasReadMe = false;
-  let rootReadMe = false;
-  let wrongCase = false;
-  let wrongExtension = false;
-  let noExtension = false;
+
+  // Exact leaf names that sit at the archive root. The server reads each
+  // required file by its exact root path (unzip.read("manifest.json"), ...),
+  // so this set is what determines whether the package is actually valid.
+  const rootLeaves = new Set<string>();
 
   for (const filename of entryNames) {
     const lower = filename.toLowerCase();
-    // Inspect the leaf name (and whether it sits at the archive root) so the
-    // checks work regardless of folder nesting, e.g. "MyMod/manifest.json".
     const leaf = filename.split("/").pop() ?? "";
     const leafLower = leaf.toLowerCase();
     const atRoot = !filename.includes("/");
@@ -93,46 +93,16 @@ export function evaluateZipContents(
 
     if (leafLower === "manifest.json") {
       hasManifest = true;
-      if (atRoot) {
-        rootManifest = true;
-      }
-      if (leaf !== "manifest.json") {
-        wrongCase = true;
-      }
     }
     if (leafLower === "icon.png") {
       hasIcon = true;
-      if (atRoot) {
-        rootIcon = true;
-      }
-      if (leaf !== "icon.png") {
-        wrongCase = true;
-      }
     }
     if (leafLower === "readme.md") {
       hasReadMe = true;
-      if (atRoot) {
-        rootReadMe = true;
-      }
-      if (leaf !== "README.md") {
-        wrongCase = true;
-      }
     }
 
-    if (
-      leafLower === "readme.txt" ||
-      leafLower === "manifest.txt" ||
-      leafLower === "icon.jpg" ||
-      leafLower === "icon.jpeg"
-    ) {
-      wrongExtension = true;
-    }
-    if (
-      leafLower === "readme" ||
-      leafLower === "manifest" ||
-      leafLower === "icon"
-    ) {
-      noExtension = true;
+    if (atRoot) {
+      rootLeaves.add(leaf);
     }
   }
 
@@ -152,6 +122,56 @@ export function evaluateZipContents(
     warnings.push(MODPACK_WARNING);
   }
 
+  // The correctly named file at the root is all the server needs; when it's
+  // there, extra wrong-case or wrong-extension copies alongside it are harmless
+  // and must not block the upload. Only when the correct root file is ABSENT do
+  // we inspect what's there to explain why (wrong case, wrong extension, or a
+  // missing extension).
+  const rootLeavesLower = new Set(
+    Array.from(rootLeaves, (name) => name.toLowerCase())
+  );
+  const rootManifest = rootLeaves.has("manifest.json");
+  const rootIcon = rootLeaves.has("icon.png");
+  const rootReadMe = rootLeaves.has("README.md");
+
+  let wrongCase = false;
+  let wrongExtension = false;
+  let noExtension = false;
+
+  if (!rootManifest) {
+    if (rootLeavesLower.has("manifest.json")) {
+      wrongCase = true;
+    }
+    if (rootLeavesLower.has("manifest.txt")) {
+      wrongExtension = true;
+    }
+    if (rootLeavesLower.has("manifest")) {
+      noExtension = true;
+    }
+  }
+  if (!rootIcon) {
+    if (rootLeavesLower.has("icon.png")) {
+      wrongCase = true;
+    }
+    if (rootLeavesLower.has("icon.jpg") || rootLeavesLower.has("icon.jpeg")) {
+      wrongExtension = true;
+    }
+    if (rootLeavesLower.has("icon")) {
+      noExtension = true;
+    }
+  }
+  if (!rootReadMe) {
+    if (rootLeavesLower.has("readme.md")) {
+      wrongCase = true;
+    }
+    if (rootLeavesLower.has("readme.txt")) {
+      wrongExtension = true;
+    }
+    if (rootLeavesLower.has("readme")) {
+      noExtension = true;
+    }
+  }
+
   if (wrongCase) {
     errors.push(WRONG_CASE_ERROR);
   }
@@ -159,13 +179,14 @@ export function evaluateZipContents(
     errors.push(WRONG_EXTENSION_ERROR);
   }
 
-  // A required file is present but not at the archive root (e.g. the user
-  // zipped the containing folder instead of its contents). Fire for ANY
-  // misplaced required file, not only when all three are nested.
+  // A required file exists somewhere in the archive but not (in any case) at
+  // the root — e.g. the user zipped the containing folder instead of its
+  // contents. Fire for ANY misplaced required file, not only when all three
+  // are nested.
   if (
-    (hasManifest && !rootManifest) ||
-    (hasIcon && !rootIcon) ||
-    (hasReadMe && !rootReadMe)
+    (hasManifest && !rootLeavesLower.has("manifest.json")) ||
+    (hasIcon && !rootLeavesLower.has("icon.png")) ||
+    (hasReadMe && !rootLeavesLower.has("readme.md"))
   ) {
     errors.push(NOT_AT_ROOT_ERROR);
   }
