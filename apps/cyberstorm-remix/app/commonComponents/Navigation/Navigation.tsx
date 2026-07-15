@@ -110,7 +110,14 @@ function toLegacyPath(pathname: string): string {
     return "/settings/linked-accounts/";
   }
 
-  return pathname;
+  // Django canonicalises to a trailing slash (APPEND_SLASH). React Router
+  // reports pathname WITHOUT a trailing slash on the server but WITH one on the
+  // client (e.g. the `/c/:communityId/` landing), so passing it through verbatim
+  // makes the SSR and hydrated hrefs disagree — a hydration mismatch on every
+  // such page. Normalising to a trailing slash here (as every branch above
+  // already does) makes both sides deterministic and matches Django's canonical
+  // form.
+  return pathname.endsWith("/") ? pathname : `${pathname}/`;
 }
 
 // Absolute URL of the legacy Django site for the given in-app path. Built from
