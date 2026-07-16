@@ -53,6 +53,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
 import type { Route } from "./+types/packageListing";
 import { PackageActions } from "./components/PackageListing/PackageActions";
@@ -109,6 +110,8 @@ export const loader = ssrLoader(
         listingStatus: undefined,
         team,
         permissions: undefined,
+        wiki: undefined,
+        source: undefined,
         community_identifier: communityId,
         namespace_id: namespaceId,
         package_id: packageId,
@@ -116,9 +119,11 @@ export const loader = ssrLoader(
       });
     }
 
-    const [community, team] = await Promise.all([
+    const [community, team, wiki, source] = await Promise.all([
       dapper.getCommunity(communityId),
       dapper.getTeamDetails(namespaceId),
+      dapper.getPackageWiki(namespaceId, packageId).catch(() => undefined),
+      dapper.getPackageSource(namespaceId, packageId).catch(() => undefined),
     ]);
 
     return {
@@ -127,6 +132,8 @@ export const loader = ssrLoader(
       listingStatus: undefined,
       team,
       permissions: undefined,
+      wiki,
+      source,
       community_identifier: communityId,
       namespace_id: namespaceId,
       package_id: packageId,
@@ -192,6 +199,17 @@ export async function clientLoader({
     packageId
   );
 
+  const wiki = dapper
+    .getPackageWiki(namespaceId, packageId)
+    .catch((error: unknown) => {
+      if (isApiError(error) && error.response.status === 404) {
+        return undefined;
+      }
+      throw error;
+    });
+
+  const source = dapper.getPackageSource(namespaceId, packageId);
+
   return {
     community: dapper.getCommunity(communityId),
     listing: listing,
@@ -205,6 +223,8 @@ export async function clientLoader({
     ),
     team: dapper.getTeamDetails(namespaceId),
     permissions,
+    wiki,
+    source,
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
@@ -220,6 +240,8 @@ export default function PackageListing() {
     listingStatus,
     team,
     permissions,
+    wiki,
+    source,
     community_identifier,
     namespace_id,
     package_id,
@@ -337,6 +359,42 @@ export default function PackageListing() {
   if (!listing) {
     return <SkeletonBox />;
   }
+
+  const wikiTabLink = (disabled: boolean) => (
+    <NewLink
+      key="wiki"
+      primitiveType="cyberstormLink"
+      linkId="PackageWiki"
+      community={listing.community_identifier}
+      namespace={listing.namespace}
+      package={listing.name}
+      aria-current={currentTab === "wiki"}
+      disabled={disabled}
+      rootClasses={`tabs-item${
+        currentTab === "wiki" ? " tabs-item--current" : ""
+      }`}
+    >
+      Wiki
+    </NewLink>
+  );
+
+  const sourceTabLink = (disabled: boolean) => (
+    <NewLink
+      key="source"
+      primitiveType="cyberstormLink"
+      linkId="PackageSource"
+      community={listing.community_identifier}
+      namespace={listing.namespace}
+      package={listing.name}
+      aria-current={currentTab === "source"}
+      disabled={disabled}
+      rootClasses={`tabs-item${
+        currentTab === "source" ? " tabs-item--current" : ""
+      }`}
+    >
+      Analysis
+    </NewLink>
+  );
 
   // TODO: some variables are available in props (communityId, namespaceId, packageId)
   return (
@@ -466,20 +524,30 @@ export default function PackageListing() {
                   Required ({listing.dependency_count})
                 </NewLink>
 
-                <NewLink
-                  key="wiki"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageWiki"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "wiki"}
-                  rootClasses={`tabs-item${
-                    currentTab === "wiki" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Wiki
-                </NewLink>
+                <Suspense fallback={wikiTabLink(true)}>
+                  <Await resolve={wiki} errorElement={wikiTabLink(true)}>
+                    {(resolvedWiki) => (
+                      <Suspense fallback={wikiTabLink(true)}>
+                        <Await
+                          resolve={permissions}
+                          errorElement={wikiTabLink(
+                            !((resolvedWiki?.pages.length ?? 0) > 0)
+                          )}
+                        >
+                          {(resolvedPermissions) =>
+                            wikiTabLink(
+                              !(
+                                (resolvedWiki?.pages.length ?? 0) > 0 ||
+                                !!resolvedPermissions?.permissions
+                                  .can_manage_wiki
+                              )
+                            )
+                          }
+                        </Await>
+                      </Suspense>
+                    )}
+                  </Await>
+                </Suspense>
 
                 <NewLink
                   key="changelog"
@@ -512,20 +580,15 @@ export default function PackageListing() {
                   Versions
                 </NewLink>
 
-                <NewLink
-                  key="source"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageSource"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "source"}
-                  rootClasses={`tabs-item${
-                    currentTab === "source" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Analysis
-                </NewLink>
+                <Suspense fallback={sourceTabLink(true)}>
+                  <Await resolve={source} errorElement={sourceTabLink(true)}>
+                    {(resolvedSource) =>
+                      sourceTabLink(
+                        (resolvedSource?.decompilations?.length ?? 0) === 0
+                      )
+                    }
+                  </Await>
+                </Suspense>
               </Tabs>
 
               <div className="package-listing__content">
