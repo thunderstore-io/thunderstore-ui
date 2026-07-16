@@ -308,7 +308,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }, [location.pathname, location.search]);
 
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the inline script below stamps the saved
+    // display preferences (data-content-width / data-card-layout) on <html>
+    // BEFORE hydration, so the DOM legitimately differs from the server tree
+    // on this one element. Suppression is one element deep — children still
+    // report mismatches.
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/*
           We define CSS layers inline at the very top of the head to guarantee they are registered
