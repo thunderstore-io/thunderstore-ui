@@ -1,8 +1,6 @@
 @layer theme-components-colors {
   /* These variables are copied from Figma with the plugin variables2css */
   :root {
-    --ad-bg-color--default: var(--color-nightsky-4);
-    --ad-text-color--default: var(--color-text-tertiary);
     --alert-danger-bg-color--default: var(--color-accent-red-2);
     --alert-danger-border-color--default: var(--color-accent-red-7);
     --alert-danger-icon-color--default: var(--color-accent-red-7);

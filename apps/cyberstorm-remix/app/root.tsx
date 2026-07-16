@@ -34,6 +34,7 @@ import {
   Container,
   LinkingProvider,
   ToastProvider,
+  classnames,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
@@ -49,10 +50,12 @@ import {
 
 import type { Route } from "./+types/root";
 import {
-  BOTTOM_BANNER_AD_SLOTS,
-  BOTTOM_RIGHT_AD_SLOTS,
+  AD_DEMO_MODE,
+  BOTTOM_AD_SLOTS,
+  COMMUNITY_RAIL_SLOTS,
+  FLOATING_VIDEO_ID,
   type NitroAds,
-  RIGHT_COLUMN_SLOTS,
+  PACKAGE_RAIL_SLOTS,
   createAllNimbusAds,
   onNavigateNimbusAds,
   teardownNimbusAds,
@@ -64,9 +67,7 @@ import { Seo } from "./commonComponents/Seo/Seo";
 
 config.autoAddCss = false;
 
-// Bottom ad row disabled (TS-3954) due to poor viewability, pending
-// reassessment. Flip to true to bring the full-width bottom banner + its
-// companions back; the slot config and CSS are left intact for an easy revert.
+// Single full-width bottom banner between content and footer.
 const BOTTOM_ADS_ENABLED = false;
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
@@ -238,9 +239,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const communityId = matches.find((m) => m.params.communityId)?.params
     .communityId;
 
+  // Package detail routes carry a packageId param (/c/:communityId/p/:namespaceId/
+  // :packageId...); they put the ad rail in the LEFT gutter (see below).
+  const isPackageDetailPage = matches.some((m) => !!m.params.packageId);
+
   // Kill switch for local development and tests (set VITE_DISABLE_ADS=true).
   const adsDisabled = resolvedEnvVars?.VITE_DISABLE_ADS === "true";
-  const shouldShowAds = adsDisabled
+  // Routes where the ad surface is allowed at all. The NitroPay script (and its
+  // consent banner) loads on these; account/upload/tools routes get neither.
+  const adsAllowedOnRoute = adsDisabled
     ? false
     : location.pathname.startsWith("/teams")
       ? false
@@ -251,6 +258,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
           : location.pathname.startsWith("/tools")
             ? false
             : true;
+
+  // The landing pages (community list + root) load the consent banner but show
+  // NO ads, to keep the landing uncluttered. Individual communities live under
+  // /c/, so they are unaffected.
+  const isLandingPage =
+    location.pathname === "/" || location.pathname.startsWith("/communities");
+
+  // Load the NitroPay script (consent banner) wherever ads are allowed, but only
+  // CREATE ad slots off the landing pages.
+  const shouldLoadConsent = adsAllowedOnRoute;
+  const shouldCreateAds = adsAllowedOnRoute && !isLandingPage;
 
   // Tell NitroPay a new pageview happened on client-side navigation. Without
   // this an entire SPA session is one long-lived pageview on a refresh timer,
@@ -326,44 +344,66 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   currentUser={data?.currentUser}
                   communityId={communityId}
                 />
-                <IslandContainer direction="x">
-                  <Island
-                    as="main"
-                    id="main-content"
-                    tabIndex={-1}
-                    rootClasses="layout__main flex--grow-1"
-                  >
-                    <Container size="default">
-                      <Breadcrumbs />
-                      {children}
-                    </Container>
-                  </Island>
-                  {shouldShowAds && (
-                    <Island rootClasses="layout__ads">
-                      <div className="layout__ads-stack">
-                        {RIGHT_COLUMN_SLOTS.map((slot) => (
+                {/* The main island spans the full content-row width and IS the
+                    grid: the content sits in the middle track with a gutter on
+                    each side; the ad rail lives in one gutter and the other is a
+                    plain margin (equal once both exceed their minimums — the
+                    rail side reserves a stepped ad minimum). Gutters are
+                    viewport-sized, so an ad loading never shifts the content,
+                    and the whole area, gutters included, shares the island
+                    background. The rail tracks are only reserved when ads are
+                    shown (--ads). See app/styles/layout.css. */}
+                <Island
+                  as="main"
+                  id="main-content"
+                  tabIndex={-1}
+                  rootClasses={classnames(
+                    "layout__main",
+                    shouldCreateAds ? "layout__main--ads" : undefined,
+                    shouldCreateAds && isPackageDetailPage
+                      ? "layout__main--rail-left"
+                      : undefined
+                  )}
+                >
+                  <Container size="default">
+                    <Breadcrumbs />
+                    {children}
+                  </Container>
+                  {shouldCreateAds && (
+                    <div className="layout__ads">
+                      {/* Both routes' rail tiers live here; layout.css shows only
+                          the active route's fitting-height tier (data-rail-active-
+                          page + each tier's data-rail-page). Package detail/listing
+                          → package rail; everything else → community rail. */}
+                      <div
+                        className="layout__ads-stack"
+                        data-rail-active-page={
+                          isPackageDetailPage ? "package" : "community"
+                        }
+                      >
+                        {COMMUNITY_RAIL_SLOTS.map((slot) => (
                           <AdContainer
                             key={slot.containerId}
                             containerId={slot.containerId}
                             sizeVariant={slot.sizeVariant}
+                            railPage="community"
+                          />
+                        ))}
+                        {PACKAGE_RAIL_SLOTS.map((slot) => (
+                          <AdContainer
+                            key={slot.containerId}
+                            containerId={slot.containerId}
+                            sizeVariant={slot.sizeVariant}
+                            railPage="package"
                           />
                         ))}
                       </div>
-                    </Island>
-                  )}
-                </IslandContainer>
-                {shouldShowAds && BOTTOM_ADS_ENABLED ? (
-                  <Island rootClasses="flex--x layout__bottom-ads">
-                    <div className="layout__bottom-ads-banners">
-                      {BOTTOM_BANNER_AD_SLOTS.map((slot) => (
-                        <AdContainer
-                          key={slot.containerId}
-                          containerId={slot.containerId}
-                          sizeVariant={slot.sizeVariant}
-                        />
-                      ))}
                     </div>
-                    {BOTTOM_RIGHT_AD_SLOTS.map((slot) => (
+                  )}
+                </Island>
+                {shouldCreateAds && BOTTOM_ADS_ENABLED ? (
+                  <Island rootClasses="layout__bottom-ads">
+                    {BOTTOM_AD_SLOTS.map((slot) => (
                       <AdContainer
                         key={slot.containerId}
                         containerId={slot.containerId}
@@ -373,7 +413,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Island>
                 ) : null}
                 <Footer domain={resolvedEnvVars?.VITE_API_URL || ""} />
-                {shouldShowAds ? <AdsInit /> : null}
+                {shouldCreateAds ? (
+                  /* Anchor for the single page-level floating video; NitroPay
+                     floats the player out of this empty div to a viewport corner
+                     (see FLOATING_VIDEO_* in nitroAds.ts). Taken out of flow so
+                     it adds no gap to the layout column. */
+                  <div
+                    id={FLOATING_VIDEO_ID}
+                    className="layout__floating-video-anchor"
+                  />
+                ) : null}
+                {/* Load the NitroPay script (consent banner) wherever ads are
+                    allowed; AdsInit only CREATES ad slots when createAds is set,
+                    so the landing pages get consent but no ads. */}
+                {shouldLoadConsent ? (
+                  <AdsInit createAds={shouldCreateAds} />
+                ) : null}
               </IslandContainer>
             </TooltipProvider>
           </ToastProvider>
@@ -469,7 +524,10 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html
-function AdsInit() {
+// Loads the NitroPay script (which shows the consent banner) whenever mounted.
+// Ad slots are only created when `createAds` is true — so consent-only routes
+// (the landing pages) render this with createAds=false.
+function AdsInit({ createAds }: { createAds: boolean }) {
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
   const [adsScriptLoaded, setAdsScriptLoaded] = useState(
@@ -495,6 +553,11 @@ function AdsInit() {
         $script.src = "https://s.nitropay.com/ads-785.js";
         $script.setAttribute("async", "true");
         $script.setAttribute("data-log-level", "silent");
+        if (AD_DEMO_MODE) {
+          // NitroPay's global placeholder switch — see AD_DEMO_MODE in
+          // nitroAds.ts.
+          $script.setAttribute("data-demo", "true");
+        }
 
         $script.onload = () => {
           if (!cancelled) {
@@ -542,6 +605,12 @@ function AdsInit() {
   // slots on the new containers.
   const hasCreatedAds = useRef(false);
   useEffect(() => {
+    // Consent-only routes (the landing pages) load the script above but create
+    // no ad slots.
+    if (!createAds) {
+      return;
+    }
+
     let idleHandle: number | undefined;
     let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
 
@@ -575,8 +644,9 @@ function AdsInit() {
     }
 
     // Cancel a still-pending creation and forget the slot refs when this
-    // unmounts (e.g. navigating to an ad-suppressed route) so returning
-    // re-creates them on fresh containers.
+    // unmounts OR when createAds toggles off (navigating to a landing /
+    // consent-only route), so returning re-creates them on fresh containers.
+    // Resetting the latch lets the toggled-back-on case re-create.
     return () => {
       if (idleHandle !== undefined) {
         window.cancelIdleCallback(idleHandle);
@@ -584,9 +654,10 @@ function AdsInit() {
       if (timeoutHandle !== undefined) {
         clearTimeout(timeoutHandle);
       }
+      hasCreatedAds.current = false;
       teardownNimbusAds();
     };
-  }, [adsScriptLoaded]);
+  }, [adsScriptLoaded, createAds]);
 
   return <></>;
 }

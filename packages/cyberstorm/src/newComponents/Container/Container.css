@@ -1,11 +1,13 @@
 @layer components {
+  /* No padding-inline: the horizontal side spacing is owned by the layout grid
+     (.layout__main / its ad gutters — see app/styles/layout.css), so the content
+     fills its track. padding-block stays for the top/bottom breathing room. */
   .container {
     container: container / inline-size;
     flex: 0 1 auto;
     width: min(100%, var(--container-width));
     margin-inline: auto;
-    padding-inline: var(--container-padding);
-    padding-block: 1rem 4rem;
+    padding-block: 1rem;
   }
 
   .container:where([data-size="wide"]) {

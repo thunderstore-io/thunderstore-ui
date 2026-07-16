@@ -7,7 +7,6 @@
 @import "./styles/typography.css";
 
 /* Components */
-@import "./components/AdContainer/AdContainer.css";
 @import "./components/Alert/Alert.css";
 @import "./components/Avatar/Avatar.css";
 @import "./components/Button/Button.css";
