@@ -25,6 +25,9 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
     if (!el || !notes) return;
     const measure = () => setOverflowing(el.scrollHeight > el.clientHeight + 1);
     measure();
+    // ResizeObserver may be missing in older/edge environments; skip the live
+    // observer there (the expand toggle still re-measures via this effect).
+    if (typeof ResizeObserver === "undefined") return;
     const observer = new ResizeObserver(measure);
     observer.observe(el);
     return () => observer.disconnect();
