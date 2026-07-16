@@ -7,12 +7,17 @@ import {
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunityPackageListingHeader } from "app/c/CommunityPackageListingSubpath";
+import { SidebarAd } from "app/commonComponents/Ads/SidebarAd";
+import { PACKAGE_SIDEBAR_AD } from "app/commonComponents/Ads/nitroAds";
 import { CommunityPromo } from "app/commonComponents/CommunityPromo/CommunityPromo";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import type { ReportPackageFormProps } from "app/p/components/ReportPackage/ReportPackageForm";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import { type OutletContextShape } from "app/root";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
@@ -231,6 +236,11 @@ export default function PackageListing() {
   const currentUser = outletContext.currentUser;
   const config = outletContext.requestConfig;
   const dapper = outletContext.dapper;
+
+  // The package route is ad-allowed, so VITE_DISABLE_ADS (the local / test kill
+  // switch) is the only gate for the sidebar's 300×250.
+  const adsDisabled =
+    getPublicEnvVariables(["VITE_DISABLE_ADS"]).VITE_DISABLE_ADS === "true";
 
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
@@ -583,6 +593,8 @@ export default function PackageListing() {
             {(resolvedCommunity) => packageBoxes(listing, resolvedCommunity)}
           </Await>
         </Suspense>
+
+        {adsDisabled ? null : <SidebarAd slot={PACKAGE_SIDEBAR_AD} />}
       </aside>
 
       {ReportPackageModal}

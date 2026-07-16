@@ -4,7 +4,9 @@ import type { AdContainerSizeVariant } from "@thunderstore/cyberstorm";
  * NitroPay integration config + SPA lifecycle helpers for Nimbus.
  *
  * The ad surface (publisher 785): a DISPLAY side rail, a single page-level
- * floating video, and a single bottom banner. The rail (see `app/styles/
+ * floating video, a single bottom banner, and two page-scoped 300×250 sidebar
+ * slots (community search + package listing; see SidebarAd /
+ * createPageScopedAd). The rail (see `app/styles/
  * layout.css`) snaps its WIDTH to a standard ad width (120/160/180/300 — the
  * largest that fits the gutter) and picks its HEIGHT from three fixed tiers
  * (300×600/300×250/300×100), revealing only the tallest that fully fits the
@@ -189,6 +191,11 @@ function sizesThatFit(maxWidth: number, maxHeight: number): string[][] {
 // container's measured box (its width is capped at 980, see layout.css).
 const BOTTOM_AD_SIZES = sizesThatFit(980, 250);
 
+// The sidebar ads' candidate pool (community search + package listing) — every
+// unit up to the 300×250 rectangle. createNimbusAd narrows it to what fits the
+// container's measured box.
+const SIDEBAR_AD_SIZES = sizesThatFit(300, 250);
+
 // --- Slot inventory ---
 
 // The rail reveals at the smallest ad step: the layout reserves a stepped ad
@@ -350,6 +357,28 @@ export const BOTTOM_AD_SLOTS: RenderedAdSlot[] = [
     ...BOTTOM_AD_REFRESH,
   }),
 ];
+
+// Page-scoped 300×250 rectangles rendered by <SidebarAd>: one at the top of the
+// community package-search filter sidebar, one under the package-listing sidebar.
+// Unlike the layout slots above — whose containers live in the root layout and
+// are created once by createAllNimbusAds — these containers only exist on their
+// page, so <SidebarAd> creates them per-mount (awaiting whenNitroAdsReady) and
+// frees them on unmount. Both show the house fallback while unfilled. The coarse
+// mediaQuery keeps phones (where the sidebar is hidden) out of the auction; the
+// CSS visibility + renderVisibleOnly are the precise gate.
+export const COMMUNITY_SIDEBAR_AD: RenderedAdSlot = displaySlot({
+  containerId: `${AD_PREFIX}-community-sidebar-300x250`,
+  sizeVariant: "display-300-250",
+  sizes: SIDEBAR_AD_SIZES,
+  mediaQuery: "(min-width: 768px)",
+});
+
+export const PACKAGE_SIDEBAR_AD: RenderedAdSlot = displaySlot({
+  containerId: `${AD_PREFIX}-package-sidebar-300x250`,
+  sizeVariant: "display-300-250",
+  sizes: SIDEBAR_AD_SIZES,
+  mediaQuery: "(min-width: 768px)",
+});
 
 // --- Lifecycle (module-scope so refs survive AdsInit unmount/remount) ---
 
@@ -614,4 +643,58 @@ export function teardownNimbusAds(): void {
   adInViewObserver?.disconnect();
   adInViewObserver = undefined;
   pendingInViewSlots.clear();
+}
+
+// --- Script readiness (for page-scoped slots) ---
+
+// window.nitroAds is usable only after the async NitroPay script loads. The
+// layout slots are created from AdsInit the moment it observes that load; a
+// page-scoped slot (the sidebar ads) lives in a component that can mount
+// before the script is ready, so it awaits this instead. AdsInit publishes the
+// ref via markNitroAdsReady. Resolves for the rest of the page lifetime once the
+// script is in (window.nitroAds persists), so later awaits are instant.
+let readyNitroAds: NitroAds | undefined;
+const nitroReadyWaiters: Array<(nitroAds: NitroAds) => void> = [];
+
+export function markNitroAdsReady(nitroAds: NitroAds): void {
+  if (readyNitroAds) {
+    return;
+  }
+  readyNitroAds = nitroAds;
+  const waiters = nitroReadyWaiters.splice(0);
+  for (const resolve of waiters) {
+    resolve(nitroAds);
+  }
+}
+
+export function whenNitroAdsReady(): Promise<NitroAds> {
+  if (readyNitroAds) {
+    return Promise.resolve(readyNitroAds);
+  }
+  return new Promise((resolve) => {
+    nitroReadyWaiters.push(resolve);
+  });
+}
+
+// --- Page-scoped sidebar ads (created by <SidebarAd> per-mount) ---
+
+// Forget one slot's refs after its container div unmounts. React removes the
+// `#id` div and NitroPay frees the slot, so this just drops our refs (registry +
+// render clock) — unlike teardownNimbusAds it neither bumps the generation nor
+// clears the whole surface, since only this one slot went away.
+function removeNimbusAd(containerId: string): void {
+  adRegistry.delete(containerId);
+  lastRenderedAt.delete(containerId);
+  pendingInViewSlots.delete(containerId);
+}
+
+export function createPageScopedAd(
+  nitroAds: NitroAds,
+  slot: RenderedAdSlot
+): void {
+  createNimbusAd(nitroAds, slot.containerId, slot.options);
+}
+
+export function removePageScopedAd(slot: RenderedAdSlot): void {
+  removeNimbusAd(slot.containerId);
 }

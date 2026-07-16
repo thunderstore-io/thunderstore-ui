@@ -57,6 +57,7 @@ import {
   type NitroAds,
   PACKAGE_RAIL_SLOTS,
   createAllNimbusAds,
+  markNitroAdsReady,
   onNavigateNimbusAds,
   teardownNimbusAds,
 } from "./commonComponents/Ads/nitroAds";
@@ -619,6 +620,19 @@ function AdsInit({ createAds }: { createAds: boolean }) {
       }
     };
   }, []);
+
+  // Publish the ready nitroAds ref for page-scoped slots (the sidebar ads) to
+  // await — their containers can mount before this async script loads. Runs on
+  // landing pages too (the script loads there for consent), so a later
+  // community visit resolves instantly. Independent of createAds: the sidebar
+  // ads are gated by their own routes, not this layout's slot creation.
+  useEffect(() => {
+    const nitroAds =
+      typeof window !== "undefined" ? window.nitroAds : undefined;
+    if (adsScriptLoaded && nitroAds?.createAd) {
+      markNitroAdsReady(nitroAds);
+    }
+  }, [adsScriptLoaded]);
 
   // Create the slots once per mount. The ref is set when the deferred creation
   // actually fires (not when scheduled), so React StrictMode's dev

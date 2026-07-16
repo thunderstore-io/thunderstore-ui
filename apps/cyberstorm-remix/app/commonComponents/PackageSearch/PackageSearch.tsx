@@ -3,7 +3,14 @@ import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  Suspense,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Await, useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
 import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
@@ -19,6 +26,7 @@ import {
   NewPagination,
   NewTextInput,
   SkeletonBox,
+  classnames,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -61,13 +69,25 @@ interface Props {
   currentUser?: CurrentUser;
   dapper: DapperTs;
   teamName?: string;
+  // Rendered at the top of the sidebar, above the filters. The community page
+  // passes its 300×250 ad here; when set, the sidebar widens to hold it (see
+  // .package-search--with-sidebar-ad in PackageSearch.css).
+  sidebarSlot?: ReactNode;
 }
 
 /**
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
-  const { listings, filters, config, currentUser, dapper, teamName } = props;
+  const {
+    listings,
+    filters,
+    config,
+    currentUser,
+    dapper,
+    teamName,
+    sidebarSlot,
+  } = props;
 
   const navigationType = useNavigationType();
 
@@ -364,8 +384,14 @@ export function PackageSearch(props: Props) {
   );
 
   return (
-    <div className="package-search">
+    <div
+      className={classnames(
+        "package-search",
+        sidebarSlot ? "package-search--with-sidebar-ad" : undefined
+      )}
+    >
       <div className="package-search__sidebar">
+        {sidebarSlot}
         <div className="package-search__filters">{filtersContent}</div>
       </div>
 

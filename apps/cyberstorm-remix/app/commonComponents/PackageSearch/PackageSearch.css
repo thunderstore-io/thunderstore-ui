@@ -1,9 +1,18 @@
 @layer nimbus-components {
   .package-search {
+    --package-search-sidebar-width: 15.5rem;
+
     display: grid;
-    grid-template-columns: 15.5rem minmax(0, 1fr);
+    grid-template-columns: var(--package-search-sidebar-width) minmax(0, 1fr);
     gap: var(--gap-xl);
     align-items: start;
+  }
+
+  /* The community page renders a 300×250 ad above the filters (sidebarSlot in
+     PackageSearch); widen the sidebar column to hold it (+2px for the ad slot's
+     borders). Other PackageSearch uses keep the default narrow sidebar. */
+  .package-search--with-sidebar-ad {
+    --package-search-sidebar-width: calc(300px + 2px);
   }
 
   .package-search__sidebar {
@@ -35,7 +44,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    width: 15.5rem;
+    width: var(--package-search-sidebar-width);
   }
 
   .package-search__drawer-toggle {
