@@ -1,25 +1,70 @@
+import * as Sentry from "@sentry/react-router";
 import type { ErrorEvent } from "@sentry/react-router";
 import { isRouteErrorResponse } from "react-router";
 
 import { isApiError } from "@thunderstore/thunderstore-api";
 
 /**
- * Expected 4xx errors — router-internal 404s for unmatched URLs (bots,
- * typos, ACME probes), 405s for invalid methods or POSTs without an action,
- * and 4xx ApiErrors converted to Responses by ssrLoader — are user/bot-facing
- * outcomes rather than bugs and should not be reported to Sentry. 5xx errors
- * and non-HTTP errors are real failures and must still be captured.
+ * Decide whether a route error is expected traffic rather than a bug.
  *
- * clientLoaders throw ApiError directly (it is not converted to a Response on
- * the client), so 4xx ApiErrors — 401/403/404/429, e.g. a Cloudflare 403 on a
- * deep listing page — are matched here too, not just thrown Responses.
+ * Router-internal 4xx ErrorResponses — 404s for unmatched URLs (bots, typos,
+ * ACME probes), 405s for invalid methods or POSTs without an action — and the
+ * 4xx Responses ssrLoader converts ApiErrors into are user/bot-facing
+ * outcomes, not bugs: suppressed wholesale.
+ *
+ * Raw ApiErrors (clientLoaders throw them unconverted) REPORT BY DEFAULT;
+ * suppression is an explicit allowlist of statuses normal browsing produces:
+ *   - 403/404/410: permission gates, stale links, removed content.
+ *   - 401: expected for an anonymous user (RouteErrorBoundary redirects them
+ *     to login), an auth regression for a logged-in one. Gates without
+ *     session context (entry.client onError, entry.server handleError) treat
+ *     401 as expected; RouteErrorBoundary resolves the session and passes
+ *     `anonymous` to make the real call.
+ *   - Everything else (400, 405, 409, 422, 429, ...) reports: we built a bad
+ *     request, drifted from the API contract, or hit rate limiting — bugs or
+ *     incidents, not traffic.
+ *
+ * Suppressed ApiErrors still leave a sampled, grouped trace — see
+ * heartbeatSuppressed4xx. 5xx and non-HTTP errors always report.
  */
-export function isExpectedRouteError(error: unknown): boolean {
+const SUPPRESSED_API_ERROR_STATUSES = new Set([403, 404, 410]);
+
+export function isExpectedRouteError(
+  error: unknown,
+  context?: { anonymous?: boolean }
+): boolean {
   if (isRouteErrorResponse(error)) return error.status < 500;
   if (isApiError(error)) {
-    return error.response.status >= 400 && error.response.status < 500;
+    const status = error.response.status;
+    if (SUPPRESSED_API_ERROR_STATUSES.has(status)) return true;
+    if (status === 401) return context?.anonymous !== false;
+    return false;
   }
   return false;
+}
+
+// ~2% of suppressed 4xx leave a trace; at that rate 20 heartbeat events/hour
+// on one issue ≈ 1000 real occurrences/hour.
+const HEARTBEAT_SAMPLE_RATE = 0.02;
+
+/**
+ * Sampled, grouped trace of the 4xx ApiErrors isExpectedRouteError
+ * suppresses, so a storm of "expected" errors (Cloudflare serving 403s on
+ * /api, a broken internal link 404ing every visitor) stays visible as a
+ * frequency spike on one warning-level issue per status instead of vanishing
+ * entirely. ApiErrors only — suppressed RouteErrorResponses are dominated by
+ * bot noise (unmatched-URL 404s) and stay silent. Called from
+ * RouteErrorBoundary only, so an error seen by several gates counts once.
+ */
+export function heartbeatSuppressed4xx(error: unknown): void {
+  if (!isApiError(error)) return;
+  if (Math.random() >= HEARTBEAT_SAMPLE_RATE) return;
+  const status = String(error.response.status);
+  Sentry.captureMessage(`Suppressed client 4xx: ${status}`, {
+    level: "warning",
+    fingerprint: ["suppressed-4xx", status],
+    tags: { suppressed_status: status },
+  });
 }
 
 /**

@@ -1,12 +1,19 @@
+import * as SentrySdk from "@sentry/react-router";
 import type { ErrorEvent } from "@sentry/react-router";
-import { assert, describe, expect, it } from "vitest";
+import { afterEach, assert, describe, expect, it, vi } from "vitest";
 
 import {
   beforeSend,
   denyUrls,
+  heartbeatSuppressed4xx,
   isExpectedRouteError,
   toReportableError,
 } from "../sentry";
+
+// heartbeatSuppressed4xx calls the SDK; nothing else under test does.
+vi.mock("@sentry/react-router", () => ({
+  captureMessage: vi.fn(),
+}));
 
 // This attempts to match how Sentry does things.
 // https://docs.sentry.io/platforms/javascript/configuration/options/#denyUrls
@@ -365,12 +372,33 @@ describe("utils.sentry.isExpectedRouteError", () => {
     responseJson: undefined,
   });
 
-  it.each([401, 403, 404, 429])(
-    "returns true for %i ApiErrors thrown by clientLoaders",
+  it.each([403, 404, 410])(
+    "returns true for %i ApiErrors (normal-browsing allowlist)",
     (status) => {
       expect(isExpectedRouteError(apiError(status))).toBe(true);
     }
   );
+
+  it.each([400, 405, 409, 422, 429])(
+    "returns false for %i ApiErrors (4xx reports by default)",
+    (status) => {
+      expect(isExpectedRouteError(apiError(status))).toBe(false);
+    }
+  );
+
+  it("treats 401 ApiErrors as expected without session context", () => {
+    // Gates without session context (onError, handleError) defer the real
+    // decision to RouteErrorBoundary.
+    expect(isExpectedRouteError(apiError(401))).toBe(true);
+    expect(isExpectedRouteError(apiError(401), {})).toBe(true);
+    expect(isExpectedRouteError(apiError(401), { anonymous: true })).toBe(true);
+  });
+
+  it("reports 401 ApiErrors for logged-in users (auth regression)", () => {
+    expect(isExpectedRouteError(apiError(401), { anonymous: false })).toBe(
+      false
+    );
+  });
 
   it.each([500, 502, 503, 504])("returns false for %i ApiErrors", (status) => {
     expect(isExpectedRouteError(apiError(status))).toBe(false);
@@ -386,6 +414,50 @@ describe("utils.sentry.isExpectedRouteError", () => {
     expect(
       isExpectedRouteError({ status: 404, statusText: "", data: null })
     ).toBe(false);
+  });
+});
+
+describe("utils.sentry.heartbeatSuppressed4xx", () => {
+  const apiError = (status: number) => ({
+    message: `${status}: `,
+    response: { headers: {}, status, statusText: "", url: "" },
+    responseJson: undefined,
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.mocked(SentrySdk.captureMessage).mockClear();
+  });
+
+  it("emits a grouped warning for a sampled suppressed ApiError", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    heartbeatSuppressed4xx(apiError(404));
+    expect(SentrySdk.captureMessage).toHaveBeenCalledWith(
+      "Suppressed client 4xx: 404",
+      {
+        level: "warning",
+        fingerprint: ["suppressed-4xx", "404"],
+        tags: { suppressed_status: "404" },
+      }
+    );
+  });
+
+  it("stays silent outside the sample", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.99);
+    heartbeatSuppressed4xx(apiError(404));
+    expect(SentrySdk.captureMessage).not.toHaveBeenCalled();
+  });
+
+  it("never fires for route ErrorResponses (bot-404 noise stays silent)", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    heartbeatSuppressed4xx({
+      status: 404,
+      statusText: "",
+      internal: true,
+      data: null,
+      error: new Error("No route matches URL"),
+    });
+    expect(SentrySdk.captureMessage).not.toHaveBeenCalled();
   });
 });
 

@@ -94,7 +94,10 @@ startTransition(() => {
       <HydratedRouter
         onError={(error, info) => {
           // Client-side navigations to unmatched URLs surface here as 404
-          // ErrorResponses; they are expected traffic, not bugs.
+          // ErrorResponses; they are expected traffic, not bugs. Without
+          // session context 401s are also skipped here — RouteErrorBoundary
+          // sees the same loader errors, resolves the session (reporting
+          // logged-in 401s) and emits the suppressed-4xx heartbeat.
           if (isExpectedRouteError(error)) return;
           Sentry.sentryOnError(error, info);
         }}

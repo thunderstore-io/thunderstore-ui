@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/react-router";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import {
+  heartbeatSuppressed4xx,
   isExpectedRouteError,
   toReportableError,
 } from "cyberstorm/utils/sentry";
@@ -30,17 +31,49 @@ export function RouteErrorBoundary() {
   // *should* happen only in dev mode) makes me want to ensure any
   // rerenders don't get logged in Sentry twice.
   useEffect(() => {
-    if (error && import.meta.env.PROD) {
-      // Expected 4xx responses (404s for unmatched URLs, upstream 4xx
-      // converted by ssrLoader) render the boundary but are not bugs.
-      if (!isExpectedRouteError(error)) {
-        // Wrap react-router ErrorResponse objects so Sentry records a real
-        // Error grouped by status instead of "Object captured as exception".
-        Sentry.captureException(toReportableError(error));
-      }
-    } else if (error) {
+    if (!error) return;
+    if (!import.meta.env.PROD) {
       console.error("Error boundary caught error", error);
+      return;
     }
+    let active = true;
+
+    const classifyAndReport = async () => {
+      // A 401 is expected for an anonymous user (redirected to login below)
+      // but an auth regression for a logged-in one — resolve the session
+      // before classifying. Other statuses don't need session context.
+      let anonymous: boolean | undefined;
+      if (isApiError(error) && error.response.status === 401) {
+        const storedUser = await getSessionTools()?.getSessionCurrentUser(true);
+        anonymous = !storedUser?.username;
+      }
+      if (!active) return;
+
+      if (isExpectedRouteError(error, { anonymous })) {
+        // Suppressed as an individual event; a sampled, grouped trace keeps
+        // storms of "expected" 4xx visible — see sentry.ts.
+        heartbeatSuppressed4xx(error);
+        return;
+      }
+      // Wrap react-router ErrorResponse objects so Sentry records a real
+      // Error grouped by status instead of "Object captured as exception".
+      // Reported 4xx ApiErrors get a per-status fingerprint so a storm (e.g.
+      // Cloudflare 429s) spikes ONE alertable issue instead of scattering
+      // across routes.
+      Sentry.captureException(
+        toReportableError(error),
+        isApiError(error) &&
+          error.response.status >= 400 &&
+          error.response.status < 500
+          ? { fingerprint: ["api-4xx", String(error.response.status)] }
+          : undefined
+      );
+    };
+
+    classifyAndReport();
+    return () => {
+      active = false;
+    };
   }, [error]);
 
   let statusCode: StatusCode = "???";
