@@ -7,6 +7,7 @@ import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
+import { CommunityPackageListingHeader } from "~/c/CommunityPackageListingSubpath";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -204,7 +205,7 @@ export async function clientLoader({
 clientLoader.hydrate = true;
 
 export default function Dependants() {
-  const { filters, listing, listings } = useLoaderData<
+  const { community, filters, listing, listings } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -219,6 +220,15 @@ export default function Dependants() {
 
   return (
     <Page as="section" rootClasses="dependants">
+      <Suspense fallback={null}>
+        <Await resolve={community}>
+          {(resolvedCommunity) => (
+            <CommunityPackageListingHeader
+              resolvedCommunity={resolvedCommunity}
+            />
+          )}
+        </Await>
+      </Suspense>
       <Suspense fallback={<SkeletonBox />}>
         <Await resolve={listing}>
           {(resolvedValue) => (

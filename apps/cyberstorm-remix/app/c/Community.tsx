@@ -282,12 +282,7 @@ export default function Community() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   if (isPackageListingPath(location.pathname)) {
-    return (
-      <CommunityPackageListingPage
-        community={community}
-        outletContext={outletContext}
-      />
-    );
+    return <CommunityPackageListingPage outletContext={outletContext} />;
   }
 
   return (

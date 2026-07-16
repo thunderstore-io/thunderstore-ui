@@ -243,6 +243,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // :packageId...); they put the ad rail in the LEFT gutter (see below).
   const isPackageDetailPage = matches.some((m) => !!m.params.packageId);
 
+  // packageListing + its version page render the package sidebar, so they use the
+  // full 3-column layout (ad rail | content | sidebar in col 3). Dependants (a
+  // search page under the same package routes) has no sidebar and keeps the plain
+  // rail-left layout. Matched by route id (the route file path).
+  const isPackageListingWithSidebar = matches.some(
+    (m) => m.id === "p/packageListing" || m.id === "p/packageListingVersion"
+  );
+
   // Kill switch for local development and tests (set VITE_DISABLE_ADS=true).
   const adsDisabled = resolvedEnvVars?.VITE_DISABLE_ADS === "true";
   // Routes where the ad surface is allowed at all. The NitroPay script (and its
@@ -360,15 +368,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   rootClasses={classnames(
                     "layout__main",
                     shouldCreateAds ? "layout__main--ads" : undefined,
-                    shouldCreateAds && isPackageDetailPage
+                    shouldCreateAds &&
+                      isPackageDetailPage &&
+                      !isPackageListingWithSidebar
                       ? "layout__main--rail-left"
+                      : undefined,
+                    isPackageListingWithSidebar
+                      ? "layout__main--package-detail"
                       : undefined
                   )}
                 >
-                  <Container size="default">
-                    <Breadcrumbs />
-                    {children}
-                  </Container>
+                  {isPackageListingWithSidebar ? (
+                    // Package listing pages skip the centered Container so their
+                    // breadcrumb + banner + content + sidebar become real grid
+                    // items of layout__main (see .layout__main--package-detail).
+                    <>
+                      <Breadcrumbs />
+                      {children}
+                    </>
+                  ) : (
+                    <Container size="default">
+                      <Breadcrumbs />
+                      {children}
+                    </Container>
+                  )}
                   {shouldCreateAds && (
                     <div className="layout__ads">
                       {/* Both routes' rail tiers live here; layout.css shows only

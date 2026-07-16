@@ -134,6 +134,118 @@
       minmax(var(--container-padding), 1fr);
   }
 
+  /* Package listing pages (packageListing + version) lay their pieces DIRECTLY
+     into this grid — breadcrumb, banner, content, the optional management toolbar,
+     and the sidebar are all real grid items (root.tsx skips the centered Container
+     for these routes; the pages render a flat fragment). No subgrid /
+     display:contents, so SSR and client render identically — no reflow on
+     hydration. Three columns: ad rail | content | sidebar. The sidebar COLUMN
+     flexes (its extra width is the right margin) while the sidebar ELEMENT stays
+     --package-sidebar-width. Rows: breadcrumb, then banner + management, then
+     content + sidebar — so the sidebar's Install button lines up with the page
+     header, and the management toolbar sits in the row above it (present or not,
+     so mods get it with no layout shift). Applies with or without ads (the rail
+     just fills col 1 when ads are on); it's these pages' sole layout modifier
+     (not paired with --rail-left), and comes after the base --ads grid in source
+     order so it wins. */
+  .layout__main--package-detail {
+    /* padding-block replaces the (now-skipped) content Container's; padding-inline
+       0 lets the gutters own the horizontal spacing. */
+    padding-block: 1rem;
+    padding-inline: 0;
+
+    --package-sidebar-width: 20rem;
+
+    /* Fallback for when ads are off (no .layout__main--ads to step it); the
+       @media steps below override it when ads are on. */
+    --ad-gutter-min: var(--container-padding);
+
+    /* The sidebar column's min is the sidebar width PLUS a container-padding
+       gutter, so the (start-aligned) sidebar never hugs the layout's right edge
+       even when the column can't grow past its minimum. */
+    grid-template-columns:
+      minmax(var(--ad-gutter-min), 1fr)
+      minmax(0, var(--content-max))
+      minmax(
+        calc(var(--package-sidebar-width) + var(--container-padding)),
+        1fr
+      );
+    row-gap: var(--gap-md);
+  }
+
+  /* The rail shares the content row (like the old single-row ad grid) so its
+     tall sticky stack doesn't inflate the breadcrumb/banner rows above. */
+  .layout__main--package-detail > .layout__ads {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .layout__main--package-detail > .breadcrumbs {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  /* The banner cell. packageListing wraps the banner in .package-listing__banner
+     (it also overlays the internal notes there); version / dependants render the
+     bare .community__header--compact. Both sit in the same cell. */
+  .layout__main--package-detail > .community__header--compact,
+  .layout__main--package-detail > .package-listing__banner {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
+  .layout__main--package-detail > .package-listing__management {
+    grid-row: 2;
+    grid-column: 3;
+  }
+
+  .layout__main--package-detail > .package-listing__package-content-section {
+    grid-row: 3;
+    grid-column: 2;
+
+    /* No top padding: the page header must start at the row's top so the
+       sidebar's Install button (also row-top) lines up with it. */
+    padding-top: 0;
+  }
+
+  /* The sidebar keeps its own width and sits at the start of its (wider) column,
+     beside the content; the column's extra width falls to its right. */
+  .layout__main--package-detail > .package-listing-sidebar {
+    grid-row: 3;
+    grid-column: 3;
+    justify-self: start;
+    width: var(--package-sidebar-width);
+  }
+
+  /* Below ~70rem there isn't room for content + the sidebar side by side: drop to
+     a single content column, stack the pieces in DOM order, and fold the sidebar
+     into its drawer (the .package-listing__narrow-actions button reveals it). */
+  @media (width <= 70rem) {
+    .layout__main--ads.layout__main--package-detail {
+      grid-template-columns:
+        minmax(var(--container-padding), 1fr)
+        minmax(0, var(--content-max))
+        minmax(var(--container-padding), 1fr);
+    }
+
+    .layout__main--package-detail > .breadcrumbs,
+    .layout__main--package-detail > .community__header--compact,
+    .layout__main--package-detail > .package-listing__banner,
+    .layout__main--package-detail > .package-listing__management,
+    .layout__main--package-detail > .package-listing__package-content-section {
+      grid-row: auto;
+      grid-column: 2;
+    }
+
+    .layout__main--package-detail > .package-listing-sidebar {
+      display: none;
+    }
+
+    .layout__main--package-detail .package-listing__narrow-actions {
+      display: flex;
+    }
+  }
+
   /* Stepped side reservation: each step is a standard rail width (+2px slot
      borders +8px outer margin), rising with the viewport so a larger ad fits once
      there's room beyond the 90rem content floor. The four rail units are

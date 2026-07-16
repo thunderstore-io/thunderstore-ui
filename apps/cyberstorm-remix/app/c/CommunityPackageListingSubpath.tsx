@@ -1,9 +1,7 @@
-import { Page } from "app/commonComponents/Page/Page";
-import { Suspense } from "react";
-import { Await, Outlet } from "react-router";
+import { Outlet } from "react-router";
 
 import { type OutletContextShape } from "../root";
-import type { clientLoader, loader } from "./Community";
+import type { loader } from "./Community";
 import "./CommunityPackageListingSubpath.css";
 
 type ResolvedCommunity = Awaited<
@@ -11,9 +9,6 @@ type ResolvedCommunity = Awaited<
 >;
 
 type CommunityPageProps = {
-  community:
-    | Awaited<ReturnType<typeof loader>>["community"]
-    | Awaited<ReturnType<typeof clientLoader>>["community"];
   outletContext: OutletContextShape;
 };
 
@@ -41,7 +36,12 @@ function CommunityPackageListingHeroBackground({
   );
 }
 
-function CommunityPackageListingHeader({
+// The community hero banner for package pages. Rendered by each package page in
+// the content column of its grid (see packageListing/packageListingVersion/
+// Dependants), NOT here in the community layout, so it lines up with the content
+// and the sidebar sits beside it instead of the banner spanning both. Returns
+// null when the community has no hero image.
+export function CommunityPackageListingHeader({
   resolvedCommunity,
 }: {
   resolvedCommunity: ResolvedCommunity;
@@ -60,21 +60,10 @@ function CommunityPackageListingHeader({
 }
 
 export function CommunityPackageListingPage({
-  community,
   outletContext,
 }: CommunityPageProps) {
-  return (
-    <Page rootClasses="community community--packageListingSubpath">
-      <Suspense fallback={null}>
-        <Await resolve={community}>
-          {(resolvedCommunity) => (
-            <CommunityPackageListingHeader
-              resolvedCommunity={resolvedCommunity}
-            />
-          )}
-        </Await>
-      </Suspense>
-      <Outlet context={outletContext} />
-    </Page>
-  );
+  // No wrapper element: package listing pages place their pieces directly into
+  // the layout grid (see .layout__main--package-detail in layout.css), so an
+  // intermediate box would break it. Dependants renders its own <Page>.
+  return <Outlet context={outletContext} />;
 }

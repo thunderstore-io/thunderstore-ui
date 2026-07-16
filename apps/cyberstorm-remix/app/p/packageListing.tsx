@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CommunityPackageListingHeader } from "app/c/CommunityPackageListingSubpath";
 import { CommunityPromo } from "app/commonComponents/CommunityPromo/CommunityPromo";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import type { ReportPackageFormProps } from "app/p/components/ReportPackage/ReportPackageForm";
@@ -339,7 +340,26 @@ export default function PackageListing() {
   // TODO: some variables are available in props (communityId, namespaceId, packageId)
   return (
     <>
-      <section className="package-listing__package-section">
+      {/* Community hero banner — its own grid row (col 2), so the sidebar's
+          Install lines up with the page header below it (see
+          .layout__main--package-detail). Null when the community has no hero.
+          The internal notes (mods only) overlay the banner rather than taking a
+          sidebar slot, so they never shift the layout — see packageListing.css. */}
+      <div className="package-listing__banner">
+        <Suspense fallback={null}>
+          <Await resolve={community}>
+            {(resolvedCommunity) => (
+              <CommunityPackageListingHeader
+                resolvedCommunity={resolvedCommunity}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </div>
+
+      {/* Moderation toolbar — its own grid item (col 3, above the sidebar), so it
+          appears for mods with no layout shift; empty for everyone else. */}
+      <div className="package-listing__management">
         <PackageListingManagement
           listing={listing}
           listingStatus={listingStatus}
@@ -347,227 +367,223 @@ export default function PackageListing() {
           toast={toast}
           requestConfig={config}
         />
+      </div>
 
-        <div className="package-listing__main">
-          <section className="package-listing__package-content-section">
-            {listing.is_deprecated ? (
-              <NewAlert csVariant="warning">
-                This package has been deprecated and may no longer be
-                maintained. We recommend looking for an alternative.
-              </NewAlert>
-            ) : null}
+      <section className="package-listing__package-content-section">
+        {listing.is_deprecated ? (
+          <NewAlert csVariant="warning">
+            This package has been deprecated and may no longer be maintained. We
+            recommend looking for an alternative.
+          </NewAlert>
+        ) : null}
 
-            <PageHeader
-              headingLevel="1"
-              headingSize="3"
-              image={listing.icon_url}
-              description={listing.description}
-              variant="detailed"
-              meta={
-                <>
-                  <NewLink
-                    primitiveType="cyberstormLink"
-                    linkId="Team"
-                    community={listing.community_identifier}
-                    team={listing.namespace}
-                    csVariant="cyber"
-                    rootClasses="page-header__meta-item"
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faUsers} />
-                    </NewIcon>
-                    {listing.namespace}
-                  </NewLink>
-
-                  {listing.website_url ? (
-                    <NewLink
-                      primitiveType="link"
-                      href={listing.website_url}
-                      csVariant="cyber"
-                      rootClasses="page-header__meta-item"
-                    >
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon
-                          icon={
-                            isGithubUrl(listing.website_url)
-                              ? faGithub
-                              : faArrowUpRight
-                          }
-                        />
-                      </NewIcon>
-                      {listing.website_url}
-                    </NewLink>
-                  ) : null}
-                </>
-              }
-            >
-              {formatToDisplayName(listing.name)}
-            </PageHeader>
-
-            <div className="package-listing__narrow-actions">
-              <PackageActions
-                downloadUrl={listing.download_url}
-                team={team}
-                installUrl={listing.install_url}
-                reportPackageButton={ReportPackageButton}
-                packageDetailsNarrow={
-                  <PackageDetailsNarrow
-                    lastUpdated={lastUpdated}
-                    firstUploaded={firstUploaded}
-                    listing={listing}
-                    community={community}
-                  />
-                }
-                isLiked={isLiked}
-                currentUser={currentUser}
-                packageLikeAction={packageLikeAction}
-                namespace={listing.namespace}
-                packageName={listing.name}
-              />
-
-              <CommunityPromo
-                variant="pill"
-                communityId={listing.community_identifier}
-              />
-            </div>
-
+        <PageHeader
+          headingLevel="1"
+          headingSize="3"
+          image={listing.icon_url}
+          description={listing.description}
+          variant="detailed"
+          meta={
             <>
-              <Tabs>
-                <NewLink
-                  key="description"
-                  primitiveType="cyberstormLink"
-                  linkId="Package"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "details"}
-                  rootClasses={`tabs-item${
-                    currentTab === "details" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Details
-                </NewLink>
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Team"
+                community={listing.community_identifier}
+                team={listing.namespace}
+                csVariant="cyber"
+                rootClasses="page-header__meta-item"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faUsers} />
+                </NewIcon>
+                {listing.namespace}
+              </NewLink>
 
+              {listing.website_url ? (
                 <NewLink
-                  key="required"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageRequired"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "required"}
-                  rootClasses={`tabs-item${
-                    currentTab === "required" ? " tabs-item--current" : ""
-                  }`}
+                  primitiveType="link"
+                  href={listing.website_url}
+                  csVariant="cyber"
+                  rootClasses="page-header__meta-item"
                 >
-                  Required ({listing.dependency_count})
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon
+                      icon={
+                        isGithubUrl(listing.website_url)
+                          ? faGithub
+                          : faArrowUpRight
+                      }
+                    />
+                  </NewIcon>
+                  {listing.website_url}
                 </NewLink>
-
-                <NewLink
-                  key="wiki"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageWiki"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "wiki"}
-                  rootClasses={`tabs-item${
-                    currentTab === "wiki" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Wiki
-                </NewLink>
-
-                <NewLink
-                  key="changelog"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageChangelog"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "changelog"}
-                  disabled={!listing.has_changelog}
-                  rootClasses={`tabs-item${
-                    currentTab === "changelog" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Changelog
-                </NewLink>
-
-                <NewLink
-                  key="versions"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageVersions"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "versions"}
-                  rootClasses={`tabs-item${
-                    currentTab === "versions" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Versions
-                </NewLink>
-
-                <NewLink
-                  key="source"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageSource"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "source"}
-                  rootClasses={`tabs-item${
-                    currentTab === "source" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Analysis
-                </NewLink>
-              </Tabs>
-
-              <div className="package-listing__content">
-                <Outlet
-                  context={
-                    {
-                      ...outletContext,
-                      packageDownloadUrl: listing.download_url,
-                    } as PackageListingOutletContext
-                  }
-                />
-              </div>
+              ) : null}
             </>
-          </section>
+          }
+        >
+          {formatToDisplayName(listing.name)}
+        </PageHeader>
 
-          <aside className="package-listing-sidebar">
-            <PackageActions
-              downloadUrl={listing.download_url}
-              team={team}
-              installUrl={listing.install_url}
-              reportPackageButton={ReportPackageButton}
-              isLiked={isLiked}
-              currentUser={currentUser}
-              packageLikeAction={packageLikeAction}
-              namespace={listing.namespace}
-              packageName={listing.name}
-            />
+        <div className="package-listing__narrow-actions">
+          <PackageActions
+            downloadUrl={listing.download_url}
+            team={team}
+            installUrl={listing.install_url}
+            reportPackageButton={ReportPackageButton}
+            packageDetailsNarrow={
+              <PackageDetailsNarrow
+                lastUpdated={lastUpdated}
+                firstUploaded={firstUploaded}
+                listing={listing}
+                community={community}
+              />
+            }
+            isLiked={isLiked}
+            currentUser={currentUser}
+            packageLikeAction={packageLikeAction}
+            namespace={listing.namespace}
+            packageName={listing.name}
+          />
 
-            <CommunityPromo
-              variant="pill"
-              communityId={listing.community_identifier}
-            />
-
-            {packageMeta(lastUpdated, firstUploaded, listing)}
-
-            <Suspense>
-              <Await resolve={community}>
-                {(resolvedCommunity) =>
-                  packageBoxes(listing, resolvedCommunity)
-                }
-              </Await>
-            </Suspense>
-          </aside>
+          <CommunityPromo
+            variant="pill"
+            communityId={listing.community_identifier}
+          />
         </div>
+
+        <>
+          <Tabs>
+            <NewLink
+              key="description"
+              primitiveType="cyberstormLink"
+              linkId="Package"
+              community={listing.community_identifier}
+              namespace={listing.namespace}
+              package={listing.name}
+              aria-current={currentTab === "details"}
+              rootClasses={`tabs-item${
+                currentTab === "details" ? " tabs-item--current" : ""
+              }`}
+            >
+              Details
+            </NewLink>
+
+            <NewLink
+              key="required"
+              primitiveType="cyberstormLink"
+              linkId="PackageRequired"
+              community={listing.community_identifier}
+              namespace={listing.namespace}
+              package={listing.name}
+              aria-current={currentTab === "required"}
+              rootClasses={`tabs-item${
+                currentTab === "required" ? " tabs-item--current" : ""
+              }`}
+            >
+              Required ({listing.dependency_count})
+            </NewLink>
+
+            <NewLink
+              key="wiki"
+              primitiveType="cyberstormLink"
+              linkId="PackageWiki"
+              community={listing.community_identifier}
+              namespace={listing.namespace}
+              package={listing.name}
+              aria-current={currentTab === "wiki"}
+              rootClasses={`tabs-item${
+                currentTab === "wiki" ? " tabs-item--current" : ""
+              }`}
+            >
+              Wiki
+            </NewLink>
+
+            <NewLink
+              key="changelog"
+              primitiveType="cyberstormLink"
+              linkId="PackageChangelog"
+              community={listing.community_identifier}
+              namespace={listing.namespace}
+              package={listing.name}
+              aria-current={currentTab === "changelog"}
+              disabled={!listing.has_changelog}
+              rootClasses={`tabs-item${
+                currentTab === "changelog" ? " tabs-item--current" : ""
+              }`}
+            >
+              Changelog
+            </NewLink>
+
+            <NewLink
+              key="versions"
+              primitiveType="cyberstormLink"
+              linkId="PackageVersions"
+              community={listing.community_identifier}
+              namespace={listing.namespace}
+              package={listing.name}
+              aria-current={currentTab === "versions"}
+              rootClasses={`tabs-item${
+                currentTab === "versions" ? " tabs-item--current" : ""
+              }`}
+            >
+              Versions
+            </NewLink>
+
+            <NewLink
+              key="source"
+              primitiveType="cyberstormLink"
+              linkId="PackageSource"
+              community={listing.community_identifier}
+              namespace={listing.namespace}
+              package={listing.name}
+              aria-current={currentTab === "source"}
+              rootClasses={`tabs-item${
+                currentTab === "source" ? " tabs-item--current" : ""
+              }`}
+            >
+              Analysis
+            </NewLink>
+          </Tabs>
+
+          <div className="package-listing__content">
+            <Outlet
+              context={
+                {
+                  ...outletContext,
+                  packageDownloadUrl: listing.download_url,
+                } as PackageListingOutletContext
+              }
+            />
+          </div>
+        </>
       </section>
+
+      <aside className="package-listing-sidebar">
+        <PackageActions
+          downloadUrl={listing.download_url}
+          team={team}
+          installUrl={listing.install_url}
+          reportPackageButton={ReportPackageButton}
+          isLiked={isLiked}
+          currentUser={currentUser}
+          packageLikeAction={packageLikeAction}
+          namespace={listing.namespace}
+          packageName={listing.name}
+        />
+
+        <CommunityPromo
+          variant="pill"
+          communityId={listing.community_identifier}
+        />
+
+        {packageMeta(lastUpdated, firstUploaded, listing)}
+
+        <Suspense>
+          <Await resolve={community}>
+            {(resolvedCommunity) => packageBoxes(listing, resolvedCommunity)}
+          </Await>
+        </Suspense>
+      </aside>
 
       {ReportPackageModal}
     </>
