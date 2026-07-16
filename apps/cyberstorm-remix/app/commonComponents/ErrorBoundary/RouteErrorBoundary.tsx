@@ -5,7 +5,7 @@ import {
   isExpectedRouteError,
   toReportableError,
 } from "cyberstorm/utils/sentry";
-import { type JSX, useEffect } from "react";
+import { type JSX, useCallback, useEffect, useRef } from "react";
 import {
   isRouteErrorResponse,
   useLocation,
@@ -27,6 +27,26 @@ export function RouteErrorBoundary() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // One forced session lookup shared by the classify + redirect effects below
+  // — a 401 page would otherwise fetch /current-user twice. Forced (true)
+  // because the cached user can't be trusted on a 401: an expired session
+  // still has a stored "logged-in" user, which would misclassify the most
+  // common 401 as an auth regression. Resolves to whether the session is
+  // anonymous, or undefined when the lookup itself failed (env missing,
+  // /api unreachable) so callers degrade instead of rejecting.
+  const anonymousLookup = useRef<Promise<boolean | undefined> | null>(null);
+  const resolveAnonymous = useCallback(() => {
+    anonymousLookup.current ??= (async () => {
+      try {
+        const storedUser = await getSessionTools()?.getSessionCurrentUser(true);
+        return !storedUser?.username;
+      } catch {
+        return undefined;
+      }
+    })();
+    return anonymousLookup.current;
+  }, []);
+
   // Seeing double console logs caused by React's strictMode (that
   // *should* happen only in dev mode) makes me want to ensure any
   // rerenders don't get logged in Sentry twice.
@@ -41,18 +61,12 @@ export function RouteErrorBoundary() {
     const classifyAndReport = async () => {
       // A 401 is expected for an anonymous user (redirected to login below)
       // but an auth regression for a logged-in one — resolve the session
-      // before classifying. Other statuses don't need session context.
+      // before classifying (a failed lookup leaves anonymous undefined, so
+      // the 401 is suppressed with a heartbeat). Other statuses don't need
+      // session context.
       let anonymous: boolean | undefined;
       if (isApiError(error) && error.response.status === 401) {
-        try {
-          const storedUser =
-            await getSessionTools()?.getSessionCurrentUser(true);
-          anonymous = !storedUser?.username;
-        } catch {
-          // Session lookup failed (env missing, /api unreachable). Leave
-          // anonymous undefined: the 401 is suppressed with a heartbeat
-          // instead of surfacing an unhandled rejection here.
-        }
+        anonymous = await resolveAnonymous();
       }
       if (!active) return;
 
@@ -81,7 +95,7 @@ export function RouteErrorBoundary() {
     return () => {
       active = false;
     };
-  }, [error]);
+  }, [error, resolveAnonymous]);
 
   let statusCode: StatusCode = "???";
 
@@ -97,11 +111,12 @@ export function RouteErrorBoundary() {
 
     async function checkAuth() {
       if (statusCode === 401) {
-        const tools = getSessionTools();
-        const storedUser = await tools?.getSessionCurrentUser(true);
-        const isLoggedIn = Boolean(storedUser?.username);
+        const anonymous = await resolveAnonymous();
 
-        if (!isLoggedIn && active) {
+        // Redirect only when the session is CONFIRMED anonymous; a failed
+        // lookup (undefined) keeps the user on the error page instead of
+        // bouncing them to login while /api is flaky.
+        if (anonymous === true && active) {
           navigate(
             `/login?returnUrl=${encodeURIComponent(
               location.pathname + location.search + location.hash
@@ -119,7 +134,14 @@ export function RouteErrorBoundary() {
     return () => {
       active = false;
     };
-  }, [statusCode, location.pathname, location.search, location.hash, navigate]);
+  }, [
+    statusCode,
+    location.pathname,
+    location.search,
+    location.hash,
+    navigate,
+    resolveAnonymous,
+  ]);
 
   const errorTitle = errorTitles[statusCode] ?? "Unexpected error";
 
