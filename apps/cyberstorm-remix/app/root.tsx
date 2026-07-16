@@ -69,7 +69,7 @@ import { Seo } from "./commonComponents/Seo/Seo";
 config.autoAddCss = false;
 
 // Single full-width bottom banner between content and footer.
-const BOTTOM_ADS_ENABLED = false;
+const BOTTOM_ADS_ENABLED = true;
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
