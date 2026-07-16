@@ -164,6 +164,7 @@ export default function CommunityPackageSearch() {
       sidebarSlot={
         adsDisabled ? undefined : <SidebarAd slot={COMMUNITY_SIDEBAR_AD} />
       }
+      withDisplayControls
     />
   );
 }

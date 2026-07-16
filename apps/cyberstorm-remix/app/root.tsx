@@ -279,6 +279,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const shouldLoadConsent = adsAllowedOnRoute;
   const shouldCreateAds = adsAllowedOnRoute && !isLandingPage;
 
+  // The package search (a community's landing) opts into the content-width
+  // toggle (.layout__main--content-toggle in layout.css): 90rem by default,
+  // 120rem when the user switches it on. Other routes keep the fixed 90rem.
+  const isPackageSearchPage =
+    !!communityId &&
+    [`/c/${communityId}`, `/c/${communityId}/`].includes(location.pathname);
+
   // Tell NitroPay a new pageview happened on client-side navigation. Without
   // this an entire SPA session is one long-lived pageview on a refresh timer,
   // which depresses CPM and drives the ad CPU churn. We key on pathname AND
@@ -311,6 +318,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <style>
           {`@layer utils, colors, layout, components, overrides, theme, theme-utils, theme-colors, theme-layout, theme-components, theme-components-sizes, theme-components-colors, theme-components-miscs, nimbus, nimbus-utils, nimbus-colors, nimbus-layout, nimbus-components, nimbus-components-sizes, nimbus-components-colors, nimbus-components-layouts, nimbus-components-miscs, nimbus-overrides;`}
         </style>
+        {/* Reflect the saved display preferences before hydration so the package
+            search paints at the chosen content width and card layout with no
+            flash (see DisplayControls + layout.css + CardPackage.css). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('nimbus-content-width')==='wide')document.documentElement.dataset.contentWidth='wide';if(localStorage.getItem('nimbus-card-layout')==='list')document.documentElement.dataset.cardLayout='list';}catch(e){}",
+          }}
+        />
         <Seo />
         <Meta />
         <link
@@ -376,6 +392,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       : undefined,
                     isPackageListingWithSidebar
                       ? "layout__main--package-detail"
+                      : undefined,
+                    isPackageSearchPage
+                      ? "layout__main--content-toggle"
                       : undefined
                   )}
                 >

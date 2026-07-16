@@ -61,6 +61,11 @@
     width: 100%;
   }
 
+  /* Cards + View sit at the right of the drawer, under the full-width Sort. */
+  .package-search__drawer-sorting .display-controls {
+    align-self: flex-end;
+  }
+
   .package-search__content {
     display: flex;
     flex-direction: column;
@@ -153,9 +158,29 @@
     gap: var(--gap-sm);
     width: 100%;
 
+    /* Named container so the list CardPackage variant can react to its own width
+       (in list mode the cards are full-width, so the grid width ≈ card width).
+       See the @container package-cards rule in CardPackage.css. */
+    container: package-cards / inline-size;
+
     > .skeleton {
       height: 30rem;
     }
+  }
+
+  /* List layout: one card per row instead of the auto-fill grid. Driven by
+     html[data-card-layout="list"] (see DisplayControls + CardPackage.css). */
+  :root[data-card-layout="list"] .package-search__grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* List-variant author link: neutral by default (matching the "by" prefix),
+     cyber-green only on hover. Defined here (nimbus layer) so it wins over the
+     Link's cyber variant in theme-components; the hover green still comes from
+     that variant's --link-color-hover. */
+  :root[data-card-layout="list"] .card-package__link {
+    --link-color: var(--card-package--prefix-color);
   }
 
   /* Below ~1020px viewport (this container ≈ 58rem wide) the search input gets

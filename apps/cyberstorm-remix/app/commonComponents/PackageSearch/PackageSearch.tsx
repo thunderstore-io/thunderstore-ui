@@ -54,6 +54,7 @@ import {
   synchronizeSearchParams,
 } from "./PackageSearchLogic";
 import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
+import { DisplayControls } from "./components/DisplayControls";
 import { PackageCount } from "./components/PackageCount/PackageCount";
 import { PackageOrder } from "./components/PackageOrder";
 import { PackageOrderOptions } from "./components/packageOrderOptions";
@@ -73,6 +74,10 @@ interface Props {
   // passes its 300×250 ad here; when set, the sidebar widens to hold it (see
   // .package-search--with-sidebar-ad in PackageSearch.css).
   sidebarSlot?: ReactNode;
+  // Show the display controls — Cards (Grid/List) and View (Compact/Wide). The
+  // community search opts in; the View menu needs the layout to carry
+  // .layout__main--content-toggle (see root.tsx).
+  withDisplayControls?: boolean;
 }
 
 /**
@@ -87,6 +92,7 @@ export function PackageSearch(props: Props) {
     dapper,
     teamName,
     sidebarSlot,
+    withDisplayControls,
   } = props;
 
   const navigationType = useNavigationType();
@@ -431,6 +437,7 @@ export function PackageSearch(props: Props) {
                 )}
               />
             </div>
+            {withDisplayControls ? <DisplayControls /> : null}
           </div>
           <Drawer
             popoverId="package-search-filters-drawer"
@@ -463,6 +470,9 @@ export function PackageSearch(props: Props) {
                     "order"
                   )}
                 />
+                {/* Cards + View live on the search row on desktop; in the drawer
+                    on narrow screens so they stay reachable there too. */}
+                {withDisplayControls ? <DisplayControls /> : null}
               </div>
               <DrawerDivider />
               {filtersContent}

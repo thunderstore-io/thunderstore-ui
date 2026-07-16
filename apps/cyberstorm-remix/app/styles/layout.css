@@ -92,6 +92,23 @@
     grid-column: 1;
   }
 
+  /* The package search opts into the content-width toggle (class set by root.tsx):
+     90rem by default, 120rem when the user has switched it on. The preference is
+     stored in localStorage and reflected pre-hydration as html[data-content-width]
+     (see the inline script in root.tsx), so the width is correct on first paint —
+     no flash. Other routes keep the 90rem default.
+
+     Wide mode also drops the rail's reserved minimum (--ad-gutter-min back to just
+     the padding): the content is a fixed-max track, so it now grows to the full
+     120rem BEFORE the gutter takes anything, and the rail gets only the leftover
+     — snapped by the container query, hidden when less than a 120px unit is left.
+     So wide mode prioritizes content; the rail is a bonus when the viewport is
+     wide enough to afford both. */
+  :root[data-content-width="wide"] .layout__main--content-toggle {
+    --content-max: 120rem;
+    --ad-gutter-min: var(--container-padding);
+  }
+
   /* One side gutter reserves ad space via a stepped minimum (--ad-gutter-min):
      wider viewports reserve a larger standard ad width (see the media queries
      below); the opposite gutter is just the container padding. The content track
@@ -327,6 +344,16 @@
        mis-serve) so it can't spill past the rail and over the floating reserve.
        A real ad is measured and fits — a no-op for it. */
     overflow: hidden;
+  }
+
+  /* The community package search's rail is in the RIGHT gutter; pin it to the
+     LEFT (inner) edge so it sits beside the content and the extra gutter width
+     falls on the outer side. Package pages (--rail-left / --package-detail) have
+     the rail in the LEFT gutter, where the default right-edge pin above is
+     already the inner/content edge — so they keep the default and their rail
+     also sits beside the content. */
+  .layout__main--content-toggle .layout__ads-stack {
+    margin-inline: var(--space-8) auto;
   }
 
   /* Reveal the rail once its gutter can hold the narrowest (120px) unit, then
