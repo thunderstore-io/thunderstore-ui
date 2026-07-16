@@ -279,12 +279,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const shouldLoadConsent = adsAllowedOnRoute;
   const shouldCreateAds = adsAllowedOnRoute && !isLandingPage;
 
-  // The package search (a community's landing) opts into the content-width
-  // toggle (.layout__main--content-toggle in layout.css): 90rem by default,
-  // 120rem when the user switches it on. Other routes keep the fixed 90rem.
-  const isPackageSearchPage =
-    !!communityId &&
-    [`/c/${communityId}`, `/c/${communityId}/`].includes(location.pathname);
+  // Package-search pages all render the shared PackageSearch (a community's
+  // landing, a team's packages, a package's dependants) and get the same
+  // treatment: the content-width toggle (.layout__main--content-toggle: 90rem
+  // default, 120rem when switched on) plus a right-gutter community rail and a
+  // sidebar ad. Matched by route id; other routes keep the fixed 90rem.
+  const isPackageSearchPage = matches.some((m) =>
+    [
+      "c/tabs/PackageSearch/PackageSearch",
+      "p/team/Team",
+      "p/dependants/Dependants",
+    ].includes(m.id)
+  );
 
   // Tell NitroPay a new pageview happened on client-side navigation. Without
   // this an entire SPA session is one long-lived pageview on a refresh timer,
@@ -387,7 +393,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     shouldCreateAds ? "layout__main--ads" : undefined,
                     shouldCreateAds &&
                       isPackageDetailPage &&
-                      !isPackageListingWithSidebar
+                      !isPackageListingWithSidebar &&
+                      !isPackageSearchPage
                       ? "layout__main--rail-left"
                       : undefined,
                     isPackageListingWithSidebar
@@ -417,11 +424,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       {/* Both routes' rail tiers live here; layout.css shows only
                           the active route's fitting-height tier (data-rail-active-
                           page + each tier's data-rail-page). Package detail/listing
-                          → package rail; everything else → community rail. */}
+                          → package rail; the package searches (incl. dependants)
+                          and everything else → community rail. */}
                       <div
                         className="layout__ads-stack"
                         data-rail-active-page={
-                          isPackageDetailPage ? "package" : "community"
+                          isPackageDetailPage && !isPackageSearchPage
+                            ? "package"
+                            : "community"
                         }
                       >
                         {COMMUNITY_RAIL_SLOTS.map((slot) => (

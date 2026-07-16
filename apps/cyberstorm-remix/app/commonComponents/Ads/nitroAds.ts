@@ -358,27 +358,29 @@ export const BOTTOM_AD_SLOTS: RenderedAdSlot[] = [
   }),
 ];
 
-// Page-scoped 300×250 rectangles rendered by <SidebarAd>: one at the top of the
-// community package-search filter sidebar, one under the package-listing sidebar.
-// Unlike the layout slots above — whose containers live in the root layout and
-// are created once by createAllNimbusAds — these containers only exist on their
-// page, so <SidebarAd> creates them per-mount (awaiting whenNitroAdsReady) and
-// frees them on unmount. Both show the house fallback while unfilled. The coarse
-// mediaQuery keeps phones (where the sidebar is hidden) out of the auction; the
-// CSS visibility + renderVisibleOnly are the precise gate.
-export const COMMUNITY_SIDEBAR_AD: RenderedAdSlot = displaySlot({
-  containerId: `${AD_PREFIX}-community-sidebar-300x250`,
-  sizeVariant: "display-300-250",
-  sizes: SIDEBAR_AD_SIZES,
-  mediaQuery: "(min-width: 768px)",
-});
+// Page-scoped 300×250 rectangles rendered by <SidebarAd>: one at the top of each
+// package-search filter sidebar (community landing, team packages, dependants)
+// and one under the package-listing sidebar. Distinct ids per page so each is
+// configured/reported separately in NitroPay. Unlike the layout slots above —
+// whose containers live in the root layout and are created once by
+// createAllNimbusAds — these containers only exist on their page, so <SidebarAd>
+// creates them per-mount (awaiting whenNitroAdsReady) and frees them on unmount.
+// Both show the house fallback while unfilled. The coarse mediaQuery keeps phones
+// (where the sidebar is hidden) out of the auction; the CSS visibility +
+// renderVisibleOnly are the precise gate.
+function sidebarAd(page: string): RenderedAdSlot {
+  return displaySlot({
+    containerId: `${AD_PREFIX}-${page}-sidebar-300x250`,
+    sizeVariant: "display-300-250",
+    sizes: SIDEBAR_AD_SIZES,
+    mediaQuery: "(min-width: 768px)",
+  });
+}
 
-export const PACKAGE_SIDEBAR_AD: RenderedAdSlot = displaySlot({
-  containerId: `${AD_PREFIX}-package-sidebar-300x250`,
-  sizeVariant: "display-300-250",
-  sizes: SIDEBAR_AD_SIZES,
-  mediaQuery: "(min-width: 768px)",
-});
+export const COMMUNITY_SIDEBAR_AD: RenderedAdSlot = sidebarAd("community");
+export const PACKAGE_SIDEBAR_AD: RenderedAdSlot = sidebarAd("package");
+export const TEAM_SIDEBAR_AD: RenderedAdSlot = sidebarAd("team");
+export const DEPENDANTS_SIDEBAR_AD: RenderedAdSlot = sidebarAd("dependants");
 
 // --- Lifecycle (module-scope so refs survive AdsInit unmount/remount) ---
 

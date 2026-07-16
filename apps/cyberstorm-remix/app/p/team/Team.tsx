@@ -1,9 +1,14 @@
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
+import { SidebarAd } from "~/commonComponents/Ads/SidebarAd";
+import { TEAM_SIDEBAR_AD } from "~/commonComponents/Ads/nitroAds";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -163,6 +168,11 @@ export default function Team() {
 
   const outletContext = useOutletContext() as OutletContextShape;
 
+  // VITE_DISABLE_ADS (the local / test kill switch) is the only ad gate on this
+  // route; when off we pass no slot, keeping the sidebar at its default width.
+  const adsDisabled =
+    getPublicEnvVariables(["VITE_DISABLE_ADS"]).VITE_DISABLE_ADS === "true";
+
   return (
     <Page as="section" rootClasses="team">
       <PageHeader headingLevel="1" headingSize="2">
@@ -175,6 +185,10 @@ export default function Team() {
         currentUser={outletContext.currentUser}
         dapper={outletContext.dapper}
         teamName={teamId}
+        sidebarSlot={
+          adsDisabled ? undefined : <SidebarAd slot={TEAM_SIDEBAR_AD} />
+        }
+        withDisplayControls
       />
     </Page>
   );
