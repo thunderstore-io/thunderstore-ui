@@ -494,7 +494,11 @@ function createNimbusAd(
           return;
         }
         const resolved = Array.isArray(ad) ? ad[0] : ad;
-        if (resolved) {
+        // A page-scoped slot may have unmounted while creation was in flight
+        // (removePageScopedAd drops refs without bumping the generation);
+        // registering then would leave a stale ref for onNavigate to churn
+        // against. Only register while the container div is still mounted.
+        if (resolved && document.getElementById(containerId)) {
           adRegistry.set(containerId, resolved);
         }
       })
