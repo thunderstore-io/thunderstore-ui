@@ -420,6 +420,18 @@ export function PackageSearch(props: Props) {
             type="search"
             rootClasses="package-search__search"
           />
+          <div className="package-search__listing-actions">
+            <div className="package-search__sorting">
+              <PackageOrder
+                order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
+                setOrder={setParamsBlobValue(
+                  setSearchParamsBlob,
+                  searchParamsBlob,
+                  "order"
+                )}
+              />
+            </div>
+          </div>
           <Drawer
             popoverId="package-search-filters-drawer"
             headerContent={
@@ -458,6 +470,20 @@ export function PackageSearch(props: Props) {
           </Drawer>
         </div>
         <div className="package-search__search-params">
+          <div className="package-search__results">
+            <Suspense fallback={<SkeletonBox />}>
+              {/* Silent on failure — the grid Await owns the visible error. */}
+              <Await resolve={listings} errorElement={<></>}>
+                {(resolvedValue) => (
+                  <PackageCount
+                    page={currentPage}
+                    pageSize={PER_PAGE}
+                    totalCount={resolvedValue.count}
+                  />
+                )}
+              </Await>
+            </Suspense>
+          </div>
           <CategoryTagCloud
             searchValue={searchParamsBlob.search}
             setSearchValue={setParamsBlobValue(
@@ -476,34 +502,6 @@ export function PackageSearch(props: Props) {
             rootClasses="package-search__tags"
             clearAll={clearAll(setSearchParamsBlob, searchParamsBlob)}
           />
-          <div className="package-search__tools">
-            <div className="package-search__listing-actions">
-              <div className="package-search__sorting">
-                <PackageOrder
-                  order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
-                  setOrder={setParamsBlobValue(
-                    setSearchParamsBlob,
-                    searchParamsBlob,
-                    "order"
-                  )}
-                />
-              </div>
-            </div>
-            <div className="package-search__results">
-              <Suspense fallback={<SkeletonBox />}>
-                {/* Silent on failure — the grid Await owns the visible error. */}
-                <Await resolve={listings} errorElement={<></>}>
-                  {(resolvedValue) => (
-                    <PackageCount
-                      page={currentPage}
-                      pageSize={PER_PAGE}
-                      totalCount={resolvedValue.count}
-                    />
-                  )}
-                </Await>
-              </Suspense>
-            </div>
-          </div>
         </div>
         <div className="package-search__packages">
           <Suspense fallback={<PackageSearchPackagesSkeleton />}>
