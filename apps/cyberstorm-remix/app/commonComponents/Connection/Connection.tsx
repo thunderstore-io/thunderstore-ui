@@ -41,7 +41,10 @@ export function Connection(props: ConnectionProps) {
           if (connection) {
             props.disconnectFunction(identifier);
           } else {
-            window.open(connectionLink);
+            // noopener: window.open gives the opened page a window.opener
+            // back-reference by default (reverse tabnabbing), and unlike
+            // target="_blank" anchors, browsers do NOT imply noopener here.
+            window.open(connectionLink, "_blank", "noopener,noreferrer");
           }
         }}
       />
