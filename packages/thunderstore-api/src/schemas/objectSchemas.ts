@@ -131,6 +131,16 @@ export const packageListingSchema = z.object({
   namespace: z.string().min(1),
   rating_count: z.number().int(),
   size: z.number().int(),
+  // Optional for now: absent until the backend serializer change (ac2c470c) is
+  // deployed, and the frontend deploys first. The list CardPackage variant
+  // renders the version + Install/Download only when present.
+  // TODO(backend-listing-fields): once the backend exposing
+  // latest_version_number / install_url / download_url on the community listing
+  // endpoint is live, make these required (drop `.optional()`). Matching notes
+  // in @thunderstore/dapper's PackageListing type and CardPackage.tsx.
+  latest_version_number: z.string().optional(),
+  install_url: z.string().optional(),
+  download_url: z.string().optional(),
 });
 
 export const packageListingStatusSchema = z.object({
