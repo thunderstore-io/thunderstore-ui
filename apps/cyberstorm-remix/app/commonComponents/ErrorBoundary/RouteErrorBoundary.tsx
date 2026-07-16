@@ -44,8 +44,15 @@ export function RouteErrorBoundary() {
       // before classifying. Other statuses don't need session context.
       let anonymous: boolean | undefined;
       if (isApiError(error) && error.response.status === 401) {
-        const storedUser = await getSessionTools()?.getSessionCurrentUser(true);
-        anonymous = !storedUser?.username;
+        try {
+          const storedUser =
+            await getSessionTools()?.getSessionCurrentUser(true);
+          anonymous = !storedUser?.username;
+        } catch {
+          // Session lookup failed (env missing, /api unreachable). Leave
+          // anonymous undefined: the 401 is suppressed with a heartbeat
+          // instead of surfacing an unhandled rejection here.
+        }
       }
       if (!active) return;
 

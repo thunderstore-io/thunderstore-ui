@@ -14,6 +14,8 @@ import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { HydratedRouter } from "react-router/dom";
 
+import { isApiError } from "@thunderstore/thunderstore-api";
+
 const publicEnvVariables = getPublicEnvVariables([
   "VITE_SITE_URL",
   "VITE_BETA_SITE_URL",
@@ -99,6 +101,12 @@ startTransition(() => {
           // sees the same loader errors, resolves the session (reporting
           // logged-in 401s) and emits the suppressed-4xx heartbeat.
           if (isExpectedRouteError(error)) return;
+          // ALL 4xx ApiErrors are boundary-owned: the boundary captures the
+          // reported ones with a per-status fingerprint, and capturing here
+          // too would double-bill every storm across two issues (Sentry's
+          // Dedupe can't match events whose fingerprints differ). 5xx and
+          // non-HTTP errors still report from both gates and dedupe cleanly.
+          if (isApiError(error) && error.response.status < 500) return;
           Sentry.sentryOnError(error, info);
         }}
       />
