@@ -10,7 +10,7 @@ import {
 
 import { type getPrivateListing } from "../../listingUtils";
 import { ManagementTools } from "./ManagementTools";
-import { InternalNotes, RejectionReason } from "./ReviewInformation";
+import { RejectionReason } from "./ReviewInformation";
 
 type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
 type Permissions = Awaited<ReturnType<typeof fetchPackagePermissions>>;
@@ -37,10 +37,7 @@ export function PackageListingManagement({
     <Suspense>
       <Await resolve={listingStatus}>
         {(resolvedListingStatus) => (
-          <>
-            <RejectionReason status={resolvedListingStatus} />
-            <InternalNotes status={resolvedListingStatus} />
-          </>
+          <RejectionReason status={resolvedListingStatus} />
         )}
       </Await>
 

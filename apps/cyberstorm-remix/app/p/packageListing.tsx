@@ -62,6 +62,7 @@ import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 import type { Route } from "./+types/packageListing";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageListingManagement } from "./components/PackageListing/PackageListingManagement";
+import { InternalNotes } from "./components/PackageListing/ReviewInformation";
 import {
   getPackageListingStatusWhenNeeded,
   getPrivateListing,
@@ -362,6 +363,13 @@ export default function PackageListing() {
               <CommunityPackageListingHeader
                 resolvedCommunity={resolvedCommunity}
               />
+            )}
+          </Await>
+        </Suspense>
+        <Suspense fallback={null}>
+          <Await resolve={listingStatus}>
+            {(resolvedListingStatus) => (
+              <InternalNotes status={resolvedListingStatus} />
             )}
           </Await>
         </Suspense>
