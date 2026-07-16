@@ -75,19 +75,19 @@
     width: 100%;
   }
 
+  /* One combined dashed box of icon-only actions (the Island "special" variant
+     supplies the flex row + border + background). fit-content so the box hugs
+     its buttons; start-aligned to line up with the sidebar below. */
   .package-listing-management-tools {
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
     box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
+    width: fit-content;
     max-width: 100%;
   }
 
-  .package-listing-management-tools .island[data-variant="special"] {
-    flex: 0 1 auto;
-    min-width: 0;
-    max-width: 100%;
+  /* No empty dashed box when the user has no applicable action. */
+  .package-listing-management-tools:empty {
+    display: none;
   }
 
   .package-listing-sidebar__categories,

@@ -65,11 +65,15 @@ export function ManagePackageForm({
       open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
-        <NewButton csSize="small">
+        <NewButton
+          csSize="small"
+          csModifiers={["only-icon"]}
+          aria-label="Manage Package"
+          tooltipText="Manage Package"
+        >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faCog} />
           </NewIcon>
-          Manage Package
         </NewButton>
       }
       titleContent="Manage Package"
