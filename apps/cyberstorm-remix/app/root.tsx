@@ -255,18 +255,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // Kill switch for local development and tests (set VITE_DISABLE_ADS=true).
   const adsDisabled = resolvedEnvVars?.VITE_DISABLE_ADS === "true";
   // Routes where the ad surface is allowed at all. The NitroPay script (and its
-  // consent banner) loads on these; account/upload/tools routes get neither.
-  const adsAllowedOnRoute = adsDisabled
-    ? false
-    : location.pathname.startsWith("/teams")
-      ? false
-      : location.pathname.startsWith("/settings")
-        ? false
-        : location.pathname.startsWith("/package/create")
-          ? false
-          : location.pathname.startsWith("/tools")
-            ? false
-            : true;
+  // consent banner) loads on these; account / login / upload / tools routes get
+  // neither. (/auth is backend-proxied, so the app never renders it.)
+  const adsAllowedOnRoute =
+    !adsDisabled &&
+    !["/teams", "/settings", "/package/create", "/tools", "/login"].some(
+      (prefix) => location.pathname.startsWith(prefix)
+    );
 
   // The landing pages (community list + root) load the consent banner but show
   // NO ads, to keep the landing uncluttered. Individual communities live under
