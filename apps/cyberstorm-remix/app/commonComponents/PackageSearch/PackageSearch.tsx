@@ -123,7 +123,7 @@ export function PackageSearch(props: Props) {
       setSortedSections(sections);
       if (sections.length !== 0) {
         setSearchParamsBlob((prev) =>
-          prev.section === "" ? { ...prev, section: sections[0].uuid } : prev
+          prev.section === "" ? { ...prev, section: sections[0].slug } : prev
         );
       }
       setCategories(
@@ -148,12 +148,12 @@ export function PackageSearch(props: Props) {
     categories
   );
 
-  const updateCatSelection = (catId: string, v: TRISTATE) => {
+  const updateCatSelection = (catSlug: string, v: TRISTATE) => {
     setParamsBlobCategories(
       setSearchParamsBlob,
       searchParamsBlob,
       parsedCategories.map((uc) => {
-        if (uc.id === catId) {
+        if (uc.slug === catSlug) {
           return {
             ...uc,
             selection: v,
@@ -169,11 +169,11 @@ export function PackageSearch(props: Props) {
       state: c.selection,
       setStateFunc: (v: boolean | TRISTATE) =>
         updateCatSelection(
-          c.id,
+          c.slug,
           typeof v === "string" ? v : v ? "include" : "off"
         ),
       label: c.name,
-      value: c.id,
+      value: c.slug,
     };
   });
   // Categories end
@@ -315,7 +315,7 @@ export function PackageSearch(props: Props) {
             selected={
               searchParamsBlob.section === "" || sortedSections.length === 0
                 ? sortedSections.length > 0
-                  ? sortedSections[0].uuid
+                  ? sortedSections[0].slug
                   : "all"
                 : searchParamsBlob.section
             }

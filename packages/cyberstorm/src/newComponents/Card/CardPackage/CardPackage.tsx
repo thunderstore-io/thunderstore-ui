@@ -67,11 +67,13 @@ export function CardPackage(props: Props) {
   const tags = (
     <div className="card-package__tags">
       {packageData.categories.length
-        ? packageData.categories.map((c, index) => (
+        ? packageData.categories.map((c) => (
             <NewTag
               csMode="link"
-              href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
-              key={`category_${c}_${index}`}
+              href={`/c/${
+                packageData.community_identifier
+              }/?includedCategories=${encodeURIComponent(c.slug)}`}
+              key={`category_${c.slug}`}
               csVariant="primary"
               csSize="xsmall"
               csModifiers={["dark", "hoverable"]}
