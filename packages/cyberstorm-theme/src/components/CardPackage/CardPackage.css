@@ -1,7 +1,13 @@
 @layer theme-components {
   .card-package {
     --card-package-border-radius: var(--radius-md);
-    --card-package-transition: ease-out var(--animation-duration-xs);
+
+    /* Only the hover properties transition. A bare "ease-out <dur>" resolves to
+       `transition: all`, which animates the card's size/layout when the Cards
+       mode (data-card-layout) flips grid⇄list — an unwanted reflow animation. */
+    --card-package-transition: background-color var(--animation-duration-xs)
+        ease-out,
+      box-shadow var(--animation-duration-xs) ease-out;
     --card-package-focus-outline: 0.2rem solid var(--color-cyber-green-5);
     --card-package-focus-outline-offset: var(--space-8);
     --card-package-background-color: var(--color-surface-a4);

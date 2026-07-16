@@ -1,6 +1,7 @@
 import {
   faBan,
   faClockRotateLeft,
+  faCodeBranch,
   faDownload,
   faThumbTack,
   faThumbsUp,
@@ -18,12 +19,14 @@ import { type PackageListing } from "@thunderstore/dapper/types";
 
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
+import { ThunderstoreLogo } from "../../../svg/svg";
 import {
   classnames,
   componentClasses,
   formatInteger,
   formatToDisplayName,
 } from "../../../utils/utils";
+import { Button as NewButton } from "../../Button/Button";
 import { Icon as NewIcon } from "../../Icon/Icon";
 import { Image } from "../../Image/Image";
 import { Link as NewLink } from "../../Link/Link";
@@ -65,6 +68,39 @@ export function CardPackage(props: Props) {
   const hasImageTags =
     packageData.is_pinned || packageData.is_nsfw || packageData.is_deprecated;
 
+  // Pinned / NSFW / Deprecated badges. Grid mode overlays them on the image;
+  // list mode shows them inline next to the title (see CardPackage.css). The
+  // layout is chosen purely by CSS from html[data-card-layout], so both
+  // placements sit in the DOM and one is hidden.
+  const renderBadges = () => (
+    <>
+      {packageData.is_pinned ? (
+        <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faThumbTack} />
+          </NewIcon>
+          Pinned
+        </NewTag>
+      ) : null}
+      {packageData.is_nsfw ? (
+        <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faLips} />
+          </NewIcon>
+          NSFW
+        </NewTag>
+      ) : null}
+      {packageData.is_deprecated ? (
+        <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faWarning} />
+          </NewIcon>
+          Deprecated
+        </NewTag>
+      ) : null}
+    </>
+  );
+
   return (
     <div
       className={classnames(
@@ -86,32 +122,7 @@ export function CardPackage(props: Props) {
         rootClasses="card-package__media"
       >
         {hasImageTags ? (
-          <div className="card-package__image-tags">
-            {packageData.is_pinned ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faThumbTack} />
-                </NewIcon>
-                Pinned
-              </NewTag>
-            ) : null}
-            {packageData.is_nsfw ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faLips} />
-                </NewIcon>
-                NSFW
-              </NewTag>
-            ) : null}
-            {packageData.is_deprecated ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faWarning} />
-                </NewIcon>
-                Deprecated
-              </NewTag>
-            ) : null}
-          </div>
+          <div className="card-package__image-tags">{renderBadges()}</div>
         ) : null}
         <Image
           src={packageData.icon_url}
@@ -125,17 +136,22 @@ export function CardPackage(props: Props) {
 
       <div className="card-package__content">
         <div className="card-package__info">
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Package"
-            community={packageData.community_identifier}
-            namespace={packageData.namespace}
-            package={packageData.name}
-            rootClasses="card-package__title"
-            title={formatToDisplayName(packageData.name)}
-          >
-            {formatToDisplayName(packageData.name)}
-          </NewLink>
+          <div className="card-package__heading">
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="Package"
+              community={packageData.community_identifier}
+              namespace={packageData.namespace}
+              package={packageData.name}
+              rootClasses="card-package__title"
+              title={formatToDisplayName(packageData.name)}
+            >
+              {formatToDisplayName(packageData.name)}
+            </NewLink>
+            {hasImageTags ? (
+              <div className="card-package__badges">{renderBadges()}</div>
+            ) : null}
+          </div>
 
           <div className="card-package__author">
             <span className="card-package__prefix">by</span>
@@ -210,6 +226,16 @@ export function CardPackage(props: Props) {
                 {formatInteger(packageData.rating_count)}
               </NewMetaItem>
             </TooltipWrapper>
+            {/* Latest version — list variant only (hidden in grid via CSS), and
+                only when the backend supplies it (see PackageListing). */}
+            {packageData.latest_version_number ? (
+              <NewMetaItem csSize="12" rootClasses="card-package__version">
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faCodeBranch} />
+                </NewIcon>
+                {packageData.latest_version_number}
+              </NewMetaItem>
+            ) : null}
           </div>
           <TooltipWrapper tooltipText={tooltipText}>
             <span className="card-package__updated" aria-label="Last Updated">
@@ -225,6 +251,45 @@ export function CardPackage(props: Props) {
           </TooltipWrapper>
         </div>
       </div>
+
+      {/* Install / Download — list variant only (hidden in grid, revealed on
+          hover via CSS). Rendered only when the backend supplies the URLs, so
+          the card still works before the backend deploys those fields — see the
+          TODO(backend-listing-fields) note on PackageListing. */}
+      {packageData.install_url || packageData.download_url ? (
+        <div className="card-package__actions">
+          {packageData.install_url ? (
+            <NewButton
+              primitiveType="link"
+              href={packageData.install_url}
+              csVariant="accent"
+              csSize="small"
+              rootClasses="card-package__install"
+            >
+              <NewIcon csMode="inline">
+                <ThunderstoreLogo />
+              </NewIcon>
+              Install
+            </NewButton>
+          ) : null}
+          {packageData.download_url ? (
+            <NewButton
+              primitiveType="link"
+              href={packageData.download_url}
+              csVariant="secondary"
+              csSize="small"
+              aria-label="Download"
+              rootClasses="card-package__download"
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faDownload} />
+              </NewIcon>
+              {/* Hidden (icon-only) when the card is narrow — see CardPackage.css. */}
+              <span className="card-package__download-label">Download</span>
+            </NewButton>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }
