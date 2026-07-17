@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/react-router";
+
 import type { AdContainerSizeVariant } from "@thunderstore/cyberstorm";
 
 /**
@@ -493,6 +495,33 @@ function fittingSizes(containerId: string, candidates: string[][]): string[][] {
   return fit.length > 0 ? fit : candidates;
 }
 
+// Async ad-lifecycle errors (createAd rejecting/throwing, onNavigate throwing)
+// can fire for every ad on every pageview if something breaks — and some are
+// simply expected (adblock blocks the script/auction). So, unlike the render
+// error boundaries (which fire at most once per mount and report in full), these
+// are heavily sampled: ~1 in 1000 leaves a grouped, warning-level Sentry trace,
+// so a real spike surfaces as one issue per placement+phase without flooding on
+// the expected background rate. Prod only. The phase is appended to the
+// fingerprint so these never merge with the boundaries' ["ad-container",
+// placement] render issues (see AdErrorBoundary).
+const AD_ERROR_SAMPLE_RATE = 0.001;
+
+function reportAdLifecycleError(
+  error: unknown,
+  containerId: string,
+  phase: "create" | "navigate"
+): void {
+  if (!import.meta.env.PROD || Math.random() >= AD_ERROR_SAMPLE_RATE) {
+    return;
+  }
+  const placement = adPlacementKey(containerId);
+  Sentry.captureException(error, {
+    level: "warning",
+    fingerprint: ["ad-container", placement, phase],
+    tags: { ad_placement: placement, ad_phase: phase },
+  });
+}
+
 function createNimbusAd(
   nitroAds: NitroAds,
   containerId: string,
@@ -528,11 +557,14 @@ function createNimbusAd(
           adRegistry.set(containerId, resolved);
         }
       })
-      .catch(() => {
-        // Creation failed (e.g. blocked); nothing to register.
+      .catch((error: unknown) => {
+        // Creation failed (adblock/network) or a bug in the resolve handler
+        // above; nothing to register. Sampled Sentry trace only.
+        reportAdLifecycleError(error, containerId, "create");
       });
-  } catch {
-    // createAd threw synchronously; nothing to register.
+  } catch (error) {
+    // createAd threw synchronously; nothing to register. Sampled trace only.
+    reportAdLifecycleError(error, containerId, "create");
   }
 }
 
@@ -648,8 +680,9 @@ export function onNavigateNimbusAds(): void {
     try {
       ad.onNavigate();
       issued = true;
-    } catch {
-      // Slot may be mid-initialization; ignore.
+    } catch (error) {
+      // Slot may be mid-initialization; report a sampled trace and move on.
+      reportAdLifecycleError(error, id, "navigate");
     }
   });
   if (issued) {
