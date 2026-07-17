@@ -130,6 +130,7 @@ export const PackageActions = memo(function PackageActions(
                 Boolean(currentUser?.username)
               )
             }
+            aria-label={isLiked ? "Unlike" : "Like"}
             tooltipText="Like"
             csVariant={isLiked ? "primary" : "secondary"}
             csSize="big"

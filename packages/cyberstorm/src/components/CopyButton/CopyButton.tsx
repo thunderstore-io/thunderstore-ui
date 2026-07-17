@@ -30,6 +30,7 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
           onMouseOut={() => setIsTooltipOpen(false)}
           onBlur={() => {}}
           onFocus={() => {}}
+          aria-label={wasRecentlyCopied ? "Copied" : "Copy"}
           className="copy-button"
           ref={forwardedRef}
           {...forwardedProps}

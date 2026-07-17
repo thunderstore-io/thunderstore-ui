@@ -7,6 +7,7 @@ export function ReportPackageButton(props: { onClick: () => void }) {
   return (
     <NewButton
       onClick={props.onClick}
+      aria-label="Report Package"
       tooltipText="Report Package"
       csVariant="secondary"
       csModifiers={["only-icon"]}
