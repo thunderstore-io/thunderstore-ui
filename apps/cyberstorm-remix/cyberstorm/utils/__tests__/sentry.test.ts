@@ -317,6 +317,132 @@ describe("utils.sentry.beforeSend", () => {
   });
 });
 
+describe("utils.sentry.beforeSend proxied ad-script + browser-internal noise", () => {
+  // Reconstructed from real production Sentry events. Ad scripts are proxied
+  // through our own origin, so their frames carry host-less paths — which is why
+  // several leaked past the host-based denyUrls.
+
+  it("#1 drops the Google IMA ima3.js cross-origin SecurityError", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "SecurityError",
+            value:
+              "Failed to read a named property 'performance' from 'Window': An attempt was made to break through the security policy of the user agent.",
+            stacktrace: { frames: [{ filename: "/js/sdkloader/ima3.js" }] },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("#3 drops the Freestar ftUtils.js TypeError", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Cannot read properties of null (reading 'document')",
+            stacktrace: {
+              frames: [
+                { filename: "/ftUtils.js" },
+                { filename: "/assets/entry.client-C6mKbqym.js" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("#4 drops the adloox /api/init NS_ERROR (proxied, host-less path)", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "NS_ERROR_NOT_INITIALIZED",
+            value: "",
+            stacktrace: {
+              frames: [
+                { filename: "/api/init-6845t8qo4yd8s4f4if8a.js" },
+                { filename: "/assets/entry.client-C6mKbqym.js" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("#5 drops the /serve/load.js NS_ERROR (proxied, host-less path)", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "NS_ERROR_NOT_INITIALIZED",
+            value: "",
+            stacktrace: {
+              frames: [
+                { filename: "/serve/load.js" },
+                { filename: "/assets/entry.client-C6mKbqym.js" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("#2 keeps the React removeChild NotFoundError (prevented by hardenDom, not beforeSend)", () => {
+    // A genuine React reconciliation signature — must NOT be blanket-dropped.
+    // hardenDomAgainstTranslation (entry.client) neutralises the extension/
+    // translator DOM mutation that triggers it, so it should stop occurring once
+    // 8.28.0 ships; if one still slips through, beforeSend passes it on.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "NotFoundError",
+            value:
+              "Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.",
+            stacktrace: {
+              frames: [
+                { filename: "/assets/PackageSearch-DjQLx51N.js" },
+                { filename: "/assets/index-Xg5WbocQ.js" },
+              ],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
+  it("keeps a genuine same-origin SecurityError (not cross-origin)", () => {
+    // Guard: only cross-origin / security-policy SecurityErrors are ad noise. A
+    // real same-origin SecurityError from our code must still report.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "SecurityError",
+            value: "The operation is insecure.",
+            stacktrace: {
+              frames: [{ filename: "/assets/entry.client-C6mKbqym.js" }],
+            },
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+});
+
 describe("utils.sentry.isExpectedRouteError", () => {
   // Matches the shape react-router's isRouteErrorResponse checks for,
   // i.e. what getInternalRouterError / thrown Responses produce.
