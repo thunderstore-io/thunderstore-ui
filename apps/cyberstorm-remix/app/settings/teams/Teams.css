@@ -18,13 +18,6 @@
     font-weight: var(--font-weight-bold);
   }
 
-  /* The trigger sits alone in the FormSection content grid, whose items
-     justify-self: stretch by default — keep it hugging its content (as on the
-     live site) instead of spanning the whole column. */
-  .create-team-trigger {
-    justify-self: start;
-  }
-
   .create-team-form__body {
     display: flex;
     flex-direction: column;

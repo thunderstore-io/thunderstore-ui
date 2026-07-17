@@ -264,11 +264,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
       csSize="small"
       contentClasses="create-team-form__body"
       trigger={
-        <NewButton
-          popoverTarget="teamsCreateTeam"
-          popoverTargetAction="show"
-          rootClasses="create-team-trigger"
-        >
+        <NewButton popoverTarget="teamsCreateTeam" popoverTargetAction="show">
           Create Team
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faPlus} />

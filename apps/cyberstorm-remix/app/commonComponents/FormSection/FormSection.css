@@ -42,6 +42,11 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+
+    /* Hug the header's children (its title text + the metaExtra action button)
+       to the start instead of stretching them to full width — without this an
+       action like "Create Team" / "Add Member" spans the whole column. */
+    align-items: flex-start;
   }
 
   .form-section__header-texts {

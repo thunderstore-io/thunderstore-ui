@@ -49,6 +49,9 @@
   }
 
   .team-profile__save {
-    align-self: flex-end;
+    /* The content is a grid, so use justify-self (inline axis) to right-align +
+       shrink the button to its content; align-self here would only move it on
+       the block axis and leave it spanning the column. */
+    justify-self: end;
   }
 }
