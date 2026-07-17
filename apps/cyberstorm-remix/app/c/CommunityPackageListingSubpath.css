@@ -3,11 +3,18 @@
     gap: var(--gap-xl);
   }
 
-  .community__header--compact {
+  /* Chain the base class (specificity 0-2-0) so these compact overrides beat the
+     base .community__header / .community__background (0-1-0) regardless of CSS
+     bundle order. Both live in @layer nimbus-layout, so equal-specificity rules
+     are decided by source order — and package pages now import this file in a
+     different order than the community layout did, which let the base win (the
+     banner rendered at the full 12rem / aspect 4:1 / opacity 0.8 instead of the
+     compact 6rem / 8:1 / opacity 0.3). */
+  .community__header.community__header--compact {
     grid-template-rows: auto;
   }
 
-  .community__background--packagePage {
+  .community__background.community__background--packagePage {
     --community-hero-max-height: 6rem;
     --community-hero-aspect-ratio: 8 / 1;
 
