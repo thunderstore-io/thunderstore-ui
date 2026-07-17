@@ -1,0 +1,17 @@
+@layer nimbus-components {
+  .community-alerts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    align-self: stretch;
+    width: 100%;
+  }
+
+  /* The community page goes full-bleed on narrow viewports; inset the alerts
+     from the screen edges there, matching CommunityPromo's bar. */
+  @media (width <= 48rem) {
+    .community-alerts {
+      margin: 0 var(--gap-md);
+    }
+  }
+}

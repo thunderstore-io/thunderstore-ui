@@ -7,6 +7,10 @@ import {
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CommunityAlerts,
+  getCommunityAlerts,
+} from "app/commonComponents/CommunityAlerts/CommunityAlerts";
+import {
   CommunityPromo,
   communityHasPromo,
 } from "app/commonComponents/CommunityPromo/CommunityPromo";
@@ -253,14 +257,21 @@ function CommunityMainPage({
 }) {
   const communityId = useParams().communityId;
   const showCommunityPromo = communityHasPromo(communityId);
+  // Alerts are keyed off the community id (known at SSR), so this is stable
+  // across server and client — the `--with-alerts` row and the rendering always
+  // agree.
+  const alerts = getCommunityAlerts(communityId);
+  const hasAlerts = alerts.length > 0;
 
   return (
     <Page
       rootClasses={classnames(
         "community",
-        showCommunityPromo ? "community--with-promo" : null
+        showCommunityPromo ? "community--with-promo" : null,
+        hasAlerts ? "community--with-alerts" : null
       )}
     >
+      {hasAlerts ? <CommunityAlerts alerts={alerts} /> : null}
       <Suspense fallback={<CommunityMainHeaderSkeleton />}>
         <Await resolve={community}>
           {(resolvedCommunity) => (
