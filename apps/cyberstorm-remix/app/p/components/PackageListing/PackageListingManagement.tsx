@@ -10,7 +10,6 @@ import {
 
 import { type getPrivateListing } from "../../listingUtils";
 import { ManagementTools } from "./ManagementTools";
-import { RejectionReason } from "./ReviewInformation";
 
 type Listing = NonNullable<Awaited<ReturnType<typeof getPrivateListing>>>;
 type Permissions = Awaited<ReturnType<typeof fetchPackagePermissions>>;
@@ -35,12 +34,6 @@ export function PackageListingManagement({
 }: PackageListingManagementProps) {
   return (
     <Suspense>
-      <Await resolve={listingStatus}>
-        {(resolvedListingStatus) => (
-          <RejectionReason status={resolvedListingStatus} />
-        )}
-      </Await>
-
       <Await resolve={permissions}>
         {(resolvedPermissions) =>
           !resolvedPermissions ? null : (

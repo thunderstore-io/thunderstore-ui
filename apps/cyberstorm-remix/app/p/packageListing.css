@@ -90,8 +90,7 @@
     display: none;
   }
 
-  .package-listing-sidebar__categories,
-  .review-information-card {
+  .package-listing-sidebar__categories {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
@@ -100,61 +99,80 @@
     background-color: var(--color-surface-default);
   }
 
-  .review-information-card--danger {
-    background-color: var(--color-accent-red-5);
-  }
-
-  .review-information-card__text {
-    font: inherit;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-  }
-
-  /* Banner cell is the positioning context for the internal-notes overlay. */
+  /* Banner cell is the positioning context for the banner-note overlay. */
   .package-listing__banner {
     position: relative;
   }
 
-  .package-listing__internal-notes {
+  /* The rejection reason and the mods-only internal notes render as collapsible
+     cards overlaid on the community banner (rejection first), so neither takes
+     sidebar space nor shifts the layout. */
+  .package-listing__banner-notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: flex-start;
+  }
+
+  .package-listing__banner-notes:empty {
+    display: none;
+  }
+
+  .package-listing__banner-note {
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
     box-sizing: border-box;
+    width: fit-content;
+    max-width: min(28rem, 100%);
     padding: var(--space-12);
     border-radius: var(--radius-md);
     background-color: var(--color-surface-1);
   }
 
-  /* When the community has a banner, overlay the notes on it and clamp them to
-     the banner's height; when expanded they grow beyond it (over the content
-     below) without reflowing the page since the overlay is out of flow. Without
-     a banner there's nothing to overlay, so the notes stay in normal flow. */
+  .package-listing__banner-note--danger {
+    background-color: var(--color-accent-red-5);
+  }
+
+  /* The cards sit side by side, overlaid on the banner and each clamped to its
+     height; expanding one grows it over the content below without reflowing the
+     page since the overlay is out of flow. Without a banner there's nothing to
+     overlay, so the cards stay in normal flow. They never wrap here (a wrapped
+     second card would stack below the short banner and cover the package
+     header) — instead they shrink side by side until the mobile breakpoint
+     below drops them into a column. */
   .package-listing__banner:has(.community__header--compact)
-    .package-listing__internal-notes {
+    .package-listing__banner-notes {
     position: absolute;
     inset: var(--space-8) auto auto var(--space-8);
     z-index: 1;
-    width: fit-content;
-    max-width: min(32rem, calc(100% - 2 * var(--space-8)));
-    max-height: calc(100% - 2 * var(--space-8));
+    flex-wrap: nowrap;
+    max-width: calc(100% - 2 * var(--space-8));
+  }
+
+  .package-listing__banner:has(.community__header--compact)
+    .package-listing__banner-note {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-height: 5rem;
     overflow: hidden;
   }
 
   .package-listing__banner:has(.community__header--compact)
-    .package-listing__internal-notes--expanded {
+    .package-listing__banner-note--expanded {
     max-height: min(80vh, 40rem);
     overflow-y: auto;
     box-shadow: var(--shadow-lg);
   }
 
-  .package-listing__internal-notes-header {
+  .package-listing__banner-note-header {
     display: flex;
     gap: var(--gap-sm);
     align-items: center;
     justify-content: space-between;
   }
 
-  .package-listing__internal-notes-toggle {
+  .package-listing__banner-note-toggle {
     flex: none;
     padding: 0;
     border: none;
@@ -170,7 +188,7 @@
     }
   }
 
-  .package-listing__internal-notes-text {
+  .package-listing__banner-note-text {
     margin: 0;
     font: inherit;
     white-space: pre-wrap;
@@ -178,22 +196,27 @@
   }
 
   /* On single-column (mobile/tablet) layouts the banner is too short to overlay
-     the notes on — the clamped card ends up unusably small (Show more becomes
+     on — the clamped cards end up unusably small (Show more becomes
      unclickable). Drop them into normal flow below the banner instead, with a
      comfortable collapsed height. */
   @media (width <= 70rem) {
     .package-listing__banner:has(.community__header--compact)
-      .package-listing__internal-notes {
+      .package-listing__banner-notes {
       position: static;
       inset: auto;
-      width: auto;
+      flex-direction: column;
       max-width: none;
-      max-height: 6rem;
-      margin-top: var(--gap-sm);
     }
 
     .package-listing__banner:has(.community__header--compact)
-      .package-listing__internal-notes--expanded {
+      .package-listing__banner-note {
+      width: 100%;
+      max-width: none;
+      max-height: 6rem;
+    }
+
+    .package-listing__banner:has(.community__header--compact)
+      .package-listing__banner-note--expanded {
       max-height: min(80vh, 40rem);
     }
   }
