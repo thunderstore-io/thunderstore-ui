@@ -1,15 +1,6 @@
 // Variants
-export const CardPackageVariantsList = [
-  "card",
-  "featured",
-  "fullWidth",
-  "secondary",
-] as const;
-export type CardPackageVariants =
-  | "card"
-  | "featured"
-  | "fullWidth"
-  | "secondary";
+export const CardPackageVariantsList = ["card"] as const;
+export type CardPackageVariants = "card";
 
 // Sizes
 export const CardPackageSizesList = ["medium"] as const;

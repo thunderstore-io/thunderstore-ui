@@ -40,7 +40,6 @@
     .table__header {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       justify-content: center;
       padding: var(--space-8) var(--space-4);
       font-weight: 700;

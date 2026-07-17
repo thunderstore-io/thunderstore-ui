@@ -1,6 +1,7 @@
 import {
   faBan,
   faClockRotateLeft,
+  faCodeBranch,
   faDownload,
   faThumbTack,
   faThumbsUp,
@@ -9,9 +10,7 @@ import {
 import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import ago from "s-ago";
 
-import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme";
 import {
   type CardPackageModifiers,
   type CardPackageSizes,
@@ -20,12 +19,14 @@ import { type PackageListing } from "@thunderstore/dapper/types";
 
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
+import { ThunderstoreLogo } from "../../../svg/svg";
 import {
   classnames,
   componentClasses,
   formatInteger,
   formatToDisplayName,
 } from "../../../utils/utils";
+import { Button as NewButton } from "../../Button/Button";
 import { Icon as NewIcon } from "../../Icon/Icon";
 import { Image } from "../../Image/Image";
 import { Link as NewLink } from "../../Link/Link";
@@ -37,7 +38,6 @@ interface Props {
   packageData: PackageListing;
   isLiked: boolean;
   packageLikeAction?: () => void;
-  csVariant?: CardPackageVariants;
   csSize?: CardPackageSizes;
   csModifiers?: CardPackageModifiers;
   rootClasses?: string;
@@ -48,7 +48,6 @@ export function CardPackage(props: Props) {
     packageData,
     isLiked,
     packageLikeAction,
-    csVariant = "card",
     csSize = "medium",
     csModifiers,
     rootClasses,
@@ -64,121 +63,49 @@ export function CardPackage(props: Props) {
     );
   }, [packageData.last_updated]);
 
-  const tags = (
-    <div className="card-package__tags">
-      {packageData.categories.length
-        ? packageData.categories.map((c, index) => (
-            <NewTag
-              csMode="link"
-              href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
-              key={`category_${c}_${index}`}
-              csVariant="primary"
-              csSize="xsmall"
-              csModifiers={["dark", "hoverable"]}
-            >
-              <span>{c.name}</span>
-            </NewTag>
-          ))
-        : null}
-    </div>
-  );
+  const hasDescription = packageData.description.trim().length > 0;
+  const hasCategories = packageData.categories.length > 0;
+  const hasImageTags =
+    packageData.is_pinned || packageData.is_nsfw || packageData.is_deprecated;
 
-  const description = (
-    <p className="card-package__description">{packageData.description}</p>
-  );
-
-  const meta = (
-    <div className="card-package__meta">
-      <TooltipWrapper
-        tooltipText={`${formatInteger(
-          packageData.download_count,
-          "standard"
-        )} Downloads`}
-      >
-        <NewMetaItem csSize="12">
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faDownload} />
+  // Pinned / NSFW / Deprecated badges. Grid mode overlays them on the image;
+  // list mode shows them inline next to the title (see CardPackage.css). The
+  // layout is chosen purely by CSS from html[data-card-layout], so both
+  // placements sit in the DOM and one is hidden.
+  const renderBadges = () => (
+    <>
+      {packageData.is_pinned ? (
+        <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faThumbTack} />
           </NewIcon>
-          {formatInteger(packageData.download_count)}
-        </NewMetaItem>
-      </TooltipWrapper>
-      <TooltipWrapper
-        tooltipText={`${formatInteger(
-          packageData.rating_count,
-          "standard"
-        )} Likes`}
-      >
-        <NewMetaItem
-          csSize="12"
-          primitiveType="metaItemActionable"
-          onClick={packageLikeAction}
-        >
-          <NewIcon
-            csMode="inline"
-            noWrapper
-            rootClasses={isLiked ? "card-package--is-liked" : undefined}
-          >
-            <FontAwesomeIcon icon={faThumbsUp} />
+          Pinned
+        </NewTag>
+      ) : null}
+      {packageData.is_nsfw ? (
+        <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faLips} />
           </NewIcon>
-          {formatInteger(packageData.rating_count)}
-        </NewMetaItem>
-      </TooltipWrapper>
-      {/* <TooltipWrapper
-      tooltipText={`Latest version: TODO ADD FIELD TO ENDPOINT`}
-    >
-      <div className="card-package__footer__metaitem">
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faCodeBranch} />
-        </NewIcon>
-        TODO
-      </div>
-    </TooltipWrapper> */}
-      {csVariant === "fullWidth" ? (
-        <TooltipWrapper
-          tooltipText={`Last updated: ${ago(
-            new Date(packageData.last_updated)
-          )}`}
-        >
-          <NewMetaItem csSize="12">
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faClockRotateLeft} />
-            </NewIcon>
-            {ago(new Date(packageData.last_updated))}
-          </NewMetaItem>
-        </TooltipWrapper>
+          NSFW
+        </NewTag>
       ) : null}
-    </div>
-  );
-
-  const cardFooter = (
-    <div className="card-package__footer">
-      {csVariant === "fullWidth" ? tags : null}
-
-      {csVariant === "card" ? (
-        <>
-          {meta}
-          <TooltipWrapper tooltipText={tooltipText}>
-            <span className="card-package__updated" aria-label="Last Updated">
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faClockRotateLeft} />
-              </NewIcon>
-              <RelativeTime
-                time={packageData.last_updated}
-                suppressHydrationWarning
-                disableTitle
-              />
-            </span>
-          </TooltipWrapper>
-        </>
+      {packageData.is_deprecated ? (
+        <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
+          <NewIcon noWrapper csMode="inline">
+            <FontAwesomeIcon icon={faWarning} />
+          </NewIcon>
+          Deprecated
+        </NewTag>
       ) : null}
-    </div>
+    </>
   );
 
   return (
     <div
       className={classnames(
         "card-package",
-        ...componentClasses("card-package", csVariant, csSize, csModifiers),
+        ...componentClasses("card-package", "card", csSize, csModifiers),
         rootClasses
       )}
     >
@@ -192,37 +119,10 @@ export function CardPackage(props: Props) {
         title={`${formatToDisplayName(packageData.name)} by ${
           packageData.namespace
         }`}
+        rootClasses="card-package__media"
       >
-        {csVariant === "card" &&
-        (packageData.is_pinned ||
-          packageData.is_nsfw ||
-          packageData.is_deprecated) ? (
-          <div className="card-package__image-tags">
-            {packageData.is_pinned ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faThumbTack} />
-                </NewIcon>
-                Pinned
-              </NewTag>
-            ) : null}
-            {packageData.is_nsfw ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faLips} />
-                </NewIcon>
-                NSFW
-              </NewTag>
-            ) : null}
-            {packageData.is_deprecated ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
-                <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faWarning} />
-                </NewIcon>
-                Deprecated
-              </NewTag>
-            ) : null}
-          </div>
+        {hasImageTags ? (
+          <div className="card-package__image-tags">{renderBadges()}</div>
         ) : null}
         <Image
           src={packageData.icon_url}
@@ -236,17 +136,22 @@ export function CardPackage(props: Props) {
 
       <div className="card-package__content">
         <div className="card-package__info">
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Package"
-            community={packageData.community_identifier}
-            namespace={packageData.namespace}
-            package={packageData.name}
-            rootClasses="card-package__title"
-            title={formatToDisplayName(packageData.name)}
-          >
-            {formatToDisplayName(packageData.name)}
-          </NewLink>
+          <div className="card-package__heading">
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="Package"
+              community={packageData.community_identifier}
+              namespace={packageData.namespace}
+              package={packageData.name}
+              rootClasses="card-package__title"
+              title={formatToDisplayName(packageData.name)}
+            >
+              {formatToDisplayName(packageData.name)}
+            </NewLink>
+            {hasImageTags ? (
+              <div className="card-package__badges">{renderBadges()}</div>
+            ) : null}
+          </div>
 
           <div className="card-package__author">
             <span className="card-package__prefix">by</span>
@@ -264,16 +169,127 @@ export function CardPackage(props: Props) {
           </div>
         </div>
 
-        {["card", "featured", "fullWidth"].includes(csVariant)
-          ? description
-          : null}
+        {hasDescription ? (
+          <p className="card-package__description">{packageData.description}</p>
+        ) : null}
 
-        {["card", "featured"].includes(csVariant) ? tags : null}
-        {csVariant === "featured" ? meta : null}
+        {hasCategories ? (
+          <div className="card-package__tags">
+            {packageData.categories.map((c) => (
+              <NewTag
+                csMode="link"
+                href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
+                key={`category_${c.id}`}
+                csVariant="primary"
+                csSize="xsmall"
+                csModifiers={["dark", "hoverable"]}
+              >
+                <span>{c.name}</span>
+              </NewTag>
+            ))}
+          </div>
+        ) : null}
 
-        {csVariant === "card" ? cardFooter : null}
+        <div className="card-package__footer">
+          <div className="card-package__meta">
+            <TooltipWrapper
+              tooltipText={`${formatInteger(
+                packageData.download_count,
+                "standard"
+              )} Downloads`}
+            >
+              <NewMetaItem csSize="12">
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faDownload} />
+                </NewIcon>
+                {formatInteger(packageData.download_count)}
+              </NewMetaItem>
+            </TooltipWrapper>
+            <TooltipWrapper
+              tooltipText={`${formatInteger(
+                packageData.rating_count,
+                "standard"
+              )} Likes`}
+            >
+              <NewMetaItem
+                csSize="12"
+                primitiveType="metaItemActionable"
+                onClick={packageLikeAction}
+              >
+                <NewIcon
+                  csMode="inline"
+                  noWrapper
+                  rootClasses={isLiked ? "card-package--is-liked" : undefined}
+                >
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                </NewIcon>
+                {formatInteger(packageData.rating_count)}
+              </NewMetaItem>
+            </TooltipWrapper>
+            {/* Latest version — list variant only (hidden in grid via CSS), and
+                only when the backend supplies it (see PackageListing). */}
+            {packageData.latest_version_number ? (
+              <NewMetaItem csSize="12" rootClasses="card-package__version">
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faCodeBranch} />
+                </NewIcon>
+                {packageData.latest_version_number}
+              </NewMetaItem>
+            ) : null}
+          </div>
+          <TooltipWrapper tooltipText={tooltipText}>
+            <span className="card-package__updated" aria-label="Last Updated">
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faClockRotateLeft} />
+              </NewIcon>
+              <RelativeTime
+                time={packageData.last_updated}
+                suppressHydrationWarning
+                disableTitle
+              />
+            </span>
+          </TooltipWrapper>
+        </div>
       </div>
-      {csVariant === "fullWidth" ? cardFooter : null}
+
+      {/* Install / Download — list variant only (hidden in grid, revealed on
+          hover via CSS). Rendered only when the backend supplies the URLs, so
+          the card still works before the backend deploys those fields — see the
+          TODO(backend-listing-fields) note on PackageListing. */}
+      {packageData.install_url || packageData.download_url ? (
+        <div className="card-package__actions">
+          {packageData.install_url ? (
+            <NewButton
+              primitiveType="link"
+              href={packageData.install_url}
+              csVariant="accent"
+              csSize="small"
+              rootClasses="card-package__install"
+            >
+              <NewIcon csMode="inline">
+                <ThunderstoreLogo />
+              </NewIcon>
+              Install
+            </NewButton>
+          ) : null}
+          {packageData.download_url ? (
+            <NewButton
+              primitiveType="link"
+              href={packageData.download_url}
+              csVariant="secondary"
+              csSize="small"
+              aria-label="Download"
+              rootClasses="card-package__download"
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faDownload} />
+              </NewIcon>
+              {/* Hidden (icon-only) when the card is narrow — see CardPackage.css. */}
+              <span className="card-package__download-label">Download</span>
+            </NewButton>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

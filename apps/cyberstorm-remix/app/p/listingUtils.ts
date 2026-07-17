@@ -97,9 +97,8 @@ export async function getPrivateListing(
   } catch (e) {
     // A logged-in user who still can't see the listing — a genuine 404, or a
     // 403 when the backend hides its existence — should land on a clean 404
-    // page. Without this, the raw ApiError escapes uncaught: it isn't a
-    // RouteErrorResponse, so isExpectedRouteError() lets Sentry capture it as a
-    // bug and the generic error boundary renders instead of the 404 page.
+    // page. Without this, the raw ApiError escapes uncaught and the generic
+    // error boundary renders instead of the 404 page.
     const status = isApiError(e) ? e.response?.status : undefined;
     if (status === 404 || status === 403) {
       throw new Response("Package not found", { status: 404 });

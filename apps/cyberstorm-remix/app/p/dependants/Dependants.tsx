@@ -1,4 +1,5 @@
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
@@ -7,6 +8,9 @@ import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
+import { CommunityPackageListingHeader } from "~/c/CommunityPackageListingSubpath";
+import { SidebarAd } from "~/commonComponents/Ads/SidebarAd";
+import { DEPENDANTS_SIDEBAR_AD } from "~/commonComponents/Ads/nitroAds";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -204,11 +208,16 @@ export async function clientLoader({
 clientLoader.hydrate = true;
 
 export default function Dependants() {
-  const { filters, listing, listings } = useLoaderData<
+  const { community, filters, listing, listings } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
   const outletContext = useOutletContext() as OutletContextShape;
+
+  // VITE_DISABLE_ADS (the local / test kill switch) is the only ad gate on this
+  // route; when off we pass no slot, keeping the sidebar at its default width.
+  const adsDisabled =
+    getPublicEnvVariables(["VITE_DISABLE_ADS"]).VITE_DISABLE_ADS === "true";
 
   // Gated SSR data: the listing was hidden from the anonymous SSR request.
   // The clientLoader refetches it (and its dependants) with the user's
@@ -219,6 +228,15 @@ export default function Dependants() {
 
   return (
     <Page as="section" rootClasses="dependants">
+      <Suspense fallback={null}>
+        <Await resolve={community}>
+          {(resolvedCommunity) => (
+            <CommunityPackageListingHeader
+              resolvedCommunity={resolvedCommunity}
+            />
+          )}
+        </Await>
+      </Suspense>
       <Suspense fallback={<SkeletonBox />}>
         <Await resolve={listing}>
           {(resolvedValue) => (
@@ -254,6 +272,10 @@ export default function Dependants() {
         config={outletContext.requestConfig}
         currentUser={outletContext.currentUser}
         dapper={outletContext.dapper}
+        sidebarSlot={
+          adsDisabled ? undefined : <SidebarAd slot={DEPENDANTS_SIDEBAR_AD} />
+        }
+        withDisplayControls
       />
     </Page>
   );

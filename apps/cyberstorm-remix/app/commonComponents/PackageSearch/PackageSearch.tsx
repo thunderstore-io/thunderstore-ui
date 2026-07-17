@@ -3,7 +3,14 @@ import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  Suspense,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Await, useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
 import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
@@ -19,6 +26,7 @@ import {
   NewPagination,
   NewTextInput,
   SkeletonBox,
+  classnames,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -46,6 +54,7 @@ import {
   synchronizeSearchParams,
 } from "./PackageSearchLogic";
 import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
+import { DisplayControls } from "./components/DisplayControls";
 import { PackageCount } from "./components/PackageCount/PackageCount";
 import { PackageOrder } from "./components/PackageOrder";
 import { PackageOrderOptions } from "./components/packageOrderOptions";
@@ -61,13 +70,30 @@ interface Props {
   currentUser?: CurrentUser;
   dapper: DapperTs;
   teamName?: string;
+  // Rendered at the top of the sidebar, above the filters. The community page
+  // passes its 300×250 ad here; when set, the sidebar widens to hold it (see
+  // .package-search--with-sidebar-ad in PackageSearch.css).
+  sidebarSlot?: ReactNode;
+  // Show the display controls — Cards (Grid/List) and View (Compact/Wide). The
+  // community search opts in; the View menu needs the layout to carry
+  // .layout__main--content-toggle (see root.tsx).
+  withDisplayControls?: boolean;
 }
 
 /**
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
-  const { listings, filters, config, currentUser, dapper, teamName } = props;
+  const {
+    listings,
+    filters,
+    config,
+    currentUser,
+    dapper,
+    teamName,
+    sidebarSlot,
+    withDisplayControls,
+  } = props;
 
   const navigationType = useNavigationType();
 
@@ -364,8 +390,14 @@ export function PackageSearch(props: Props) {
   );
 
   return (
-    <div className="package-search">
+    <div
+      className={classnames(
+        "package-search",
+        sidebarSlot ? "package-search--with-sidebar-ad" : undefined
+      )}
+    >
       <div className="package-search__sidebar">
+        {sidebarSlot}
         <div className="package-search__filters">{filtersContent}</div>
       </div>
 
@@ -394,6 +426,19 @@ export function PackageSearch(props: Props) {
             type="search"
             rootClasses="package-search__search"
           />
+          <div className="package-search__listing-actions">
+            <div className="package-search__sorting">
+              <PackageOrder
+                order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
+                setOrder={setParamsBlobValue(
+                  setSearchParamsBlob,
+                  searchParamsBlob,
+                  "order"
+                )}
+              />
+            </div>
+            {withDisplayControls ? <DisplayControls /> : null}
+          </div>
           <Drawer
             popoverId="package-search-filters-drawer"
             headerContent={
@@ -425,6 +470,9 @@ export function PackageSearch(props: Props) {
                     "order"
                   )}
                 />
+                {/* Cards + View live on the search row on desktop; in the drawer
+                    on narrow screens so they stay reachable there too. */}
+                {withDisplayControls ? <DisplayControls /> : null}
               </div>
               <DrawerDivider />
               {filtersContent}
@@ -432,6 +480,20 @@ export function PackageSearch(props: Props) {
           </Drawer>
         </div>
         <div className="package-search__search-params">
+          <div className="package-search__results">
+            <Suspense fallback={<SkeletonBox />}>
+              {/* Silent on failure — the grid Await owns the visible error. */}
+              <Await resolve={listings} errorElement={<></>}>
+                {(resolvedValue) => (
+                  <PackageCount
+                    page={currentPage}
+                    pageSize={PER_PAGE}
+                    totalCount={resolvedValue.count}
+                  />
+                )}
+              </Await>
+            </Suspense>
+          </div>
           <CategoryTagCloud
             searchValue={searchParamsBlob.search}
             setSearchValue={setParamsBlobValue(
@@ -450,34 +512,6 @@ export function PackageSearch(props: Props) {
             rootClasses="package-search__tags"
             clearAll={clearAll(setSearchParamsBlob, searchParamsBlob)}
           />
-          <div className="package-search__tools">
-            <div className="package-search__listing-actions">
-              <div className="package-search__sorting">
-                <PackageOrder
-                  order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
-                  setOrder={setParamsBlobValue(
-                    setSearchParamsBlob,
-                    searchParamsBlob,
-                    "order"
-                  )}
-                />
-              </div>
-            </div>
-            <div className="package-search__results">
-              <Suspense fallback={<SkeletonBox />}>
-                {/* Silent on failure — the grid Await owns the visible error. */}
-                <Await resolve={listings} errorElement={<></>}>
-                  {(resolvedValue) => (
-                    <PackageCount
-                      page={currentPage}
-                      pageSize={PER_PAGE}
-                      totalCount={resolvedValue.count}
-                    />
-                  )}
-                </Await>
-              </Suspense>
-            </div>
-          </div>
         </div>
         <div className="package-search__packages">
           <Suspense fallback={<PackageSearchPackagesSkeleton />}>

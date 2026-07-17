@@ -101,6 +101,7 @@ export function SubmissionResult({
                 primitiveType="link"
                 href={`/c/${v.community.identifier}/p/${submissionStatusResult.package_version.namespace}/${submissionStatusResult.package_version.name}/`}
                 target="_blank"
+                rel="noopener noreferrer"
                 csVariant="cyber"
               >
                 View listing

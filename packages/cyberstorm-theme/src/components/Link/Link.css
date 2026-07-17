@@ -21,8 +21,4 @@
       }
     }
   }
-
-  .link > svg {
-    filter: var(--dropshadow-default);
-  }
 }

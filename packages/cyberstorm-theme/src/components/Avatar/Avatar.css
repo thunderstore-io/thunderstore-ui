@@ -50,7 +50,6 @@
     &:where(.avatar__placeholder-letter) {
       > .avatar__image {
         --avatar-image-color: #39e9aa;
-        --avatar-image-font: var(--font-body);
         --avatar-image-font-weight: var(--font-weight-semibold);
         --avatar-image-font-size: calc(var(--size) / 1.9);
         --avatar-image-line-height: var(--line-height-xs);

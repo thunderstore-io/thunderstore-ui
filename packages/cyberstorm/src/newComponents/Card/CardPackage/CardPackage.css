@@ -1,18 +1,22 @@
 @layer components {
   .card-package {
     position: relative;
-    display: flex;
-    flex-direction: var(--card-package-flex-direction);
-    gap: var(--card-package-gap);
-    padding: var(--card-package-padding);
+    display: grid;
+    grid-template:
+      "image" auto
+      "content" 1fr;
     border-radius: var(--card-package-border-radius);
+    overflow-wrap: anywhere;
     background-color: var(--card-package-background-color);
-    box-shadow: var(--card-package-box-shadow);
     transition: var(--card-package-transition);
   }
 
+  .card-package__media {
+    grid-area: image;
+  }
+
   .card-package:has(:focus-visible) {
-    outline: var(--card-package-focus-outline-offset);
+    outline: var(--card-package-focus-outline);
     outline-offset: var(--card-package-focus-outline-offset);
   }
 
@@ -26,10 +30,7 @@
   }
 
   .card-package__image-wrapper {
-    border-radius: var(--card-package--image-wrapper-border-top-left-radius)
-      var(--card-package--image-wrapper-border-top-right-radius)
-      var(--card-package--image-wrapper-border-bottom-right-radius)
-      var(--card-package--image-wrapper-border-bottom-left-radius) !important;
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
 
     &:hover {
       filter: brightness(1.2);
@@ -49,15 +50,15 @@
   }
 
   .card-package__content {
-    display: flex;
-    flex: var(--card-package--content-flex);
-    flex-direction: var(--card-package--content-flex-direction);
-    gap: var(--card-package--content-gap);
-    align-items: var(--card-package--content-align-items);
-    align-self: var(--card-package--content-align-self);
-    justify-content: var(--card-package--content-justify-content);
-    height: 100%;
-    padding: var(--card-package--content-padding);
+    display: grid;
+    grid-area: content;
+    grid-template:
+      "info" auto
+      "desc" 1fr
+      "tags" auto
+      "footer" auto;
+    gap: var(--gap-sm);
+    padding: 0.75rem;
   }
 
   .card-package__image-tags {
@@ -72,27 +73,40 @@
   }
 
   .card-package__info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--card-package--info-gap);
-    align-items: flex-start;
-    align-self: var(--card-package--info-align-self);
-    justify-content: var(--card-package--info-justify-content);
+    display: grid;
+    grid-area: info;
+    grid-template:
+      "title" auto
+      "author" auto;
+    gap: var(--space-6);
     width: 100%;
-    max-width: var(--card-package--info-max-width);
   }
 
-  /* Title */
+  /* Wraps the title; in list mode it also holds the inline badges (below). */
+  .card-package__heading {
+    grid-area: title;
+    min-width: 0;
+  }
+
+  /* Inline pinned/nsfw/deprecated badges — hidden in grid mode (the image
+     overlay is used there instead), shown in list mode. */
+  .card-package__badges {
+    display: none;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
   .card-package__title {
+    grid-area: title;
     width: 100%;
     overflow: hidden;
     color: var(--card-package--title-color);
     font-weight: var(--font-weight-bold);
-    font-size: var(--card-package--title-font-size);
+    font-size: var(--font-size-body-xl);
     font-family: var(--font-family--inter);
     font-style: normal;
-    line-height: normal;
-    line-height: var(--card-package--title-line-height);
+    line-height: var(--line-height-auto);
     white-space: nowrap;
     text-overflow: ellipsis;
 
@@ -103,68 +117,63 @@
     outline: none !important;
   }
 
-  /* Author */
   .card-package__author {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-area: author;
+    grid-template-columns: auto 1fr;
     width: 100%;
-    font-weight: var(--card-package--author-font-weight);
-    font-size: var(--card-package--author-font-size);
+    min-width: 0;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
     text-decoration: none;
   }
 
   .card-package__link {
+    justify-self: start;
+    max-width: 100%;
     overflow: hidden;
-    font-weight: var(--card-package--link-font-weight);
+    font-weight: var(--font-weight-regular);
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
   .card-package__prefix {
-    padding-right: var(--card-package--prefix-padding-right);
+    min-width: max-content;
+    padding-right: var(--space-4);
     color: var(--card-package--prefix-color);
   }
 
-  /* Description */
   .card-package__description {
-    flex: 1;
+    grid-area: desc;
+    min-width: 0;
+    min-height: 0;
     color: var(--card-package--description-color);
-    font-weight: var(--card-package--description-font-weight);
-    font-size: var(--card-package--description-font-size);
-    font-family: var(--card-package--description-font-family);
-    font-style: var(--card-package--description-font-style);
-    line-height: var(--card-package--description-line-height);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    font-family: var(--font-family--inter);
+    font-style: normal;
+    line-height: var(--line-height-md);
   }
 
-  /* Tags */
   .card-package__tags {
     display: flex;
-    flex: 0 1 auto;
     flex-wrap: wrap;
-    gap: var(--card-package--tags-gap);
-    place-content: var(--card-package--tags-align-content)
-      var(--card-package--tags-justify-content);
-    align-items: var(--card-package--tags-align-items);
-    align-self: stretch;
+    grid-area: tags;
+    gap: var(--gap-2xs);
+    justify-content: flex-start;
   }
 
-  /* Footer */
   .card-package__footer {
     display: flex;
-    flex-direction: var(--card-package--footer-flex-direction, column);
-    gap: var(--card-package--footer-gap);
-    align-items: flex-start;
-    align-self: stretch;
-    justify-content: flex-end;
+    flex-direction: column;
+    grid-area: footer;
+    gap: var(--gap-sm);
   }
 
   .card-package__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 12px 24px;
-    align-content: center;
-    align-items: center;
-    align-self: stretch;
     color: var(--color-text-tertiary);
   }
 
@@ -173,7 +182,180 @@
     gap: var(--space-6);
     align-items: center;
     color: var(--card-package--updated-color);
-    font-weight: var(--card-package--updated-font-weight);
-    font-size: var(--card-package--updated-font-size);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-sm);
+  }
+
+  /* Version stat + Install/Download are list-variant only — hidden here, shown
+     in the list section below. (Version also depends on the backend supplying
+     latest_version_number.) */
+  .card-package__version {
+    display: none;
+  }
+
+  .card-package__actions {
+    display: none;
+  }
+
+  /* ── List layout (html[data-card-layout="list"]) ─────────────────────────
+     Reflow each card to image-left / content-right. CardPackage is only used
+     by the package search, so the global attribute never reaches other
+     surfaces. The grid card markup is unchanged — only CSS differs — so there
+     is no SSR/client mismatch when the attribute is set pre-hydration. */
+  :root[data-card-layout="list"] .card-package {
+    grid-template: "image content actions" auto / auto 1fr auto;
+    padding: 1rem;
+    column-gap: 1rem;
+  }
+
+  :root[data-card-layout="list"] .card-package__media {
+    align-self: start;
+    width: 10rem;
+    height: 10rem;
+  }
+
+  /* The 1rem card padding owns the outer spacing in list mode. */
+  :root[data-card-layout="list"] .card-package__content {
+    padding: 0;
+  }
+
+  :root[data-card-layout="list"] .card-package__image-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md) !important;
+  }
+
+  :root[data-card-layout="list"] .card-package__image-tags {
+    display: none;
+  }
+
+  :root[data-card-layout="list"] .card-package__heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  :root[data-card-layout="list"] .card-package__title {
+    width: auto;
+    max-width: 100%;
+  }
+
+  :root[data-card-layout="list"] .card-package__badges {
+    display: flex;
+  }
+
+  :root[data-card-layout="list"] .card-package__footer {
+    flex-flow: row wrap;
+    gap: var(--gap-sm) var(--gap-xl);
+    align-items: center;
+  }
+
+  :root[data-card-layout="list"] .card-package__version {
+    display: inline-flex;
+  }
+
+  /* Install / Download stacked on the right, top-aligned with the content, and
+     revealed only while the card is hovered/focused. They reserve their space
+     (visibility, not display) so revealing them never reflows the card. */
+  :root[data-card-layout="list"] .card-package__actions {
+    display: flex;
+    flex-direction: column;
+    grid-area: actions;
+    gap: var(--gap-sm);
+    align-self: start;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--animation-duration-md) ease;
+  }
+
+  :root[data-card-layout="list"] .card-package:hover .card-package__actions,
+  :root[data-card-layout="list"]
+    .card-package:focus-within
+    .card-package__actions {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* No hover on touch devices — keep the actions always visible there. Phones
+     still hide them: the display:none in the mobile media query below wins
+     regardless of visibility. */
+  @media (hover: none) {
+    :root[data-card-layout="list"] .card-package__actions {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  /* Below 600px card width (but not phones — those hide the buttons, see the
+     media query below), move Install / Download under the image as compact,
+     always-visible buttons with an icon-only Download. Queries the
+     package-cards container (the grid, ≈ card width in list mode) because a
+     container can't style itself; the card is only used inside that grid. */
+  @container package-cards (width < 600px) {
+    :root[data-card-layout="list"] .card-package {
+      grid-template:
+        "image content"
+        "actions content" / auto 1fr;
+    }
+
+    :root[data-card-layout="list"] .card-package__actions {
+      flex-flow: row wrap;
+      grid-area: actions;
+      gap: var(--space-6);
+      align-self: start;
+      margin-top: var(--gap-sm);
+      visibility: visible;
+      opacity: 1;
+    }
+
+    :root[data-card-layout="list"] .card-package__download-label {
+      display: none;
+    }
+  }
+
+  /* Mobile list card: a small icon with the title beside it, and
+     description / tags / meta on their own full-width rows below (not indented by
+     the icon). Categories scroll on one row; no Install / Download on phones. */
+  @media (width <= 48rem) {
+    :root[data-card-layout="list"] .card-package {
+      grid-template:
+        "image info" auto
+        "desc desc" auto
+        "tags tags" auto
+        "footer footer" auto / auto 1fr;
+      gap: var(--gap-sm) var(--space-12);
+      padding: var(--space-12);
+    }
+
+    /* Reparent the content's children onto the card grid so desc/tags/meta can
+       span the full width under the icon. */
+    :root[data-card-layout="list"] .card-package__content {
+      display: contents;
+    }
+
+    :root[data-card-layout="list"] .card-package__media {
+      width: 4rem;
+      height: 4rem;
+    }
+
+    :root[data-card-layout="list"] .card-package__actions {
+      display: none;
+    }
+
+    :root[data-card-layout="list"] .card-package__title {
+      font-size: var(--font-size-body-lg);
+    }
+
+    :root[data-card-layout="list"] .card-package__tags {
+      flex-wrap: nowrap;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    :root[data-card-layout="list"] .card-package__tags > * {
+      flex: none;
+    }
   }
 }

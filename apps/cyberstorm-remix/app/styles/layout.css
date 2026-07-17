@@ -5,6 +5,11 @@
     --content-padding-top: 1.5rem;
     --sidebar-sticky-top: calc(var(--header-height) + var(--section-gap));
 
+    /* Reserved at the bottom of the ad rail so no rail ad sits behind the docked
+       floating video (see .layout__ads-stack height). Approximate height of
+       NitroPay's floating player — tune to match the actual docked size. */
+    --floating-video-height: 200px;
+
     /* stylelint-disable */
     interpolate-size: allow-keywords;
     /* stylelint-enable */
@@ -15,184 +20,427 @@
     background-color: var(--color-surface-1);
   }
 
+  /* The main island IS the content/ad grid and spans the full row width, so its
+     background covers the whole area — content plus both gutters. The content
+     sits in the middle track (col 2); the ad rail lives in the right gutter
+     (col 3) and a left gutter (col 1) mirrors it — equal once both exceed their
+     minimums, since the rail side reserves a stepped ad minimum (--ad-gutter-min
+     below). The gutters are viewport-sized, so an ad LOADING never shifts the
+     content, and the rail simply reveals itself when its gutter is wide enough
+     for an ad (see .layout__ads-stack). The 3-track template applies only when
+     ads are shown (--ads, added in root.tsx); without ads it's a single content
+     track and <Container> does the centering. */
   .layout__main {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-md);
+    align-items: start;
     min-width: 0;
+
+    /* Side inset for the content — <Container> no longer pads itself, so the
+       grid owns the horizontal spacing. The ad layout (below) resets this to 0
+       and folds the same inset into its gutter minimums instead, so it never
+       shrinks the ad gutters. */
+    padding-inline: var(--container-padding);
+
+    /* Default max content width. On ad pages the content grows toward this as
+       the viewport widens (balanced against the stepped ad gutters below); once
+       it hits the cap the gutters take the rest. The package search can raise it
+       to 120rem via the content-width toggle (.layout__main--content-toggle).
+       Keep the default in sync with <Container size="default">. */
+    --content-max: 90rem;
   }
 
-  /* Right ad rail beside the content, ending above the full-width bottom ad
-     row. The island spans the content row's height; the stack inside is a
-     sticky, viewport-fitted flex column that reveals progressively more ad
-     units as it gets taller (see the container-query bands below), with the
-     video pinned to the stack's end. */
+  /* Right ad rail: lives in the grid's right gutter track (col 3) and fills it
+     (place-self: stretch). It's an inline-size container so the sticky stack
+     inside can snap to a discrete ad width (see the @container rules below),
+     sitting at the gutter's inner edge beside the content. */
   .layout__ads {
-    align-self: stretch;
+    place-self: stretch;
+    container: nimbus-ad-gutter / inline-size;
+  }
+
+  /* Anchor for the page-level floating video. Pinned to the bottom-right corner
+     (where the player docks) and out of flow, so it adds no gap to the layout
+     column AND any content rendered into it — the demo unit, or the player's
+     non-floating "hidden" state — appears at the corner instead of the flex
+     column's top-left (the static position an absolutely-positioned flex child
+     otherwise takes). NitroPay's real floating player sets its own fixed
+     position over this. */
+  .layout__floating-video-anchor {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+  }
+
+  /* Content goes in the middle track (col 2), filling up to --content-max — the
+     fixed <Container size="default"> cap is only for the ad-free pages. */
+  .layout__main--ads > .container {
+    grid-column: 2;
+
+    --container-width: var(--content-max);
+  }
+
+  /* The rail lives in a side gutter: the right gutter by default (search page),
+     the left gutter on package pages (.layout__main--rail-left, set by root.tsx).
+     The opposite gutter is a plain margin. */
+  .layout__main--ads > .layout__ads {
+    grid-column: 3;
+  }
+
+  .layout__main--rail-left > .layout__ads {
+    grid-column: 1;
+  }
+
+  /* The package search opts into the content-width toggle (class set by root.tsx):
+     90rem by default, 120rem when the user has switched it on. The preference is
+     stored in localStorage and reflected pre-hydration as html[data-content-width]
+     (see the inline script in root.tsx), so the width is correct on first paint —
+     no flash. Other routes keep the 90rem default.
+
+     Wide mode also drops the rail's reserved minimum (--ad-gutter-min back to just
+     the padding): the content is a fixed-max track, so it now grows to the full
+     120rem BEFORE the gutter takes anything, and the rail gets only the leftover
+     — snapped by the container query, hidden when less than a 120px unit is left.
+     So wide mode prioritizes content; the rail is a bonus when the viewport is
+     wide enough to afford both. */
+  :root[data-content-width="wide"] .layout__main--content-toggle {
+    --content-max: 120rem;
+    --ad-gutter-min: var(--container-padding);
+  }
+
+  /* One side gutter reserves ad space via a stepped minimum (--ad-gutter-min):
+     wider viewports reserve a larger standard ad width (see the media queries
+     below); the opposite gutter is just the container padding. The content track
+     never shrinks below --content-floor (90rem, or the available width on
+     viewports too narrow to fit it) — the ad only ever uses space BEYOND the
+     content, it never squeezes it. Once the content hits --content-max the 1fr
+     gutters take the rest. padding-inline is 0 so the reservation lives entirely
+     in the gutters. The rail reveals + snaps its width to its gutter (see
+     .layout__ads-stack + the nimbus-ad-gutter queries) and defaults to the right
+     gutter; .layout__main--rail-left moves it to the left. */
+  .layout__main--ads {
+    padding-inline: 0;
+
+    --ad-gutter-min: var(--container-padding);
+
+    /* Never drops below 90rem so ads can't steal content width; falls to the
+       viewport (minus both gutters' padding + the two column gaps) when 90rem
+       won't fit, so nothing overflows. */
+    --content-floor: min(
+      90rem,
+      100% - 2 * var(--container-padding) - 2 * var(--space-32)
+    );
+
+    grid-template-columns:
+      minmax(var(--container-padding), 1fr)
+      minmax(var(--content-floor), var(--content-max))
+      minmax(var(--ad-gutter-min), 1fr);
+
+    /* 32px between the content and the rail (and the opposite margin). */
+    column-gap: var(--space-32);
+  }
+
+  /* Package pages put the rail in the LEFT gutter; the right gutter becomes the
+     plain margin, biasing the content toward the rail-free side. Compound with
+     --ads so the class alone never rewrites a non-ad page's single-column grid. */
+  .layout__main--ads.layout__main--rail-left {
+    grid-template-columns:
+      minmax(var(--ad-gutter-min), 1fr)
+      minmax(var(--content-floor), var(--content-max))
+      minmax(var(--container-padding), 1fr);
+  }
+
+  /* Package listing pages (packageListing + version) lay their pieces DIRECTLY
+     into this grid — breadcrumb, banner, content, the optional management toolbar,
+     and the sidebar are all real grid items (root.tsx skips the centered Container
+     for these routes; the pages render a flat fragment). No subgrid /
+     display:contents, so SSR and client render identically — no reflow on
+     hydration. Three columns: ad rail | content | sidebar. The sidebar COLUMN
+     flexes (its extra width is the right margin) while the sidebar ELEMENT stays
+     --package-sidebar-width. Rows: breadcrumb, then banner + management, then
+     content + sidebar — so the sidebar's Install button lines up with the page
+     header, and the management toolbar sits in the row above it (present or not,
+     so mods get it with no layout shift). Applies with or without ads (the rail
+     just fills col 1 when ads are on); it's these pages' sole layout modifier
+     (not paired with --rail-left), and comes after the base --ads grid in source
+     order so it wins. */
+  .layout__main--package-detail {
+    /* padding-block replaces the (now-skipped) content Container's; padding-inline
+       0 lets the gutters own the horizontal spacing. */
+    padding-block: 1rem;
+    padding-inline: 0;
+
+    --package-sidebar-width: 20rem;
+
+    /* Fallback for when ads are off (no .layout__main--ads to step it); the
+       @media steps below override it when ads are on. */
+    --ad-gutter-min: var(--container-padding);
+
+    /* The sidebar column's min is the sidebar width PLUS a container-padding
+       gutter, so the (start-aligned) sidebar never hugs the layout's right edge
+       even when the column can't grow past its minimum. */
+    grid-template-columns:
+      minmax(var(--ad-gutter-min), 1fr)
+      minmax(0, var(--content-max))
+      minmax(
+        calc(var(--package-sidebar-width) + var(--container-padding)),
+        1fr
+      );
+    row-gap: var(--gap-md);
+  }
+
+  /* The rail shares the content row (like the old single-row ad grid) so its
+     tall sticky stack doesn't inflate the breadcrumb/banner rows above. */
+  .layout__main--package-detail > .layout__ads {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .layout__main--package-detail > .breadcrumbs {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  /* The banner cell. packageListing wraps the banner in .package-listing__banner
+     (it also overlays the internal notes there); version / dependants render the
+     bare .community__header--compact. Both sit in the same cell. */
+  .layout__main--package-detail > .community__header--compact,
+  .layout__main--package-detail > .package-listing__banner {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
+  .layout__main--package-detail > .package-listing__management {
+    grid-row: 2;
+    grid-column: 3;
+  }
+
+  .layout__main--package-detail > .package-listing__package-content-section {
+    grid-row: 3;
+    grid-column: 2;
+
+    /* No top padding: the page header must start at the row's top so the
+       sidebar's Install button (also row-top) lines up with it. */
+    padding-top: 0;
+  }
+
+  /* The sidebar keeps its own width and sits at the start of its (wider) column,
+     beside the content; the column's extra width falls to its right. */
+  .layout__main--package-detail > .package-listing-sidebar {
+    grid-row: 3;
+    grid-column: 3;
+    justify-self: start;
+    width: var(--package-sidebar-width);
+  }
+
+  /* Below ~70rem there isn't room for content + the sidebar side by side: drop to
+     a single content column, stack the pieces in DOM order, and fold the sidebar
+     into its drawer (the .package-listing__narrow-actions button reveals it). */
+  @media (width <= 70rem) {
+    /* Not gated on --ads: the base grid above applies with ads off too (see its
+       "Fallback for when ads are off" note), so the narrow-screen collapse must
+       drop the sidebar track in that case as well, matching the child-placement
+       rules below. */
+    .layout__main--package-detail {
+      grid-template-columns:
+        minmax(var(--container-padding), 1fr)
+        minmax(0, var(--content-max))
+        minmax(var(--container-padding), 1fr);
+    }
+
+    .layout__main--package-detail > .breadcrumbs,
+    .layout__main--package-detail > .community__header--compact,
+    .layout__main--package-detail > .package-listing__banner,
+    .layout__main--package-detail > .package-listing__management,
+    .layout__main--package-detail > .package-listing__package-content-section {
+      grid-row: auto;
+      grid-column: 2;
+    }
+
+    .layout__main--package-detail > .package-listing-sidebar {
+      display: none;
+    }
+
+    .layout__main--package-detail .package-listing__narrow-actions {
+      display: flex;
+    }
+  }
+
+  /* Stepped side reservation: each step is a standard rail width (+2px slot
+     borders +8px outer margin), rising with the viewport so a larger ad fits once
+     there's room beyond the 90rem content floor. The four rail units are
+     120/160/180/300; the breakpoints are set so the content stays at its 90rem
+     floor at each step (content + gutter + opposite padding + the two 32px gaps
+     must fit), and a 300×600 lands by ~1880px so ~1905px shows it. Below ~1700px
+     the gutter is just padding and the rail stays hidden. The rail width follows
+     the gutter automatically via the nimbus-ad-gutter container queries below. */
+  @media (width >= 1700px) {
+    .layout__main--ads {
+      --ad-gutter-min: calc(120px + 2px + var(--space-8));
+    }
+  }
+
+  @media (width >= 1740px) {
+    .layout__main--ads {
+      --ad-gutter-min: calc(160px + 2px + var(--space-8));
+    }
+  }
+
+  @media (width >= 1760px) {
+    .layout__main--ads {
+      --ad-gutter-min: calc(180px + 2px + var(--space-8));
+    }
+  }
+
+  @media (width >= 1880px) {
+    .layout__main--ads {
+      --ad-gutter-min: calc(300px + 2px + var(--space-8));
+    }
   }
 
   .layout__ads-stack {
-    /* Size container-query context: the slots below reveal by THIS stack's own
-       height (see the bands further down), not a viewport media query. */
+    /* Query THIS stack's own height to hide the rail when it's too short — see
+       the @container rule below. */
     container: nimbus-ad-rail / size;
     position: sticky;
 
-    /* Pin at the stack's natural resting offset (header + island-container gap
-       + island padding): it never travels relative to the island, so scrolling
-       has no catch-up nudge, and it stays clear of the navigation. */
-    top: calc(var(--header-height) + var(--gap-2xs));
-    display: flex;
+    /* Rest below the header with a gap-md of breathing room (more than the
+       island's own gap), so the ad sits a little below the gutter/nav top
+       instead of hugging it. */
+    top: calc(var(--header-height) + var(--gap-md));
+
+    /* Hidden until the gutter can hold the narrowest (120px) unit; the
+       nimbus-ad-gutter rule below reveals it (display: flex). Staying hidden
+       below that removes the reserved gap. */
+    display: none;
     flex-direction: column;
     gap: var(--gap-xs);
-    align-items: center;
 
-    /* 336px ads + the slots' 1px borders (see AdContainer.css sizing rule). */
-    width: calc(336px + 2px);
+    /* Pin the rail to the right edge of its gutter, 8px in. For the default right
+       gutter that's the OUTER edge (8px off the scrollbar); for the package
+       pages' LEFT gutter (--rail-left / --package-detail) it's the INNER edge, so
+       the rail sits beside the content. The community search flips it to the left
+       (inner) edge of its right gutter via --content-toggle below. The gutter is
+       only ad+2+8 wide, so at the reveal point the rail sits just beside the 32px
+       content gap; on wider screens the gutter's extra width falls on the far
+       side (auto margin). */
+    margin-inline: auto var(--space-8);
 
-    /* Use nearly the full viewport height — only a symmetric gap-2xs above (the
-       sticky `top`) and below. A larger bottom reserve left the stack ~3px shy
-       of the 600px-display config at ~1080p, so it fell back to the 300px one
-       with a big empty gap; this gives that configuration the room it needs. */
+    /* Discrete width: the stack snaps to a standard rail width — 120/160/180/300
+       (+ the slot's 1px borders) — the largest that fits the gutter, chosen by
+       the nimbus-ad-gutter @container rules below. Always <= the gutter so it
+       can't overflow the page; createAd is then given only the sizes that fit
+       this box (see fittingSizes in nitroAds.ts). */
+    width: calc(120px + 2px);
+
+    /* Fill the viewport height minus the header, the top offset above and a
+       gap below, AND the floating video's reserve, so no rail ad sits behind the
+       docked player. */
     height: calc(
-      100dvh - var(--header-height) - var(--gap-2xs) - var(--gap-2xs)
+      100dvh - var(--header-height) - var(--gap-md) - var(--gap-2xs) -
+        var(--floating-video-height)
     );
+
+    /* Contain an oversized creative within the rail. NitroPay's DEMO mode serves
+       the tallest unit that fits the container WIDTH, ignoring its height, so a
+       short rail can still receive a 600-tall demo unit; clip it (and any real
+       mis-serve) so it can't spill past the rail and over the floating reserve.
+       A real ad is measured and fits — a no-op for it. */
+    overflow: hidden;
   }
 
-  /* The active config's video pins to the rail's bottom (it is last in every
-     configuration that has one); the auto margin swallows the leftover height so
-     the slack sits above it. Matches by id suffix as each config has its own
-     video slot. */
-  .layout__ads-stack .ad-container[data-cid$="-video"] {
-    margin-top: auto;
+  /* The community package search's rail is in the RIGHT gutter; pin it to the
+     LEFT (inner) edge so it sits beside the content and the extra gutter width
+     falls on the outer side. Package pages (--rail-left / --package-detail) have
+     the rail in the LEFT gutter, where the default right-edge pin above is
+     already the inner/content edge — so they keep the default and their rail
+     also sits beside the content. */
+  .layout__main--content-toggle .layout__ads-stack {
+    margin-inline: var(--space-8) auto;
   }
 
-  /* --- Rail configurations: shortest to tallest rail height ---
-     Each configuration owns its slots and exactly one config shows per height
-     band. Slots are matched by their VERSION-INDEPENDENT suffix
-     (-<config>-<position>-<type>), not the `nimbus-v<N>-` prefix, so bumping
-     AD_SLOT_VERSION in nitroAds.ts never has to touch this file. A band's lower
-     bound is that configuration's cumulative content height — ad box heights
-     (incl. their 1px borders) plus the 8px inter-slot gap — so it appears when
-     it fits (square = 336x300 display, double = 336x600 display):
-
-       [ 331 -  571)  1  fishstick + fishstick + video
-       [ 571 -  641)  2  fishstick + square + video
-       [ 641 -  871)  3  fishstick + square + fishstick + video
-       [ 871 -  941)  4  fishstick + double + video
-       [ 941 - 1181)  5  fishstick + double + fishstick + video
-       [1181 - 1481)  6  fishstick + double + square + video
-       [1481 -  inf)  7  fishstick + double + double + video
-
-     NitroPay stays in step because every rail slot is created eagerly with its
-     config's mediaQuery — a viewport-height band mirroring these container bands
-     plus the rail chrome (see railHeightMq in nitroAds.ts) — so NitroPay serves
-     only the matching config while CSS hides the rest. */
-
-  /* Hide every rail slot; the matching band (and the narrow width regime below)
-     shows exactly one config's slots. */
-  .layout__ads .ad-container {
-    display: none;
-  }
-
-  @container nimbus-ad-rail (331px <= height < 571px) {
-    .layout__ads .ad-container[data-cid$="-1-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-1-2-fishstick"],
-    .layout__ads .ad-container[data-cid$="-1-3-video"] {
+  /* Reveal the rail once its gutter can hold the narrowest (120px) unit, then
+     snap it to the largest standard rail width that fits. The largest matching
+     @container wins (source order ascending), so e.g. a 305px gutter resolves to
+     300, a 185px gutter to 180. Below 120px the stack stays hidden (no reserved
+     gap). */
+  @container nimbus-ad-gutter (min-width: calc(120px + 2px)) {
+    .layout__ads-stack {
       display: flex;
+      justify-content: flex-end;
+      width: calc(120px + 2px);
     }
   }
 
-  @container nimbus-ad-rail (571px <= height < 641px) {
-    .layout__ads .ad-container[data-cid$="-2-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-2-2-square"],
-    .layout__ads .ad-container[data-cid$="-2-3-video"] {
-      display: flex;
-    }
-  }
-
-  @container nimbus-ad-rail (641px <= height < 871px) {
-    .layout__ads .ad-container[data-cid$="-3-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-3-2-square"],
-    .layout__ads .ad-container[data-cid$="-3-3-fishstick"],
-    .layout__ads .ad-container[data-cid$="-3-4-video"] {
-      display: flex;
-    }
-  }
-
-  @container nimbus-ad-rail (871px <= height < 941px) {
-    .layout__ads .ad-container[data-cid$="-4-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-4-2-double"],
-    .layout__ads .ad-container[data-cid$="-4-3-video"] {
-      display: flex;
-    }
-  }
-
-  @container nimbus-ad-rail (941px <= height < 1181px) {
-    .layout__ads .ad-container[data-cid$="-5-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-5-2-double"],
-    .layout__ads .ad-container[data-cid$="-5-3-fishstick"],
-    .layout__ads .ad-container[data-cid$="-5-4-video"] {
-      display: flex;
-    }
-  }
-
-  @container nimbus-ad-rail (1181px <= height < 1481px) {
-    .layout__ads .ad-container[data-cid$="-6-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-6-2-double"],
-    .layout__ads .ad-container[data-cid$="-6-3-square"],
-    .layout__ads .ad-container[data-cid$="-6-4-video"] {
-      display: flex;
-    }
-  }
-
-  @container nimbus-ad-rail (height >= 1481px) {
-    .layout__ads .ad-container[data-cid$="-7-1-fishstick"],
-    .layout__ads .ad-container[data-cid$="-7-2-double"],
-    .layout__ads .ad-container[data-cid$="-7-3-double"],
-    .layout__ads .ad-container[data-cid$="-7-4-video"] {
-      display: flex;
-    }
-  }
-
-  /* Width regimes (viewport-driven: horizontal room for the rail). Full 336px
-     rail at >= 1484px (the old Django site's breakpoint); a single 160px narrow
-     fill slot from 1214-1483.98px; below 1214px the rail is hidden and the
-     bottom banner row is the only ad surface. */
-  @media (width <= 1213.98px) {
-    .layout__ads {
-      display: none;
-    }
-  }
-
-  /* Below the shortest config's band the rail can show nothing (every slot stays
-     display:none), so hide the column instead of reserving an empty 336px
-     gutter. Threshold = band 1's 331px rail height + the rail chrome
-     (--header-height + 2× --gap-2xs = 4rem); custom properties aren't allowed in
-     media conditions, so the 4rem is inlined. Only the full-width rail regime is
-     height-banded — the narrow fill slot below isn't, so it's left untouched. */
-  @media (width >= 1484px) and (height < calc(331px + 4rem)) {
-    .layout__ads {
-      display: none;
-    }
-  }
-
-  @media (width >= 1214px) and (width <= 1483.98px) {
+  @container nimbus-ad-gutter (min-width: calc(160px + 2px)) {
     .layout__ads-stack {
       width: calc(160px + 2px);
     }
+  }
 
-    /* Width regime wins over the height bands: hide every config slot (any
-       fishstick/square/double/video), show only the narrow fill slot. */
-    .layout__ads .ad-container[data-cid$="-fishstick"],
-    .layout__ads .ad-container[data-cid$="-square"],
-    .layout__ads .ad-container[data-cid$="-double"],
-    .layout__ads .ad-container[data-cid$="-video"] {
+  @container nimbus-ad-gutter (min-width: calc(180px + 2px)) {
+    .layout__ads-stack {
+      width: calc(180px + 2px);
+    }
+  }
+
+  @container nimbus-ad-gutter (min-width: calc(300px + 2px)) {
+    .layout__ads-stack {
+      width: calc(300px + 2px);
+    }
+  }
+
+  /* Rail height tiers: three fixed-height containers (see AdContainer.css) share
+     the stack, but only ONE shows — the tallest that fully fits the rail's
+     available height — so a served ad is never clipped/below the fold (protects
+     viewable %). Hidden by default; the height cascade below reveals one. */
+  .layout__ads-stack .ad-container[data-size^="rail-"] {
+    display: none;
+  }
+
+  /* Reveal the tallest tier the rail height (this stack's own height, queried via
+     nimbus-ad-rail) can fully show. Ascending source order: each taller band
+     hides the shorter tier and shows its own, so the largest fitting tier wins;
+     below the shortest tier's height nothing shows. Page-agnostic — it reveals
+     the tier for BOTH route sets; the route gate below hides the inactive one. */
+  @container nimbus-ad-rail (height >= calc(100px + 2px)) {
+    .layout__ads-stack .ad-container[data-size="rail-300x100"] {
+      display: flex;
+    }
+  }
+
+  @container nimbus-ad-rail (height >= calc(250px + 2px)) {
+    .layout__ads-stack .ad-container[data-size="rail-300x100"] {
       display: none;
     }
 
-    .layout__ads .ad-container[data-cid$="-narrow"] {
+    .layout__ads-stack .ad-container[data-size="rail-300x250"] {
       display: flex;
     }
+  }
+
+  @container nimbus-ad-rail (height >= calc(600px + 2px)) {
+    .layout__ads-stack .ad-container[data-size="rail-300x250"] {
+      display: none;
+    }
+
+    .layout__ads-stack .ad-container[data-size="rail-300x600"] {
+      display: flex;
+    }
+  }
+
+  /* Route gate: the stack advertises its active route (data-rail-active-page, set
+     in root.tsx); hide the OTHER route's rail set. Higher specificity than the
+     height cascade above, so it wins over whatever tier the cascade revealed,
+     leaving only the active route's fitting tier visible. Both sets stay in the
+     DOM (and are created up front), so navigating between routes only toggles
+     visibility — NitroPay fills the newly revealed tier via renderVisibleOnly. */
+  .layout__ads-stack[data-rail-active-page="community"]
+    .ad-container[data-rail-page="package"],
+  .layout__ads-stack[data-rail-active-page="package"]
+    .ad-container[data-rail-page="community"] {
+    display: none;
   }
 
   /* Mobile breakpoint */
@@ -202,97 +450,17 @@
     }
   }
 
-  /* Bottom ad row: full-width island between content and footer. Only the
-     breakpoint-matching banner reveals (mirrors each slot's NitroPay
-     mediaQuery). The banner area never exceeds 980px (the widest unit with
-     real bidding pressure) — alone it sits centered; companion placements
-     reveal as soon as the row fits the smallest unit we serve (88px wide)
-     next to the already-capped placements, and grow up to the same 980px cap.
-     Centering also swallows the slack once every visible placement is maxed. */
+  /* Bottom ad row: a single full-width island between content and footer holding
+     one centered ad container, capped at 980px wide (the widest unit with real
+     bidding pressure). createNimbusAd passes only the sizes that fit the
+     measured box (fittingSizes, nitroAds.ts), so there are no per-width slots.
+     The 250px-tall box is set by the bottom-banner variant in AdContainer.css. */
   .layout__bottom-ads {
-    gap: var(--space-16);
-    justify-content: center;
     padding: var(--space-16);
   }
 
-  .layout__bottom-ads-banners {
-    display: flex;
-    flex: 0 1 auto;
-    width: calc(980px + 2px);
-    min-width: 0;
-  }
-
-  /* Companion reveals: the second at >= 1120px (982 banner + 16 gap + 90
-     smallest-unit floor + 32 island padding), the third at >= 2118px (both
-     predecessors capped + another gap + the 90px floor). The flex-basis IS the
-     90px floor — growing from it keeps the row deficit-free at the reveal
-     breakpoints, so the banner never gets shrink-squeezed below its 982px cap
-     (which would silently filter out the widest, highest-CPM units). */
-  .layout__bottom-ads .ad-container[data-size="bottom-right"] {
-    display: none;
-    flex: 1 1 calc(88px + 2px);
-    min-width: calc(88px + 2px);
-    max-width: calc(980px + 2px);
-  }
-
-  @media (width >= 1120px) {
-    .layout__bottom-ads .ad-container[data-cid$="-bottom-ad-right"] {
-      display: inline-flex;
-    }
-  }
-
-  @media (width >= 2118px) {
-    .layout__bottom-ads .ad-container[data-cid$="-bottom-ad-third"] {
-      display: inline-flex;
-    }
-  }
-
-  /* Second bottom ad (the narrow companion beside the banner): show only the
-     heart in its unfilled fallback. Visually hidden, not display:none, so the
-     adblock notice stays in the accessibility tree (as on the slim rail slots
-     in AdContainer.css). The third companion keeps the full text. */
-  .layout__bottom-ads
-    .ad-container[data-cid$="-bottom-ad-right"]
-    .ad-container__fallback-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    clip-path: inset(50%);
-  }
-
-  /* Hidden by default; the matching band's media query below reveals exactly
-     one banner. The box itself (980×250-class) is sized by the bottom-banner
-     variant in AdContainer.css. */
   .layout__bottom-ads .ad-container[data-size="bottom-banner"] {
-    display: none;
-  }
-
-  @media (width <= 767.98px) {
-    .layout__bottom-ads .ad-container[data-cid$="-bottom-ad-very-narrow"] {
-      display: flex;
-    }
-  }
-
-  @media (width >= 768px) and (width <= 991.98px) {
-    .layout__bottom-ads .ad-container[data-cid$="-bottom-ad-narrow"] {
-      display: flex;
-    }
-  }
-
-  @media (width >= 992px) and (width <= 1199.98px) {
-    .layout__bottom-ads .ad-container[data-cid$="-bottom-ad-wide"] {
-      display: flex;
-    }
-  }
-
-  @media (width >= 1200px) {
-    .layout__bottom-ads .ad-container[data-cid$="-bottom-ad-very-wide"] {
-      display: flex;
-    }
+    max-width: calc(980px + 2px);
+    margin-inline: auto;
   }
 }

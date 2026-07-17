@@ -1,10 +1,9 @@
 import { faBoxOpen, faListUl } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { Await } from "react-router";
-import { Island, IslandContainer } from "~/commonComponents/Island/Island";
+import { Island } from "~/commonComponents/Island/Island";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
@@ -44,20 +43,17 @@ export function ManagementTools({
 
   const showManagePackage = permissions.can_manage || permissions.can_moderate;
 
+  // All management actions live in ONE dashed box as icon-only buttons; the box
+  // hides itself (:empty in CSS) when the user has no applicable action.
   return (
-    <IslandContainer
-      direction="x"
-      rootClasses="package-listing-management-tools"
-    >
+    <Island variant="special" rootClasses="package-listing-management-tools">
       {showManagePackage ? (
-        <Island variant="special">
-          <ManagePackageForm
-            listing={listing}
-            permissions={permissions}
-            toast={toast}
-            config={requestConfig}
-          />
-        </Island>
+        <ManagePackageForm
+          listing={listing}
+          permissions={permissions}
+          toast={toast}
+          config={requestConfig}
+        />
       ) : null}
 
       <Suspense fallback={null}>
@@ -74,7 +70,7 @@ export function ManagementTools({
           )}
         </Await>
       </Suspense>
-    </IslandContainer>
+    </Island>
   );
 }
 
@@ -98,64 +94,49 @@ function ManagementToolsListingStatus({
   const canViewPackageAdmin =
     permissions.can_view_package_admin_page && listingStatus?.package_admin_url;
 
-  if (
-    !permissions.can_moderate &&
-    !canViewListingAdmin &&
-    !canViewPackageAdmin
-  ) {
-    return null;
-  }
-
   return (
     <>
       {permissions.can_moderate ? (
-        <Island variant="special">
-          <ReviewPackageForm
-            communityId={listing.community_identifier}
-            namespaceId={listing.namespace}
-            packageId={listing.name}
-            packageListingStatus={listingStatus}
-            toast={toast}
-            config={requestConfig}
-          />
-        </Island>
+        <ReviewPackageForm
+          communityId={listing.community_identifier}
+          namespaceId={listing.namespace}
+          packageId={listing.name}
+          packageListingStatus={listingStatus}
+          toast={toast}
+          config={requestConfig}
+        />
       ) : null}
 
-      {canViewListingAdmin || canViewPackageAdmin ? (
-        <Island variant="special">
-          {canViewListingAdmin ? (
-            <NewButton
-              csSize="small"
-              csVariant="secondary"
-              primitiveType="link"
-              href={`${publicEnvVariables.VITE_SITE_URL}${listingStatus.listing_admin_url}`}
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faListUl} />
-              </NewIcon>
-              Package Listing Admin
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faArrowUpRight} />
-              </NewIcon>
-            </NewButton>
-          ) : null}
-          {canViewPackageAdmin ? (
-            <NewButton
-              csSize="small"
-              csVariant="secondary"
-              primitiveType="link"
-              href={`${publicEnvVariables.VITE_SITE_URL}${listingStatus.package_admin_url}`}
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faBoxOpen} />
-              </NewIcon>
-              Package Admin
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faArrowUpRight} />
-              </NewIcon>
-            </NewButton>
-          ) : null}
-        </Island>
+      {canViewListingAdmin ? (
+        <NewButton
+          csSize="small"
+          csVariant="secondary"
+          csModifiers={["only-icon"]}
+          aria-label="Package Listing Admin"
+          tooltipText="Package Listing Admin"
+          primitiveType="link"
+          href={`${publicEnvVariables.VITE_SITE_URL}${listingStatus.listing_admin_url}`}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faListUl} />
+          </NewIcon>
+        </NewButton>
+      ) : null}
+
+      {canViewPackageAdmin ? (
+        <NewButton
+          csSize="small"
+          csVariant="secondary"
+          csModifiers={["only-icon"]}
+          aria-label="Package Admin"
+          tooltipText="Package Admin"
+          primitiveType="link"
+          href={`${publicEnvVariables.VITE_SITE_URL}${listingStatus.package_admin_url}`}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faBoxOpen} />
+          </NewIcon>
+        </NewButton>
       ) : null}
     </>
   );

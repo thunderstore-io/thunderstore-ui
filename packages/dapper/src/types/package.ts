@@ -15,6 +15,16 @@ export interface PackageListing {
   namespace: string;
   rating_count: number;
   size: number;
+  // Optional for now: absent until the backend serializer change (ac2c470c) is
+  // deployed (the frontend deploys first), so consumers must guard on presence.
+  // The list CardPackage variant shows the latest version + Install/Download
+  // when set.
+  // TODO(backend-listing-fields): make these required once the backend change is
+  // deployed. Matching note in @thunderstore/thunderstore-api's
+  // packageListingSchema.
+  latest_version_number?: string;
+  install_url?: string;
+  download_url?: string;
 }
 
 export type PackageListings = PaginatedList<PackageListing>;

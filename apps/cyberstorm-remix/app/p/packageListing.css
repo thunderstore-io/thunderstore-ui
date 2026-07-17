@@ -6,7 +6,6 @@
     flex-direction: column;
     gap: var(--gap-xs);
     align-items: stretch;
-    align-self: stretch;
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
@@ -14,10 +13,10 @@
   }
 
   .package-listing__main {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
     gap: var(--gap-3xl);
-    align-items: flex-start;
-    align-self: stretch;
+    align-items: start;
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
@@ -26,11 +25,8 @@
 
   .package-listing__package-content-section {
     display: flex;
-    flex: 1 1 0;
     flex-direction: column;
     gap: var(--gap-xl);
-    align-items: flex-start;
-    align-self: stretch;
     box-sizing: border-box;
     min-width: 0;
     max-width: 100%;
@@ -57,7 +53,6 @@
     flex-direction: column;
     gap: var(--gap-3xl);
     align-items: stretch;
-    align-self: stretch;
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
@@ -68,35 +63,31 @@
     display: flex;
     gap: var(--gap-xs);
     align-items: flex-start;
-    align-self: stretch;
   }
 
   .package-listing__narrow-actions {
     display: none;
     flex-direction: column;
     gap: var(--gap-xs);
-    align-items: flex-start;
-    align-self: stretch;
   }
 
   .package-listing__drawer-button {
     width: 100%;
   }
 
+  /* One combined dashed box of icon-only actions (the Island "special" variant
+     supplies the flex row + border + background). fit-content so the box hugs
+     its buttons; start-aligned to line up with the sidebar below. */
   .package-listing-management-tools {
-    flex-wrap: wrap;
-    align-self: stretch;
-    justify-content: flex-end;
+    justify-content: flex-start;
     box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
+    width: fit-content;
     max-width: 100%;
   }
 
-  .package-listing-management-tools .island[data-variant="special"] {
-    flex: 0 1 auto;
-    min-width: 0;
-    max-width: 100%;
+  /* No empty dashed box when the user has no applicable action. */
+  .package-listing-management-tools:empty {
+    display: none;
   }
 
   .package-listing-sidebar__categories,
@@ -104,8 +95,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
-    align-items: flex-start;
-    align-self: stretch;
     padding: var(--space-16);
     border-radius: var(--radius-md);
     background-color: var(--color-surface-default);
@@ -116,10 +105,97 @@
   }
 
   .review-information-card__text {
-    align-self: stretch;
     font: inherit;
     white-space: pre-wrap;
     overflow-wrap: break-word;
+  }
+
+  /* Banner cell is the positioning context for the internal-notes overlay. */
+  .package-listing__banner {
+    position: relative;
+  }
+
+  .package-listing__internal-notes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    box-sizing: border-box;
+    padding: var(--space-12);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-1);
+  }
+
+  /* When the community has a banner, overlay the notes on it and clamp them to
+     the banner's height; when expanded they grow beyond it (over the content
+     below) without reflowing the page since the overlay is out of flow. Without
+     a banner there's nothing to overlay, so the notes stay in normal flow. */
+  .package-listing__banner:has(.community__header--compact)
+    .package-listing__internal-notes {
+    position: absolute;
+    inset: var(--space-8) auto auto var(--space-8);
+    z-index: 1;
+    width: fit-content;
+    max-width: min(32rem, calc(100% - 2 * var(--space-8)));
+    max-height: calc(100% - 2 * var(--space-8));
+    overflow: hidden;
+  }
+
+  .package-listing__banner:has(.community__header--compact)
+    .package-listing__internal-notes--expanded {
+    max-height: min(80vh, 40rem);
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .package-listing__internal-notes-header {
+    display: flex;
+    gap: var(--gap-sm);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .package-listing__internal-notes-toggle {
+    flex: none;
+    padding: 0;
+    border: none;
+    color: var(--color-cyber-green-7);
+    font: inherit;
+    font-weight: var(--font-weight-semibold);
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-cyber-green-9);
+      text-decoration: underline;
+    }
+  }
+
+  .package-listing__internal-notes-text {
+    margin: 0;
+    font: inherit;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  /* On single-column (mobile/tablet) layouts the banner is too short to overlay
+     the notes on — the clamped card ends up unusably small (Show more becomes
+     unclickable). Drop them into normal flow below the banner instead, with a
+     comfortable collapsed height. */
+  @media (width <= 70rem) {
+    .package-listing__banner:has(.community__header--compact)
+      .package-listing__internal-notes {
+      position: static;
+      inset: auto;
+      width: auto;
+      max-width: none;
+      max-height: 6rem;
+      margin-top: var(--gap-sm);
+    }
+
+    .package-listing__banner:has(.community__header--compact)
+      .package-listing__internal-notes--expanded {
+      max-height: min(80vh, 40rem);
+    }
   }
 
   .review-package__body {
@@ -130,7 +206,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
-    align-items: flex-start;
   }
 
   .review-package__label {
@@ -160,15 +235,12 @@
     flex-direction: column;
     flex-shrink: 0;
     gap: var(--gap-md);
-    align-items: flex-start;
   }
 
   .package-listing-sidebar__main {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
-    align-items: flex-start;
-    align-self: stretch;
   }
 
   .package-listing-sidebar__actions-skeleton,
@@ -203,8 +275,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-3xs);
-    align-items: flex-start;
-    align-self: stretch;
 
     > :first-child {
       border-radius: var(--radius-md) var(--radius-md) 0 0;
@@ -219,7 +289,6 @@
     display: flex;
     gap: var(--gap-3xl);
     align-items: center;
-    align-self: stretch;
     padding: var(--space-8) var(--space-12);
     background: var(--color-surface-default);
   }
@@ -259,7 +328,6 @@
   .package-listing-sidebar__header {
     display: flex;
     align-items: center;
-    align-self: stretch;
   }
 
   .package-listing-sidebar__body {
@@ -269,7 +337,6 @@
     gap: var(--gap-xs);
     align-content: flex-start;
     align-items: flex-start;
-    align-self: stretch;
     min-width: 6.25rem;
     max-width: 18.75rem;
   }
@@ -295,6 +362,7 @@
     }
 
     .package-listing__main {
+      grid-template-columns: minmax(0, 1fr);
       width: 100%;
       min-width: 0;
       max-width: 100%;

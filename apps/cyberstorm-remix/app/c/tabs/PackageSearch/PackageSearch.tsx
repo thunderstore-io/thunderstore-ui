@@ -1,9 +1,14 @@
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
+import { SidebarAd } from "~/commonComponents/Ads/SidebarAd";
+import { COMMUNITY_SIDEBAR_AD } from "~/commonComponents/Ads/nitroAds";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/packageOrderOptions";
 import { type OutletContextShape } from "~/root";
@@ -143,15 +148,23 @@ export default function CommunityPackageSearch() {
 
   const outletContext = useOutletContext() as OutletContextShape;
 
+  // The community route is always ad-allowed, so VITE_DISABLE_ADS (the local /
+  // test kill switch) is the only gate. When ads are off we pass no slot, which
+  // also keeps the sidebar at its default width.
+  const adsDisabled =
+    getPublicEnvVariables(["VITE_DISABLE_ADS"]).VITE_DISABLE_ADS === "true";
+
   return (
-    <>
-      <PackageSearch
-        listings={listings}
-        filters={filters}
-        config={outletContext.requestConfig}
-        currentUser={outletContext.currentUser}
-        dapper={outletContext.dapper}
-      />
-    </>
+    <PackageSearch
+      listings={listings}
+      filters={filters}
+      config={outletContext.requestConfig}
+      currentUser={outletContext.currentUser}
+      dapper={outletContext.dapper}
+      sidebarSlot={
+        adsDisabled ? undefined : <SidebarAd slot={COMMUNITY_SIDEBAR_AD} />
+      }
+      withDisplayControls
+    />
   );
 }

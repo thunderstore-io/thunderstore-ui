@@ -1,8 +1,6 @@
 @layer theme-components-colors {
   /* These variables are copied from Figma with the plugin variables2css */
   :root {
-    --ad-bg-color--default: var(--color-nightsky-4);
-    --ad-text-color--default: var(--color-text-tertiary);
     --alert-danger-bg-color--default: var(--color-accent-red-2);
     --alert-danger-border-color--default: var(--color-accent-red-7);
     --alert-danger-icon-color--default: var(--color-accent-red-7);
@@ -133,20 +131,6 @@
     --button-warning-text-color--active: var(--color-accent-yellow-11);
     --button-warning-text-color--default: var(--color-accent-yellow-11);
     --button-warning-text-color--hover: var(--color-accent-yellow-11);
-    --card-package-shared--is-liked-icon-color: var(--color-cyber-green-7);
-    --card-package-shared--title-link-color: var(--color-text-primary);
-    --card-package-shared--title-color: var(--color-text-primary);
-    --card-package-shared--prefix-color: var(--color-text-tertiary);
-    --card-package-shared--description-color: var(--color-text-secondary);
-    --card-package-card-background-color: var(--color-surface-a4);
-    --card-package-card-hover-background-color: var(--color-surface-a5);
-    --card-package-card--updated-color: var(--color-text-tertiary);
-    --card-package-featured-background-color: rgb(61 61 127 / 0.44);
-    --card-package-featured-hover-background-color: rgb(63 63 136 / 0.55);
-    --card-package-fullwidth-background-color: var(--color-surface-a4);
-    --card-package-fullwidth-hover-background-color: var(--color-surface-a6);
-    --card-package-secondary-background-color: rgb(63 63 136 / 0.55);
-    --card-package-secondary-hover-background-color: rgb(63 63 136 / 0.55);
     --checkbox-bg-color--active: var(--color-nightsky-a10);
     --checkbox-bg-color--default: var(--color-nightsky-a8);
     --checkbox-bg-color--hover: var(--color-nightsky-a10);

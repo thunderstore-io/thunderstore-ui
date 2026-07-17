@@ -20,7 +20,6 @@
     flex-direction: column;
 
     /* gap: var(--modal-content-gap); */
-    align-items: flex-start;
     align-self: stretch;
     justify-content: center;
 
@@ -75,7 +74,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
-    align-items: flex-start;
     align-self: stretch;
 
     /* min-height:0 lets the body shrink below its content height inside the

@@ -1,7 +1,0 @@
-@layer theme-components {
-  /* VARIANTS DEFAULT STATE */
-  .ad-container__fallback:where(.ad-container__fallback--variant--primary) {
-    --ad-container-fallback-color: var(--ad-text-color--default);
-    --ad-container-fallback-background-color: var(--ad-bg-color--default);
-  }
-}

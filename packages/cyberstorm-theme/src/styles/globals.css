@@ -24,7 +24,6 @@
     --space-48: 3rem;
     --space-51: 3.188rem;
     --space-54: 3.375rem;
-    --space-80: 5rem;
 
     /* Space affecting layout values */
 
@@ -41,7 +40,6 @@
     --gap-5xl: var(--space-40);
     --gap-6xl: var(--space-44);
     --gap-7xl: var(--space-48);
-    --gap-form-column: var(--space-80);
     --page-margin: 16rem;
     --page-margin-top: 25px;
 
@@ -64,8 +62,10 @@
     --animation-duration-md: 150ms;
     --animation-duration-lg: 300ms;
 
-    /* Shared variables for layout */
-    --container-padding: clamp(1rem, 3.75vw, 4rem);
+    /* Shared variables for layout. Hold 1rem until ~90rem (1440px — the content
+       width) so narrow and mid-width screens aren't over-padded, then grow to
+       4rem by ~120rem (1920px) for wide desktops. */
+    --container-padding: clamp(1rem, calc(1rem + (100vw - 90rem) * 0.1), 4rem);
     --container-width: 90rem;
     --island-gap: 0.25rem;
   }

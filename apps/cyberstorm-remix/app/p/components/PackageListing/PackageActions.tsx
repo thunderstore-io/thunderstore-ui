@@ -130,7 +130,8 @@ export const PackageActions = memo(function PackageActions(
                 Boolean(currentUser?.username)
               )
             }
-            tooltipText="Like"
+            aria-label={isLiked ? "Unlike" : "Like"}
+            tooltipText={isLiked ? "Unlike" : "Like"}
             csVariant={isLiked ? "primary" : "secondary"}
             csSize="big"
             csModifiers={["only-icon"]}

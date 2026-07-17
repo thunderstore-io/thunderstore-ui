@@ -1,12 +1,9 @@
 @layer nimbus-components {
   .page-header {
     display: flex;
-
-    /* flex: 1 1 0; */
     flex-direction: row;
     gap: var(--space-32);
     align-items: flex-start;
-    align-self: stretch;
     border-radius: var(--radius-md);
   }
 
@@ -48,15 +45,12 @@
     flex: 1 0 0;
     flex-direction: column;
     gap: 0.75rem;
-    align-items: flex-start;
     min-width: 0;
 
     .page-header__info {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
-      align-items: flex-start;
-      align-self: stretch;
     }
   }
 
@@ -74,7 +68,6 @@
       flex: 1 0 0;
       flex-direction: column;
       gap: 0.25rem;
-      align-items: flex-start;
     }
 
     .page-header__meta {
@@ -91,12 +84,10 @@
 
   .page-header__description {
     display: inline-block;
-    align-self: stretch;
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-lg);
     line-height: var(--line-height-md);
-    text-shadow: var(--textshadow-default);
     word-break: break-word;
   }
 
@@ -108,7 +99,6 @@
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-lg);
-    text-shadow: var(--textshadow-default);
     word-break: break-all;
 
     svg {

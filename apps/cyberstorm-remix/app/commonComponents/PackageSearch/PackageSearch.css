@@ -1,9 +1,18 @@
 @layer nimbus-components {
   .package-search {
-    display: flex;
+    --package-search-sidebar-width: 15.5rem;
+
+    display: grid;
+    grid-template-columns: var(--package-search-sidebar-width) minmax(0, 1fr);
     gap: var(--gap-xl);
-    align-items: flex-start;
-    align-self: stretch;
+    align-items: start;
+  }
+
+  /* The community page renders a 300×250 ad above the filters (sidebarSlot in
+     PackageSearch); widen the sidebar column to hold it (+2px for the ad slot's
+     borders). Other PackageSearch uses keep the default narrow sidebar. */
+  .package-search--with-sidebar-ad {
+    --package-search-sidebar-width: calc(300px + 2px);
   }
 
   .package-search__sidebar {
@@ -12,8 +21,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
-    align-items: flex-start;
-    min-width: 15.5rem;
     max-height: calc(100vh - var(--header-height) - 2rem);
     padding-top: var(--space-16);
     border-radius: var(--radius-md);
@@ -36,11 +43,8 @@
   .package-search__filters {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-sm);
     gap: 0.75rem;
-    align-items: stretch;
-    align-self: stretch;
-    width: 15.5rem;
+    width: var(--package-search-sidebar-width);
   }
 
   .package-search__drawer-toggle {
@@ -57,12 +61,16 @@
     width: 100%;
   }
 
+  /* Cards + View sit at the right of the drawer, under the full-width Sort. */
+  .package-search__drawer-sorting .display-controls {
+    align-self: flex-end;
+  }
+
   .package-search__content {
     display: flex;
-    flex: 0 1 100%;
     flex-direction: column;
     gap: var(--space-24);
-    align-items: flex-start;
+    min-width: 0;
     padding-top: var(--space-16);
   }
 
@@ -71,9 +79,8 @@
     flex-direction: column;
     gap: var(--gap-xl);
     align-items: center;
-    align-self: stretch;
     justify-content: center;
-    padding: var(--space-48) 0;
+    padding: var(--space-16) 0;
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
 
@@ -87,31 +94,23 @@
     }
   }
 
+  /* Results count (left) + active-filter chips (right), on one row. */
   .package-search__search-params {
     display: flex;
     flex: 1 1 0;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: var(--gap-md);
-    align-items: flex-start;
-    align-self: stretch;
-    justify-content: center;
+    align-items: center;
     min-width: 0;
   }
 
   .package-search__tags {
     display: flex;
-    flex: 0 1 0;
+    flex: 1 1 0;
+    flex-wrap: wrap;
     gap: var(--gap-sm);
     align-items: center;
     min-width: 0;
-  }
-
-  .package-search__tools {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap-xl);
-    align-items: center;
-    align-self: stretch;
   }
 
   .package-search__listing-actions {
@@ -135,10 +134,10 @@
 
   .package-search__results {
     display: flex;
-    flex: 1;
+    flex: none;
     gap: var(--gap-2xs);
     align-items: center;
-    justify-content: flex-end;
+    white-space: nowrap;
 
     .skeleton {
       width: 18ch;
@@ -152,7 +151,6 @@
     flex-direction: column;
     gap: var(--gap-md);
     align-items: center;
-    align-self: stretch;
   }
 
   .package-search__grid {
@@ -161,15 +159,50 @@
     gap: var(--gap-sm);
     width: 100%;
 
+    /* Named container so the list CardPackage variant can react to its own width
+       (in list mode the cards are full-width, so the grid width ≈ card width).
+       See the @container package-cards rule in CardPackage.css. */
+    container: package-cards / inline-size;
+
     > .skeleton {
       height: 30rem;
     }
   }
 
-  @media (width <= 48rem) {
-    .package-search__results {
+  /* List layout: one card per row instead of the auto-fill grid. Driven by
+     html[data-card-layout="list"] (see DisplayControls + CardPackage.css). */
+  :root[data-card-layout="list"] .package-search__grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* List-variant author link: neutral by default (matching the "by" prefix),
+     cyber-green only on hover. Defined here (nimbus layer) so it wins over the
+     Link's cyber variant in theme-components; the hover green still comes from
+     that variant's --link-color-hover. */
+  :root[data-card-layout="list"] .card-package__link {
+    --link-color: var(--card-package--prefix-color);
+  }
+
+  /* Below ~1020px viewport (this container ≈ 58rem wide) the search input gets
+     too narrow beside the Sort/Cards/View dropdowns; stack the input above them. */
+  @container container (width <= 58rem) {
+    .package-search__search-wrapper {
+      flex-direction: column;
       align-items: stretch;
-      justify-content: center;
+    }
+  }
+
+  @container container (width <= 48rem) {
+    .package-search {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Phones keep the input + filters-drawer button on one row (the actions live
+       in the drawer, so there's nothing to stack here). */
+    .package-search__search-wrapper {
+      flex-direction: row;
+      align-items: center;
     }
 
     .package-search__grid {
@@ -180,26 +213,25 @@
       display: none;
     }
 
-    .package-search__sorting {
+    /* Sorting + display controls fold into the filters drawer on narrow
+       screens; hide the (now-empty) actions group so the search row keeps no
+       dangling gap. */
+    .package-search__listing-actions {
       display: none;
     }
 
     .package-search__drawer-sorting {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-sm);
     }
 
     .package-search__drawer-toggle {
       display: flex;
     }
-
-    .package-search__tools {
-      flex-direction: column;
-      gap: 0.5rem;
-      align-items: stretch;
-    }
   }
 
-  @media (width <= 475px) {
+  @container container (width <= 475px) {
     .package-search__results {
       align-items: stretch;
       justify-content: center;
@@ -220,7 +252,7 @@
   }
 
   /* This is added for better grid on phones */
-  @media (width <= 416px) {
+  @container container (width <= 416px) {
     .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     }

@@ -20,35 +20,34 @@ export function Connection(props: ConnectionProps) {
     props;
 
   return (
-    <div className={`connection ${connection ? "" : "connection--disabled"}`}>
-      <div className="connection__body">
-        <div className="connection__info">
-          <div className="connection__provider">
-            <NewIcon wrapperClasses="connection__icon">{icon}</NewIcon>
-            <div className="connection__name">{name}</div>
-          </div>
-          {connection ? (
-            <div className="connection__description">
-              <span className="connection__connected">Connected as</span>
-              <span className="connection__username">
-                {connection.username}
-              </span>
-            </div>
-          ) : null}
+    <div className={`connection ${connection ? "connection--active" : ""}`}>
+      <div className="connection__info">
+        <div className="connection__provider">
+          <NewIcon wrapperClasses="connection__icon">{icon}</NewIcon>
+          <div className="connection__name">{name}</div>
         </div>
-        <NewSwitch
-          rootClasses="connection__switch"
-          disabled={disabled}
-          value={connection !== undefined}
-          onChange={() => {
-            if (connection) {
-              props.disconnectFunction(identifier);
-            } else {
-              window.open(connectionLink);
-            }
-          }}
-        />
+        {connection ? (
+          <div className="connection__description">
+            <span className="connection__connected">Connected as</span>
+            <span className="connection__username">{connection.username}</span>
+          </div>
+        ) : null}
       </div>
+      <NewSwitch
+        rootClasses="connection__switch"
+        disabled={disabled}
+        value={connection !== undefined}
+        onChange={() => {
+          if (connection) {
+            props.disconnectFunction(identifier);
+          } else {
+            // noopener: window.open gives the opened page a window.opener
+            // back-reference by default (reverse tabnabbing), and unlike
+            // target="_blank" anchors, browsers do NOT imply noopener here.
+            window.open(connectionLink, "_blank", "noopener,noreferrer");
+          }
+        }}
+      />
     </div>
   );
 }
