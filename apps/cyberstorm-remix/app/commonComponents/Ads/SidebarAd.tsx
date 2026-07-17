@@ -22,11 +22,14 @@ export function SidebarAd({ slot }: { slot: RenderedAdSlot }) {
     let cancelled = false;
     let idleHandle: number | undefined;
     let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+    // Aborting on unmount drops the readiness waiter (and releases this closure)
+    // so a blocked NitroPay script can't accumulate waiters across navigations.
+    const readyController = new AbortController();
 
     // The script can still be loading when this mounts (direct entry / a nav
     // from an ad-free route), so wait for the ref instead of reading it now.
-    whenNitroAdsReady().then((nitroAds) => {
-      if (cancelled) {
+    whenNitroAdsReady(readyController.signal).then((nitroAds) => {
+      if (cancelled || !nitroAds) {
         return;
       }
       // Defer the auction to idle so it doesn't contend with hydration, matching
@@ -43,6 +46,7 @@ export function SidebarAd({ slot }: { slot: RenderedAdSlot }) {
 
     return () => {
       cancelled = true;
+      readyController.abort();
       if (idleHandle !== undefined) {
         window.cancelIdleCallback(idleHandle);
       }

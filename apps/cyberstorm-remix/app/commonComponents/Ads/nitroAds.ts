@@ -394,6 +394,19 @@ const adRegistry = new Map<string, NitroAd>();
 // with refs to slots whose container divs were already unmounted.
 let adGeneration = 0;
 
+// Per-container creation epoch for page-scoped sidebar slots. adGeneration only
+// covers whole-surface teardown; a single sidebar can unmount (or unmount then
+// remount, reusing the same id) without bumping it. createPageScopedAd bumps the
+// epoch before each createAd and removePageScopedAd bumps it on unmount, so a
+// createAd promise that resolves late is recognized as stale and never registers
+// a ref for onNavigate to churn against. Layout slots have no entry here (their
+// creation is guarded by adGeneration alone).
+const pageScopedEpoch = new Map<string, number>();
+
+function bumpPageScopedEpoch(containerId: string): void {
+  pageScopedEpoch.set(containerId, (pageScopedEpoch.get(containerId) ?? 0) + 1);
+}
+
 // Slot-creation time; the fallback "creative live since" for a slot that has
 // not yet reported a render via the nitroAds.rendered event below.
 let adsLiveSince = 0;
@@ -476,6 +489,7 @@ function createNimbusAd(
   options: NitroAdOptions
 ): void {
   const generation = adGeneration;
+  const pageEpoch = pageScopedEpoch.get(containerId);
   // Pass only the sizes that fit the measured container (the floating video has
   // no `sizes`). NitroPay serves the listed size as-is, so this is what keeps
   // ads from overflowing their slot.
@@ -493,12 +507,14 @@ function createNimbusAd(
           // gone and NitroPay has freed the slot.
           return;
         }
+        if (pageScopedEpoch.get(containerId) !== pageEpoch) {
+          // A page-scoped slot unmounted — or unmounted and remounted with a
+          // newer creation — while this was in flight. Registering now would
+          // leave a stale ref for onNavigate to churn against.
+          return;
+        }
         const resolved = Array.isArray(ad) ? ad[0] : ad;
-        // A page-scoped slot may have unmounted while creation was in flight
-        // (removePageScopedAd drops refs without bumping the generation);
-        // registering then would leave a stale ref for onNavigate to churn
-        // against. Only register while the container div is still mounted.
-        if (resolved && document.getElementById(containerId)) {
+        if (resolved) {
           adRegistry.set(containerId, resolved);
         }
       })
@@ -673,12 +689,35 @@ export function markNitroAdsReady(nitroAds: NitroAds): void {
   }
 }
 
-export function whenNitroAdsReady(): Promise<NitroAds> {
+// Resolves once the NitroPay script loads (markNitroAdsReady). If the script is
+// blocked (adblock/network) it never loads, so callers MUST pass an AbortSignal
+// and abort on unmount — otherwise every mount leaves an unresolved waiter and a
+// retained `.then` closure, accumulating over a session. On abort the waiter is
+// dropped and the promise resolves to null so the caller's closure is released.
+export function whenNitroAdsReady(
+  signal?: AbortSignal
+): Promise<NitroAds | null> {
   if (readyNitroAds) {
     return Promise.resolve(readyNitroAds);
   }
   return new Promise((resolve) => {
-    nitroReadyWaiters.push(resolve);
+    if (signal?.aborted) {
+      resolve(null);
+      return;
+    }
+    const waiter = (nitroAds: NitroAds) => resolve(nitroAds);
+    nitroReadyWaiters.push(waiter);
+    signal?.addEventListener(
+      "abort",
+      () => {
+        const index = nitroReadyWaiters.indexOf(waiter);
+        if (index !== -1) {
+          nitroReadyWaiters.splice(index, 1);
+        }
+        resolve(null);
+      },
+      { once: true }
+    );
   });
 }
 
@@ -698,9 +737,14 @@ export function createPageScopedAd(
   nitroAds: NitroAds,
   slot: RenderedAdSlot
 ): void {
+  // Bump BEFORE createNimbusAd captures the epoch, so any older in-flight
+  // creation for this id (a fast remount) is invalidated.
+  bumpPageScopedEpoch(slot.containerId);
   createNimbusAd(nitroAds, slot.containerId, slot.options);
 }
 
 export function removePageScopedAd(slot: RenderedAdSlot): void {
+  // Invalidate any still-in-flight createAd for this id (see createNimbusAd).
+  bumpPageScopedEpoch(slot.containerId);
   removeNimbusAd(slot.containerId);
 }
