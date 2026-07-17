@@ -107,6 +107,7 @@
   .package-search__tags {
     display: flex;
     flex: 1 1 0;
+    flex-wrap: wrap;
     gap: var(--gap-sm);
     align-items: center;
     min-width: 0;

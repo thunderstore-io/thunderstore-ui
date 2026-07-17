@@ -131,7 +131,7 @@ export const PackageActions = memo(function PackageActions(
               )
             }
             aria-label={isLiked ? "Unlike" : "Like"}
-            tooltipText="Like"
+            tooltipText={isLiked ? "Unlike" : "Like"}
             csVariant={isLiked ? "primary" : "secondary"}
             csSize="big"
             csModifiers={["only-icon"]}
