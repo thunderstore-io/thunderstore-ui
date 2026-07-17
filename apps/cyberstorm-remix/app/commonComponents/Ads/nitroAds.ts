@@ -258,6 +258,15 @@ function displaySlot(slot: {
 const AD_SLOT_VERSION = 2;
 const AD_PREFIX = `nimbus-v${AD_SLOT_VERSION}`;
 
+// Version-independent placement key for telemetry — strips the `nimbus-v<N>-`
+// prefix and the trailing `-<w>x<h>` size so bumping AD_SLOT_VERSION (or moving a
+// size tier) doesn't split one placement's Sentry issues. Used by the ad error
+// boundaries (AdErrorBoundary) to fingerprint per placement, e.g.
+// "nimbus-v2-community-sidebar-300x250" → "community-sidebar".
+export function adPlacementKey(containerId: string): string {
+  return containerId.replace(/^nimbus-v\d+-/, "").replace(/-\d+x\d+$/, "");
+}
+
 // Single page-level floating video (NitroPay `floating` format): docks to a
 // viewport corner rather than living in the rail, so it's created once (not per
 // rail config) and has no width/height gating — its container is a plain empty
@@ -273,7 +282,8 @@ const FLOATING_VIDEO_OPTIONS: NitroAdOptions = {
   refreshLimit: 0,
   // 30s auto-refresh for the video (display slots use 60s).
   refreshTime: 30,
-  onNavigateMin: ON_NAVIGATE_MIN,
+  // No onNavigateMin: the floating video is excluded from SPA onNavigate
+  // refreshes (see onNavigateNimbusAds), so a navigation floor never applies.
   // Dock to the bottom-right corner (NitroPay's default, set explicitly to match
   // the placement spec); smaller player on phones so it doesn't dominate.
   floating: { position: "right", reduceMobileSize: true },

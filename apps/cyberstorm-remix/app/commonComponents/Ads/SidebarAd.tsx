@@ -2,8 +2,10 @@ import { useEffect } from "react";
 
 import { AdContainer } from "@thunderstore/cyberstorm";
 
+import { AdErrorBoundary } from "./AdErrorBoundary";
 import {
   type RenderedAdSlot,
+  adPlacementKey,
   createPageScopedAd,
   removePageScopedAd,
   whenNitroAdsReady,
@@ -60,10 +62,12 @@ export function SidebarAd({ slot }: { slot: RenderedAdSlot }) {
   }, [slot]);
 
   return (
-    <AdContainer
-      containerId={slot.containerId}
-      sizeVariant={slot.sizeVariant}
-    />
+    <AdErrorBoundary placement={adPlacementKey(slot.containerId)}>
+      <AdContainer
+        containerId={slot.containerId}
+        sizeVariant={slot.sizeVariant}
+      />
+    </AdErrorBoundary>
   );
 }
 

@@ -49,6 +49,7 @@ import {
 } from "@thunderstore/ts-api-react";
 
 import type { Route } from "./+types/root";
+import { AdErrorBoundary } from "./commonComponents/Ads/AdErrorBoundary";
 import {
   AD_DEMO_MODE,
   BOTTOM_AD_SLOTS,
@@ -434,35 +435,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             : "community"
                         }
                       >
-                        {COMMUNITY_RAIL_SLOTS.map((slot) => (
-                          <AdContainer
-                            key={slot.containerId}
-                            containerId={slot.containerId}
-                            sizeVariant={slot.sizeVariant}
-                            railPage="community"
-                          />
-                        ))}
-                        {PACKAGE_RAIL_SLOTS.map((slot) => (
-                          <AdContainer
-                            key={slot.containerId}
-                            containerId={slot.containerId}
-                            sizeVariant={slot.sizeVariant}
-                            railPage="package"
-                          />
-                        ))}
+                        <AdErrorBoundary placement="rail">
+                          {COMMUNITY_RAIL_SLOTS.map((slot) => (
+                            <AdContainer
+                              key={slot.containerId}
+                              containerId={slot.containerId}
+                              sizeVariant={slot.sizeVariant}
+                              railPage="community"
+                            />
+                          ))}
+                          {PACKAGE_RAIL_SLOTS.map((slot) => (
+                            <AdContainer
+                              key={slot.containerId}
+                              containerId={slot.containerId}
+                              sizeVariant={slot.sizeVariant}
+                              railPage="package"
+                            />
+                          ))}
+                        </AdErrorBoundary>
                       </div>
                     </div>
                   )}
                 </Island>
                 {shouldCreateAds && BOTTOM_ADS_ENABLED ? (
                   <Island rootClasses="layout__bottom-ads">
-                    {BOTTOM_AD_SLOTS.map((slot) => (
-                      <AdContainer
-                        key={slot.containerId}
-                        containerId={slot.containerId}
-                        sizeVariant={slot.sizeVariant}
-                      />
-                    ))}
+                    <AdErrorBoundary placement="content-bottom">
+                      {BOTTOM_AD_SLOTS.map((slot) => (
+                        <AdContainer
+                          key={slot.containerId}
+                          containerId={slot.containerId}
+                          sizeVariant={slot.sizeVariant}
+                        />
+                      ))}
+                    </AdErrorBoundary>
                   </Island>
                 ) : null}
                 <Footer domain={resolvedEnvVars?.VITE_API_URL || ""} />
