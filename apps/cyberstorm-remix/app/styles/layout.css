@@ -238,7 +238,11 @@
      a single content column, stack the pieces in DOM order, and fold the sidebar
      into its drawer (the .package-listing__narrow-actions button reveals it). */
   @media (width <= 70rem) {
-    .layout__main--ads.layout__main--package-detail {
+    /* Not gated on --ads: the base grid above applies with ads off too (see its
+       "Fallback for when ads are off" note), so the narrow-screen collapse must
+       drop the sidebar track in that case as well, matching the child-placement
+       rules below. */
+    .layout__main--package-detail {
       grid-template-columns:
         minmax(var(--container-padding), 1fr)
         minmax(0, var(--content-max))
