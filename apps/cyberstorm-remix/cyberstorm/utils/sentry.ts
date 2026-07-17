@@ -7,22 +7,23 @@ import { isApiError } from "@thunderstore/thunderstore-api";
 /**
  * Decide whether a route error is expected traffic rather than a bug.
  *
- * Router-internal 4xx ErrorResponses — 404s for unmatched URLs (bots, typos,
- * ACME probes), 405s for invalid methods or POSTs without an action — and the
- * 4xx Responses ssrLoader converts ApiErrors into are user/bot-facing
- * outcomes, not bugs: suppressed wholesale.
+ * 4xx REPORTS BY DEFAULT; suppression is an explicit allowlist of statuses
+ * normal browsing produces (403/404/410: permission gates, stale links,
+ * removed content; 401: see below). Everything else (400, 405, 409, 422, 429,
+ * ...) reports — a bad request we built, API-contract drift, or rate limiting.
+ * This applies to BOTH shapes a 4xx arrives in:
+ *   - Raw ApiErrors (clientLoaders throw them unconverted).
+ *   - Loader-thrown Responses (ssrLoader converts ApiErrors into Responses;
+ *     the router deserializes them as ErrorResponses with `internal: false`).
+ *     Without this, an SSR-side 429/400 would be blanket-suppressed.
+ * Router-internal ErrorResponses (`internal: true` — 404s for unmatched URLs,
+ * 405s for bad methods) are genuine bot/user noise and stay suppressed.
  *
- * Raw ApiErrors (clientLoaders throw them unconverted) REPORT BY DEFAULT;
- * suppression is an explicit allowlist of statuses normal browsing produces:
- *   - 403/404/410: permission gates, stale links, removed content.
- *   - 401: expected for an anonymous user (RouteErrorBoundary redirects them
- *     to login), an auth regression for a logged-in one. Gates without
- *     session context (entry.client onError, entry.server handleError) treat
- *     401 as expected; RouteErrorBoundary resolves the session and passes
- *     `anonymous` to make the real call.
- *   - Everything else (400, 405, 409, 422, 429, ...) reports: we built a bad
- *     request, drifted from the API contract, or hit rate limiting — bugs or
- *     incidents, not traffic.
+ * 401 is expected for an anonymous user (RouteErrorBoundary redirects them to
+ * login), an auth regression for a logged-in one. Only the raw-ApiError path
+ * carries session context; RouteErrorBoundary resolves the session and passes
+ * `anonymous`. Context-less gates (entry.client onError, entry.server
+ * handleError) and loader-thrown 401s treat 401 as expected.
  *
  * Suppressed ApiErrors still leave a sampled, grouped trace — see
  * heartbeatSuppressed4xx. 5xx and non-HTTP errors always report.
@@ -33,7 +34,17 @@ export function isExpectedRouteError(
   error: unknown,
   context?: { anonymous?: boolean }
 ): boolean {
-  if (isRouteErrorResponse(error)) return error.status < 500;
+  if (isRouteErrorResponse(error)) {
+    if (error.status >= 500) return false;
+    // Loader-thrown Responses (internal:false) mirror the ApiError allowlist
+    // below (+ context-less 401); router-internal 4xx (internal:true) is noise.
+    if ((error as { internal?: boolean }).internal === false) {
+      return (
+        SUPPRESSED_API_ERROR_STATUSES.has(error.status) || error.status === 401
+      );
+    }
+    return true;
+  }
   if (isApiError(error)) {
     const status = error.response.status;
     if (SUPPRESSED_API_ERROR_STATUSES.has(status)) return true;

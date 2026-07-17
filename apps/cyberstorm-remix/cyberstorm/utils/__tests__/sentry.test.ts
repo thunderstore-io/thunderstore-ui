@@ -347,17 +347,37 @@ describe("utils.sentry.isExpectedRouteError", () => {
     }
   );
 
-  it("returns true for loader-thrown Responses deserialized by the router", () => {
-    // ssrLoader converts 4xx ApiErrors to thrown Responses; on the client
-    // these surface as ErrorResponses with internal=false and no `error`.
-    expect(
-      isExpectedRouteError({
-        status: 404,
-        statusText: "",
-        internal: false,
-        data: '{"status":404,"statusText":"","url":"https://example/api"}',
-      })
-    ).toBe(true);
+  // ssrLoader converts 4xx ApiErrors to thrown Responses; the router
+  // deserializes them as ErrorResponses with internal=false. These mirror the
+  // ApiError allowlist rather than being blanket-suppressed.
+  const loaderThrownResponse = (status: number) => ({
+    status,
+    statusText: "",
+    internal: false,
+    data: `{"status":${status},"statusText":"","url":"https://example/api"}`,
+  });
+
+  it.each([403, 404, 410, 401])(
+    "returns true for loader-thrown %i (normal-browsing allowlist)",
+    (status) => {
+      expect(isExpectedRouteError(loaderThrownResponse(status))).toBe(true);
+    }
+  );
+
+  it.each([400, 405, 409, 422, 429])(
+    "returns false for loader-thrown %i (SSR 4xx reports by default)",
+    (status) => {
+      // A Cloudflare 429 or contract-drift 400 during SSR must not be
+      // silently swallowed just because ssrLoader wrapped it in a Response.
+      expect(isExpectedRouteError(loaderThrownResponse(status))).toBe(false);
+    }
+  );
+
+  it("still suppresses router-internal 4xx wholesale (bot noise)", () => {
+    // internal:true = unmatched-URL 404s / bad-method 405s the router itself
+    // raised — those stay expected regardless of status.
+    expect(isExpectedRouteError(routeErrorResponse(429))).toBe(true);
+    expect(isExpectedRouteError(routeErrorResponse(400))).toBe(true);
   });
 
   it("returns false for plain Errors", () => {
