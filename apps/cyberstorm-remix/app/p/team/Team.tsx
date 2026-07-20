@@ -4,7 +4,10 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { parsePageParam } from "cyberstorm/utils/searchParamsUtils";
+import {
+  parseIntListParam,
+  parsePageParam,
+} from "cyberstorm/utils/searchParamsUtils";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
@@ -36,8 +39,14 @@ export const loader = ssrLoader(
         searchParams.get("ordering") ?? PackageOrderOptions.Updated;
       const page = searchParams.get("page");
       const search = searchParams.get("search");
-      const includedCategories = searchParams.get("includedCategories");
-      const excludedCategories = searchParams.get("excludedCategories");
+      const includedCategories = parseIntListParam(
+        searchParams,
+        "includedCategories"
+      );
+      const excludedCategories = parseIntListParam(
+        searchParams,
+        "excludedCategories"
+      );
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
@@ -64,8 +73,8 @@ export const loader = ssrLoader(
           ordering ?? "",
           parsePageParam(page),
           search ?? "",
-          includedCategories?.split(",") ?? undefined,
-          excludedCategories?.split(",") ?? undefined,
+          includedCategories,
+          excludedCategories,
           finalSection,
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
@@ -120,8 +129,14 @@ export async function clientLoader({
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
     const page = searchParams.get("page");
     const search = searchParams.get("search");
-    const includedCategories = searchParams.get("includedCategories");
-    const excludedCategories = searchParams.get("excludedCategories");
+    const includedCategories = parseIntListParam(
+      searchParams,
+      "includedCategories"
+    );
+    const excludedCategories = parseIntListParam(
+      searchParams,
+      "excludedCategories"
+    );
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
@@ -144,8 +159,8 @@ export async function clientLoader({
         ordering ?? "",
         parsePageParam(page),
         search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
+        includedCategories,
+        excludedCategories,
         finalSection,
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false

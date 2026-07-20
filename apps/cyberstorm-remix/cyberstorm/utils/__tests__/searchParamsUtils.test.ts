@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parsePageParam } from "../searchParamsUtils";
+import { parseIntListParam, parsePageParam } from "../searchParamsUtils";
 
 describe("utils.searchParamsUtils.parsePageParam", () => {
   it("returns a valid 1-based page number", () => {
@@ -27,5 +27,44 @@ describe("utils.searchParamsUtils.parsePageParam", () => {
     expect(parsePageParam("1abc")).toBeUndefined();
     expect(parsePageParam("1e3")).toBeUndefined();
     expect(parsePageParam("0x10")).toBeUndefined();
+  });
+});
+
+describe("utils.searchParamsUtils.parseIntListParam", () => {
+  const params = (qs: string) => new URLSearchParams(qs);
+
+  it("keeps valid positive-integer ids", () => {
+    expect(parseIntListParam(params("x=17"), "x")).toEqual(["17"]);
+    expect(parseIntListParam(params("x=1&x=2"), "x")).toEqual(["1", "2"]);
+  });
+
+  it("splits comma-separated values", () => {
+    expect(parseIntListParam(params("x=1,2,3"), "x")).toEqual(["1", "2", "3"]);
+  });
+
+  it("combines repeated keys + comma values and drops invalid ones", () => {
+    expect(parseIntListParam(params("x=1,abc,2&x=3&x=-1"), "x")).toEqual([
+      "1",
+      "2",
+      "3",
+    ]);
+  });
+
+  it("dedupes", () => {
+    expect(parseIntListParam(params("x=1,1&x=1"), "x")).toEqual(["1"]);
+  });
+
+  it("returns undefined when absent or every value is invalid", () => {
+    expect(parseIntListParam(params(""), "x")).toBeUndefined();
+    expect(parseIntListParam(params("x=abc"), "x")).toBeUndefined();
+    expect(parseIntListParam(params("x=-1&x=0&x=1.5"), "x")).toBeUndefined();
+  });
+
+  it("drops non-decimal and unsafe-integer tokens", () => {
+    expect(parseIntListParam(params("x=0x10"), "x")).toBeUndefined();
+    expect(parseIntListParam(params("x=5abc&x=6"), "x")).toEqual(["6"]);
+    expect(
+      parseIntListParam(params("x=99999999999999999999"), "x")
+    ).toBeUndefined();
   });
 });
