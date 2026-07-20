@@ -4,6 +4,7 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { parsePageParam } from "cyberstorm/utils/searchParamsUtils";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
@@ -61,7 +62,7 @@ export const loader = ssrLoader(
             namespaceId: params.namespaceId,
           },
           ordering ?? "",
-          page === null ? undefined : Number(page),
+          parsePageParam(page),
           search ?? "",
           includedCategories?.split(",") ?? undefined,
           excludedCategories?.split(",") ?? undefined,
@@ -141,7 +142,7 @@ export async function clientLoader({
           namespaceId: params.namespaceId,
         },
         ordering ?? "",
-        page === null ? undefined : Number(page),
+        parsePageParam(page),
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,

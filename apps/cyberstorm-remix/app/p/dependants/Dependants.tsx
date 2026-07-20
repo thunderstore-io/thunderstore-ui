@@ -4,6 +4,7 @@ import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
+import { parsePageParam } from "cyberstorm/utils/searchParamsUtils";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
@@ -87,7 +88,7 @@ export const loader = ssrLoader(
             packageName: params.packageId,
           },
           ordering ?? "",
-          page === null ? undefined : Number(page),
+          parsePageParam(page),
           search ?? "",
           includedCategories?.split(",") ?? undefined,
           excludedCategories?.split(",") ?? undefined,
@@ -185,7 +186,7 @@ export async function clientLoader({
           packageName: params.packageId,
         },
         ordering ?? "",
-        page === null ? undefined : Number(page),
+        parsePageParam(page),
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,
