@@ -98,6 +98,10 @@
   }
 
   .card-package__title {
+    /* The title link is an <a> (inline by default); block makes its width:100% +
+       overflow/text-overflow ellipsis actually clip long unbreakable names in
+       grid mode. List mode's flex heading already blockifies it. */
+    display: block;
     grid-area: title;
     width: 100%;
     overflow: hidden;
@@ -153,6 +157,7 @@
     font-family: var(--font-family--inter);
     font-style: normal;
     line-height: var(--line-height-md);
+    overflow-wrap: anywhere;
   }
 
   .card-package__tags {
