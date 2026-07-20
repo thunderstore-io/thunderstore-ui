@@ -133,6 +133,9 @@ export const denyUrls: (string | RegExp)[] = [
   "2mdn.net",
   "p7cloud.net",
   "imasdk.googleapis.com", // Google IMA SDK (ima3.js)
+  // ...also proxied same-origin (adblock evasion) so the host is stripped from
+  // the Sentry frame; match the bare filename too.
+  "ima3.js",
   "ftUtils.js", // Freestar/ad placement util, served without a stable host
   "cpx.to", // CPX survey/pixel
 ];
@@ -209,8 +212,30 @@ function isExtensionStackOverflow(event: ErrorEvent): boolean {
   return !hasOwnCodeFrame;
 }
 
+/**
+ * Third-party ad scripts are proxied through our own origin, so their Sentry
+ * stack frames carry host-less paths (/js/sdkloader/ima3.js, /serve/load.js,
+ * /api/init-<hash>.js) that the host-based denyUrls above can't match. They
+ * surface browser-internal errors that never originate in our first-party code,
+ * so drop them by signature (robust to the proxy paths churning per vendor):
+ *   - cross-origin frame/window access blocked by the UA (SecurityError)
+ *   - Firefox XPCOM failures (NS_ERROR_*), usually with an empty message
+ */
+function isBrowserInternalNoise(event: ErrorEvent): boolean {
+  const values = event.exception?.values ?? [];
+  return values.some((v) => {
+    const type = v.type ?? "";
+    if (type.startsWith("NS_ERROR_")) return true;
+    return (
+      type === "SecurityError" &&
+      /security policy|cross-origin|blocked a frame/i.test(v.value ?? "")
+    );
+  });
+}
+
 export function beforeSend(event: ErrorEvent): ErrorEvent | null {
   if (isAdScriptError(event)) return null;
   if (isExtensionStackOverflow(event)) return null;
+  if (isBrowserInternalNoise(event)) return null;
   return event;
 }

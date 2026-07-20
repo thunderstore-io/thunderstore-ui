@@ -2,6 +2,13 @@
   .error-boundary {
     display: flex;
     flex-direction: column;
+
+    /* Package routes lay their content directly into the layout__main grid, so
+       the boundary can render as a direct grid child. Span every column instead
+       of auto-placing into the narrow ad-rail gutter (column 1) — otherwise the
+       12rem "404" hangs off the left edge. A no-op in the flow/Container layouts
+       every other route uses. */
+    grid-column: 1 / -1;
     gap: 1rem;
     align-items: center;
     justify-content: center;
