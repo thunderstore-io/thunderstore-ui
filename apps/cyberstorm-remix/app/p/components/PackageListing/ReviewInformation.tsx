@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { classnames } from "@thunderstore/cyberstorm";
 import { type PackageListingStatus } from "@thunderstore/dapper/types";
@@ -7,22 +7,26 @@ export interface ReviewInformationProps {
   status?: PackageListingStatus;
 }
 
-// Internal notes are shown as an overlay on the community banner (see
-// packageListing.tsx + packageListing.css), so they don't take sidebar space or
-// shift the layout. Collapsed, the card is clamped to the banner's height; when
-// the note is longer it can be expanded over the content below (capped at
-// min(80vh, 40rem), scrolling past that). The "Show more"/"Show less" toggle
-// only appears when the note actually overflows the collapsed area.
-export const InternalNotes = ({ status }: ReviewInformationProps) => {
+/**
+ * A collapsible note card overlaid on the community banner (positioned by
+ * packageListing.css), used for the rejection reason and mod internal notes so
+ * neither costs sidebar space nor shifts the page. The Show more/less toggle
+ * appears only when the text overflows the collapsed height.
+ */
+function BannerNote(props: {
+  label: string;
+  text: string;
+  danger?: boolean;
+  footer?: ReactNode;
+}) {
+  const { label, text, danger, footer } = props;
   const cardRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [overflowing, setOverflowing] = useState(false);
 
-  const notes = status?.internal_notes || "";
-
   useEffect(() => {
     const el = cardRef.current;
-    if (!el || !notes) return;
+    if (!el) return;
     const measure = () => setOverflowing(el.scrollHeight > el.clientHeight + 1);
     measure();
     // ResizeObserver may be missing in older/edge environments; skip the live
@@ -31,26 +35,23 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
     const observer = new ResizeObserver(measure);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [notes, expanded]);
-
-  if (!notes) {
-    return null;
-  }
+  }, [text, expanded]);
 
   return (
     <div
       ref={cardRef}
       className={classnames(
-        "package-listing__internal-notes",
-        expanded ? "package-listing__internal-notes--expanded" : undefined
+        "package-listing__banner-note",
+        danger ? "package-listing__banner-note--danger" : undefined,
+        expanded ? "package-listing__banner-note--expanded" : undefined
       )}
     >
-      <div className="package-listing__internal-notes-header">
-        <span className="review-package__label">Internal notes</span>
+      <div className="package-listing__banner-note-header">
+        <span className="review-package__label">{label}</span>
         {overflowing || expanded ? (
           <button
             type="button"
-            className="package-listing__internal-notes-toggle"
+            className="package-listing__banner-note-toggle"
             aria-expanded={expanded}
             onClick={() => setExpanded((value) => !value)}
           >
@@ -58,31 +59,41 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
           </button>
         ) : null}
       </div>
-      <pre className="package-listing__internal-notes-text">{notes}</pre>
+      <pre className="package-listing__banner-note-text">{text}</pre>
+      {footer}
     </div>
   );
-};
+}
 
-export const RejectionReason = ({ status }: ReviewInformationProps) => {
-  if (!status) {
+export const InternalNotes = ({ status }: ReviewInformationProps) => {
+  const notes = status?.internal_notes || "";
+
+  if (!notes) {
     return null;
   }
 
-  const isRejected = status.review_status === "rejected";
-  const reason = status.rejection_reason || "";
+  return <BannerNote label="Internal notes" text={notes} />;
+};
+
+export const RejectionReason = ({ status }: ReviewInformationProps) => {
+  const isRejected = status?.review_status === "rejected";
+  const reason = status?.rejection_reason || "";
 
   if (!reason || !isRejected) {
     return null;
   }
 
   return (
-    <div className="review-information-card review-information-card--danger">
-      <h4 className="review-package__label">Package rejected</h4>
-      <pre className="review-information-card__text">{reason}</pre>
-      <p className="review-information-card__text">
-        If you think this is a mistake, please reach out to the moderators in{" "}
-        <a href="https://discord.thunderstore.io/">our Discord server</a>.
-      </p>
-    </div>
+    <BannerNote
+      label="Package rejected"
+      text={reason}
+      danger
+      footer={
+        <p className="package-listing__banner-note-text">
+          If you think this is a mistake, please reach out to the moderators in{" "}
+          <a href="https://discord.thunderstore.io/">our Discord server</a>.
+        </p>
+      }
+    />
   );
 };

@@ -62,7 +62,10 @@ import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 import type { Route } from "./+types/packageListing";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageListingManagement } from "./components/PackageListing/PackageListingManagement";
-import { InternalNotes } from "./components/PackageListing/ReviewInformation";
+import {
+  InternalNotes,
+  RejectionReason,
+} from "./components/PackageListing/ReviewInformation";
 import {
   getPackageListingStatusWhenNeeded,
   getPrivateListing,
@@ -354,8 +357,9 @@ export default function PackageListing() {
       {/* Community hero banner — its own grid row (col 2), so the sidebar's
           Install lines up with the page header below it (see
           .layout__main--package-detail). Null when the community has no hero.
-          The internal notes (mods only) overlay the banner rather than taking a
-          sidebar slot, so they never shift the layout — see packageListing.css. */}
+          The rejection reason and mod-only internal notes overlay the banner
+          rather than taking a sidebar slot, so they never shift the layout —
+          see packageListing.css. */}
       <div className="package-listing__banner">
         <Suspense fallback={null}>
           <Await resolve={community}>
@@ -369,7 +373,10 @@ export default function PackageListing() {
         <Suspense fallback={null}>
           <Await resolve={listingStatus}>
             {(resolvedListingStatus) => (
-              <InternalNotes status={resolvedListingStatus} />
+              <div className="package-listing__banner-notes">
+                <RejectionReason status={resolvedListingStatus} />
+                <InternalNotes status={resolvedListingStatus} />
+              </div>
             )}
           </Await>
         </Suspense>
