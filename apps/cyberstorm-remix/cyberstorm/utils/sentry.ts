@@ -54,6 +54,25 @@ export function isExpectedRouteError(
   return false;
 }
 
+/**
+ * True for a 4xx in either shape it reaches a gate as — a raw ApiError
+ * (clientLoaders) or a router-serialized RouteErrorResponse object (ssrLoader).
+ * RouteErrorBoundary owns 4xx reporting (wraps them via toReportableError, and
+ * fingerprints ApiErrors per status), so the client HydratedRouter onError gate
+ * skips these: capturing there too double-bills, and a RouteErrorResponse
+ * captured raw becomes a useless "Object captured as exception with keys: data,
+ * internal, status, statusText" event. 5xx and non-HTTP errors return false —
+ * both gates report them and Sentry dedupes.
+ */
+export function isBoundaryOwned4xx(error: unknown): boolean {
+  const status = isApiError(error)
+    ? error.response.status
+    : isRouteErrorResponse(error)
+      ? error.status
+      : undefined;
+  return status !== undefined && status >= 400 && status < 500;
+}
+
 // ~2% of suppressed 4xx leave a trace; at that rate 20 heartbeat events/hour
 // on one issue ≈ 1000 real occurrences/hour.
 const HEARTBEAT_SAMPLE_RATE = 0.02;
