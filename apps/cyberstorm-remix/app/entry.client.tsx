@@ -27,10 +27,12 @@ const publicEnvVariables = getPublicEnvVariables([
 
 Sentry.init({
   dsn: publicEnvVariables.VITE_CLIENT_SENTRY_DSN,
-  integrations: [
-    // Replay is only available in the client
-    Sentry.replayIntegration(),
-  ],
+  // No replayIntegration. It was previously configured with both replay sample
+  // rates at 0, so it recorded nothing while still shipping ~124 KiB (a third
+  // of entry.client) and running its DOM instrumentation on every page load;
+  // the integration and those two options were removed together. Re-adding it
+  // means setting a sample rate above 0 as well — and preferably lazy-loading
+  // it, since it is by far the largest thing in the entry bundle.
 
   beforeBreadcrumb: (
     breadcrumb: Sentry.Breadcrumb
@@ -64,11 +66,6 @@ Sentry.init({
 
   // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
   tracePropagationTargets: [],
-
-  // Capture Replay for 10% of all sessions,
-  // plus for 100% of sessions with an error
-  replaysSessionSampleRate: 0,
-  replaysOnErrorSampleRate: 0,
 
   // Filter out e.g. ad related domains that may spam errors.
   denyUrls,
