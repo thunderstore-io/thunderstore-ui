@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { parseSearchParam } from "cyberstorm/utils/searchParamsUtils";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
 import {
@@ -68,7 +69,7 @@ export const loader = ssrLoader(
     const url = new URL(request.url);
     const searchParams = url.searchParams;
     const order = searchParams.get("order") ?? SortOptions.Popular;
-    const search = searchParams.get("search");
+    const search = parseSearchParam(searchParams.get("search"));
     const page = undefined;
     const dapper = new DapperTs(() => {
       return {
@@ -81,7 +82,7 @@ export const loader = ssrLoader(
       communities: await dapper.getCommunities(
         page,
         order === null ? undefined : order,
-        search === null ? undefined : search
+        search
       ),
       seo: createSeo({
         descriptors: [
@@ -151,13 +152,13 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   });
   const searchParams = new URL(request.url).searchParams;
   const order = searchParams.get("order");
-  const search = searchParams.get("search");
+  const search = parseSearchParam(searchParams.get("search"));
   const page = undefined;
   return {
     communities: dapper.getCommunities(
       page,
       order ?? SortOptions.Popular,
-      search ?? ""
+      search
     ),
   };
 }

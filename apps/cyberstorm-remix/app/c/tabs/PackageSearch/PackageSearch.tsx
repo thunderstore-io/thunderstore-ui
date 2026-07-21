@@ -7,6 +7,7 @@ import { createSeo } from "cyberstorm/utils/meta";
 import {
   parseIntListParam,
   parsePageParam,
+  parseSearchParam,
 } from "cyberstorm/utils/searchParamsUtils";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -34,7 +35,7 @@ export const loader = ssrLoader(
       const ordering =
         searchParams.get("ordering") ?? PackageOrderOptions.Updated;
       const page = searchParams.get("page");
-      const search = searchParams.get("search");
+      const search = parseSearchParam(searchParams.get("search"));
       const includedCategories = parseIntListParam(
         searchParams,
         "includedCategories"
@@ -64,7 +65,7 @@ export const loader = ssrLoader(
           },
           ordering ?? "",
           parsePageParam(page),
-          search ?? "",
+          search,
           includedCategories,
           excludedCategories,
           finalSection,
@@ -108,7 +109,7 @@ export async function clientLoader({
     const ordering =
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
     const page = searchParams.get("page");
-    const search = searchParams.get("search");
+    const search = parseSearchParam(searchParams.get("search"));
     const includedCategories = parseIntListParam(
       searchParams,
       "includedCategories"
@@ -136,7 +137,7 @@ export async function clientLoader({
         },
         ordering ?? "",
         parsePageParam(page),
-        search ?? "",
+        search,
         includedCategories,
         excludedCategories,
         finalSection,

@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { parseIntListParam, parsePageParam } from "../searchParamsUtils";
+import {
+  parseIntListParam,
+  parsePageParam,
+  parseSearchParam,
+} from "../searchParamsUtils";
 
 describe("utils.searchParamsUtils.parsePageParam", () => {
   it("returns a valid 1-based page number", () => {
@@ -66,5 +70,53 @@ describe("utils.searchParamsUtils.parseIntListParam", () => {
     expect(
       parseIntListParam(params("x=99999999999999999999"), "x")
     ).toBeUndefined();
+  });
+
+  it("caps how many ids one URL can push into the API query", () => {
+    // A header-limit-sized query string otherwise packs thousands of ids into
+    // the listing API's `IN` clause, and each unique URL misses the CDN.
+    const many = Array.from({ length: 500 }, (_, i) => i + 1).join(",");
+    const capped = parseIntListParam(params(`x=${many}`), "x");
+    expect(capped).toHaveLength(100);
+    expect(capped?.[0]).toBe("1");
+
+    // The cap counts unique ids, so repeats don't burn through it.
+    const repeated = `${"7,".repeat(500)}8`;
+    expect(parseIntListParam(params(`x=${repeated}`), "x")).toEqual(["7", "8"]);
+  });
+});
+
+describe("utils.searchParamsUtils.parseSearchParam", () => {
+  // Built from char codes so the control bytes stay visible in the source.
+  const NUL = String.fromCharCode(0);
+  const LF = String.fromCharCode(10);
+  const DEL = String.fromCharCode(127);
+  const C1 = String.fromCharCode(0x9b);
+
+  it("passes ordinary search terms through", () => {
+    expect(parseSearchParam("bepinex")).toBe("bepinex");
+    expect(parseSearchParam("two words")).toBe("two words");
+    expect(parseSearchParam("dash-and_underscore")).toBe("dash-and_underscore");
+  });
+
+  it("strips control characters", () => {
+    // `?search=%00` was forwarded to the API raw and came back 400 — the bug
+    // this guards. C0, DEL and C1 are all Unicode Cc.
+    expect(parseSearchParam(`be${NUL}pinex`)).toBe("bepinex");
+    expect(parseSearchParam(`line${LF}break`)).toBe("linebreak");
+    expect(parseSearchParam(`a${DEL}b${C1}cd`)).toBe("abcd");
+  });
+
+  it("returns an empty string when absent or all control characters", () => {
+    // "" and undefined are filtered out identically when the query string is
+    // built, so an all-control-character search behaves as if never provided.
+    expect(parseSearchParam(null)).toBe("");
+    expect(parseSearchParam("")).toBe("");
+    expect(parseSearchParam("   ")).toBe("");
+    expect(parseSearchParam(NUL)).toBe("");
+  });
+
+  it("trims surrounding whitespace", () => {
+    expect(parseSearchParam("  bepinex  ")).toBe("bepinex");
   });
 });
