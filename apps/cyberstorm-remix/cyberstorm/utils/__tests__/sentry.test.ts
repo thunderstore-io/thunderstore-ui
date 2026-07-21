@@ -6,6 +6,7 @@ import {
   beforeSend,
   denyUrls,
   heartbeatSuppressed4xx,
+  isBoundaryOwned4xx,
   isExpectedRouteError,
   toReportableError,
 } from "../sentry";
@@ -678,5 +679,50 @@ describe("utils.sentry.toReportableError", () => {
 
     const plain = new Error("boom");
     expect(toReportableError(plain)).toBe(plain);
+  });
+});
+
+describe("utils.sentry.isBoundaryOwned4xx", () => {
+  // clientLoaders throw ApiError directly (see isApiError).
+  const apiError = (status: number) => ({
+    message: `${status}: `,
+    response: { headers: {}, status, statusText: "", url: "" },
+    responseJson: undefined,
+  });
+  // ssrLoader 4xx arrive as router-serialized ErrorResponse objects — the shape
+  // captured raw as "Object captured as exception with keys: ...".
+  const routeErrorResponse = (status: number) => ({
+    status,
+    statusText: "",
+    internal: false,
+    data: null,
+  });
+
+  it.each([400, 405, 409, 422, 429])(
+    "is true for %i ApiErrors (RouteErrorBoundary reports them)",
+    (status) => {
+      expect(isBoundaryOwned4xx(apiError(status))).toBe(true);
+    }
+  );
+
+  it.each([400, 429])(
+    "is true for loader-thrown %i RouteErrorResponse objects",
+    (status) => {
+      expect(isBoundaryOwned4xx(routeErrorResponse(status))).toBe(true);
+    }
+  );
+
+  it.each([500, 502, 503])(
+    "is false for %i — both gates report and dedupe",
+    (status) => {
+      expect(isBoundaryOwned4xx(apiError(status))).toBe(false);
+      expect(isBoundaryOwned4xx(routeErrorResponse(status))).toBe(false);
+    }
+  );
+
+  it("is false for non-HTTP errors and nullish input", () => {
+    expect(isBoundaryOwned4xx(new Error("loader exploded"))).toBe(false);
+    expect(isBoundaryOwned4xx(null)).toBe(false);
+    expect(isBoundaryOwned4xx(undefined)).toBe(false);
   });
 });
