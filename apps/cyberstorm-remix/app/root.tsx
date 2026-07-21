@@ -62,6 +62,7 @@ import {
   onNavigateNimbusAds,
   teardownNimbusAds,
 } from "./commonComponents/Ads/nitroAds";
+import { scheduleWhenIdle } from "./commonComponents/Ads/scheduleWhenIdle";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { Island, IslandContainer } from "./commonComponents/Island/Island";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
@@ -580,6 +581,19 @@ function App() {
 export default App;
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+// Upper bound on how long idle-waiting may delay ad work, used for both the
+// script injection and the slot creation below, so a page that never goes idle
+// still loads ads within a bounded, predictable window.
+//
+// Deliberately small, and deliberately not a fixed delay. Holding the script
+// back on a timer to push the auction past the TTI quiet window moves the lab
+// metric without reducing any work — the main thread blocks for exactly as long,
+// just later — and it costs real impressions: a short visit ends before the
+// first render, and every 30-60s slot refresh shifts by the same amount. Ad
+// revenue is the constrained resource here, so idle-gating is as far as this
+// goes: off hydration's back, still inside the visit.
+const AD_IDLE_TIMEOUT_MS = 2000;
+
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html
 // Loads the NitroPay script (which shows the consent banner) whenever mounted.
@@ -638,15 +652,27 @@ function AdsInit({ createAds }: { createAds: boolean }) {
       }
     };
 
+    // Inject during main-thread idle rather than the instant `load` fires, so
+    // the auction never starts midway through hydration work. See
+    // scheduleWhenIdle for why, and AD_IDLE_TIMEOUT_MS for what this
+    // deliberately does *not* do (hold the script back on a flat timer).
+    let cancelIdle: (() => void) | undefined;
+
+    const startAdLoad = () => {
+      if (cancelled) return;
+      cancelIdle = scheduleWhenIdle(loadAds, AD_IDLE_TIMEOUT_MS);
+    };
+
     if (document.readyState === "complete") {
-      loadAds();
+      startAdLoad();
     } else {
-      window.addEventListener("load", loadAds);
+      window.addEventListener("load", startAdLoad);
     }
 
     return () => {
       cancelled = true;
-      window.removeEventListener("load", loadAds);
+      window.removeEventListener("load", startAdLoad);
+      cancelIdle?.();
       if ($script) {
         $script.onload = null;
         $script.onerror = null;
@@ -682,8 +708,7 @@ function AdsInit({ createAds }: { createAds: boolean }) {
       return;
     }
 
-    let idleHandle: number | undefined;
-    let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+    let cancelIdle: (() => void) | undefined;
 
     // Read window.nitroAds inside the effect rather than depending on it:
     // re-running on its identity change would tear the registry down (cleanup)
@@ -704,14 +729,8 @@ function AdsInit({ createAds }: { createAds: boolean }) {
       };
 
       // Defer slot creation to main-thread idle time so the ad auctions never
-      // contend with hydration/interaction work; the timeout bounds how long
-      // a busy page may delay the first impressions. Safari has no
-      // requestIdleCallback — fall back to a short timeout there.
-      if (typeof window.requestIdleCallback === "function") {
-        idleHandle = window.requestIdleCallback(create, { timeout: 2000 });
-      } else {
-        timeoutHandle = setTimeout(create, 200);
-      }
+      // contend with hydration/interaction work.
+      cancelIdle = scheduleWhenIdle(create, AD_IDLE_TIMEOUT_MS);
     }
 
     // Cancel a still-pending creation and forget the slot refs when this
@@ -719,12 +738,7 @@ function AdsInit({ createAds }: { createAds: boolean }) {
     // consent-only route), so returning re-creates them on fresh containers.
     // Resetting the latch lets the toggled-back-on case re-create.
     return () => {
-      if (idleHandle !== undefined) {
-        window.cancelIdleCallback(idleHandle);
-      }
-      if (timeoutHandle !== undefined) {
-        clearTimeout(timeoutHandle);
-      }
+      cancelIdle?.();
       hasCreatedAds.current = false;
       teardownNimbusAds();
     };
