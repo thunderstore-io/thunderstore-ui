@@ -41,6 +41,13 @@ interface Props {
   csSize?: CardPackageSizes;
   csModifiers?: CardPackageModifiers;
   rootClasses?: string;
+  /**
+   * Loads this card's icon eagerly at high priority. Set it on the cards that
+   * start above the fold: on a listing page the first one is the LCP element,
+   * and the default lazy loading means the browser only discovers it after
+   * layout. Leave false everywhere else so the rest of the grid stays lazy.
+   */
+  priority?: boolean;
 }
 
 export function CardPackage(props: Props) {
@@ -51,6 +58,7 @@ export function CardPackage(props: Props) {
     csSize = "medium",
     csModifiers,
     rootClasses,
+    priority = false,
   } = props;
 
   const [tooltipText, setTooltipText] = useState(
@@ -131,6 +139,8 @@ export function CardPackage(props: Props) {
           square
           intrinsicWidth={256}
           intrinsicHeight={256}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : undefined}
         />
       </NewLink>
 

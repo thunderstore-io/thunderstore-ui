@@ -21,6 +21,13 @@ export interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   /** Force 1:1 aspect ratio */
   square?: boolean;
   loading?: "eager" | "lazy";
+  /**
+   * Set "high" on the image most likely to be the LCP element (e.g. the first
+   * row of a card grid) and pair it with loading="eager". Lazy-loading defers
+   * discovery until layout, which is why a lazily-loaded LCP image is slow —
+   * Lighthouse flags it as both not-eagerly-loaded and not-priority-hinted.
+   */
+  fetchPriority?: "high" | "low" | "auto";
   csVariant?: ImageVariants;
   intrinsicWidth?: number;
   intrinsicHeight?: number;
@@ -40,6 +47,7 @@ export const Image = memo(function Image(props: ImageProps) {
     intrinsicWidth,
     intrinsicHeight,
     loading = "lazy",
+    fetchPriority,
     ...forwardedProps
   } = props;
   const fProps = forwardedProps as ImageProps;
@@ -73,6 +81,7 @@ export const Image = memo(function Image(props: ImageProps) {
           <img
             src={src}
             loading={loading}
+            fetchPriority={fetchPriority}
             alt={alt}
             className="image__src"
             width={intrinsicWidth}
