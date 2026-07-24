@@ -6,6 +6,7 @@ import {
   faCog,
   faGamepad,
   faLongArrowLeft,
+  faMagnifyingGlass,
   faUpload,
   faUserShield,
   faUsers,
@@ -25,7 +26,7 @@ import {
   buildAuthLoginUrl,
   buildLogoutUrl,
 } from "cyberstorm/utils/ThunderstoreAuth";
-import { type CSSProperties, useEffect } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router";
 import { Island } from "~/commonComponents/Island/Island";
 
@@ -43,11 +44,14 @@ import {
   NewDropDownSubTrigger,
   NewIcon,
   NewLink,
+  NewTextInput,
   OverwolfLogo,
   ThunderstoreLogo,
   classnames,
 } from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
+
+import { TEAMS_FILTER_THRESHOLD, filterTeams, sortTeams } from "./teams";
 
 const NAVIGATION_POPOVER_ID = "mobileNavMenu";
 const DEVELOPERS_POPOVER_ID = "mobileNavMenuDevelopers";
@@ -516,6 +520,86 @@ export function DesktopLoginPopover() {
   );
 }
 
+// The Teams submenu of the desktop user dropdown: alphabetised, height-capped
+// with its own scrollbar, and — past TEAMS_FILTER_THRESHOLD — a lightweight
+// client-side filter. Its own component so the filter state lives here.
+function TeamsSubmenu(props: { teams: string[]; communityId: string }) {
+  const { teams, communityId } = props;
+  const [query, setQuery] = useState("");
+
+  const sortedTeams = useMemo(() => sortTeams(teams), [teams]);
+  const showFilter = sortedTeams.length > TEAMS_FILTER_THRESHOLD;
+  const filteredTeams = useMemo(
+    () => filterTeams(sortedTeams, query),
+    [sortedTeams, query]
+  );
+
+  return (
+    <NewDropDownSub>
+      <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
+        <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+          <FontAwesomeIcon icon={faUsers} />
+        </NewIcon>
+        Teams
+      </NewDropDownSubTrigger>
+      <NewDropDownSubContent rootClasses="navigation-header__teams-dropdown">
+        {showFilter ? (
+          // stopPropagation keeps Radix's menu typeahead + arrow navigation
+          // from stealing keystrokes while the user types in the filter. The
+          // wrapper is a passive event boundary, not a control — role
+          // "presentation" says so, and keeps the static-interaction rule (and
+          // the code scanner behind it) from reading it as a custom widget.
+          <div
+            role="presentation"
+            className="navigation-header__teams-filter"
+            onKeyDown={(event) => event.stopPropagation()}
+          >
+            <NewTextInput
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              clearValue={query ? () => setQuery("") : undefined}
+              placeholder="Filter teams..."
+              aria-label="Filter teams"
+              type="search"
+              csSize="small"
+              leftIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+            />
+          </div>
+        ) : null}
+        <NewDropDownItem asChild>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            rootClasses="dropdown__item navigation-header__dropdown-item"
+          >
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            All Teams
+          </NewLink>
+        </NewDropDownItem>
+        {filteredTeams.length > 0 ? <NewDropDownDivider /> : null}
+        <div className="navigation-header__teams-list">
+          {filteredTeams.map((teamName) => (
+            <NewDropDownItem key={teamName} asChild>
+              <NewLink
+                primitiveType="link"
+                href={`/c/${communityId}/p/${teamName}/`}
+                rootClasses="dropdown__item navigation-header__dropdown-item"
+              >
+                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                  <FontAwesomeIcon icon={faUsers} />
+                </NewIcon>
+                {teamName}
+              </NewLink>
+            </NewDropDownItem>
+          ))}
+        </div>
+      </NewDropDownSubContent>
+    </NewDropDownSub>
+  );
+}
+
 export function DesktopUserDropdown(props: {
   user: CurrentUser;
   domain: string;
@@ -561,43 +645,7 @@ export function DesktopUserDropdown(props: {
         </NewLink>
       </NewDropDownItem>
       {communityId ? (
-        <NewDropDownSub>
-          <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-              <FontAwesomeIcon icon={faUsers} />
-            </NewIcon>
-            Teams
-          </NewDropDownSubTrigger>
-          <NewDropDownSubContent>
-            <NewDropDownItem asChild>
-              <NewLink
-                primitiveType="cyberstormLink"
-                linkId="Teams"
-                rootClasses="dropdown__item navigation-header__dropdown-item"
-              >
-                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-                  <FontAwesomeIcon icon={faUsers} />
-                </NewIcon>
-                All Teams
-              </NewLink>
-            </NewDropDownItem>
-            {user.teams.length > 0 ? <NewDropDownDivider /> : null}
-            {user.teams.map((teamName) => (
-              <NewDropDownItem key={teamName} asChild>
-                <NewLink
-                  primitiveType="link"
-                  href={`/c/${communityId}/p/${teamName}/`}
-                  rootClasses="dropdown__item navigation-header__dropdown-item"
-                >
-                  <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-                    <FontAwesomeIcon icon={faUsers} />
-                  </NewIcon>
-                  {teamName}
-                </NewLink>
-              </NewDropDownItem>
-            ))}
-          </NewDropDownSubContent>
-        </NewDropDownSub>
+        <TeamsSubmenu teams={user.teams} communityId={communityId} />
       ) : (
         <NewDropDownItem asChild>
           <NewLink
@@ -714,7 +762,7 @@ export function MobileUserMenu(props: {
             {communityId ? "All Teams" : "Teams"}
           </NewLink>
           {communityId &&
-            user.teams.map((teamName) => (
+            sortTeams(user.teams).map((teamName) => (
               <NewLink
                 key={teamName}
                 primitiveType="link"
