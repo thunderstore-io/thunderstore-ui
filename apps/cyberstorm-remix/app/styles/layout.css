@@ -247,6 +247,13 @@
         minmax(var(--container-padding), 1fr)
         minmax(0, var(--content-max))
         minmax(var(--container-padding), 1fr);
+
+      /* The base --ads grid sets a 32px column-gap to separate content from the
+         ad rail. Here the rail is gone and columns 1/3 are just empty gutters,
+         so that gap stacked on top of the gutter's own --container-padding —
+         giving the content 48px of dead space each side on mobile. Drop it: the
+         gutter is the padding. */
+      column-gap: 0;
     }
 
     .layout__main--package-detail > .breadcrumbs,
