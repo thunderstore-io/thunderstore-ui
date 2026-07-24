@@ -30,6 +30,12 @@ export default defineProject({
       "react-dom",
       "react-dom/client",
       "react-dom/server",
+      // react-markdown must be pre-bundled in the same pass as react, or it
+      // gets its own optimized copy, hooks resolve against a second React
+      // instance and every render throws "Cannot read properties of null".
+      "react-markdown",
+      "rehype-raw",
+      "remark-gfm",
     ],
   },
 });

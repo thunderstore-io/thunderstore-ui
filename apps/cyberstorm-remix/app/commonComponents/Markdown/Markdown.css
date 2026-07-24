@@ -5,6 +5,17 @@
     scrollbar-width: none;
   }
 
+  /* Shown when a document fails to convert (see MarkdownErrorBoundary). The
+     source is still readable, so wrap it rather than letting long lines force
+     the page wide. */
+  .markdown__fallback {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-family: var(--font-family-monospace);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
   .markdown {
     display: block;
     color: var(--color-text-primary);
