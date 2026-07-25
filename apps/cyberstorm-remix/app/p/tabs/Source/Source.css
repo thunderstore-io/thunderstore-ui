@@ -20,6 +20,13 @@
     justify-content: space-between;
   }
 
+  /* Download action pinned to the card header's top-right, clear of the
+     file-name/meta column. */
+  .package-source__header-actions {
+    flex: none;
+    align-self: flex-start;
+  }
+
   .package-source__header-info {
     display: flex;
     flex: 1;
