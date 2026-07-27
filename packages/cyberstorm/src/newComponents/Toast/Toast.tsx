@@ -1,12 +1,3 @@
-import {
-  faCheckCircle,
-  faExclamationCircle,
-  faExclamationTriangle,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  faOctagonExclamation,
-  faXmarkLarge,
-} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixToast from "@radix-ui/react-toast";
 import React from "react";
@@ -15,6 +6,13 @@ import {
   type ToastSizes,
   type ToastVariants,
 } from "@thunderstore/cyberstorm-theme";
+import {
+  faCheckCircle,
+  faExclamationCircle,
+  faExclamationTriangle,
+  faOctagonExclamation,
+  faXmarkLarge,
+} from "@thunderstore/icons";
 
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";

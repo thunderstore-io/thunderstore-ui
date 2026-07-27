@@ -1,8 +1,8 @@
-import { faSpinnerThird } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode } from "react";
 
 import { NewIcon, classnames } from "@thunderstore/cyberstorm";
+import { faSpinnerThird } from "@thunderstore/icons";
 
 interface Props {
   children: ReactNode;

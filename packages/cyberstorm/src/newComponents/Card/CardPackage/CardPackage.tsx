@@ -1,13 +1,3 @@
-import {
-  faBan,
-  faClockRotateLeft,
-  faCodeBranch,
-  faDownload,
-  faThumbTack,
-  faThumbsUp,
-  faWarning,
-} from "@fortawesome/free-solid-svg-icons";
-import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
@@ -16,6 +6,16 @@ import {
   type CardPackageSizes,
 } from "@thunderstore/cyberstorm-theme";
 import { type PackageListing } from "@thunderstore/dapper/types";
+import {
+  faBan,
+  faClockRotateLeft,
+  faCodeBranch,
+  faDownload,
+  faLips,
+  faThumbTack,
+  faThumbsUp,
+  faWarning,
+} from "@thunderstore/icons";
 
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";

@@ -1,7 +1,8 @@
-import { faCheck, faClone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type Dispatch, type SetStateAction, useState } from "react";
 import React from "react";
+
+import { faCheck, faClone } from "@thunderstore/icons";
 
 import { Icon as NewIcon } from "../../newComponents/Icon/Icon";
 import { Tooltip } from "../../newComponents/Tooltip/Tooltip";

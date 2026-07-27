@@ -1,9 +1,9 @@
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type PropsWithChildren, memo } from "react";
 
 import { NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm";
+import { faCaretDown } from "@thunderstore/icons";
 
 interface Props extends PropsWithChildren {
   headerTitle: string;

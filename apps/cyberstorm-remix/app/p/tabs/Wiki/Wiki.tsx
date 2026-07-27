@@ -1,5 +1,3 @@
-import { faGhost } from "@fortawesome/free-solid-svg-icons";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -24,6 +22,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageWiki } from "@thunderstore/dapper-ts";
+import { faGhost, faPlus } from "@thunderstore/icons";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
 import type { Route } from "./+types/Wiki";

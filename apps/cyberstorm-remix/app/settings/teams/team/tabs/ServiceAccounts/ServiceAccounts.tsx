@@ -1,4 +1,3 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
@@ -25,6 +24,7 @@ import {
   NewIcon,
   NewTextInput,
 } from "@thunderstore/cyberstorm";
+import { faPlus } from "@thunderstore/icons";
 import {
   type TeamServiceAccountAddRequestData,
   teamAddServiceAccount,

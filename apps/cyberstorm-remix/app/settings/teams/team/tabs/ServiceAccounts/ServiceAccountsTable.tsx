@@ -1,4 +1,3 @@
-import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { useOutletContext } from "react-router";
@@ -9,6 +8,7 @@ import {
   NewTable,
   NewTableSort,
 } from "@thunderstore/cyberstorm";
+import { faPeopleGroup } from "@thunderstore/icons";
 import { type TeamServiceAccount } from "@thunderstore/thunderstore-api";
 
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";

@@ -1,4 +1,3 @@
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -6,6 +5,7 @@ import {
   NewLink,
   ThunderstoreLogoHorizontal,
 } from "@thunderstore/cyberstorm";
+import { faDiscord, faGithub } from "@thunderstore/icons";
 
 import "./FooterSocials.css";
 

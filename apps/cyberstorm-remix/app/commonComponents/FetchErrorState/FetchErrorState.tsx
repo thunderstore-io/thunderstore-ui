@@ -1,4 +1,3 @@
-import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ReactNode } from "react";
 import { useRevalidator } from "react-router";
@@ -9,6 +8,7 @@ import {
   NewButton,
   NewIcon,
 } from "@thunderstore/cyberstorm";
+import { faRotateRight } from "@thunderstore/icons";
 
 import "./FetchErrorState.css";
 

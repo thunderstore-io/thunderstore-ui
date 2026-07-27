@@ -1,4 +1,3 @@
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
@@ -12,6 +11,7 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
+import { faTrash } from "@thunderstore/icons";
 import {
   type TeamServiceAccount,
   teamServiceAccountRemove,

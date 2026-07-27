@@ -1,10 +1,3 @@
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import {
-  faBook,
-  faDownload,
-  faGamepad,
-} from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CommunityPromo,
@@ -36,6 +29,13 @@ import {
   classnames,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import {
+  faArrowUpRight,
+  faBook,
+  faDiscord,
+  faDownload,
+  faGamepad,
+} from "@thunderstore/icons";
 
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/Community";

@@ -1,4 +1,3 @@
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer, useState } from "react";
@@ -13,6 +12,7 @@ import {
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
+import { faPlus } from "@thunderstore/icons";
 import {
   type RequestConfig,
   type TeamAddMemberRequestData,

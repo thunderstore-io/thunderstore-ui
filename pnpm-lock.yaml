@@ -143,18 +143,6 @@ importers:
       '@fortawesome/fontawesome-svg-core':
         specifier: 7.1.0
         version: 7.1.0
-      '@fortawesome/free-brands-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
-      '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
-      '@fortawesome/pro-light-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
-      '@fortawesome/pro-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
         version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
@@ -191,6 +179,9 @@ importers:
       '@thunderstore/dapper-ts':
         specifier: workspace:*
         version: link:../../packages/dapper-ts
+      '@thunderstore/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       '@thunderstore/react-dnd':
         specifier: workspace:*
         version: link:../../packages/react-dnd
@@ -315,9 +306,6 @@ importers:
       '@fortawesome/fontawesome-svg-core':
         specifier: 7.1.0
         version: 7.1.0
-      '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
         version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
@@ -339,6 +327,9 @@ importers:
       '@thunderstore/cyberstorm-theme':
         specifier: workspace:*
         version: link:../../packages/cyberstorm-theme
+      '@thunderstore/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       '@types/react':
         specifier: 19.2.8
         version: 19.2.8
@@ -388,15 +379,6 @@ importers:
       '@fortawesome/fontawesome-svg-core':
         specifier: 7.1.0
         version: 7.1.0
-      '@fortawesome/free-brands-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
-      '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
-      '@fortawesome/pro-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
         version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
@@ -430,6 +412,9 @@ importers:
       '@thunderstore/dapper':
         specifier: workspace:*
         version: link:../dapper
+      '@thunderstore/icons':
+        specifier: workspace:*
+        version: link:../icons
       '@thunderstore/thunderstore-api':
         specifier: workspace:*
         version: link:../thunderstore-api
@@ -673,6 +658,35 @@ importers:
       vitest:
         specifier: 3.2.6
         version: 3.2.6(@types/debug@4.1.12)(@types/node@24.12.0)(@vitest/browser@3.2.6)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0)
+
+  packages/icons:
+    dependencies:
+      '@fortawesome/free-brands-svg-icons':
+        specifier: 7.1.0
+        version: 7.1.0
+      '@fortawesome/free-solid-svg-icons':
+        specifier: 7.1.0
+        version: 7.1.0
+    devDependencies:
+      '@types/node':
+        specifier: 24.12.0
+        version: 24.12.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.3.2
+        version: 7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0)
+      vite-plugin-dts:
+        specifier: 4.5.4
+        version: 4.5.4(@types/node@24.12.0)(rollup@2.80.0)(typescript@5.9.3)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))
+    optionalDependencies:
+      '@fortawesome/pro-light-svg-icons':
+        specifier: 7.1.0
+        version: 7.1.0
+      '@fortawesome/pro-solid-svg-icons':
+        specifier: 7.1.0
+        version: 7.1.0
 
   packages/react-dnd:
     dependencies:
@@ -8534,10 +8548,12 @@ snapshots:
   '@fortawesome/pro-light-svg-icons@7.1.0':
     dependencies:
       '@fortawesome/fontawesome-common-types': 7.1.0
+    optional: true
 
   '@fortawesome/pro-solid-svg-icons@7.1.0':
     dependencies:
       '@fortawesome/fontawesome-common-types': 7.1.0
+    optional: true
 
   '@fortawesome/react-fontawesome@3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)':
     dependencies:
@@ -9549,7 +9565,7 @@ snapshots:
 
   '@rollup/pluginutils@5.3.0(rollup@2.80.0)':
     dependencies:
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       estree-walker: 2.0.2
       picomatch: 4.0.4
     optionalDependencies:

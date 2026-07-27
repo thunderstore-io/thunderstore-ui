@@ -1,8 +1,7 @@
-import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import { faArrowUpRight, faBoltLightning } from "@thunderstore/icons";
 
 import "./FooterManagerAd.css";
 

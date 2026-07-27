@@ -1,10 +1,3 @@
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import {
-  faCaretRight,
-  faUsers,
-  faWarning,
-} from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunityPackageListingHeader } from "app/c/CommunityPackageListingSubpath";
 import { SidebarAd } from "app/commonComponents/Ads/SidebarAd";
@@ -58,6 +51,14 @@ import {
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
+import {
+  faArrowUpRight,
+  faCaretRight,
+  faGithub,
+  faLips,
+  faUsers,
+  faWarning,
+} from "@thunderstore/icons";
 
 import type { Route } from "./+types/packageListing";
 import { PackageActions } from "./components/PackageListing/PackageActions";
