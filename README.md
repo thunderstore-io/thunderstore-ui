@@ -176,6 +176,17 @@ git-ignored `build-secrets/.npmrc`:
 Re-run `pnpm install` afterwards to pull the Pro packages and regenerate the icon set in Pro
 mode. (`FONTAWESOME_PRO=0` forces placeholder mode even when the Pro packages are installed.)
 
+By default the app expects the Thunderstore backend to be running, which serves it
+at [http://thunderstore.localhost](http://thunderstore.localhost) (the dev server
+also listens directly on [http://localhost:3000](http://localhost:3000)). See
+[`apps/cyberstorm-remix/README.md`](apps/cyberstorm-remix/README.md) for the full
+backend-plus-frontend setup.
+
+You can also skip the backend entirely and develop against a deployed API: set
+`DEV_API_PROXY_TARGET` and the dev server routes the backend-owned paths there
+itself. See
+[Developing without a local backend](apps/cyberstorm-remix/README.md#developing-without-a-local-backend).
+
 ## Monorepo layout
 
 - **`apps/*`** — runnable applications. The main one is `cyberstorm-remix` (the
