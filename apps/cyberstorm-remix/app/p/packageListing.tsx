@@ -81,6 +81,44 @@ type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };
 
+type ResolvedListing = NonNullable<
+  Awaited<ReturnType<typeof getPublicListing>>
+>;
+
+// Browser-tab title + share metadata, shared by the SSR loader and the
+// clientLoader. clientLoader.hydrate reruns the client loader on load and
+// replaces the match data the <Seo> head reads; when that data omitted `seo`
+// the title collapsed to the root's bare "Thunderstore" after hydration. Every
+// field here comes off the already-awaited `listing`, so producing it on the
+// client costs no extra request — the two loaders emit identical tags and the
+// title never flips.
+function packageListingSeo(listing: ResolvedListing, request: Request) {
+  const displayName = formatToDisplayName(listing.name);
+  return createSeo({
+    descriptors: [
+      {
+        title: `${displayName} by ${listing.namespace} | ${listing.community_name} | Thunderstore`,
+      },
+      { name: "description", content: listing.description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: getCanonicalUrl(request) },
+      {
+        property: "og:title",
+        content: `${displayName} by ${listing.namespace}`,
+      },
+      { property: "og:description", content: listing.description },
+      ...(listing.icon_url
+        ? [
+            { property: "og:image", content: listing.icon_url },
+            { property: "og:image:width", content: "256" },
+            { property: "og:image:height", content: "256" },
+          ]
+        : []),
+      { property: "og:site_name", content: "Thunderstore" },
+    ],
+  });
+}
+
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
     const { communityId, namespaceId, packageId } = params;
@@ -139,33 +177,7 @@ export const loader = ssrLoader(
       community_identifier: communityId,
       namespace_id: namespaceId,
       package_id: packageId,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${formatToDisplayName(listing.name)} | Thunderstore - The ${
-              community.name
-            } Mod Database`,
-          },
-          { name: "description", content: listing.description },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: getCanonicalUrl(request) },
-          {
-            property: "og:title",
-            content: `${formatToDisplayName(listing.name)} by ${
-              listing.namespace
-            }`,
-          },
-          { property: "og:description", content: listing.description },
-          ...(listing.icon_url
-            ? [
-                { property: "og:image", content: listing.icon_url },
-                { property: "og:image:width", content: "256" },
-                { property: "og:image:height", content: "256" },
-              ]
-            : []),
-          { property: "og:site_name", content: "Thunderstore" },
-        ],
-      }),
+      seo: packageListingSeo(listing, request),
     };
   },
   { cache: true }
@@ -217,6 +229,10 @@ export async function clientLoader({
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
+    // Same title/metadata the SSR loader emits, so hydration doesn't drop it
+    // back to the root "Thunderstore" fallback. `listing` is already awaited
+    // above, so this adds no request.
+    seo: packageListingSeo(listing, request),
   };
 }
 

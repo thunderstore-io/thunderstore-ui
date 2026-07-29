@@ -49,6 +49,41 @@ import "./packageListing.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+// Browser-tab title + share metadata, shared by the SSR loader and the
+// clientLoader so the title doesn't collapse to the root "Thunderstore"
+// fallback after hydration (clientLoader.hydrate replaces the match data the
+// <Seo> head reads). Everything comes off the already-awaited `listing`.
+function packageVersionSeo(
+  listing: PackageListingDetails,
+  packageVersion: string,
+  request: Request
+) {
+  const displayName = formatToDisplayName(listing.name);
+  return createSeo({
+    descriptors: [
+      {
+        title: `${displayName} v${packageVersion} by ${listing.namespace} | ${listing.community_name} | Thunderstore`,
+      },
+      { name: "description", content: listing.description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: getCanonicalUrl(request) },
+      {
+        property: "og:title",
+        content: `${displayName} v${packageVersion} by ${listing.namespace}`,
+      },
+      { property: "og:description", content: listing.description },
+      ...(listing.icon_url
+        ? [
+            { property: "og:image", content: listing.icon_url },
+            { property: "og:image:width", content: "256" },
+            { property: "og:image:height", content: "256" },
+          ]
+        : []),
+      { property: "og:site_name", content: "Thunderstore" },
+    ],
+  });
+}
+
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
     const { communityId, namespaceId, packageId, packageVersion } = params;
@@ -100,33 +135,7 @@ export const loader = ssrLoader(
       listing,
       packageVersion,
       team,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${formatToDisplayName(listing.name)} v${packageVersion} | ${
-              community.name
-            } Mod Database`,
-          },
-          { name: "description", content: listing.description },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: getCanonicalUrl(request) },
-          {
-            property: "og:title",
-            content: `${formatToDisplayName(
-              listing.name
-            )} v${packageVersion} by ${listing.namespace}`,
-          },
-          { property: "og:description", content: listing.description },
-          ...(listing.icon_url
-            ? [
-                { property: "og:image", content: listing.icon_url },
-                { property: "og:image:width", content: "256" },
-                { property: "og:image:height", content: "256" },
-              ]
-            : []),
-          { property: "og:site_name", content: "Thunderstore" },
-        ],
-      }),
+      seo: packageVersionSeo(listing, packageVersion, request),
     };
   },
   { cache: true }
@@ -158,6 +167,8 @@ export async function clientLoader({
     listing,
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
+    // Match the SSR title so hydration doesn't drop it (see packageVersionSeo).
+    seo: packageVersionSeo(listing, packageVersion, request),
   };
 }
 
