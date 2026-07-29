@@ -525,10 +525,17 @@ export function PackageSearch(props: Props) {
                 <>
                   {resolvedValue.results.length > 0 ? (
                     <div className="package-search__grid">
-                      {resolvedValue.results.map((p) => (
+                      {resolvedValue.results.map((p, index) => (
                         <CardPackage
                           key={`${p.namespace}-${p.name}`}
                           packageData={p}
+                          // The first card's icon is the LCP element on listing
+                          // pages, and every Image defaults to loading="lazy",
+                          // so the browser only discovered it after layout.
+                          // Only the first: fetchPriority is a ranking hint, so
+                          // flagging a whole row would dilute it and put
+                          // several large icons in contention on mobile.
+                          priority={index === 0}
                           isLiked={ratedPackages.includes(
                             `${p.namespace}-${p.name}`
                           )}
