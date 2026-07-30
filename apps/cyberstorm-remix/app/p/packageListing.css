@@ -75,9 +75,9 @@
     width: 100%;
   }
 
-  /* One combined dashed box of icon-only actions (the Island "special" variant
+  /* One combined dashed box of moderator actions (the Island "special" variant
      supplies the flex row + border + background). fit-content so the box hugs
-     its buttons; start-aligned to line up with the sidebar below. */
+     its buttons; it sits right-aligned in the breadcrumb row (see layout.css). */
   .package-listing-management-tools {
     justify-content: flex-start;
     box-sizing: border-box;
