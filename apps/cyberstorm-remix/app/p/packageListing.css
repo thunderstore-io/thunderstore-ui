@@ -75,9 +75,9 @@
     width: 100%;
   }
 
-  /* One combined dashed box of icon-only actions (the Island "special" variant
+  /* One combined dashed box of moderator actions (the Island "special" variant
      supplies the flex row + border + background). fit-content so the box hugs
-     its buttons; start-aligned to line up with the sidebar below. */
+     its buttons; it sits right-aligned in the breadcrumb row (see layout.css). */
   .package-listing-management-tools {
     justify-content: flex-start;
     box-sizing: border-box;
@@ -99,19 +99,14 @@
     background-color: var(--color-surface-default);
   }
 
-  /* Banner cell is the positioning context for the banner-note overlay. */
-  .package-listing__banner {
-    position: relative;
-  }
-
-  /* The rejection reason and the mods-only internal notes render as collapsible
-     cards overlaid on the community banner (rejection first), so neither takes
-     sidebar space nor shifts the layout. */
+  /* The rejection reason and the mods-only internal notes render as full-width
+     cards stacked above the page header (rejection first), alongside the
+     deprecation notice. */
   .package-listing__banner-notes {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: var(--space-8);
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .package-listing__banner-notes:empty {
@@ -123,8 +118,7 @@
     flex-direction: column;
     gap: var(--gap-sm);
     box-sizing: border-box;
-    width: fit-content;
-    max-width: min(28rem, 100%);
+    width: 100%;
     padding: var(--space-12);
     border-radius: var(--radius-md);
     background-color: var(--color-surface-1);
@@ -134,37 +128,6 @@
     background-color: var(--color-accent-red-5);
   }
 
-  /* The cards sit side by side, overlaid on the banner and each clamped to its
-     height; expanding one grows it over the content below without reflowing the
-     page since the overlay is out of flow. Without a banner there's nothing to
-     overlay, so the cards stay in normal flow. They never wrap here (a wrapped
-     second card would stack below the short banner and cover the package
-     header) — instead they shrink side by side until the mobile breakpoint
-     below drops them into a column. */
-  .package-listing__banner:has(.community__header--compact)
-    .package-listing__banner-notes {
-    position: absolute;
-    inset: var(--space-8) auto auto var(--space-8);
-    z-index: 1;
-    flex-wrap: nowrap;
-    max-width: calc(100% - 2 * var(--space-8));
-  }
-
-  .package-listing__banner:has(.community__header--compact)
-    .package-listing__banner-note {
-    flex: 0 1 auto;
-    min-width: 0;
-    max-height: 5rem;
-    overflow: hidden;
-  }
-
-  .package-listing__banner:has(.community__header--compact)
-    .package-listing__banner-note--expanded {
-    max-height: min(80vh, 40rem);
-    overflow-y: auto;
-    box-shadow: var(--shadow-lg);
-  }
-
   .package-listing__banner-note-header {
     display: flex;
     gap: var(--gap-sm);
@@ -172,20 +135,30 @@
     justify-content: space-between;
   }
 
-  .package-listing__banner-note-toggle {
-    flex: none;
-    padding: 0;
+  /* Clickable header bar for the collapsible internal-notes card: a full-width
+     button strip using the secondary-button color, its negative margins
+     cancelling the card padding so it reaches the edges. */
+  .package-listing__banner-note-header--bar {
+    box-sizing: border-box;
+    margin: calc(-1 * var(--space-12)) calc(-1 * var(--space-12)) 0;
+    padding: var(--space-8) var(--space-12);
     border: none;
-    color: var(--color-cyber-green-7);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    color: inherit;
     font: inherit;
-    font-weight: var(--font-weight-semibold);
-    background: none;
+    text-align: left;
+    background-color: var(--button-secondary-bg-color--default);
     cursor: pointer;
 
     &:hover {
-      color: var(--color-cyber-green-9);
-      text-decoration: underline;
+      background-color: var(--button-secondary-bg-color--hover);
     }
+  }
+
+  /* When collapsed the header is the card's only child, so round it fully. */
+  .package-listing__banner-note-header--bar:last-child {
+    margin-bottom: calc(-1 * var(--space-12));
+    border-radius: var(--radius-md);
   }
 
   .package-listing__banner-note-text {
@@ -193,32 +166,6 @@
     font: inherit;
     white-space: pre-wrap;
     overflow-wrap: break-word;
-  }
-
-  /* On single-column (mobile/tablet) layouts the banner is too short to overlay
-     on — the clamped cards end up unusably small (Show more becomes
-     unclickable). Drop them into normal flow below the banner instead, with a
-     comfortable collapsed height. */
-  @media (width <= 70rem) {
-    .package-listing__banner:has(.community__header--compact)
-      .package-listing__banner-notes {
-      position: static;
-      inset: auto;
-      flex-direction: column;
-      max-width: none;
-    }
-
-    .package-listing__banner:has(.community__header--compact)
-      .package-listing__banner-note {
-      width: 100%;
-      max-width: none;
-      max-height: 6rem;
-    }
-
-    .package-listing__banner:has(.community__header--compact)
-      .package-listing__banner-note--expanded {
-      max-height: min(80vh, 40rem);
-    }
   }
 
   .review-package__body {

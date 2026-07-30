@@ -62,15 +62,11 @@ export function ReviewPackageForm({
       open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
-        <NewButton
-          csSize="small"
-          csModifiers={["only-icon"]}
-          aria-label="Review Package"
-          tooltipText="Review Package"
-        >
+        <NewButton csSize="small">
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faScaleBalanced} />
           </NewIcon>
+          Review
         </NewButton>
       }
       titleContent="Review Package"

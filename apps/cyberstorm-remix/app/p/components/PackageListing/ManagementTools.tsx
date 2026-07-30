@@ -43,19 +43,10 @@ export function ManagementTools({
 
   const showManagePackage = permissions.can_manage || permissions.can_moderate;
 
-  // All management actions live in ONE dashed box as icon-only buttons; the box
-  // hides itself (:empty in CSS) when the user has no applicable action.
+  // All management actions live in ONE dashed box; the box hides itself (:empty
+  // in CSS) when the user has no applicable action.
   return (
     <Island variant="special" rootClasses="package-listing-management-tools">
-      {showManagePackage ? (
-        <ManagePackageForm
-          listing={listing}
-          permissions={permissions}
-          toast={toast}
-          config={requestConfig}
-        />
-      ) : null}
-
       <Suspense fallback={null}>
         <Await resolve={listingStatus}>
           {(resolvedListingStatus) => (
@@ -70,6 +61,15 @@ export function ManagementTools({
           )}
         </Await>
       </Suspense>
+
+      {showManagePackage ? (
+        <ManagePackageForm
+          listing={listing}
+          permissions={permissions}
+          toast={toast}
+          config={requestConfig}
+        />
+      ) : null}
     </Island>
   );
 }
