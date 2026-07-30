@@ -372,10 +372,7 @@ export default function PackageListing() {
     <>
       {/* Community hero banner — its own grid row (col 2), so the sidebar's
           Install lines up with the page header below it (see
-          .layout__main--package-detail). Null when the community has no hero.
-          The rejection reason and mod-only internal notes overlay the banner
-          rather than taking a sidebar slot, so they never shift the layout —
-          see packageListing.css. */}
+          .layout__main--package-detail). Null when the community has no hero. */}
       <div className="package-listing__banner">
         <Suspense fallback={null}>
           <Await resolve={community}>
@@ -383,16 +380,6 @@ export default function PackageListing() {
               <CommunityPackageListingHeader
                 resolvedCommunity={resolvedCommunity}
               />
-            )}
-          </Await>
-        </Suspense>
-        <Suspense fallback={null}>
-          <Await resolve={listingStatus}>
-            {(resolvedListingStatus) => (
-              <div className="package-listing__banner-notes">
-                <RejectionReason status={resolvedListingStatus} />
-                <InternalNotes status={resolvedListingStatus} />
-              </div>
             )}
           </Await>
         </Suspense>
@@ -417,6 +404,19 @@ export default function PackageListing() {
             recommend looking for an alternative.
           </NewAlert>
         ) : null}
+
+        {/* Rejection reason and mods-only internal notes, shown above the page
+            header alongside the deprecation notice. */}
+        <Suspense fallback={null}>
+          <Await resolve={listingStatus}>
+            {(resolvedListingStatus) => (
+              <div className="package-listing__banner-notes">
+                <RejectionReason status={resolvedListingStatus} />
+                <InternalNotes status={resolvedListingStatus} />
+              </div>
+            )}
+          </Await>
+        </Suspense>
 
         <PageHeader
           headingLevel="1"

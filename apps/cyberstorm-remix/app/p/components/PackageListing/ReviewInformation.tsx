@@ -1,6 +1,8 @@
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type ReactNode, useState } from "react";
 
-import { classnames } from "@thunderstore/cyberstorm";
+import { NewIcon, classnames } from "@thunderstore/cyberstorm";
 import { type PackageListingStatus } from "@thunderstore/dapper/types";
 
 export interface ReviewInformationProps {
@@ -8,59 +10,52 @@ export interface ReviewInformationProps {
 }
 
 /**
- * A collapsible note card overlaid on the community banner (positioned by
- * packageListing.css), used for the rejection reason and mod internal notes so
- * neither costs sidebar space nor shifts the page. The Show more/less toggle
- * appears only when the text overflows the collapsed height.
+ * A note card shown above the page header alongside the deprecation notice
+ * (styled by packageListing.css), used for the rejection reason and mod
+ * internal notes. When `collapsible`, its header becomes a full-width button
+ * that toggles the note body.
  */
 function BannerNote(props: {
   label: string;
   text: string;
   danger?: boolean;
   footer?: ReactNode;
+  collapsible?: boolean;
 }) {
-  const { label, text, danger, footer } = props;
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [expanded, setExpanded] = useState(false);
-  const [overflowing, setOverflowing] = useState(false);
-
-  useEffect(() => {
-    const el = cardRef.current;
-    if (!el) return;
-    const measure = () => setOverflowing(el.scrollHeight > el.clientHeight + 1);
-    measure();
-    // ResizeObserver may be missing in older/edge environments; skip the live
-    // observer there (the expand toggle still re-measures via this effect).
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [text, expanded]);
+  const { label, text, danger, footer, collapsible } = props;
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div
-      ref={cardRef}
       className={classnames(
         "package-listing__banner-note",
-        danger ? "package-listing__banner-note--danger" : undefined,
-        expanded ? "package-listing__banner-note--expanded" : undefined
+        danger ? "package-listing__banner-note--danger" : undefined
       )}
     >
-      <div className="package-listing__banner-note-header">
-        <span className="review-package__label">{label}</span>
-        {overflowing || expanded ? (
-          <button
-            type="button"
-            className="package-listing__banner-note-toggle"
-            aria-expanded={expanded}
-            onClick={() => setExpanded((value) => !value)}
-          >
-            {expanded ? "Show less" : "Show more"}
-          </button>
-        ) : null}
-      </div>
-      <pre className="package-listing__banner-note-text">{text}</pre>
-      {footer}
+      {collapsible ? (
+        <button
+          type="button"
+          className="package-listing__banner-note-header package-listing__banner-note-header--bar"
+          aria-expanded={!collapsed}
+          aria-label={collapsed ? `Expand ${label}` : `Collapse ${label}`}
+          onClick={() => setCollapsed((value) => !value)}
+        >
+          <span className="review-package__label">{label}</span>
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={collapsed ? faCaretDown : faCaretUp} />
+          </NewIcon>
+        </button>
+      ) : (
+        <div className="package-listing__banner-note-header">
+          <span className="review-package__label">{label}</span>
+        </div>
+      )}
+      {collapsed ? null : (
+        <>
+          <pre className="package-listing__banner-note-text">{text}</pre>
+          {footer}
+        </>
+      )}
     </div>
   );
 }
@@ -72,7 +67,7 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
     return null;
   }
 
-  return <BannerNote label="Internal notes" text={notes} />;
+  return <BannerNote label="Internal notes" text={notes} collapsible />;
 };
 
 export const RejectionReason = ({ status }: ReviewInformationProps) => {
