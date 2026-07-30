@@ -1,4 +1,4 @@
-import { getSectionDefault } from "cyberstorm/utils/section";
+import { getSectionSelection } from "cyberstorm/utils/section";
 
 import { type Section } from "@thunderstore/dapper/types";
 import { type CommunityFilters } from "@thunderstore/thunderstore-api";
@@ -40,7 +40,7 @@ export const searchParamsToBlob = (
       initialOrder && isPackageOrderOptions(initialOrder)
         ? (initialOrder as PackageOrderOptionsType)
         : undefined,
-    section: getSectionDefault(initialSection, sections),
+    section: getSectionSelection(initialSection, sections),
     deprecated:
       initialDeprecated === null
         ? false
@@ -136,7 +136,7 @@ export const resetParams = (
   setter({
     search: "",
     order: order,
-    section: getSectionDefault(null, sortedSections as Section[]),
+    section: getSectionSelection(null, sortedSections as Section[]),
     deprecated: false,
     nsfw: false,
     page: 1,
