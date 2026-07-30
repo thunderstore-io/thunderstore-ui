@@ -36,7 +36,7 @@ export function stripHtmlTags(html: string = ""): string {
  * All entities including &amp; are handled in one pass to correctly decode
  * double-encoded entities like &amp;lt;.
  */
-function decodeHtmlEntities(text: string): string {
+export function decodeHtmlEntities(text: string): string {
   return text.replace(
     /&(?:#(\d+)|#x([0-9a-fA-F]+)|([a-z0-9]+));/gi,
     (match, dec, hex, named) => {

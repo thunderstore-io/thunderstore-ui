@@ -1,6 +1,63 @@
-.code-box-html {
-  position: relative;
-  align-self: stretch;
-  width: 100%;
-  overflow: auto;
+@layer nimbus-components {
+  .code-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* The scroll port. Both axes live here: rows are absolutely positioned on the
+     surface inside, which is sized to the full line count and the widest line. */
+  .code-view__scroll {
+    position: relative;
+    width: 100%;
+    padding: var(--space-8) 0;
+    border: 1px solid var(--color-surface-8);
+    border-radius: var(--radius-md);
+    overflow: auto;
+    font-size: var(--font-size-body-md);
+    font-family: var(--font-family-monospace);
+    background-color: var(--color-surface-1);
+
+    /* Rows are positioned against this box, so it must not be the containing
+       block's scroll parent for `top` to mean "offset within the file". */
+    contain: paint;
+  }
+
+  .code-view__surface {
+    position: relative;
+  }
+
+  .code-view__row {
+    position: absolute;
+    left: 0;
+    display: flex;
+    gap: var(--space-16);
+    align-items: flex-start;
+    width: 100%;
+    height: var(--code-view-line-height);
+    line-height: var(--code-view-line-height);
+  }
+
+  .code-view__gutter {
+    position: sticky;
+    left: 0;
+    flex-shrink: 0;
+
+    /* Wide enough for a six-digit line number; decompiled assemblies get long. */
+    width: 6ch;
+    padding-right: var(--space-8);
+    color: var(--color-text-tertiary);
+    text-align: right;
+    background-color: var(--color-surface-1);
+    user-select: none;
+  }
+
+  .code-view__code {
+    flex: 1;
+    font: inherit;
+    white-space: pre;
+  }
 }

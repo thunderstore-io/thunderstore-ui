@@ -158,9 +158,12 @@ export default function Source() {
                   className="package-source__decompilations-file"
                   key={decompilation.source_file_name}
                 >
+                  {/* The API returns Pygments-highlighted HTML, which
+                      CodeBoxHTML renders directly — no client-side
+                      re-highlighting, and only the visible rows are mounted. */}
                   <CodeBoxHTML
                     value={decompilation.result}
-                    language={"csharp"}
+                    label={decompilation.source_file_name}
                   />
                 </div>
               </div>
