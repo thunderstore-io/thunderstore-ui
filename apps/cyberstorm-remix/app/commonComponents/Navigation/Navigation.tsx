@@ -360,6 +360,7 @@ export function Navigation(props: {
                 csSize="small"
                 aria-label="Upload"
                 tooltipText="Upload"
+                community={communityId}
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faUpload} />
@@ -914,8 +915,9 @@ function MobileDevelopersMenu({ domain }: { domain: string }) {
 export function MobileNavigationMenu(props: {
   domain: string;
   currentUser?: CurrentUser;
+  communityId?: string;
 }) {
-  const { domain, currentUser } = props;
+  const { domain, currentUser, communityId } = props;
   const location = useLocation();
 
   useEffect(() => {
@@ -1011,6 +1013,7 @@ export function MobileNavigationMenu(props: {
               csVariant="secondary"
               csSize="small"
               tooltipText="Upload"
+              community={communityId}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faUpload} />
