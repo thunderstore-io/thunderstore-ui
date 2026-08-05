@@ -5,7 +5,7 @@ import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { useLoaderData, useOutletContext } from "react-router";
+import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
 
 import { NewAlert, NewLink } from "@thunderstore/cyberstorm";
 import {
@@ -41,6 +41,7 @@ import {
 import {
   type UploadFormFieldAction,
   buildCommunityOptions,
+  buildSelectedCommunities,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
   getUploadProgressPercent,
@@ -105,6 +106,9 @@ export default function Upload() {
   const currentUser = outletContext.currentUser;
   const dapper = outletContext.dapper;
 
+  const [searchParams] = useSearchParams();
+  const community = searchParams.get("community");
+
   const communityOptions = useMemo(
     () => buildCommunityOptions(uploadData.results),
     [uploadData.results]
@@ -156,10 +160,10 @@ export default function Upload() {
     [submissionErrorMessages]
   );
 
-  const [formInputs, dispatchForm] = useReducer(
-    uploadFormFieldReducer,
-    initialUploadFormInputs
-  );
+  const [formInputs, dispatchForm] = useReducer(uploadFormFieldReducer, {
+    ...initialUploadFormInputs,
+    communities: buildSelectedCommunities(communityOptions, community),
+  });
 
   const updateFormFieldState = (action: UploadFormFieldAction) => {
     dispatchForm(action);
