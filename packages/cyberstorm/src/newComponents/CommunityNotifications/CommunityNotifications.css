@@ -1,0 +1,8 @@
+@layer components {
+  .community-notifications {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    align-self: stretch;
+  }
+}
