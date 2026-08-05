@@ -87,11 +87,18 @@ describe("searchParamsToBlob", () => {
     expect(result.section).toBe("section-1");
   });
 
-  test("handles empty sections array correctly", () => {
+  test('selects "all" when the community has no sections', () => {
     const params = new URLSearchParams();
     const result = searchParamsToBlob(params, []);
 
-    expect(result.section).toBe("");
+    expect(result.section).toBe("all");
+  });
+
+  test('keeps an explicitly requested "all" selected', () => {
+    const params = new URLSearchParams();
+    params.set("section", "all");
+
+    expect(searchParamsToBlob(params, sections).section).toBe("all");
   });
 
   test("handles invalid integer for page", () => {
@@ -359,6 +366,24 @@ describe("synchronizeSearchParams", () => {
     expect(params.has("section")).toBe(false);
   });
 
+  test('writes out an explicitly picked "all"', () => {
+    const params = new URLSearchParams();
+    const blob = { ...defaultBlob, section: "all" };
+
+    synchronizeSearchParams(params, blob, defaultBlob, sections);
+
+    expect(params.get("section")).toBe("all");
+  });
+
+  test('omits "all" when the community has no sections to pick from', () => {
+    const params = new URLSearchParams();
+    const blob = { ...defaultBlob, section: "all" };
+
+    synchronizeSearchParams(params, blob, defaultBlob, []);
+
+    expect(params.has("section")).toBe(false);
+  });
+
   test("resets page if section has changed in ref", () => {
     const params = new URLSearchParams();
     params.set("section", "other-section");
@@ -521,7 +546,7 @@ describe("resetParams", () => {
 
     expect(setter2).toHaveBeenCalledWith(
       expect.objectContaining({
-        section: "",
+        section: "all",
       })
     );
   });

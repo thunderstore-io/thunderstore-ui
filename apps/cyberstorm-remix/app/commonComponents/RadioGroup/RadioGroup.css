@@ -48,6 +48,12 @@
     }
   }
 
+  .radio-group__divider {
+    height: var(--divider-height);
+    margin: var(--space-8) 0;
+    background-color: var(--divider-bg-color);
+  }
+
   .radio-group__radio {
     position: relative;
     display: flex;

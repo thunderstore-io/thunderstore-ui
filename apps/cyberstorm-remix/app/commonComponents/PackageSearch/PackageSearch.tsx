@@ -2,6 +2,7 @@ import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+import { ALL_SECTIONS, getSectionSelection } from "cyberstorm/utils/section";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
   type ReactNode,
@@ -33,6 +34,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   type CurrentUser,
   type PackageListings,
+  type Section,
 } from "@thunderstore/dapper/types";
 import {
   type CommunityFilters,
@@ -60,6 +62,13 @@ import { PackageOrder } from "./components/PackageOrder";
 import { PackageOrderOptions } from "./components/packageOrderOptions";
 
 const PER_PAGE = 20;
+
+const ALL_SECTIONS_OPTION: Section = {
+  uuid: ALL_SECTIONS,
+  name: "All",
+  slug: ALL_SECTIONS,
+  priority: 0,
+};
 
 interface Props {
   listings: Promise<PackageListings> | PackageListings;
@@ -147,11 +156,13 @@ export function PackageSearch(props: Props) {
         (a, b) => b.priority - a.priority
       );
       setSortedSections(sections);
-      if (sections.length !== 0) {
-        setSearchParamsBlob((prev) =>
-          prev.section === "" ? { ...prev, section: sections[0].uuid } : prev
+      setSearchParamsBlob((prev) => {
+        const section = getSectionSelection(
+          prev.section === "" ? null : prev.section,
+          sections
         );
-      }
+        return section === prev.section ? prev : { ...prev, section };
+      });
       setCategories(
         [...resolved.package_categories]
           .sort((a, b) => a.slug.localeCompare(b.slug))
@@ -329,22 +340,9 @@ export function PackageSearch(props: Props) {
       {sortedSections ? (
         <CollapsibleMenu headerTitle="Sections" defaultOpen>
           <RadioGroup
-            sections={[
-              ...sortedSections,
-              {
-                uuid: "all",
-                name: "All",
-                slug: "all",
-                priority: -999999999,
-              },
-            ]}
-            selected={
-              searchParamsBlob.section === "" || sortedSections.length === 0
-                ? sortedSections.length > 0
-                  ? sortedSections[0].uuid
-                  : "all"
-                : searchParamsBlob.section
-            }
+            sections={[ALL_SECTIONS_OPTION, ...sortedSections]}
+            dividerAfterUuid={ALL_SECTIONS}
+            selected={searchParamsBlob.section}
             setSelected={setParamsBlobValue(
               setSearchParamsBlob,
               searchParamsBlob,
