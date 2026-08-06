@@ -22,7 +22,6 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
 import {
-  CopyButton,
   Drawer,
   Heading,
   NewAlert,
@@ -40,6 +39,8 @@ import type { PackageListingDetails } from "@thunderstore/dapper/types";
 
 import type { Route } from "./+types/packageListingVersion";
 import { PackageActions } from "./components/PackageListing/PackageActions";
+import { PackageDependencyString } from "./components/PackageListing/PackageDependencyString";
+import { PackageMeta } from "./components/PackageListing/PackageListingSidebar";
 import {
   getPrivateListing,
   getPublicListing,
@@ -402,41 +403,23 @@ function packageMeta(listing: PackageListingDetails) {
   // one still returns datetime_created (see PackageListingDetails).
   const dateUploaded = listing.version_created ?? listing.datetime_created;
   return (
-    <div className="package-listing-sidebar__meta">
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Date Uploaded</div>
-        <div className="package-listing-sidebar__content">
-          {dateUploaded ? (
-            <RelativeTime time={dateUploaded} suppressHydrationWarning />
-          ) : null}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Downloads</div>
-        <div className="package-listing-sidebar__content">
-          {formatInteger(listing.download_count)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Size</div>
-        <div className="package-listing-sidebar__content">
-          {formatFileSize(listing.size)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Dependency string</div>
-        <div className="package-listing-sidebar__content">
-          <div className="package-listing-sidebar__dependency-string-wrapper">
-            <span
-              title={listing.full_version_name}
-              className="package-listing-sidebar__dependency-string"
-            >
-              {listing.full_version_name}
-            </span>
-            <CopyButton text={listing.full_version_name} />
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <PackageDependencyString dependency={listing.full_version_name} />
+      <PackageMeta
+        items={[
+          {
+            label: "Date Uploaded",
+            content: dateUploaded ? (
+              <RelativeTime time={dateUploaded} suppressHydrationWarning />
+            ) : null,
+          },
+          {
+            label: "Downloads",
+            content: formatInteger(listing.download_count),
+          },
+          { label: "Size", content: formatFileSize(listing.size) },
+        ]}
+      />
+    </>
   );
 }
