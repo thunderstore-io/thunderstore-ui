@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/react-router";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { isSsrChallengeResponse } from "cyberstorm/utils/challengeSsr";
 import {
   heartbeatSuppressed4xx,
   isExpectedRouteError,
@@ -20,6 +21,8 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 type StatusCode = number | "???";
+
+let ssrChallengeRetried = false;
 
 /**
  * Route level error boundary. Catches errors that occurred in
@@ -63,6 +66,7 @@ export function RouteErrorBoundary() {
     let active = true;
 
     const classifyAndReport = async () => {
+      if (isSsrChallengeResponse(error)) return;
       // A 401 is expected for an anonymous user (redirected to login below)
       // but an auth regression for a logged-in one — resolve the session
       // before classifying (a failed lookup leaves anonymous undefined, so
@@ -147,7 +151,16 @@ export function RouteErrorBoundary() {
     resolveAnonymous,
   ]);
 
-  const isChallenge = isCloudflareChallengeError(error);
+  useEffect(() => {
+    if (!isSsrChallengeResponse(error) || ssrChallengeRetried) return;
+    ssrChallengeRetried = true;
+    navigate(location.pathname + location.search + location.hash, {
+      replace: true,
+    });
+  }, [error, navigate, location.pathname, location.search, location.hash]);
+
+  const isChallenge =
+    isCloudflareChallengeError(error) || isSsrChallengeResponse(error);
   const errorTitle = isChallenge
     ? "Verification required"
     : errorTitles[statusCode] ?? "Unexpected error";
