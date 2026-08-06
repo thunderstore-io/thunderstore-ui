@@ -416,7 +416,9 @@ function packageMeta(listing: PackageListingDetails) {
           {
             label: "Date Uploaded",
             content: dateUploaded ? (
-              <TooltipWrapper tooltipText={new Date(dateUploaded).toUTCString()}>
+              <TooltipWrapper
+                tooltipText={new Date(dateUploaded).toUTCString()}
+              >
                 <span>
                   <RelativeTime
                     time={dateUploaded}
