@@ -33,6 +33,10 @@ export function isApiError(e: unknown): e is ApiError {
   );
 }
 
+export function isCloudflareChallengeError(e: unknown): boolean {
+  return isApiError(e) && e.response.headers?.["cf-mitigated"] === "challenge";
+}
+
 export function extractApiErrorMessage(error: ApiError | Error): string {
   const fallbackMessage = "An unknown error occurred";
 

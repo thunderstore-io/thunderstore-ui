@@ -13,7 +13,11 @@ import {
   useRouteError,
 } from "react-router";
 
-import { isApiError } from "@thunderstore/thunderstore-api";
+import { NewButton } from "@thunderstore/cyberstorm";
+import {
+  isApiError,
+  isCloudflareChallengeError,
+} from "@thunderstore/thunderstore-api";
 
 type StatusCode = number | "???";
 
@@ -143,7 +147,10 @@ export function RouteErrorBoundary() {
     resolveAnonymous,
   ]);
 
-  const errorTitle = errorTitles[statusCode] ?? "Unexpected error";
+  const isChallenge = isCloudflareChallengeError(error);
+  const errorTitle = isChallenge
+    ? "Verification required"
+    : errorTitles[statusCode] ?? "Unexpected error";
 
   return (
     <>
@@ -160,8 +167,18 @@ export function RouteErrorBoundary() {
         </h1>
         <h2 className="error-boundary__title">{errorTitle}</h2>
         <p className="error-boundary__description">
-          {errorDescriptions[statusCode] ?? "Try again in a moment!"}
+          {isChallenge
+            ? "Our security provider needs to verify your browser. Reload the page to complete the check."
+            : errorDescriptions[statusCode] ?? "Try again in a moment!"}
         </p>
+        {isChallenge && (
+          <NewButton
+            csVariant="secondary"
+            onClick={() => window.location.reload()}
+          >
+            Reload page
+          </NewButton>
+        )}
       </div>
     </>
   );
