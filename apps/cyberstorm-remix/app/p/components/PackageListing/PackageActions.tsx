@@ -64,7 +64,7 @@ export const PackageActions = memo(function PackageActions(
     isLiked !== undefined;
 
   return (
-    <>
+    <div className="package-actions">
       {installUrl !== undefined && (
         <NewButton
           csVariant="accent"
@@ -82,7 +82,7 @@ export const PackageActions = memo(function PackageActions(
           >
             <ThunderstoreLogo />
           </NewIcon>
-          Install
+          Install with App
         </NewButton>
       )}
       {packageDetailsNarrow ?? null}
@@ -143,6 +143,6 @@ export const PackageActions = memo(function PackageActions(
         )}
         {reportPackageButton ?? null}
       </div>
-    </>
+    </div>
   );
 });
