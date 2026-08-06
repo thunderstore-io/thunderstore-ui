@@ -417,8 +417,8 @@
     --tag-light-pink-icon-color--hover: var(--color-accent-pink-1);
     --tag-light-pink-text-color--default: var(--color-accent-pink-1);
     --tag-light-pink-text-color--hover: var(--color-accent-pink-1);
-    --tag-light-primary-bg-color--default: var(--color-nightsky-10);
-    --tag-light-primary-bg-color--hover: hsl(240deg 44% 55%);
+    --tag-light-primary-bg-color--default: var(--color-nightsky-8);
+    --tag-light-primary-bg-color--hover: var(--color-nightsky-9);
     --tag-light-primary-icon-color--default: var(--color-text-primary);
     --tag-light-primary-icon-color--hover: var(--color-text-primary);
     --tag-light-primary-text-color--default: var(--color-text-primary);
