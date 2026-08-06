@@ -30,7 +30,6 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
 import {
-  CopyButton,
   Drawer,
   Heading,
   NewAlert,
@@ -47,7 +46,8 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts";
 
 import { PackageActions } from "./components/PackageListing/PackageActions";
-// import type { Route } from "./+types/packageVersionWithoutCommunity";
+import { PackageDependencyString } from "./components/PackageListing/PackageDependencyString";
+import { PackageMeta } from "./components/PackageListing/PackageListingSidebar";
 import { isGithubUrl } from "./listingUtils";
 import "./packageListing.css";
 
@@ -380,37 +380,18 @@ function packageMeta(
   version: Awaited<ReturnType<typeof getPackageVersionDetails>>
 ) {
   return (
-    <div className="package-listing-sidebar__meta">
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Date Uploaded</div>
-        <div className="package-listing-sidebar__content">{firstUploaded}</div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Downloads</div>
-        <div className="package-listing-sidebar__content">
-          {formatInteger(version.download_count)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Size</div>
-        <div className="package-listing-sidebar__content">
-          {formatFileSize(version.size)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Dependency string</div>
-        <div className="package-listing-sidebar__content">
-          <div className="package-listing-sidebar__dependency-string-wrapper">
-            <span
-              title={version.full_version_name}
-              className="package-listing-sidebar__dependency-string"
-            >
-              {version.full_version_name}
-            </span>
-            <CopyButton text={version.full_version_name} />
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <PackageDependencyString dependency={version.full_version_name} />
+      <PackageMeta
+        items={[
+          { label: "Date Uploaded", content: firstUploaded },
+          {
+            label: "Downloads",
+            content: formatInteger(version.download_count),
+          },
+          { label: "Size", content: formatFileSize(version.size) },
+        ]}
+      />
+    </>
   );
 }

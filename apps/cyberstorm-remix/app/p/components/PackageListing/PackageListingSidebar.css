@@ -1,0 +1,100 @@
+@layer nimbus-layout {
+  .package-listing-sidebar {
+    position: sticky;
+
+    /* Offset below the sticky nav so the Install button clears it instead of
+       tucking under the header when a long changelog makes the sidebar stick. */
+    top: calc(var(--header-height) + var(--gap-md));
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--gap-md);
+  }
+
+  .package-listing-sidebar__main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .package-listing-sidebar__actions-skeleton,
+  .package-listing-sidebar__install-skeleton,
+  .package-listing-sidebar__skeleton {
+    width: 20rem;
+  }
+
+  .package-listing-sidebar__skeleton {
+    height: 21.4rem;
+  }
+
+  .package-listing-sidebar__install-skeleton {
+    height: 3.56rem;
+  }
+
+  .package-listing-sidebar__actions-skeleton {
+    height: 2.25rem;
+  }
+
+  .package-listing-sidebar__install {
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    font-weight: 800;
+    font-size: 21px;
+    line-height: 1;
+    box-shadow:
+      0 0 16px 0 #40ae7f inset,
+      0 1px 0 0 rgb(255 255 255 / 0.2) inset,
+      0 -3px 0 0 rgb(0 0 0 / 0.35) inset;
+  }
+
+  .package-listing-sidebar__download {
+    flex-grow: 1;
+    justify-content: center;
+  }
+
+  .package-listing-sidebar__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+
+    > :first-child {
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    > :last-child {
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+    }
+  }
+
+  .package-listing-sidebar__item {
+    display: flex;
+    gap: var(--gap-3xl);
+    align-items: center;
+    padding: var(--space-8) var(--space-12);
+    background: var(--color-surface-default);
+  }
+
+  .package-listing-sidebar__content,
+  .package-listing-sidebar__label {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-sm);
+    line-height: normal;
+  }
+
+  .package-listing-sidebar__label {
+    color: var(--color-text-secondary);
+  }
+
+  .package-listing-sidebar__content {
+    flex: 1 0 0;
+    color: var(--color-text-primary);
+    text-align: right;
+  }
+
+  @container (width <= 58rem) {
+    .package-listing-sidebar {
+      display: none;
+    }
+  }
+}
