@@ -1,16 +1,22 @@
 @layer nimbus-layout {
+  .package-actions {
+    display: grid;
+    grid-template-rows: 57px auto;
+    gap: var(--space-12);
+  }
+
   .package-actions__install-link-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: var(--font-size-body-xxxxl);
-    height: var(--font-size-body-xxxxl);
+    width: 25px;
+    height: 25px;
     overflow: hidden;
   }
 
   .package-actions__install-link-icon svg,
   .package-actions__install-link-icon img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
   }
 }
