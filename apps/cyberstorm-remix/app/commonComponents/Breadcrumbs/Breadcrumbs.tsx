@@ -160,7 +160,6 @@ export function Breadcrumbs() {
   const communitiesBreadcrumb = useMemo(() => {
     if (
       !communitiesPage &&
-      !rootIndexPage &&
       !communityPage &&
       !packageDependantsPage &&
       !packageTeamPage
@@ -177,13 +176,7 @@ export function Breadcrumbs() {
     ) : (
       <NewBreadCrumbsItem>Communities</NewBreadCrumbsItem>
     );
-  }, [
-    communitiesPage,
-    rootIndexPage,
-    communityPage,
-    packageDependantsPage,
-    packageTeamPage,
-  ]);
+  }, [communitiesPage, communityPage, packageDependantsPage, packageTeamPage]);
 
   const packageVersionBreadcrumb = useMemo(() => {
     if (!packageVersionPage) return null;
@@ -255,6 +248,12 @@ export function Breadcrumbs() {
     if (!loginPage) return null;
     return <NewBreadCrumbsItem>Log in</NewBreadCrumbsItem>;
   }, [loginPage]);
+
+  // No breadcrumb bar on the home page. After the hooks, as the component
+  // stays mounted across navigations.
+  if (rootIndexPage) {
+    return null;
+  }
 
   return (
     <NewBreadCrumbs>

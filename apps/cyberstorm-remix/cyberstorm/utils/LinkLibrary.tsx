@@ -94,7 +94,7 @@ const library: LinkLibrary = {
   CommunityPackages: (p) => (
     <Link {...p} url={`/c/${p.community}/packages/`} ref={p.customRef} />
   ),
-  Index: (p) => <Link {...p} url={"/communities"} ref={p.customRef} />, // /communities temporarily the frontpage
+  Index: (p) => <Link {...p} url={"/"} ref={p.customRef} />,
   ManifestValidator: (p) => (
     <Link {...p} url={"/tools/manifest-v1-validator/"} ref={p.customRef} />
   ),

@@ -6,6 +6,10 @@ import {
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import {
+  getCachedCommunityList,
+  seedCommunityListCache,
+} from "cyberstorm/utils/communityListCache";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { parseSearchParam } from "cyberstorm/utils/searchParamsUtils";
@@ -155,10 +159,11 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const search = parseSearchParam(searchParams.get("search"));
   const page = undefined;
   return {
-    communities: dapper.getCommunities(
-      page,
+    communities: getCachedCommunityList(
+      dapper,
       order ?? SortOptions.Popular,
-      search
+      search,
+      page
     ),
   };
 }
@@ -170,6 +175,17 @@ export default function CommunitiesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   // TODO: Disabled until we can figure out how a proper way to display skeletons
   // const navigation = useNavigation();
+
+  // After a document load the list came from the SSR loader. Priming the client
+  // cache with it lets in-app navigation back to this page (or to the frontpage,
+  // which shares the popular list) skip the refetch.
+  useEffect(() => {
+    seedCommunityListCache(
+      communities,
+      searchParams.get("order") ?? SortOptions.Popular,
+      parseSearchParam(searchParams.get("search"))
+    );
+  }, [communities, searchParams]);
 
   const changeOrder = (v: SortOptions) => {
     if (v === SortOptions.Popular) {
