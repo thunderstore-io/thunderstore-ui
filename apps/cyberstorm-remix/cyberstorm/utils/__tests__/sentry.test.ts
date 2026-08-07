@@ -171,6 +171,34 @@ describe("utils.sentry.beforeSend", () => {
     expect(beforeSend(event)).toBe(event);
   });
 
+  it("keeps a frameless message where an ad domain abuts an underscore", () => {
+    // "_" is a token character: "foo_media.net" and "media.net_extra" are
+    // identifiers of their own, not the ad host.
+    for (const value of [
+      "Failed to fetch. (foo_media.net)",
+      "Failed to fetch. (media.net_extra)",
+    ]) {
+      const event = {
+        exception: { values: [{ type: "TypeError", value }] },
+      } as ErrorEvent;
+      expect(beforeSend(event), value).toBe(event);
+    }
+  });
+
+  it("drops a frameless message where an ad host ends a sentence with a period", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Failed to load script from media.net.",
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
   it("passes through frameless events whose message is unrelated", () => {
     const event = {
       exception: {
