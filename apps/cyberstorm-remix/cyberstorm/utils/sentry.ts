@@ -165,6 +165,30 @@ function matchesDenyUrl(text: string): boolean {
   );
 }
 
+// denyUrls string entries compiled to match as host/filename tokens inside
+// free-form message text (case-insensitive). An entry matches when it is:
+//   - preceded by start-of-text or any char outside [a-z0-9-] — "." counts,
+//     so subdomains match: "(diagnostics.id5-sync.com)" matches "id5-sync.com"
+//   - followed by end-of-text or any char outside [a-z0-9.-] — so longer
+//     domains don't: neither "media.network" nor "cdn.media.net.evil.com"
+//     matches "media.net"
+// RegExp entries are used as-is.
+const denyUrlTokenPatterns: RegExp[] = denyUrls.map((pattern) =>
+  typeof pattern === "string"
+    ? new RegExp(
+        `(^|[^a-z0-9-])${pattern.replace(
+          /[.*+?^${}()|[\]\\]/g,
+          "\\$&"
+        )}($|[^a-z0-9.-])`,
+        "i"
+      )
+    : pattern
+);
+
+function matchesDenyUrlToken(text: string): boolean {
+  return denyUrlTokenPatterns.some((re) => re.test(text));
+}
+
 /**
  * A stack frame only attributes an error to a real script if it has a concrete
  * filename. Browser extensions and opaque cross-origin scripts surface as
@@ -203,7 +227,7 @@ function isAdScriptError(event: ErrorEvent): boolean {
     return namedFrames.some((frame) => matchesDenyUrl(frame.filename ?? ""));
   }
 
-  return values.some((v) => matchesDenyUrl(v.value ?? ""));
+  return values.some((v) => matchesDenyUrlToken(v.value ?? ""));
 }
 
 /**

@@ -140,6 +140,37 @@ describe("utils.sentry.beforeSend", () => {
     expect(beforeSend(event)).toBeNull();
   });
 
+  it("drops a frameless message naming an ad host as a subdomain token", () => {
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Failed to fetch. (cdn.media.net)",
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBeNull();
+  });
+
+  it("keeps a frameless message where an ad domain only appears as a prefix of another word", () => {
+    // "media.net" must match as a host token, not a bare substring:
+    // "media.network" is a different domain.
+    const event = {
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value:
+              "NetworkError when attempting to fetch resource. (media.network)",
+          },
+        ],
+      },
+    } as ErrorEvent;
+    expect(beforeSend(event)).toBe(event);
+  });
+
   it("passes through frameless events whose message is unrelated", () => {
     const event = {
       exception: {
