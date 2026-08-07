@@ -7,7 +7,7 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  index("./communities/communities.tsx", { id: "rootIndex" }),
+  index("./home/home.tsx", { id: "rootIndex" }),
   route("healthz", "./healthz.tsx"),
   route("robots.txt", "./robotsTxt.tsx"),
   route("sitemap.xml", "./sitemap.tsx"),
