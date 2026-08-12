@@ -4,6 +4,7 @@ export interface RequestConfig {
   // TODO: This should not be explicitly bound to a session ID but rather just
   //       accept any authorization header. Noting as currently out of scope.
   sessionId?: string;
+  queryServiceHost?: string;
 }
 
 export interface ApiEndpointProps<Params, QueryParams, Data> {
@@ -32,6 +33,7 @@ export * from "./get/namespacePackageListings";
 export * from "./get/package";
 export * from "./get/packageChangelog";
 export * from "./get/packageDependantsListings";
+export * from "./get/packageDownloadHistory";
 export * from "./get/packageListingDetails";
 export * from "./get/packageReadme";
 export * from "./get/packageSubmission";

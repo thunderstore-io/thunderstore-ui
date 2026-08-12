@@ -8,6 +8,7 @@ export interface DapperInterface {
   getCurrentUserTeamPermissions: methods.GetCurrentUserTeamPermissions;
   getDynamicHTML: methods.GetDynamicHTML;
   getPackageChangelog: methods.GetPackageChangelog;
+  getPackageDownloadHistory: methods.GetPackageDownloadHistory;
   getPackageListingDetails: methods.GetPackageListingDetails;
   getPackageListingStatus: methods.GetPackageListingStatus;
   getPackageListings: methods.GetPackageListings;

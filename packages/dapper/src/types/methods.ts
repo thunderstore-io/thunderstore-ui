@@ -4,6 +4,7 @@ import {
   type CommunityFilters,
 } from "./community";
 import {
+  type PackageDownloadHistory,
   type PackageListingDetails,
   type PackageListingStatus,
   type PackageListings,
@@ -94,6 +95,11 @@ export type GetPackageSource = (
   name: string,
   version?: string
 ) => Promise<PackageSource>;
+
+export type GetPackageDownloadHistory = (
+  namespace: string,
+  name: string
+) => Promise<PackageDownloadHistory>;
 
 export type PostPackageSubmissionMetadata = (
   author_name: string,
