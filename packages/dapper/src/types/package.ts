@@ -130,6 +130,13 @@ export interface PackageSource {
   decompilations: Decompilation[];
 }
 
+export interface PackageDownloadHistoryPoint {
+  hour: string;
+  downloads: number;
+}
+
+export type PackageDownloadHistory = PackageDownloadHistoryPoint[];
+
 interface Decompilation {
   source_file_name: string;
   url: string;

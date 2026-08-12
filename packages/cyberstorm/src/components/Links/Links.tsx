@@ -36,6 +36,7 @@ export type CyberstormLinkIds =
   | "PackageChangelog"
   | "PackageVersions"
   | "PackageSource"
+  | "PackageAnalytics"
   | "PackageDependants"
   | "PackageFormatDocs"
   | "PackageVersion"

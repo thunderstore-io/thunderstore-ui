@@ -25,6 +25,13 @@ export function getApiHostForSsr(): string {
   return apiHost;
 }
 
+export function getQueryServiceHost(): string | undefined {
+  return (
+    getPublicEnvVariables(["VITE_QUERY_SERVICE_URL"]).VITE_QUERY_SERVICE_URL ||
+    undefined
+  );
+}
+
 /**
  * Canonical absolute URL for a page, used for `og:url` and `rel=canonical`. The
  * SSR proxy terminates TLS and forwards over http, so `request.url` reports
