@@ -48,7 +48,7 @@ export async function fetchPackageVersionOverrideRaw(
   const resolved = config();
   const url = `${resolved.apiHost}/api/cyberstorm/package/${params.namespace}/${params.package}/v/${params.version}/markdown/${document}/download/`;
 
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: "no-store" });
   if (response.status === 404) return null;
   if (!response.ok) {
     throw new Error(`Override download failed: ${response.status}`);

@@ -29,6 +29,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   type RequestConfig,
   fetchPackageVersionMarkdownRaw,
+  fetchPackageVersionOverrideRaw,
   isApiError,
   postPackageVersionMarkdown,
   toolsMarkdownPreview,
@@ -68,28 +69,35 @@ async function fetchEditorData(
     package: packageId,
     version: packageVersion,
   };
-  const readme = await fetchPackageVersionMarkdownRaw({
-    config,
-    params,
-    data: {},
-    queryParams: {},
-    document: "readme",
-  });
 
-  let changelog = null;
-  if (isLatest) {
-    try {
-      changelog = await fetchPackageVersionMarkdownRaw({
-        config,
-        params,
-        data: {},
-        queryParams: {},
-        document: "changelog",
-      });
-    } catch (error) {
-      if (!(isApiError(error) && error.response.status === 404)) throw error;
+  // The experimental raw endpoints sit behind a server-side cache, so right
+  // after an edit they can serve pre-edit content. The download endpoint has
+  // no server-side cache and is fetched with no-store, so prefer the override
+  // from there and use the cached endpoint only for the packaged baseline,
+  // which never changes for a version.
+  const loadDocument = async (document: "readme" | "changelog") => {
+    const shared = { config, params, data: {}, queryParams: {}, document };
+    const override = await fetchPackageVersionOverrideRaw(shared).catch(
+      () => null
+    );
+    if (override !== null) {
+      return { markdown: override, is_edited: true, edited_at: null };
     }
-  }
+    try {
+      const raw = await fetchPackageVersionMarkdownRaw(shared);
+      return { ...raw, is_edited: false };
+    } catch (error) {
+      if (isApiError(error) && error.response.status === 404) return null;
+      throw error;
+    }
+  };
+
+  const readme = (await loadDocument("readme")) ?? {
+    markdown: "",
+    is_edited: false,
+    edited_at: null,
+  };
+  const changelog = isLatest ? await loadDocument("changelog") : null;
 
   return { listing, isLatest, readme, changelog };
 }
