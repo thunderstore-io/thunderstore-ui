@@ -1,25 +1,22 @@
+import { faArrowLeft, faEdit } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useRef, useState } from "react";
-import { useLoaderData, useOutletContext } from "react-router";
+import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
-import {
-  FormSection,
-  FormSectionSeparator,
-  FormSections,
-} from "~/commonComponents/FormSection/FormSection";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { Page } from "~/commonComponents/Page/Page";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
 import {
   CodeInput,
   NewAlert,
   NewButton,
-  NewLink,
+  NewIcon,
+  NewValidationBar,
   Tabs,
   classnames,
   isRecord,
@@ -37,6 +34,10 @@ import {
 
 import type { Route } from "./+types/ReadmeEdit";
 import "./ReadmeEdit.css";
+import {
+  type PreviousOverride,
+  findPreviousReadmeOverride,
+} from "./overrideMigration";
 
 // Matches the backend's MAX_MARKDOWN_SIZE (100,000 characters).
 const MAX_MARKDOWN_SIZE = 100000;
@@ -205,7 +206,12 @@ export default function ReadmeEdit() {
   const { communityId, namespaceId, packageId, packageVersion, isLatest } =
     data;
 
-  const [selectedDoc, setSelectedDoc] = useState<DocumentKey>("readme");
+  const [searchParams] = useSearchParams();
+  const [selectedDoc, setSelectedDoc] = useState<DocumentKey>(() =>
+    isLatest && searchParams.get("document") === "changelog"
+      ? "changelog"
+      : "readme"
+  );
   const [documents, setDocuments] = useState<
     Record<DocumentKey, DocumentState | null>
   >({
@@ -236,12 +242,43 @@ export default function ReadmeEdit() {
   });
   const [saving, setSaving] = useState(false);
   const [discardConfirming, setDiscardConfirming] = useState(false);
+  const [previousOverride, setPreviousOverride] =
+    useState<PreviousOverride | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Keyed on the live edit state, not the loader snapshot, so discarding a
+  // site edit in-session brings the offer back without a reload.
+  const readmeIsEdited = documents.readme?.is_edited ?? false;
+  useEffect(() => {
+    if (readmeIsEdited) return;
+    let cancelled = false;
+    findPreviousReadmeOverride(
+      outletContext.requestConfig,
+      namespaceId,
+      packageId,
+      packageVersion
+    )
+      .then((result) => {
+        if (!cancelled) setPreviousOverride(result);
+      })
+      .catch(() => {
+        // Best effort
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [namespaceId, packageId, packageVersion, readmeIsEdited]);
 
   const current = documents[selectedDoc];
   const currentText = current?.markdown ?? "";
   const isDirty = current !== null && currentText !== baselines[selectedDoc];
   const overLimit = currentText.length > MAX_MARKDOWN_SIZE;
+  const barState: PreviewState = overLimit
+    ? {
+        status: "failure",
+        message: `Too long: ${currentText.length.toLocaleString()} / ${MAX_MARKDOWN_SIZE.toLocaleString()} characters`,
+      }
+    : preview;
 
   const [debouncedText] = useDebounce(currentText, 1000);
 
@@ -393,9 +430,22 @@ export default function ReadmeEdit() {
     }
   }
 
+  function loadPreviousOverride() {
+    if (!previousOverride) return;
+    setDocuments((docs) => ({
+      ...docs,
+      readme: {
+        ...(docs.readme ?? { markdown: "", is_edited: false, edited_at: null }),
+        markdown: previousOverride.markdown,
+      },
+    }));
+    setDiscardConfirming(false);
+    setPreviousOverride(null);
+  }
+
   function loadFromFile(file: File | undefined) {
     if (!file) return;
-    // Text-length validation happens on save; this only guards against
+    // Text-length validation happens on save. This only guards against
     // reading an obviously wrong selection into memory.
     if (file.size > MAX_MARKDOWN_SIZE * 4) {
       toast.addToast({
@@ -408,59 +458,64 @@ export default function ReadmeEdit() {
     file.text().then(setCurrentText);
   }
 
-  return (
-    <Page>
-      <PageHeader headingLevel="1" headingSize="2">
-        Edit {namespaceId}-{packageId} {packageVersion}
-      </PageHeader>
+  const editedTitle = (doc: DocumentState | null, label: string) =>
+    `This ${label} has a site edit${
+      doc?.edited_at
+        ? `, last saved ${new Date(doc.edited_at).toLocaleString()}`
+        : ""
+    }. The downloaded package keeps its original file.`;
 
-      <div className="readme-edit__nav">
-        <NewLink
+  return (
+    <Page rootClasses="readme-edit">
+      <Tabs>
+        <NewButton
+          csModifiers={["ghost"]}
+          csVariant="secondary"
+          csSize="small"
           primitiveType="cyberstormLink"
-          linkId="PackageVersion"
+          linkId="Package"
           community={communityId}
           namespace={namespaceId}
           package={packageId}
-          version={packageVersion}
-          csVariant="cyber"
+          rootClasses="readme-edit__back"
         >
-          Back to version page
-        </NewLink>
-      </div>
-
-      <Tabs>
-        <button
-          key="readme"
-          onClick={() => {
-            setSelectedDoc("readme");
-            setDiscardConfirming(false);
-          }}
-          aria-current={selectedDoc === "readme"}
-          className={classnames(
-            "readme-edit__tab",
-            "tabs-item",
-            selectedDoc === "readme" ? "tabs-item--current" : undefined
-          )}
-        >
-          README
-        </button>
-        {isLatest ? (
-          <button
-            key="changelog"
-            onClick={() => {
-              setSelectedDoc("changelog");
-              setDiscardConfirming(false);
-            }}
-            aria-current={selectedDoc === "changelog"}
-            className={classnames(
-              "readme-edit__tab",
-              "tabs-item",
-              selectedDoc === "changelog" ? "tabs-item--current" : undefined
-            )}
-          >
-            CHANGELOG
-          </button>
-        ) : null}
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </NewIcon>
+          Go back
+        </NewButton>
+        {(["readme", "changelog"] as const).map((doc) =>
+          doc === "changelog" && !isLatest ? null : (
+            <button
+              key={doc}
+              onClick={() => {
+                setSelectedDoc(doc);
+                setDiscardConfirming(false);
+              }}
+              aria-current={selectedDoc === doc}
+              className={classnames(
+                "readme-edit__tab",
+                "tabs-item",
+                selectedDoc === doc ? "tabs-item--current" : undefined
+              )}
+            >
+              {doc.toUpperCase()}
+              {documents[doc]?.is_edited ? (
+                <span
+                  className="readme-edit__tab-edited"
+                  title={editedTitle(documents[doc], doc)}
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faEdit} />
+                  </NewIcon>
+                </span>
+              ) : null}
+            </button>
+          )
+        )}
+        <span className="readme-edit__identity">
+          {namespaceId}-{packageId} {packageVersion}
+        </span>
       </Tabs>
 
       {!isLatest ? (
@@ -469,35 +524,45 @@ export default function ReadmeEdit() {
         </NewAlert>
       ) : null}
 
-      {current?.is_edited ? (
+      {selectedDoc === "readme" && !current?.is_edited && previousOverride ? (
         <NewAlert csVariant="info">
-          This {selectedDoc} has a site edit
-          {current.edited_at
-            ? `, last saved ${new Date(current.edited_at).toLocaleString()}`
-            : ""}
-          . The downloaded package keeps its original file.
+          <div className="readme-edit__migrate">
+            <span>
+              Version {previousOverride.versionNumber} has a site-edited README
+              that this version does not carry.
+            </span>
+            <span className="readme-edit__migrate-actions">
+              <NewButton
+                csSize="small"
+                csVariant="accent"
+                onClick={loadPreviousOverride}
+                disabled={saving}
+              >
+                Load site edit from {previousOverride.versionNumber}
+              </NewButton>
+            </span>
+          </div>
         </NewAlert>
       ) : null}
 
-      <FormSections>
-        <FormSection
-          title="Markdown"
-          description="Edits are served on the site and through the API. The uploaded package is never modified."
-        >
+      <div className="readme-edit__workspace">
+        <div className="readme-edit__panes">
           <CodeInput
             placeholder="# Package markdown"
             onChange={(e) => setCurrentText(e.currentTarget.value)}
             value={currentText}
-            validationBarProps={
-              overLimit
-                ? {
-                    status: "failure",
-                    message: `Too long: ${currentText.length.toLocaleString()} / ${MAX_MARKDOWN_SIZE.toLocaleString()} characters`,
-                  }
-                : preview
-            }
+            rootClasses="readme-edit__editor"
           />
-          <div className="readme-edit__actions">
+          <div className="readme-edit__preview">
+            <Markdown input={previewHtml} placeholder="" dangerous />
+          </div>
+        </div>
+        <NewValidationBar
+          status={barState.status}
+          message={barState.message}
+          rootClasses="readme-edit__bar"
+        >
+          <span className="readme-edit__bar-actions">
             <input
               ref={fileInputRef}
               type="file"
@@ -509,6 +574,7 @@ export default function ReadmeEdit() {
               }}
             />
             <NewButton
+              csSize="small"
               csVariant="secondary"
               onClick={() => fileInputRef.current?.click()}
               disabled={saving}
@@ -516,29 +582,28 @@ export default function ReadmeEdit() {
               Load from file
             </NewButton>
             {current?.is_edited ? (
-              <NewButton csVariant="danger" onClick={discard} disabled={saving}>
+              <NewButton
+                csSize="small"
+                csVariant="danger"
+                onClick={discard}
+                disabled={saving}
+              >
                 {discardConfirming
                   ? "Confirm: restore packaged content"
                   : "Discard site edit"}
               </NewButton>
             ) : null}
             <NewButton
+              csSize="small"
               csVariant="accent"
               onClick={save}
               disabled={!isDirty || overLimit || saving}
             >
               {saving ? "Saving…" : "Save"}
             </NewButton>
-          </div>
-        </FormSection>
-        <FormSectionSeparator />
-        <FormSection
-          title="Preview"
-          description="Rendered with the same pipeline the site uses."
-        >
-          <Markdown input={previewHtml} placeholder="" dangerous />
-        </FormSection>
-      </FormSections>
+          </span>
+        </NewValidationBar>
+      </div>
     </Page>
   );
 }
