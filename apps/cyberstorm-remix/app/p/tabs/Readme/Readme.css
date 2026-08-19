@@ -2,4 +2,12 @@
   .package-readme__skeleton {
     height: 500px;
   }
+
+  .markdown-edited-note {
+    width: fit-content;
+    margin-bottom: var(--space-8);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    cursor: help;
+  }
 }

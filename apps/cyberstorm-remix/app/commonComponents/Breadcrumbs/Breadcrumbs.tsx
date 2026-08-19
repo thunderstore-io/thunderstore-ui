@@ -58,6 +58,9 @@ export function Breadcrumbs() {
     (m) => m.id === "tools/markdown-preview/markdownPreview"
   );
   const loginPage = matches.find((m) => m.id === "login/login");
+  const readmeEditPage = matches.find(
+    (m) => m.id === "p/readmeEdit/ReadmeEdit"
+  );
 
   const communityBreadcrumb = useMemo(
     () =>
@@ -255,6 +258,9 @@ export function Breadcrumbs() {
     if (!loginPage) return null;
     return <NewBreadCrumbsItem>Log in</NewBreadCrumbsItem>;
   }, [loginPage]);
+
+  // HACK: the readme editor renders its own "Go back" header instead.
+  if (readmeEditPage) return null;
 
   return (
     <NewBreadCrumbs>

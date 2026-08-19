@@ -16,6 +16,7 @@ import {
   NewTable,
   type NewTableLabels,
   NewTableSort,
+  NewTag,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -119,17 +120,28 @@ export default function Versions() {
                 rows={resolvedValue.map((v) => [
                   {
                     value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
-                        package={packageId}
-                        community={communityId}
-                        namespace={namespaceId}
-                        version={v.version_number}
-                        csVariant="primary"
-                      >
-                        {v.version_number}
-                      </NewLink>
+                      <>
+                        <NewLink
+                          primitiveType="cyberstormLink"
+                          linkId="PackageVersion"
+                          package={packageId}
+                          community={communityId}
+                          namespace={namespaceId}
+                          version={v.version_number}
+                          csVariant="primary"
+                        >
+                          {v.version_number}
+                        </NewLink>
+                        {v.is_edited ? (
+                          <NewTag
+                            csSize="xsmall"
+                            rootClasses="package-versions__edited"
+                            tooltipText="This version was edited on site and may not match the downloaded package."
+                          >
+                            Edited
+                          </NewTag>
+                        ) : null}
+                      </>
                     ),
                     sortValue: v.version_number,
                   },

@@ -47,6 +47,30 @@
     height: 47px;
   }
 
+  .package-listing__tabs-slot {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--space-8);
+    align-items: center;
+
+    /* Match the tab items' border-bottom so the controls center on tab text. */
+    margin-bottom: 3px;
+    margin-left: auto;
+    padding-left: var(--space-16);
+  }
+
+  .package-listing__edited-note {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    white-space: nowrap;
+    cursor: help;
+  }
+
+  /* Narrow-screen stand-in for the tab-strip slot (see packageListing.tsx). */
+  .package-listing__doc-controls-row {
+    display: none;
+  }
+
   .package-listing__content {
     display: flex;
     flex: 1 1 auto;
@@ -325,6 +349,16 @@
   @container (width <= 58rem) {
     .package-listing__narrow-actions {
       display: flex;
+    }
+
+    .package-listing__tabs-slot {
+      display: none;
+    }
+
+    .package-listing__doc-controls-row {
+      display: flex;
+      gap: var(--space-8);
+      align-items: center;
     }
 
     .package-listing-sidebar {

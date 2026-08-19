@@ -5,3 +5,17 @@
     gap: var(--gap-2xs);
   }
 }
+
+.override-migration-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8, 0.5rem);
+  justify-content: space-between;
+  width: 100%;
+}
+
+.override-migration-notice__actions {
+  display: flex;
+  gap: var(--space-8, 0.5rem);
+}

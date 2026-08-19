@@ -1,0 +1,16 @@
+.readme-edit__nav {
+  margin-bottom: var(--space-16, 1rem);
+}
+
+.readme-edit__tab {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.readme-edit__actions {
+  display: flex;
+  gap: var(--space-8, 0.5rem);
+  justify-content: flex-end;
+  margin-top: var(--space-8, 0.5rem);
+}
