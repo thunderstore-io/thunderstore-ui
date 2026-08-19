@@ -13,6 +13,7 @@ import { type PackageSubmissionResult } from "@thunderstore/dapper/types";
 
 import { Island } from "../../commonComponents/Island/Island";
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
+import { OverrideMigrationNotice } from "./OverrideMigrationNotice";
 import "./SubmissionResult.css";
 
 export interface SubmissionResultProps {
@@ -56,6 +57,12 @@ export function SubmissionResult({
       >
         {submissionStatusResult.package_version.name}
       </PageHeader>
+
+      <OverrideMigrationNotice
+        namespace={submissionStatusResult.package_version.namespace}
+        packageName={submissionStatusResult.package_version.name}
+        newVersion={submissionStatusResult.package_version.version_number}
+      />
 
       <NewTable
         titleRowContent={
