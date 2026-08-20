@@ -90,6 +90,15 @@ export type CommunityFiltersRequestParams = z.infer<
   typeof communityFiltersRequestParamsSchema
 >;
 
+// CommunityAlertsRequest
+export const communityAlertsRequestParamsSchema = z.object({
+  community_id: z.string(),
+});
+
+export type CommunityAlertsRequestParams = z.infer<
+  typeof communityAlertsRequestParamsSchema
+>;
+
 // CommunityPackageListingsRequest
 export const communityPackageListingsRequestParamsSchema = z.object({
   community_id: z.string(),

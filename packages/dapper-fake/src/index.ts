@@ -3,6 +3,7 @@ import { DapperInterface } from "@thunderstore/dapper";
 import {
   getFakeCommunities,
   getFakeCommunity,
+  getFakeCommunityAlerts,
   getFakeCommunityFilters,
 } from "./fakers/community";
 import {
@@ -39,6 +40,7 @@ import {
 export class DapperFake implements DapperInterface {
   public getCommunities = getFakeCommunities;
   public getCommunity = getFakeCommunity;
+  public getCommunityAlerts = getFakeCommunityAlerts;
   public getCommunityFilters = getFakeCommunityFilters;
   public getCurrentUser = getFakeCurrentUser;
   public getCurrentUserTeamPermissions = getFakeCurrentUserTeamPermissions;

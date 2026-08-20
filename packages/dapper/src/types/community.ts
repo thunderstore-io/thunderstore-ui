@@ -29,3 +29,13 @@ export interface CommunityFilters {
   package_categories: PackageCategory[];
   sections: Section[];
 }
+
+export type CommunityAlertVariant = "info" | "success" | "warning" | "danger";
+
+export interface CommunityAlert {
+  id: number;
+  message: string;
+  variant: CommunityAlertVariant;
+  datetime_created: string;
+  datetime_updated: string;
+}

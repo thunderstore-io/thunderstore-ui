@@ -3,6 +3,7 @@ import * as methods from "./types/methods";
 export interface DapperInterface {
   getCommunities: methods.GetCommunities;
   getCommunity: methods.GetCommunity;
+  getCommunityAlerts: methods.GetCommunityAlerts;
   getCommunityFilters: methods.GetCommunityFilters;
   getCurrentUser: methods.GetCurrentUser;
   getCurrentUserTeamPermissions: methods.GetCurrentUserTeamPermissions;

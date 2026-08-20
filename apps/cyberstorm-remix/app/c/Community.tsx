@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CommunityAlerts } from "app/commonComponents/CommunityAlerts/CommunityAlerts";
 import {
   CommunityPromo,
   communityHasPromo,
@@ -59,6 +60,9 @@ export const loader = ssrLoader(
       const community = await dapper.getCommunity(params.communityId);
       return {
         community: community,
+        alerts: await dapper
+          .getCommunityAlerts(params.communityId)
+          .catch(() => []),
         seo: createSeo({
           descriptors: [
             { title: `The ${community.name} Mod Database` },
@@ -108,6 +112,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     const community = dapper.getCommunity(params.communityId);
     return {
       community: community,
+      alerts: dapper.getCommunityAlerts(params.communityId).catch(() => []),
     };
   }
   throw new Response("Community not found", { status: 404 });
@@ -245,9 +250,11 @@ function CommunityMainHeaderSkeleton() {
 
 function CommunityMainPage({
   community,
+  alerts,
   outletContext,
 }: {
   community: CommunityLoaderData["community"];
+  alerts: CommunityLoaderData["alerts"];
   outletContext: OutletContextShape;
 }) {
   const communityId = useParams().communityId;
@@ -267,6 +274,7 @@ function CommunityMainPage({
           )}
         </Await>
       </Suspense>
+      <CommunityAlerts alerts={alerts} />
       {showCommunityPromo ? (
         <CommunityPromo variant="bar" communityId={communityId} />
       ) : null}
@@ -276,7 +284,9 @@ function CommunityMainPage({
 }
 
 export default function Community() {
-  const { community } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { community, alerts } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
 
@@ -285,6 +295,10 @@ export default function Community() {
   }
 
   return (
-    <CommunityMainPage community={community} outletContext={outletContext} />
+    <CommunityMainPage
+      community={community}
+      alerts={alerts}
+      outletContext={outletContext}
+    />
   );
 }

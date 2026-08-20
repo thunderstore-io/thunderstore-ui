@@ -1,0 +1,11 @@
+@layer nimbus-components {
+  .community-alerts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .community-alerts:empty {
+    display: none;
+  }
+}

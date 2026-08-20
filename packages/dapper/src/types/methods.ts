@@ -1,6 +1,7 @@
 import {
   type Communities,
   type Community,
+  type CommunityAlert,
   type CommunityFilters,
 } from "./community";
 import {
@@ -33,6 +34,10 @@ export type GetCommunity = (communityId: string) => Promise<Community>;
 export type GetCommunityFilters = (
   communityId: string
 ) => Promise<CommunityFilters>;
+
+export type GetCommunityAlerts = (
+  communityId: string
+) => Promise<CommunityAlert[]>;
 
 export type GetCurrentUser = () => Promise<null | CurrentUser>;
 
