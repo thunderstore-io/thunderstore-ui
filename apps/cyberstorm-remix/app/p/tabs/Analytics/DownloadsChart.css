@@ -1,0 +1,66 @@
+@layer nimbus-layout {
+  .downloads-chart {
+    --downloads-chart-line: var(--color-cyber-green-7);
+
+    width: 100%;
+  }
+
+  .downloads-chart .recharts-area-curve {
+    stroke: var(--downloads-chart-line);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .downloads-chart .recharts-area-area {
+    fill: var(--downloads-chart-line);
+    fill-opacity: 0.1;
+  }
+
+  .downloads-chart .recharts-active-dot circle {
+    fill: var(--downloads-chart-line);
+    stroke: var(--color-surface-2);
+    stroke-width: 2;
+  }
+
+  .downloads-chart .recharts-cartesian-grid line,
+  .downloads-chart .recharts-tooltip-cursor {
+    stroke: var(--color-border-dim);
+  }
+
+  .downloads-chart .recharts-cartesian-axis-line {
+    stroke: var(--color-border-default);
+  }
+
+  .downloads-chart .recharts-cartesian-axis-tick-value {
+    font-size: var(--font-size-body-sm);
+    fill: var(--color-text-tertiary);
+  }
+
+  .downloads-chart .recharts-surface:focus-visible {
+    outline: var(--border-width--px) solid var(--downloads-chart-line);
+    outline-offset: var(--space-4);
+  }
+
+  .downloads-chart__tooltip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+    padding: var(--space-8) var(--space-12);
+    border: var(--border-width--px) solid var(--color-border-bright);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-4);
+  }
+
+  .downloads-chart__tooltip-label {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-sm);
+  }
+
+  .downloads-chart__tooltip-value {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+}

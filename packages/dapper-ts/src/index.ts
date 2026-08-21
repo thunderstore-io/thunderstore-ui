@@ -10,6 +10,7 @@ import {
 import { getDynamicHTML } from "./methods/dynamicHTML";
 import {
   getPackageChangelog,
+  getPackageDownloadHistory,
   getPackagePermissions,
   getPackageReadme,
   getPackageSource,
@@ -43,6 +44,7 @@ export {
   getCurrentUserTeamPermissions,
   getDynamicHTML,
   getPackageChangelog,
+  getPackageDownloadHistory,
   getPackagePermissions,
   getPackageReadme,
   getPackageSource,
@@ -85,6 +87,7 @@ export class DapperTs implements DapperTsInterface {
     this.getCurrentUserTeamPermissions =
       this.getCurrentUserTeamPermissions.bind(this);
     this.getPackageChangelog = this.getPackageChangelog.bind(this);
+    this.getPackageDownloadHistory = this.getPackageDownloadHistory.bind(this);
     this.getPackageListings = this.getPackageListings.bind(this);
     this.getPackageListingDetails = this.getPackageListingDetails.bind(this);
     this.getPackageListingStatus = this.getPackageListingStatus.bind(this);
@@ -116,6 +119,7 @@ export class DapperTs implements DapperTsInterface {
   public getCurrentUser = getCurrentUser;
   public getCurrentUserTeamPermissions = getCurrentUserTeamPermissions;
   public getPackageChangelog = getPackageChangelog;
+  public getPackageDownloadHistory = getPackageDownloadHistory;
   public getPackageListings = getPackageListings;
   public getPackageListingDetails = getPackageListingDetails;
   public getPackageListingStatus = getPackageListingStatus;

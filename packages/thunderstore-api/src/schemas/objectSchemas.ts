@@ -261,6 +261,22 @@ export const packageSourceSchema = z.object({
   decompilations: decompilationSchema.array(),
 });
 
+export const packageDownloadHistoryPointSchema = z.object({
+  hour: z.string().datetime(),
+  downloads: z.number().int().gte(0),
+});
+
+export type PackageDownloadHistoryPoint = z.infer<
+  typeof packageDownloadHistoryPointSchema
+>;
+
+export const packageDownloadHistorySchema =
+  packageDownloadHistoryPointSchema.array();
+
+export type PackageDownloadHistory = z.infer<
+  typeof packageDownloadHistorySchema
+>;
+
 export type PackageSource = z.infer<typeof packageSourceSchema>;
 
 export type PackageVersion = z.infer<typeof packageVersionSchema>;

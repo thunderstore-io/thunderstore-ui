@@ -690,3 +690,12 @@ export const packageSourceRequestParamsSchema = z.object({
 export type PackageSourceRequestParams = z.infer<
   typeof packageSourceRequestParamsSchema
 >;
+
+export const packageDownloadHistoryRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageDownloadHistoryRequestParams = z.infer<
+  typeof packageDownloadHistoryRequestParamsSchema
+>;

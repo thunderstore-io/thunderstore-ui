@@ -1,0 +1,93 @@
+@layer nimbus-layout {
+  .package-analytics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+    width: 100%;
+    padding: var(--space-16);
+    border: var(--border-width--px) solid var(--color-border-bright);
+    border-radius: var(--radius-md);
+  }
+
+  .package-analytics__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+  }
+
+  .package-analytics__subtitle {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+
+  .package-analytics__skeleton {
+    height: 280px;
+  }
+
+  .package-analytics__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-xl);
+  }
+
+  .package-analytics__stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+  }
+
+  .package-analytics__stat-label {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-sm);
+  }
+
+  .package-analytics__stat-value {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-body-xxxxl);
+    line-height: var(--line-height-sm);
+  }
+
+  .package-analytics__stat-detail {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-sm);
+  }
+
+  .package-analytics__table-view > summary {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+    cursor: pointer;
+  }
+
+  .package-analytics__table-scroll {
+    max-height: 20rem;
+    margin-top: var(--gap-sm);
+    overflow-y: auto;
+  }
+
+  .package-analytics__table-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-body-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .package-analytics__table-scroll th,
+  .package-analytics__table-scroll td {
+    padding: var(--space-4) var(--space-8);
+    border-bottom: var(--border-width--px) solid var(--color-border-dim);
+    color: var(--color-text-secondary);
+    text-align: left;
+  }
+
+  .package-analytics__table-scroll th {
+    position: sticky;
+    top: 0;
+    color: var(--color-text-tertiary);
+    background-color: var(--color-body-bg-color);
+  }
+}
