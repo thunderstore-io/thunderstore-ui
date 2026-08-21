@@ -7,11 +7,20 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { RefObject } from "react";
 
-import { NewAlert, NewIcon, classnames } from "@thunderstore/cyberstorm";
+import {
+  NewAlert,
+  NewButton,
+  NewIcon,
+  classnames,
+} from "@thunderstore/cyberstorm";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import type { IBaseUploadHandle } from "@thunderstore/ts-uploader";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
+import {
+  type PreviousOverride,
+  downloadOverrideText,
+} from "../../p/readmeEdit/overrideMigration";
 import { PACKAGE_ZIP_ACCEPT, formatBytes } from "../uploadUtils";
 import { SectionErrors } from "./SectionErrors";
 import "./UploadFileSection.css";
@@ -23,6 +32,7 @@ export interface UploadFileSectionProps {
   sectionErrors: string[];
   fileWarnings: string[];
   fileValidationErrors: string[];
+  previousOverride: PreviousOverride | null;
   fileInputRef: RefObject<HTMLInputElement | null>;
   onFileChange: (file: File | null) => void;
   onRemoveFile: () => void;
@@ -35,6 +45,7 @@ export function UploadFileSection({
   sectionErrors,
   fileWarnings,
   fileValidationErrors,
+  previousOverride,
   fileInputRef,
   onFileChange,
   onRemoveFile,
@@ -148,6 +159,24 @@ export function UploadFileSection({
             {fileWarnings.map((msg) => (
               <div key={msg}>{msg}</div>
             ))}
+          </div>
+        </NewAlert>
+      ) : null}
+      {previousOverride ? (
+        <NewAlert csVariant="warning" rootClasses="upload__alert">
+          <div className="upload-override-warning">
+            <span>
+              Version {previousOverride.versionNumber} has a site-edited README.
+              It will not carry over to this upload automatically. You can carry
+              it over after submitting, or download it now.
+            </span>
+            <NewButton
+              csSize="small"
+              csVariant="secondary"
+              onClick={() => downloadOverrideText(previousOverride.markdown)}
+            >
+              Download it
+            </NewButton>
           </div>
         </NewAlert>
       ) : null}

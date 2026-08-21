@@ -35,6 +35,7 @@ import { UploadSubmitSection } from "./components/UploadSubmitSection";
 import { UploadTeamSection } from "./components/UploadTeamSection";
 import {
   usePackageFileUpload,
+  usePreviousOverrideWarning,
   useSubmissionStatusPolling,
   useUploadCategoryOptions,
 } from "./uploadHooks";
@@ -168,6 +169,12 @@ export default function Upload() {
   const categoryOptions = useUploadCategoryOptions(
     dapper,
     formInputs.communities
+  );
+
+  const previousOverride = usePreviousOverrideWarning(
+    requestConfig,
+    file,
+    formInputs.author_name
   );
 
   type SubmitorOutput = Awaited<
@@ -316,6 +323,7 @@ export default function Upload() {
           sectionErrors={submissionErrorsBySection.uploadFile}
           fileWarnings={fileWarnings}
           fileValidationErrors={fileErrors}
+          previousOverride={previousOverride}
           fileInputRef={fileInputRef}
           onFileChange={(nextFile) => {
             selectFile(nextFile);
