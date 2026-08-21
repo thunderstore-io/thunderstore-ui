@@ -5,78 +5,9 @@ import {
   evaluateZipContents,
   validatePackageZip,
 } from "../uploadZipValidation";
+import { buildZip, zipFile } from "./zipFixtures";
 
 const VALID_ROOT = ["manifest.json", "icon.png", "README.md"];
-
-/**
- * Builds a minimal, uncompressed (stored) ZIP containing the given entries
- * with empty contents. Only the structures `readZipFilenames` parses (local
- * headers, central directory, EOCD) are produced — enough to exercise the
- * filename reader without pulling in a ZIP library.
- */
-function buildZip(filenames: string[]): Uint8Array<ArrayBuffer> {
-  const encoder = new TextEncoder();
-  const localChunks: Uint8Array[] = [];
-  const centralChunks: Uint8Array[] = [];
-  const localOffsets: number[] = [];
-  let offset = 0;
-
-  for (const name of filenames) {
-    const nameBytes = encoder.encode(name);
-    localOffsets.push(offset);
-
-    const local = new Uint8Array(30 + nameBytes.length);
-    const view = new DataView(local.buffer);
-    view.setUint32(0, 0x04034b50, true);
-    view.setUint16(4, 20, true);
-    view.setUint16(6, 0x0800, true);
-    view.setUint16(26, nameBytes.length, true);
-    local.set(nameBytes, 30);
-
-    localChunks.push(local);
-    offset += local.length;
-  }
-
-  const centralStart = offset;
-  filenames.forEach((name, index) => {
-    const nameBytes = encoder.encode(name);
-    const central = new Uint8Array(46 + nameBytes.length);
-    const view = new DataView(central.buffer);
-    view.setUint32(0, 0x02014b50, true);
-    view.setUint16(4, 20, true);
-    view.setUint16(6, 20, true);
-    view.setUint16(8, 0x0800, true);
-    view.setUint16(28, nameBytes.length, true);
-    view.setUint32(42, localOffsets[index], true);
-    central.set(nameBytes, 46);
-
-    centralChunks.push(central);
-    offset += central.length;
-  });
-  const centralSize = offset - centralStart;
-
-  const eocd = new Uint8Array(22);
-  const eocdView = new DataView(eocd.buffer);
-  eocdView.setUint32(0, 0x06054b50, true);
-  eocdView.setUint16(8, filenames.length, true);
-  eocdView.setUint16(10, filenames.length, true);
-  eocdView.setUint32(12, centralSize, true);
-  eocdView.setUint32(16, centralStart, true);
-
-  const chunks = [...localChunks, ...centralChunks, eocd];
-  const total = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
-  const out = new Uint8Array(total);
-  let cursor = 0;
-  for (const chunk of chunks) {
-    out.set(chunk, cursor);
-    cursor += chunk.length;
-  }
-  return out;
-}
-
-function zipFile(filenames: string[], name = "package.zip"): File {
-  return new File([buildZip(filenames)], name, { type: "application/zip" });
-}
 
 describe("evaluateZipContents", () => {
   it("accepts a well-formed package with no warnings or errors", () => {

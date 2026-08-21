@@ -1,14 +1,14 @@
 /**
- * Reads the list of entry filenames from a ZIP file by parsing its central
- * directory, without decompressing any contents.
+ * Reads a ZIP file's central directory by slicing just the tail of the file
+ * (the End Of Central Directory record and the directory itself), so it stays
+ * cheap even for the 10GB maximum upload size and needs no ZIP library.
  *
- * The pre-upload package validation (see {@link ./uploadZipValidation}) only
- * needs the entry names — never the file data — so this deliberately avoids a
- * full ZIP library. It reads just the tail of the file (the End Of Central
- * Directory record and the central directory itself) via `Blob.slice`, so it
- * stays cheap even for the 10GB maximum upload size.
+ * `readZipFilenames` lists entry names for the pre-upload validation (see
+ * {@link ./uploadZipValidation}). `readZipEntryText` additionally extracts one
+ * small entry, which is how the upload form learns the package name from
+ * manifest.json before anything is sent.
  *
- * Returns `null` when the archive can't be parsed (corrupt, unsupported, or
+ * Both return `null` when the archive can't be parsed (corrupt, unsupported, or
  * not actually a ZIP). Callers should treat `null` as "couldn't analyse" and
  * fall back to server-side validation rather than blocking the upload.
  */
@@ -21,6 +21,10 @@ const ZIP64_EOCD_SIGNATURE = 0x06064b50;
 const ZIP64_EOCD_SIZE = 56;
 const CENTRAL_DIRECTORY_HEADER_SIGNATURE = 0x02014b50;
 const CENTRAL_DIRECTORY_HEADER_MIN_SIZE = 46;
+const LOCAL_HEADER_SIGNATURE = 0x04034b50;
+const LOCAL_HEADER_MIN_SIZE = 30;
+const COMPRESSION_STORED = 0;
+const COMPRESSION_DEFLATE = 8;
 
 /** Max ZIP comment length is 0xffff; the EOCD lives within this of the end. */
 const MAX_EOCD_SEARCH = EOCD_MIN_SIZE + 0xffff;
@@ -28,6 +32,8 @@ const MAX_EOCD_SEARCH = EOCD_MIN_SIZE + 0xffff;
 const MAX_CENTRAL_DIRECTORY_SIZE = 64 * 1024 * 1024;
 /** Guard against runaway loops on malformed central directories. */
 const MAX_ENTRIES = 200_000;
+/** Single-entry reads are for small metadata files, never payloads. */
+const MAX_ENTRY_SIZE = 1024 * 1024;
 
 async function sliceToDataView(
   file: File,
@@ -122,11 +128,19 @@ function findEocdOffset(eocd: DataView): number | null {
   return null;
 }
 
-function parseCentralDirectoryNames(
+interface CentralDirectoryEntry {
+  name: string;
+  method: number;
+  compressedSize: number;
+  uncompressedSize: number;
+  localHeaderOffset: number;
+}
+
+function parseCentralDirectory(
   centralDirectory: DataView
-): string[] | null {
+): CentralDirectoryEntry[] | null {
   const decoder = new TextDecoder("utf-8");
-  const names: string[] = [];
+  const entries: CentralDirectoryEntry[] = [];
   let cursor = 0;
 
   while (
@@ -161,45 +175,119 @@ function parseCentralDirectoryNames(
       centralDirectory.byteOffset + nameStart,
       nameLength
     );
-    names.push(decoder.decode(nameBytes));
+    entries.push({
+      name: decoder.decode(nameBytes),
+      method: centralDirectory.getUint16(cursor + 10, true),
+      compressedSize: centralDirectory.getUint32(cursor + 20, true),
+      uncompressedSize: centralDirectory.getUint32(cursor + 24, true),
+      localHeaderOffset: centralDirectory.getUint32(cursor + 42, true),
+    });
 
     cursor = nextCursor;
     // An archive with more entries than we're willing to scan: defer to the
     // server instead of validating against a truncated list.
-    if (names.length > MAX_ENTRIES) return null;
+    if (entries.length > MAX_ENTRIES) return null;
   }
 
   // A non-empty central directory that yields no parseable headers is corrupt.
-  return names.length > 0 ? names : null;
+  return entries.length > 0 ? entries : null;
+}
+
+async function readCentralDirectory(
+  file: File
+): Promise<CentralDirectoryEntry[] | null> {
+  const fileSize = file.size;
+  if (fileSize < EOCD_MIN_SIZE) return null;
+
+  const searchSize = Math.min(fileSize, MAX_EOCD_SEARCH);
+  const searchStart = fileSize - searchSize;
+  const eocd = await sliceToDataView(file, searchStart);
+
+  const eocdOffset = findEocdOffset(eocd);
+  if (eocdOffset === null) return null;
+  const eocdAbsoluteOffset = searchStart + eocdOffset;
+
+  let location = locateCentralDirectory(eocd, eocdOffset);
+  if (location === "needs-zip64") {
+    location = await locateZip64CentralDirectory(file, eocdAbsoluteOffset);
+  }
+  if (location === null) return null;
+
+  const { offset, size } = location;
+  // An empty but well-formed archive has a zero-length central directory.
+  if (size === 0) return [];
+  if (size < 0 || size > MAX_CENTRAL_DIRECTORY_SIZE) return null;
+  if (offset < 0 || offset + size > fileSize) return null;
+
+  const centralDirectory = await sliceToDataView(file, offset, offset + size);
+  return parseCentralDirectory(centralDirectory);
 }
 
 export async function readZipFilenames(file: File): Promise<string[] | null> {
   try {
-    const fileSize = file.size;
-    if (fileSize < EOCD_MIN_SIZE) return null;
+    const entries = await readCentralDirectory(file);
+    return entries ? entries.map((entry) => entry.name) : null;
+  } catch {
+    return null;
+  }
+}
 
-    const searchSize = Math.min(fileSize, MAX_EOCD_SEARCH);
-    const searchStart = fileSize - searchSize;
-    const eocd = await sliceToDataView(file, searchStart);
+/**
+ * Extracts one small entry as UTF-8 text. Handles stored and deflated entries,
+ * which is every archive a real-world packer produces.
+ */
+export async function readZipEntryText(
+  file: File,
+  entryName: string
+): Promise<string | null> {
+  try {
+    const entries = await readCentralDirectory(file);
+    const entry = entries?.find((candidate) => candidate.name === entryName);
+    if (!entry) return null;
 
-    const eocdOffset = findEocdOffset(eocd);
-    if (eocdOffset === null) return null;
-    const eocdAbsoluteOffset = searchStart + eocdOffset;
-
-    let location = locateCentralDirectory(eocd, eocdOffset);
-    if (location === "needs-zip64") {
-      location = await locateZip64CentralDirectory(file, eocdAbsoluteOffset);
+    // 0xffffffff means the real values live in a ZIP64 extra field, which a
+    // small metadata file never needs.
+    if (
+      entry.compressedSize === 0xffffffff ||
+      entry.localHeaderOffset === 0xffffffff
+    ) {
+      return null;
     }
-    if (location === null) return null;
+    if (
+      entry.compressedSize > MAX_ENTRY_SIZE ||
+      entry.uncompressedSize > MAX_ENTRY_SIZE
+    ) {
+      return null;
+    }
 
-    const { offset, size } = location;
-    // An empty but well-formed archive has a zero-length central directory.
-    if (size === 0) return [];
-    if (size < 0 || size > MAX_CENTRAL_DIRECTORY_SIZE) return null;
-    if (offset < 0 || offset + size > fileSize) return null;
+    const headerEnd = entry.localHeaderOffset + LOCAL_HEADER_MIN_SIZE;
+    if (headerEnd > file.size) return null;
+    const header = await sliceToDataView(
+      file,
+      entry.localHeaderOffset,
+      headerEnd
+    );
+    if (header.getUint32(0, true) !== LOCAL_HEADER_SIGNATURE) return null;
 
-    const centralDirectory = await sliceToDataView(file, offset, offset + size);
-    return parseCentralDirectoryNames(centralDirectory);
+    // Sizes come from the central directory: a streamed archive (general
+    // purpose flag bit 3) leaves the local header's copies zeroed.
+    const dataStart =
+      headerEnd + header.getUint16(26, true) + header.getUint16(28, true);
+    const dataEnd = dataStart + entry.compressedSize;
+    if (dataEnd > file.size) return null;
+    const data = file.slice(dataStart, dataEnd);
+
+    let bytes: ArrayBuffer;
+    if (entry.method === COMPRESSION_STORED) {
+      bytes = await data.arrayBuffer();
+    } else if (entry.method === COMPRESSION_DEFLATE) {
+      bytes = await new Response(
+        data.stream().pipeThrough(new DecompressionStream("deflate-raw"))
+      ).arrayBuffer();
+    } else {
+      return null;
+    }
+    return new TextDecoder("utf-8").decode(bytes);
   } catch {
     return null;
   }
