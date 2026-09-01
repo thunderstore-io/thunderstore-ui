@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOutletContext } from "react-router";
 
 import { NewAlert, NewButton, useToast } from "@thunderstore/cyberstorm";
@@ -16,6 +16,9 @@ export interface OverrideMigrationNoticeProps {
   namespace: string;
   packageName: string;
   newVersion: string;
+  /** Carry the edit over on mount, as opted into on the upload form. The
+      manual offer remains as the fallback if the carry fails. */
+  autoCarry?: boolean;
 }
 
 /**
@@ -27,6 +30,7 @@ export function OverrideMigrationNotice({
   namespace,
   packageName,
   newVersion,
+  autoCarry,
 }: OverrideMigrationNoticeProps) {
   const outletContext = useOutletContext() as OutletContextShape;
   const toast = useToast();
@@ -34,6 +38,7 @@ export function OverrideMigrationNotice({
   const [previous, setPrevious] = useState<PreviousOverride | null>(null);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const autoCarryAttempted = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,7 +52,7 @@ export function OverrideMigrationNotice({
         if (!cancelled) setPrevious(result);
       })
       .catch(() => {
-        // The notice is best-effort; a probe failure must not break the
+        // The notice is best-effort. A probe failure must not break the
         // submission result page.
       });
     return () => {
@@ -55,9 +60,7 @@ export function OverrideMigrationNotice({
     };
   }, [namespace, packageName, newVersion]);
 
-  if (!previous || done) return null;
-
-  const keep = async () => {
+  const keep = async (override: PreviousOverride) => {
     setBusy(true);
     try {
       await migrateReadmeOverride(
@@ -65,7 +68,7 @@ export function OverrideMigrationNotice({
         namespace,
         packageName,
         newVersion,
-        previous.markdown
+        override.markdown
       );
       toast.addToast({
         csVariant: "success",
@@ -87,6 +90,14 @@ export function OverrideMigrationNotice({
     }
   };
 
+  useEffect(() => {
+    if (!autoCarry || !previous || autoCarryAttempted.current) return;
+    autoCarryAttempted.current = true;
+    keep(previous);
+  }, [autoCarry, previous]);
+
+  if (!previous || done) return null;
+
   return (
     <NewAlert csVariant="info">
       <div className="override-migration-notice">
@@ -98,7 +109,7 @@ export function OverrideMigrationNotice({
           <NewButton
             csSize="small"
             csVariant="accent"
-            onClick={keep}
+            onClick={() => keep(previous)}
             disabled={busy}
           >
             {busy ? "Carrying over…" : "Carry it over"}
