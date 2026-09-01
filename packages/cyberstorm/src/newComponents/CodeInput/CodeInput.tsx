@@ -90,49 +90,57 @@ export const CodeInput = React.forwardRef<HTMLTextAreaElement, CodeInputProps>(
 
 CodeInput.displayName = "CodeInput";
 
-function ValidationBar(props: {
+const VALIDATION_BAR_STATES = {
+  waiting: {
+    icon: faPenToSquare,
+    modifier: undefined,
+    defaultMessage: "Waiting for input",
+  },
+  processing: {
+    icon: faArrowsRotate,
+    modifier: undefined,
+    defaultMessage: "Processing...",
+  },
+  success: {
+    icon: faCircleCheck,
+    modifier: "validation-bar--success",
+    defaultMessage: "All systems go!",
+  },
+  failure: {
+    icon: faTriangleExclamation,
+    modifier: "validation-bar--failure",
+    defaultMessage: "Problem, alarm, danger. Everything is going to explode.",
+  },
+} as const;
+
+export function ValidationBar(props: {
   status: "waiting" | "processing" | "success" | "failure";
   message?: string;
+  rootClasses?: string;
+  children?: ReactNode;
 }): ReactNode {
-  if (props.status === "waiting") {
-    return (
-      <div className="validation-bar">
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faPenToSquare} />
-        </NewIcon>
-        {props.message ? props.message : "Waiting for input"}
-      </div>
-    );
-  } else if (props.status === "processing") {
-    return (
-      <div className="validation-bar">
+  const state = VALIDATION_BAR_STATES[props.status];
+  return (
+    <div
+      className={classnames(
+        "validation-bar",
+        state.modifier,
+        props.rootClasses
+      )}
+    >
+      {props.status === "processing" ? (
         <NewIcon csMode="inline" rootClasses="validation-bar--spin">
-          <FontAwesomeIcon icon={faArrowsRotate} />
+          <FontAwesomeIcon icon={state.icon} />
         </NewIcon>
-        {props.message ? props.message : "Processing..."}
-      </div>
-    );
-  } else if (props.status === "success") {
-    return (
-      <div className="validation-bar validation-bar--success">
+      ) : (
         <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faCircleCheck} />
+          <FontAwesomeIcon icon={state.icon} />
         </NewIcon>
-        {props.message ? props.message : "All systems go!"}
-      </div>
-    );
-  } else {
-    return (
-      <div className="validation-bar validation-bar--failure">
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </NewIcon>
-        {props.message
-          ? props.message
-          : "Problem, alarm, danger. Everything is going to explode."}
-      </div>
-    );
-  }
+      )}
+      {props.message ?? state.defaultMessage}
+      {props.children}
+    </div>
+  );
 }
 
 ValidationBar.displayName = "ValidationBar";
