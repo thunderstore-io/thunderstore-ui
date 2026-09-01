@@ -95,6 +95,7 @@ describe("UploadSubmissionStatus", () => {
         submissionStatus: asStatus("PENDING"),
         pollingError: null,
         submitSectionErrors: [],
+        carryReadmeOverride: false,
         onRetryPolling: vi.fn(),
       })
     );
@@ -113,6 +114,7 @@ describe("UploadSubmissionStatus", () => {
         submitting: true,
         pollingError: null,
         submitSectionErrors: [],
+        carryReadmeOverride: false,
         onRetryPolling: vi.fn(),
       })
     );
@@ -132,6 +134,7 @@ describe("UploadSubmissionStatus", () => {
         submissionStatus: asStatus("FINISHED", true),
         pollingError: null,
         submitSectionErrors: ["Submit failed"],
+        carryReadmeOverride: false,
         onRetryPolling: vi.fn(),
       })
     );
@@ -152,6 +155,7 @@ describe("UploadSubmissionStatus", () => {
         submissionStatus: asStatus("PENDING"),
         pollingError: "network error",
         submitSectionErrors: [],
+        carryReadmeOverride: false,
         onRetryPolling: vi.fn(),
       })
     );
@@ -172,6 +176,7 @@ describe("UploadSubmissionStatus", () => {
         submissionStatus: asStatus("FINISHED"),
         pollingError: "network error",
         submitSectionErrors: [],
+        carryReadmeOverride: false,
         onRetryPolling: vi.fn(),
       })
     );

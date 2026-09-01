@@ -94,9 +94,22 @@
   .upload-override-warning {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-8, 0.5rem);
+    gap: var(--space-8);
     align-items: center;
     justify-content: space-between;
     width: 100%;
+  }
+
+  .upload-override-warning__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+    align-items: center;
+  }
+
+  .upload-override-warning__carry {
+    display: inline-flex;
+    gap: var(--space-8);
+    align-items: center;
   }
 }

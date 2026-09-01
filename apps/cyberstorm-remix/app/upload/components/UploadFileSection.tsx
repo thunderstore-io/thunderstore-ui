@@ -11,6 +11,7 @@ import {
   NewAlert,
   NewButton,
   NewIcon,
+  NewSwitch,
   classnames,
 } from "@thunderstore/cyberstorm";
 import { DnDFileInput } from "@thunderstore/react-dnd";
@@ -33,9 +34,11 @@ export interface UploadFileSectionProps {
   fileWarnings: string[];
   fileValidationErrors: string[];
   previousOverride: PreviousOverride | null;
+  carryOverride: boolean;
   fileInputRef: RefObject<HTMLInputElement | null>;
   onFileChange: (file: File | null) => void;
   onRemoveFile: () => void;
+  onCarryOverrideChange: (carryOverride: boolean) => void;
 }
 
 export function UploadFileSection({
@@ -46,9 +49,11 @@ export function UploadFileSection({
   fileWarnings,
   fileValidationErrors,
   previousOverride,
+  carryOverride,
   fileInputRef,
   onFileChange,
   onRemoveFile,
+  onCarryOverrideChange,
 }: UploadFileSectionProps) {
   return (
     <FormSection
@@ -166,17 +171,25 @@ export function UploadFileSection({
         <NewAlert csVariant="warning" rootClasses="upload__alert">
           <div className="upload-override-warning">
             <span>
-              Version {previousOverride.versionNumber} has a site-edited README.
-              It will not carry over to this upload automatically. You can carry
-              it over after submitting, or download it now.
+              Version {previousOverride.versionNumber} has a site-edited
+              README.
             </span>
-            <NewButton
-              csSize="small"
-              csVariant="secondary"
-              onClick={() => downloadOverrideText(previousOverride.markdown)}
-            >
-              Download it
-            </NewButton>
+            <span className="upload-override-warning__actions">
+              <span className="upload-override-warning__carry">
+                <NewSwitch
+                  value={carryOverride}
+                  onChange={onCarryOverrideChange}
+                />
+                Use it
+              </span>
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                onClick={() => downloadOverrideText(previousOverride.markdown)}
+              >
+                Download it
+              </NewButton>
+            </span>
           </div>
         </NewAlert>
       ) : null}

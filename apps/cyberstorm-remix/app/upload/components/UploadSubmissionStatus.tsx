@@ -11,6 +11,7 @@ export interface UploadSubmissionStatusProps {
   submissionStatus?: PackageSubmissionStatus;
   pollingError: string | null;
   submitSectionErrors: string[];
+  carryReadmeOverride: boolean;
   onRetryPolling: () => void;
 }
 
@@ -19,6 +20,7 @@ export function UploadSubmissionStatus({
   submissionStatus,
   pollingError,
   submitSectionErrors,
+  carryReadmeOverride,
   onRetryPolling,
 }: UploadSubmissionStatusProps) {
   const showProcessing =
@@ -31,7 +33,10 @@ export function UploadSubmissionStatus({
       <div className="submission__status">
         <SectionErrors errors={submitSectionErrors} />
         {submissionStatus?.result ? (
-          <SubmissionResult submissionStatusResult={submissionStatus.result} />
+          <SubmissionResult
+            submissionStatusResult={submissionStatus.result}
+            carryReadmeOverride={carryReadmeOverride}
+          />
         ) : null}
         {showProcessing ? <SubmissionProcessingSkeleton /> : null}
         {!showProcessing && pollingError != null ? (

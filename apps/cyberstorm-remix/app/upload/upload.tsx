@@ -176,6 +176,7 @@ export default function Upload() {
     file,
     formInputs.author_name
   );
+  const [carryOverride, setCarryOverride] = useState(false);
 
   type SubmitorOutput = Awaited<
     ReturnType<typeof postPackageSubmissionMetadata>
@@ -261,6 +262,7 @@ export default function Upload() {
 
   const handleReset = () => {
     clearFile();
+    setCarryOverride(false);
     setSubmitError(null);
     setSubmissionStatus(undefined);
     dispatchForm("reset");
@@ -324,9 +326,11 @@ export default function Upload() {
           fileWarnings={fileWarnings}
           fileValidationErrors={fileErrors}
           previousOverride={previousOverride}
+          carryOverride={carryOverride}
           fileInputRef={fileInputRef}
           onFileChange={(nextFile) => {
             selectFile(nextFile);
+            setCarryOverride(false);
             updateFormFieldState({
               field: "upload_uuid",
               value: "",
@@ -334,11 +338,13 @@ export default function Upload() {
           }}
           onRemoveFile={() => {
             clearFile();
+            setCarryOverride(false);
             updateFormFieldState({
               field: "upload_uuid",
               value: "",
             });
           }}
+          onCarryOverrideChange={setCarryOverride}
         />
         <FormSectionSeparator />
         <UploadTeamSection
@@ -412,6 +418,7 @@ export default function Upload() {
             submissionStatus={submissionStatus}
             pollingError={pollingError}
             submitSectionErrors={submissionErrorsBySection.submit}
+            carryReadmeOverride={carryOverride && !!previousOverride}
             onRetryPolling={retryPolling}
           />
         ) : null}
