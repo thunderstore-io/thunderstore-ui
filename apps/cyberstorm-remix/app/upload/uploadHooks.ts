@@ -7,7 +7,12 @@ import {
   type UserMedia,
 } from "@thunderstore/ts-uploader";
 
+import {
+  type PreviousOverride,
+  findPreviousReadmeOverride,
+} from "../p/readmeEdit/overrideMigration";
 import type { OutletContextShape } from "../root";
+import { readZipEntryText } from "./readZipFilenames";
 import {
   type CategoryOption,
   PACKAGE_ZIP_FILE_ERROR_MESSAGE,
@@ -295,4 +300,53 @@ export function useUploadCategoryOptions(
   }, [dapper, selectedCommunities]);
 
   return categoryOptions;
+}
+
+async function readPackageManifestName(file: File): Promise<string | null> {
+  const manifest = await readZipEntryText(file, "manifest.json");
+  if (manifest === null) return null;
+  try {
+    const name: unknown = JSON.parse(manifest)?.name;
+    return typeof name === "string" && name !== "" ? name : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Looks up whether the package this file will become a new version of carries
+ * a site-edited README, so the form can warn before the upload rather than
+ * only after it. Advisory: any failure simply yields no warning.
+ */
+export function usePreviousOverrideWarning(
+  requestConfig: OutletContextShape["requestConfig"],
+  file: File | null,
+  authorName: string
+): PreviousOverride | null {
+  const [previousOverride, setPreviousOverride] =
+    useState<PreviousOverride | null>(null);
+
+  useEffect(() => {
+    setPreviousOverride(null);
+    if (!file || !authorName) return;
+
+    let cancelled = false;
+    readPackageManifestName(file)
+      .then((name) =>
+        name
+          ? findPreviousReadmeOverride(requestConfig, authorName, name)
+          : null
+      )
+      .then((result) => {
+        if (!cancelled) setPreviousOverride(result);
+      })
+      .catch(() => {
+        // Advisory only: a failed probe must not disturb the form.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [file, authorName]);
+
+  return previousOverride;
 }

@@ -242,6 +242,7 @@ export const packageVersionSchema = z.object({
   download_count: z.number().int(),
   download_url: z.string(),
   install_url: z.string(),
+  is_edited: z.boolean().optional().default(false),
 });
 
 export const decompilationSchema = z.object({

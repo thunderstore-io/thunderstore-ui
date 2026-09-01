@@ -43,4 +43,10 @@
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
   }
+
+  .package-versions__edited {
+    margin-left: var(--space-8);
+    vertical-align: middle;
+    cursor: help;
+  }
 }

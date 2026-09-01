@@ -7,11 +7,21 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { RefObject } from "react";
 
-import { NewAlert, NewIcon, classnames } from "@thunderstore/cyberstorm";
+import {
+  NewAlert,
+  NewButton,
+  NewIcon,
+  NewSwitch,
+  classnames,
+} from "@thunderstore/cyberstorm";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import type { IBaseUploadHandle } from "@thunderstore/ts-uploader";
 
 import { FormSection } from "../../commonComponents/FormSection/FormSection";
+import {
+  type PreviousOverride,
+  downloadOverrideText,
+} from "../../p/readmeEdit/overrideMigration";
 import { PACKAGE_ZIP_ACCEPT, formatBytes } from "../uploadUtils";
 import { SectionErrors } from "./SectionErrors";
 import "./UploadFileSection.css";
@@ -23,9 +33,12 @@ export interface UploadFileSectionProps {
   sectionErrors: string[];
   fileWarnings: string[];
   fileValidationErrors: string[];
+  previousOverride: PreviousOverride | null;
+  carryOverride: boolean;
   fileInputRef: RefObject<HTMLInputElement | null>;
   onFileChange: (file: File | null) => void;
   onRemoveFile: () => void;
+  onCarryOverrideChange: (carryOverride: boolean) => void;
 }
 
 export function UploadFileSection({
@@ -35,9 +48,12 @@ export function UploadFileSection({
   sectionErrors,
   fileWarnings,
   fileValidationErrors,
+  previousOverride,
+  carryOverride,
   fileInputRef,
   onFileChange,
   onRemoveFile,
+  onCarryOverrideChange,
 }: UploadFileSectionProps) {
   return (
     <FormSection
@@ -148,6 +164,32 @@ export function UploadFileSection({
             {fileWarnings.map((msg) => (
               <div key={msg}>{msg}</div>
             ))}
+          </div>
+        </NewAlert>
+      ) : null}
+      {previousOverride ? (
+        <NewAlert csVariant="warning" rootClasses="upload__alert">
+          <div className="upload-override-warning">
+            <span>
+              Version {previousOverride.versionNumber} has a site-edited
+              README.
+            </span>
+            <span className="upload-override-warning__actions">
+              <span className="upload-override-warning__carry">
+                <NewSwitch
+                  value={carryOverride}
+                  onChange={onCarryOverrideChange}
+                />
+                Use it
+              </span>
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                onClick={() => downloadOverrideText(previousOverride.markdown)}
+              >
+                Download it
+              </NewButton>
+            </span>
           </div>
         </NewAlert>
       ) : null}

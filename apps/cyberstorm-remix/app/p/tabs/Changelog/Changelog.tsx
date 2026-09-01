@@ -1,4 +1,5 @@
 import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
+import { DocEditedReporter } from "app/p/components/DocEditedReporter/DocEditedReporter";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -91,6 +92,7 @@ export default function Changelog() {
         {(resolvedValue) =>
           resolvedValue ? (
             <div className="markdown-wrapper">
+              <DocEditedReporter doc={resolvedValue} />
               <div
                 dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
                 className="markdown"

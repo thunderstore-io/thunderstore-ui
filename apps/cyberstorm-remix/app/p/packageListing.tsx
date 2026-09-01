@@ -4,7 +4,11 @@ import {
   faUsers,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRight,
+  faEdit,
+  faLips,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunityPackageListingHeader } from "app/c/CommunityPackageListingSubpath";
 import { SidebarAd } from "app/commonComponents/Ads/SidebarAd";
@@ -45,6 +49,7 @@ import {
   Drawer,
   Heading,
   NewAlert,
+  NewButton,
   NewIcon,
   NewLink,
   NewTag,
@@ -77,8 +82,11 @@ import "./packageListing.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
-type PackageListingOutletContext = OutletContextShape & {
+export type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
+  /** Lets the readme/changelog tab report its site-edit state, shown as the
+      "Edited" note in the tab strip. */
+  setDocEdited?: (state: { edited_at: string | null } | null) => void;
 };
 
 type ResolvedListing = NonNullable<
@@ -263,6 +271,9 @@ export default function PackageListing() {
     getPublicEnvVariables(["VITE_DISABLE_ADS"]).VITE_DISABLE_ADS === "true";
 
   const [isLiked, setIsLiked] = useState(false);
+  const [docEdited, setDocEdited] = useState<{
+    edited_at: string | null;
+  } | null>(null);
   const toast = useToast();
 
   // Lazily fetch the report form's version list: the factory runs only when the
@@ -366,6 +377,58 @@ export default function PackageListing() {
   if (!listing) {
     return <SkeletonBox />;
   }
+
+  // The active readme/changelog tab reports its site-edit state up through
+  // setDocEdited. Shown in the tab strip, and duplicated below it for narrow
+  // screens where the strip scrolls the slot out of view.
+  const showEditButton = currentTab === "details" || currentTab === "changelog";
+  const docControls =
+    docEdited || showEditButton ? (
+      <>
+        {docEdited ? (
+          <div
+            className="package-listing__edited-note"
+            title="This content has been edited on the site and may not match the downloaded package."
+          >
+            Edited
+            {docEdited.edited_at
+              ? ` · ${new Date(docEdited.edited_at).toLocaleDateString()}`
+              : ""}
+          </div>
+        ) : null}
+        {showEditButton ? (
+          <Suspense fallback={null}>
+            <Await resolve={permissions}>
+              {(resolvedPermissions) =>
+                resolvedPermissions?.permissions.can_manage_wiki ? (
+                  <NewButton
+                    csSize="small"
+                    csVariant="secondary"
+                    csModifiers={["ghost"]}
+                    primitiveType="cyberstormLink"
+                    linkId="PackageVersionReadmeEdit"
+                    community={community_identifier}
+                    namespace={namespace_id}
+                    package={package_id}
+                    version={listing.latest_version_number}
+                    queryParams={
+                      currentTab === "changelog"
+                        ? "document=changelog"
+                        : undefined
+                    }
+                  >
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faEdit} />
+                    </NewIcon>
+                    Edit
+                  </NewButton>
+                ) : null
+              }
+            </Await>
+          </Suspense>
+        ) : null}
+      </>
+    ) : null;
 
   // TODO: some variables are available in props (communityId, namespaceId, packageId)
   return (
@@ -584,7 +647,15 @@ export default function PackageListing() {
             >
               Analysis
             </NewLink>
+            {docControls ? (
+              <div className="package-listing__tabs-slot">{docControls}</div>
+            ) : null}
           </Tabs>
+          {docControls ? (
+            <div className="package-listing__doc-controls-row">
+              {docControls}
+            </div>
+          ) : null}
 
           <div className="package-listing__content">
             <Outlet
@@ -592,6 +663,7 @@ export default function PackageListing() {
                 {
                   ...outletContext,
                   packageDownloadUrl: listing.download_url,
+                  setDocEdited,
                 } as PackageListingOutletContext
               }
             />

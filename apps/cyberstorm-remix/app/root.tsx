@@ -289,6 +289,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
     ].includes(m.id)
   );
 
+  // We obviously don't need ads on the readme edit page.
+  const isReadmeEditPage = matches.some(
+    (m) => m.id === "p/readmeEdit/ReadmeEdit"
+  );
+
   // Tell NitroPay a new pageview happened on client-side navigation. Without
   // this an entire SPA session is one long-lived pageview on a refresh timer,
   // which depresses CPM and drives the ad CPU churn. We key on pathname AND
@@ -458,7 +463,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </div>
                   )}
                 </Island>
-                {shouldCreateAds && BOTTOM_ADS_ENABLED ? (
+                {shouldCreateAds && BOTTOM_ADS_ENABLED && !isReadmeEditPage ? (
                   <Island rootClasses="layout__bottom-ads">
                     <AdErrorBoundary placement="content-bottom">
                       {BOTTOM_AD_SLOTS.map((slot) => (

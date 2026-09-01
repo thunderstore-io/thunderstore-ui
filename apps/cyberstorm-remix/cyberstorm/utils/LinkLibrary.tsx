@@ -192,6 +192,13 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
+  PackageVersionReadmeEdit: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/v/${p.version}/readme/edit`}
+      ref={p.customRef}
+    />
+  ),
   PackageVersionWithoutCommunity: (p) => (
     <Link
       {...p}

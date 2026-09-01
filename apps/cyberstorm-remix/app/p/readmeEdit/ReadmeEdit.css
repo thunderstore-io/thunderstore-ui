@@ -1,0 +1,144 @@
+@layer nimbus-layout {
+  .readme-edit {
+    padding-bottom: var(--space-32);
+  }
+
+  .readme-edit__back {
+    position: relative;
+    flex-shrink: 0;
+    margin-right: var(--space-24);
+
+    --button-text-color: var(--link-cyber-color--default);
+    --button-icon-color: var(--link-cyber-color--default);
+  }
+
+  .readme-edit__back:hover {
+    --button-text-color: var(--link-cyber-color--hover);
+    --button-icon-color: var(--link-cyber-color--hover);
+  }
+
+  .readme-edit__back::after {
+    position: absolute;
+    top: 50%;
+    right: calc(-1 * var(--space-12));
+    height: 1rem;
+    border-right: var(--border-width--px) solid var(--color-surface-10);
+    transform: translateY(-50%);
+    content: "";
+  }
+
+  .readme-edit__identity {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: var(--space-16);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-md);
+  }
+
+  .readme-edit__tab {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .readme-edit__tab-edited {
+    margin-left: var(--space-8);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    cursor: help;
+  }
+
+  .readme-edit__workspace {
+    --readme-edit-frame-color: var(--color-surface-10);
+
+    /* Viewport height left over after the navigation header, the tab strip,
+       the status bar and the page paddings. */
+    --readme-edit-pane-height: max(
+      24rem,
+      calc(100vh - var(--header-height) - 13.5rem)
+    );
+
+    display: flex;
+    flex-direction: column;
+    border: var(--border-width--px) solid var(--readme-edit-frame-color);
+    border-radius: var(--code-input-wrapper-md-border-radius);
+    background-color: var(--code-input-wrapper-bg-color--default);
+  }
+
+  .readme-edit__workspace:has(.validation-bar--failure) {
+    --readme-edit-frame-color: var(--validation-bar-border-top-color--failure);
+  }
+
+  /* The preview renders at whatever width is left, which matches the site's
+     fluid readme column at some window size, so it always wraps like a real
+     rendering. */
+  .readme-edit__panes {
+    display: grid;
+    grid-template-columns: minmax(20rem, 1fr) minmax(0, 2fr);
+  }
+
+  .readme-edit__editor {
+    border: none;
+    border-right: var(--border-width--px) solid var(--readme-edit-frame-color);
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  .readme-edit__panes .code-input {
+    min-height: var(--readme-edit-pane-height);
+  }
+
+  .readme-edit__preview {
+    min-width: 0;
+    max-height: var(--readme-edit-pane-height);
+    padding: var(--code-input-md-padding);
+    overflow-y: auto;
+  }
+
+  .readme-edit__bar {
+    flex-wrap: wrap;
+    border-top-color: var(--readme-edit-frame-color);
+  }
+
+  .readme-edit__bar-actions {
+    display: inline-flex;
+    gap: var(--space-8);
+    align-items: center;
+    margin-left: auto;
+  }
+
+  @container (width <= 64rem) {
+    .readme-edit__workspace {
+      --readme-edit-pane-height: 18rem;
+    }
+
+    .readme-edit__panes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .readme-edit__editor {
+      border-right: none;
+      border-bottom: var(--border-width--px) solid
+        var(--readme-edit-frame-color);
+    }
+
+    /* Stacked, the preview may be taller than the editor pane. */
+    .readme-edit__preview {
+      max-height: 32rem;
+    }
+  }
+
+  .readme-edit__migrate {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .readme-edit__migrate-actions {
+    display: flex;
+    gap: var(--space-8);
+  }
+}
