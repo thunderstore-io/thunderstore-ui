@@ -13,7 +13,12 @@ import {
   TEAM_SIDEBAR_AD,
   adPlacementKey,
 } from "../nitroAds";
-import { findCampaign, resolveStaticAd, staticAdForSlot } from "../staticAds";
+import {
+  findCampaign,
+  isStaticAdPath,
+  resolveStaticAd,
+  staticAdForSlot,
+} from "../staticAds";
 
 // Fixture, so the rules can be exercised with nothing live.
 const WIDE = creative("wide", 980, 250);
@@ -121,6 +126,16 @@ describe("commonComponents.Ads.campaigns", () => {
       expect(staticAdForSlot(slot, "/c/riskofrain2")).toBeUndefined();
       expect(staticAdForSlot(slot, "/communities")).toBeUndefined();
     }
+  });
+
+  it("takes over the paths a live campaign claims", () => {
+    expect(isStaticAdPath("/c/test")).toBe(true);
+    expect(isStaticAdPath("/c/test/p/Team/Package")).toBe(true);
+    expect(isStaticAdPath("/c/test-community-1")).toBe(false);
+    expect(
+      staticAdForSlot(BOTTOM_AD_SLOTS[0], "/c/test")?.creatives.length
+    ).toBeGreaterThan(0);
+    expect(staticAdForSlot(COMMUNITY_SIDEBAR_AD, "/c/test")?.href).toBeTruthy();
   });
 
   it("keeps every live campaign well-formed", () => {
