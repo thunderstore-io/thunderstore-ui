@@ -25,6 +25,7 @@ export * from "./delete/userLinkedAccountDisconnect";
 export * from "./get/community";
 export * from "./get/communityFilters";
 export * from "./get/communityList";
+export * from "./get/packageSitemap";
 export * from "./get/communityPackageListings";
 export * from "./get/currentUser";
 export * from "./get/dynamicHTML";

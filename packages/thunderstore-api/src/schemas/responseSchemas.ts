@@ -10,6 +10,7 @@ import {
   packageListingSchema,
   packageListingStatusSchema,
   packagePermissionsSchema,
+  packageSitemapEntrySchema,
   packageSourceSchema,
   packageSubmissionStatusSchema,
   packageTeamSchema,
@@ -56,6 +57,15 @@ export const communityListResponseDataSchema =
 
 export type CommunityListResponseData = z.infer<
   typeof communityListResponseDataSchema
+>;
+
+// PackageSitemapResponse
+export const packageSitemapResponseDataSchema = paginatedResults(
+  packageSitemapEntrySchema
+);
+
+export type PackageSitemapResponseData = z.infer<
+  typeof packageSitemapResponseDataSchema
 >;
 
 // CommunityResponse

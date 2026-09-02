@@ -11,6 +11,8 @@ export default [
   route("healthz", "./healthz.tsx"),
   route("robots.txt", "./robotsTxt.tsx"),
   route("sitemap.xml", "./sitemap.tsx"),
+  route("sitemap-communities.xml", "./sitemapCommunities.tsx"),
+  route("sitemap-packages/:file", "./sitemapPackages.tsx"),
 
   route("/communities", "./communities/communities.tsx"),
   route("/c/:communityId", "c/Community.tsx", [

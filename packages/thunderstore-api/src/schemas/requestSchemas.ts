@@ -10,6 +10,7 @@ import {
   nsfwQueryParam,
   packageListingsOrderingQueryParam,
   pageQueryParam,
+  pageSizeQueryParam,
   qQueryParam,
   searchQueryParam,
   sectionQueryParam,
@@ -52,6 +53,14 @@ export type UsermediaAbortUploadRequestParams = z.infer<
 >;
 
 // CommunityListRequest
+export const packageSitemapRequestQueryParamsSchema = z.array(
+  z.union([pageQueryParam, pageSizeQueryParam])
+);
+
+export type PackageSitemapRequestQueryParams = z.infer<
+  typeof packageSitemapRequestQueryParamsSchema
+>;
+
 export const communityListRequestQueryParamsSchema = z.array(
   z.union([pageQueryParam, searchQueryParam, communityListOrderingQueryParam])
 );

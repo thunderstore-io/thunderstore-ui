@@ -25,6 +25,7 @@ import {
   getPackageListingStatus,
   getPackageListings,
 } from "./methods/packageListings";
+import { getPackageSitemapPage } from "./methods/packageSitemap";
 import { getPackageVersionDetails } from "./methods/packageVersion";
 import { getRatedPackages } from "./methods/ratedPackages";
 import {
@@ -43,24 +44,25 @@ export {
   getCurrentUserTeamPermissions,
   getDynamicHTML,
   getPackageChangelog,
-  getPackagePermissions,
-  getPackageReadme,
-  getPackageSource,
-  getPackageSubmissionStatus,
-  getPackageVersionDependencies,
-  getPackageVersions,
-  getPackageWiki,
-  getPackageWikiPage,
-  postPackageSubmissionMetadata,
   getPackageListingDetails,
   getPackageListingStatus,
   getPackageListings,
+  getPackagePermissions,
+  getPackageReadme,
+  getPackageSitemapPage,
+  getPackageSource,
+  getPackageSubmissionStatus,
+  getPackageVersionDependencies,
   getPackageVersionDetails,
-  getRatedPackages,
+  getPackageVersions,
+  getPackageWiki,
+  getPackageWikiPage,
   getPrivateTeamDetails,
+  getRatedPackages,
   getTeamDetails,
   getTeamMembers,
   getTeamServiceAccounts,
+  postPackageSubmissionMetadata,
   postTeamCreate,
 };
 
@@ -78,6 +80,7 @@ export class DapperTs implements DapperTsInterface {
     this.removeSessionHook = removeSessionHook;
     this.getDynamicHTML = this.getDynamicHTML.bind(this);
     this.getCommunities = this.getCommunities.bind(this);
+    this.getPackageSitemapPage = this.getPackageSitemapPage.bind(this);
     this.getCommunity = this.getCommunity.bind(this);
     this.getCommunityFilters = this.getCommunityFilters.bind(this);
     this.getRatedPackages = this.getRatedPackages.bind(this);
@@ -110,6 +113,7 @@ export class DapperTs implements DapperTsInterface {
 
   public getDynamicHTML = getDynamicHTML;
   public getCommunities = getCommunities;
+  public getPackageSitemapPage = getPackageSitemapPage;
   public getCommunity = getCommunity;
   public getCommunityFilters = getCommunityFilters;
   public getRatedPackages = getRatedPackages;

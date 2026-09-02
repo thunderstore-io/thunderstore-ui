@@ -6,6 +6,12 @@ export const pageQueryParam = z.object({
   impotent: z.number().int(),
 });
 
+export const pageSizeQueryParam = z.object({
+  key: z.literal("page_size"),
+  value: z.number().int().optional(),
+  impotent: z.number().int(),
+});
+
 export const searchQueryParam = z.object({
   key: z.literal("search"),
   value: z.string().optional(),

@@ -12,6 +12,13 @@ export const paginatedResults = <T extends z.ZodTypeAny>(resultType: T) =>
     results: z.array(resultType),
   });
 
+export const packageSitemapEntrySchema = z.object({
+  community_identifier: z.string(),
+  namespace: z.string(),
+  name: z.string(),
+  date_updated: z.string(),
+});
+
 export const userMediaSchema = z.object({
   uuid: z.string(),
   datetime_created: z.string(),
