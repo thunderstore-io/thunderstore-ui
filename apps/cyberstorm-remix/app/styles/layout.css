@@ -5,11 +5,6 @@
     --content-padding-top: 1.5rem;
     --sidebar-sticky-top: calc(var(--header-height) + var(--section-gap));
 
-    /* Reserved at the bottom of the ad rail so no rail ad sits behind the docked
-       floating video (see .layout__ads-stack height). Approximate height of
-       NitroPay's floating player — tune to match the actual docked size. */
-    --floating-video-height: 200px;
-
     /* stylelint-disable */
     interpolate-size: allow-keywords;
     /* stylelint-enable */
@@ -320,9 +315,12 @@
   }
 
   .layout__ads-stack {
-    /* Query THIS stack's own height to hide the rail when it's too short — see
-       the @container rule below. */
-    container: nimbus-ad-rail / size;
+    /* Vertical space the rail cannot use: 56 header + 16 gap-md + 4 gap-2xs, and
+       200 for the docked floating video so no rail ad sits behind it. Written
+       out because the tier bands below need the same number and @media cannot
+       read a custom property. */
+    --rail-reserve: 276px;
+
     position: sticky;
 
     /* Rest below the header with a gap-md of breathing room (more than the
@@ -354,13 +352,11 @@
        this box (see fittingSizes in nitroAds.ts). */
     width: calc(120px + 2px);
 
-    /* Fill the viewport height minus the header, the top offset above and a
-       gap below, AND the floating video's reserve, so no rail ad sits behind the
-       docked player. */
-    height: calc(
-      100dvh - var(--header-height) - var(--gap-md) - var(--gap-2xs) -
-        var(--floating-video-height)
-    );
+    /* Tier-height, not viewport-height: the stack is the tallest item in its own
+       grid row, so a viewport-tall one sized the very box it was trying to stick
+       inside and never moved. This is a safety cap; the bands below already keep
+       the revealed tier within it. */
+    max-height: calc(100dvh - var(--rail-reserve));
 
     /* Contain an oversized creative within the rail. NitroPay's DEMO mode serves
        the tallest unit that fits the container WIDTH, ignoring its height, so a
@@ -388,7 +384,6 @@
   @container nimbus-ad-gutter (min-width: calc(120px + 2px)) {
     .layout__ads-stack {
       display: flex;
-      justify-content: flex-end;
       width: calc(120px + 2px);
     }
   }
@@ -419,18 +414,22 @@
     display: none;
   }
 
-  /* Reveal the tallest tier the rail height (this stack's own height, queried via
-     nimbus-ad-rail) can fully show. Ascending source order: each taller band
-     hides the shorter tier and shows its own, so the largest fitting tier wins;
-     below the shortest tier's height nothing shows. Page-agnostic — it reveals
-     the tier for BOTH route sets; the route gate below hides the inactive one. */
-  @container nimbus-ad-rail (height >= calc(100px + 2px)) {
+  /* Reveal the tallest tier that fully fits the rail's available height.
+     Ascending source order: each taller band hides the shorter tier and shows its
+     own, so the largest fitting tier wins; below the shortest tier's height
+     nothing shows. Page-agnostic — it reveals the tier for BOTH route sets; the
+     route gate below hides the inactive one.
+
+     Keyed on the viewport rather than on the stack, so the stack can be
+     tier-height: a tier shows once tier + 2px borders <= 100dvh - --rail-reserve,
+     i.e. from tier + 278px. */
+  @media (height >= 378px) {
     .layout__ads-stack .ad-container[data-size="rail-300x100"] {
       display: flex;
     }
   }
 
-  @container nimbus-ad-rail (height >= calc(250px + 2px)) {
+  @media (height >= 528px) {
     .layout__ads-stack .ad-container[data-size="rail-300x100"] {
       display: none;
     }
@@ -440,7 +439,7 @@
     }
   }
 
-  @container nimbus-ad-rail (height >= calc(600px + 2px)) {
+  @media (height >= 878px) {
     .layout__ads-stack .ad-container[data-size="rail-300x250"] {
       display: none;
     }

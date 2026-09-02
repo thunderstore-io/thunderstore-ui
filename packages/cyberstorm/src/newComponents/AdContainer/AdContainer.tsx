@@ -9,8 +9,8 @@ export type AdContainerSizeVariant =
   // Shows the house fallback while unfilled, like the bottom banner.
   | "display-300-250"
   // Rail skyscraper height tiers — one fixed-height box each. layout.css reveals
-  // the tallest tier that fully fits the rail height (see the nimbus-ad-rail
-  // rules), so the served ad is never clipped/below the fold.
+  // the tallest tier that fully fits the rail height, so the served ad is never
+  // clipped/below the fold.
   | "rail-300x600"
   | "rail-300x250"
   | "rail-300x100"
