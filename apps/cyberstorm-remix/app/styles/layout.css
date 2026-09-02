@@ -320,9 +320,6 @@
   }
 
   .layout__ads-stack {
-    /* Query THIS stack's own height to hide the rail when it's too short — see
-       the @container rule below. */
-    container: nimbus-ad-rail / size;
     position: sticky;
 
     /* Rest below the header with a gap-md of breathing room (more than the
@@ -354,10 +351,10 @@
        this box (see fittingSizes in nitroAds.ts). */
     width: calc(120px + 2px);
 
-    /* Fill the viewport height minus the header, the top offset above and a
-       gap below, AND the floating video's reserve, so no rail ad sits behind the
-       docked player. */
-    height: calc(
+    /* Only as tall as the tier on show: a sticky box travels through the
+       difference between its own height and its containing block's, so a
+       viewport-tall stack has none. The max-height is a safety cap. */
+    max-height: calc(
       100dvh - var(--header-height) - var(--gap-md) - var(--gap-2xs) -
         var(--floating-video-height)
     );
@@ -388,7 +385,6 @@
   @container nimbus-ad-gutter (min-width: calc(120px + 2px)) {
     .layout__ads-stack {
       display: flex;
-      justify-content: flex-end;
       width: calc(120px + 2px);
     }
   }
@@ -419,18 +415,27 @@
     display: none;
   }
 
-  /* Reveal the tallest tier the rail height (this stack's own height, queried via
-     nimbus-ad-rail) can fully show. Ascending source order: each taller band
-     hides the shorter tier and shows its own, so the largest fitting tier wins;
-     below the shortest tier's height nothing shows. Page-agnostic — it reveals
-     the tier for BOTH route sets; the route gate below hides the inactive one. */
-  @container nimbus-ad-rail (height >= calc(100px + 2px)) {
+  /* Reveal the tallest tier that fully fits the rail's available height.
+     Ascending source order: each taller band hides the shorter tier and shows its
+     own, so the largest fitting tier wins; below the shortest tier's height
+     nothing shows. Page-agnostic — it reveals the tier for BOTH route sets; the
+     route gate below hides the inactive one.
+
+     Keyed on the viewport rather than on the stack, so the stack can be
+     tier-height:
+
+       tier + 2px borders <= 100dvh - 56 (header) - 16 (gap-md) - 4 (gap-2xs)
+                                   - 200 (floating video)
+
+     putting the bands at tier + 278px. Media conditions can't read custom
+     properties, hence the literals. */
+  @media (height >= 378px) {
     .layout__ads-stack .ad-container[data-size="rail-300x100"] {
       display: flex;
     }
   }
 
-  @container nimbus-ad-rail (height >= calc(250px + 2px)) {
+  @media (height >= 528px) {
     .layout__ads-stack .ad-container[data-size="rail-300x100"] {
       display: none;
     }
@@ -440,7 +445,7 @@
     }
   }
 
-  @container nimbus-ad-rail (height >= calc(600px + 2px)) {
+  @media (height >= 878px) {
     .layout__ads-stack .ad-container[data-size="rail-300x250"] {
       display: none;
     }
