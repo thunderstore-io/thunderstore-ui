@@ -43,6 +43,7 @@
     ".": "./src/index.tsx",
     "./css": "./src/index.css",
     "./fonts.css": "./src/styles/fonts.css",
+    "./styles/fonts/*": "./src/styles/fonts/*",
     "./package.json": "./package.json",
     "./src/components": "./src/components.tsx"
   }
