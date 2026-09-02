@@ -584,15 +584,10 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 // Upper bound on how long idle-waiting may delay ad work, used for both the
 // script injection and the slot creation below, so a page that never goes idle
 // still loads ads within a bounded, predictable window.
-//
-// Deliberately small, and deliberately not a fixed delay. Holding the script
-// back on a timer to push the auction past the TTI quiet window moves the lab
-// metric without reducing any work — the main thread blocks for exactly as long,
-// just later — and it costs real impressions: a short visit ends before the
-// first render, and every 30-60s slot refresh shifts by the same amount. Ad
-// revenue is the constrained resource here, so idle-gating is as far as this
-// goes: off hydration's back, still inside the visit.
 const AD_IDLE_TIMEOUT_MS = 2000;
+
+// Flat hold from `load` before the idle wait below begins.
+const AD_START_DELAY_MS = 7000;
 
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html
@@ -652,15 +647,15 @@ function AdsInit({ createAds }: { createAds: boolean }) {
       }
     };
 
-    // Inject during main-thread idle rather than the instant `load` fires, so
-    // the auction never starts midway through hydration work. See
-    // scheduleWhenIdle for why, and AD_IDLE_TIMEOUT_MS for what this
-    // deliberately does *not* do (hold the script back on a flat timer).
     let cancelIdle: (() => void) | undefined;
+    let holdTimer: ReturnType<typeof setTimeout> | undefined;
 
     const startAdLoad = () => {
       if (cancelled) return;
-      cancelIdle = scheduleWhenIdle(loadAds, AD_IDLE_TIMEOUT_MS);
+      holdTimer = setTimeout(() => {
+        if (cancelled) return;
+        cancelIdle = scheduleWhenIdle(loadAds, AD_IDLE_TIMEOUT_MS);
+      }, AD_START_DELAY_MS);
     };
 
     if (document.readyState === "complete") {
@@ -672,6 +667,9 @@ function AdsInit({ createAds }: { createAds: boolean }) {
     return () => {
       cancelled = true;
       window.removeEventListener("load", startAdLoad);
+      if (holdTimer !== undefined) {
+        clearTimeout(holdTimer);
+      }
       cancelIdle?.();
       if ($script) {
         $script.onload = null;
