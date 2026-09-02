@@ -9,6 +9,11 @@
     align-items: center;
     align-self: stretch;
     width: 100%;
+
+    /* A grid item otherwise takes min-width: auto, and the nowrap copy below
+       makes that the whole untruncated sentence — which grew the page past the
+       viewport instead of ellipsising. */
+    min-width: 0;
     padding: var(--space-12) var(--space-16) var(--space-12) var(--space-48);
     border: 2px solid var(--color-accent-purple-4);
     border-radius: var(--radius-md);
@@ -69,8 +74,18 @@
      stylesheet could never beat the width above.) */
   @media (width <= 48rem) {
     .community-promo--bar {
+      /* The tag never shrinks, so sharing a line would clip the copy to a few
+         characters. Drop the tag below it instead. */
+      flex-wrap: wrap;
       width: auto;
       margin: 0 var(--gap-md);
+      row-gap: var(--gap-xs);
+    }
+
+    .community-promo--bar .community-promo__copy {
+      flex: 1 1 100%;
+      overflow: visible;
+      white-space: normal;
     }
   }
 }
