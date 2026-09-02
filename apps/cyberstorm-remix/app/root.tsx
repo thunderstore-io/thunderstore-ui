@@ -66,6 +66,10 @@ import {
   teardownNimbusAds,
 } from "./commonComponents/Ads/nitroAds";
 import { scheduleWhenIdle } from "./commonComponents/Ads/scheduleWhenIdle";
+import {
+  isStaticAdPath,
+  staticAdForSlot,
+} from "./commonComponents/Ads/staticAds";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { Island, IslandContainer } from "./commonComponents/Island/Island";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
@@ -75,6 +79,12 @@ config.autoAddCss = false;
 
 // Single full-width bottom banner between content and footer.
 const BOTTOM_ADS_ENABLED = true;
+
+// Changing the key replaces the container div, which is how NitroPay learns to
+// free a creative when a route becomes directly sold, and back again.
+function adSlotKey(containerId: string, isStatic: boolean): string {
+  return isStatic ? `${containerId}--static` : containerId;
+}
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -274,10 +284,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const isLandingPage =
     location.pathname === "/" || location.pathname.startsWith("/communities");
 
-  // Load the NitroPay script (consent banner) wherever ads are allowed, but only
-  // CREATE ad slots off the landing pages.
-  const shouldLoadConsent = adsAllowedOnRoute;
-  const shouldCreateAds = adsAllowedOnRoute && !isLandingPage;
+  // Whether the ad SURFACE (the rail + bottom containers) is rendered at all.
+  const shouldShowAds = adsAllowedOnRoute && !isLandingPage;
+
+  // A campaign has taken over this route: the containers still render, but they
+  // paint its artwork instead of calling NitroPay.
+  const isStaticAdRoute = isStaticAdPath(location.pathname);
+
+  // The script raises the consent banner, so it loads wherever ads are allowed;
+  // slots are only created off the landing pages. A campaign route needs
+  // neither.
+  const shouldLoadConsent = adsAllowedOnRoute && !isStaticAdRoute;
+  const shouldCreateAds = shouldShowAds && !isStaticAdRoute;
 
   // Package-search pages all render the shared PackageSearch (a community's
   // landing, a team's packages, a package's dependants) and get the same
@@ -419,8 +437,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   tabIndex={-1}
                   rootClasses={classnames(
                     "layout__main",
-                    shouldCreateAds ? "layout__main--ads" : undefined,
-                    shouldCreateAds &&
+                    shouldShowAds ? "layout__main--ads" : undefined,
+                    shouldShowAds &&
                       isPackageDetailPage &&
                       !isPackageListingWithSidebar &&
                       !isPackageSearchPage
@@ -448,7 +466,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       {children}
                     </Container>
                   )}
-                  {shouldCreateAds && (
+                  {shouldShowAds && (
                     <div className="layout__ads">
                       {/* Both routes' rail tiers live here; layout.css shows only
                           the active route's fitting-height tier (data-rail-active-
@@ -457,6 +475,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                           and everything else → community rail. */}
                       <div
                         className="layout__ads-stack"
+                        data-directly-sold={
+                          isStaticAdRoute ? "true" : undefined
+                        }
                         data-rail-active-page={
                           isPackageDetailPage && !isPackageSearchPage
                             ? "package"
@@ -466,18 +487,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         <AdErrorBoundary placement="rail">
                           {COMMUNITY_RAIL_SLOTS.map((slot) => (
                             <AdContainer
-                              key={slot.containerId}
+                              key={adSlotKey(slot.containerId, isStaticAdRoute)}
                               containerId={slot.containerId}
                               sizeVariant={slot.sizeVariant}
                               railPage="community"
+                              directlySold={isStaticAdRoute}
+                              staticAd={staticAdForSlot(
+                                slot,
+                                location.pathname
+                              )}
                             />
                           ))}
                           {PACKAGE_RAIL_SLOTS.map((slot) => (
                             <AdContainer
-                              key={slot.containerId}
+                              key={adSlotKey(slot.containerId, isStaticAdRoute)}
                               containerId={slot.containerId}
                               sizeVariant={slot.sizeVariant}
                               railPage="package"
+                              directlySold={isStaticAdRoute}
+                              staticAd={staticAdForSlot(
+                                slot,
+                                location.pathname
+                              )}
                             />
                           ))}
                         </AdErrorBoundary>
@@ -485,14 +516,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </div>
                   )}
                 </Island>
-                {shouldCreateAds && BOTTOM_ADS_ENABLED ? (
+                {shouldShowAds && BOTTOM_ADS_ENABLED ? (
                   <Island rootClasses="layout__bottom-ads">
                     <AdErrorBoundary placement="content-bottom">
                       {BOTTOM_AD_SLOTS.map((slot) => (
                         <AdContainer
-                          key={slot.containerId}
+                          key={adSlotKey(slot.containerId, isStaticAdRoute)}
                           containerId={slot.containerId}
                           sizeVariant={slot.sizeVariant}
+                          directlySold={isStaticAdRoute}
+                          staticAd={staticAdForSlot(slot, location.pathname)}
                         />
                       ))}
                     </AdErrorBoundary>
@@ -500,18 +533,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 ) : null}
                 <Footer domain={resolvedEnvVars?.VITE_API_URL || ""} />
                 {shouldCreateAds ? (
-                  /* Anchor for the single page-level floating video; NitroPay
-                     floats the player out of this empty div to a viewport corner
-                     (see FLOATING_VIDEO_* in nitroAds.ts). Taken out of flow so
-                     it adds no gap to the layout column. */
+                  /* Anchor for the page-level floating video; NitroPay floats
+                     the player out of this empty div to a viewport corner (see
+                     FLOATING_VIDEO_* in nitroAds.ts). */
                   <div
                     id={FLOATING_VIDEO_ID}
                     className="layout__floating-video-anchor"
                   />
                 ) : null}
-                {/* Load the NitroPay script (consent banner) wherever ads are
-                    allowed; AdsInit only CREATES ad slots when createAds is set,
-                    so the landing pages get consent but no ads. */}
                 {shouldLoadConsent ? (
                   <AdsInit createAds={shouldCreateAds} />
                 ) : null}
