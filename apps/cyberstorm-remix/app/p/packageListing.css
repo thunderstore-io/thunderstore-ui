@@ -75,6 +75,10 @@
     width: 100%;
   }
 
+  .package-listing__drawer {
+    color: inherit;
+  }
+
   /* One combined dashed box of moderator actions (the Island "special" variant
      supplies the flex row + border + background). fit-content so the box hugs
      its buttons; it sits right-aligned in the breadcrumb row (see layout.css). */

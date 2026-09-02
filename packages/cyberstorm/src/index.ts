@@ -143,6 +143,7 @@ export {
   numberWithSpaces,
   formatFileSize,
   formatInteger,
+  formatAsCount,
   formatToDisplayName,
 } from "./utils/utils";
 
