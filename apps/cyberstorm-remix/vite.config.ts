@@ -60,7 +60,12 @@ export default defineConfig((config) => {
       // them — it only long-caches the "/assets" path. (Previously "__remix",
       // which missed that rule and left hashed assets at Cache-Control:
       // max-age=0.)
-      cssCodeSplit: false,
+
+      // Vite emits chunks in dependency order, and the inline @layer statement in
+      // root.tsx fixes layer order but not equal-specificity rules within a
+      // layer. Base classes that routes override are :where()-wrapped so their
+      // chunk order cannot matter (see Page.css, Island.css).
+      cssCodeSplit: true,
     },
   };
 });

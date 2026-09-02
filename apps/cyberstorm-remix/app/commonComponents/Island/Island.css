@@ -4,7 +4,11 @@
     container-type: inline-size;
   }
 
-  .island {
+  /* :where() for the same reason as .page in Page.css — <Island rootClasses>
+     puts a caller's class on the same element (e.g. .team-profile__island). The
+     [data-variant] rule below keeps its specificity; it is not a caller
+     override. */
+  :where(.island) {
     border-radius: var(--radius-sm);
     background-color: var(--color-surface-2);
   }

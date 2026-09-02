@@ -1,5 +1,9 @@
 @layer nimbus-layout {
-  .page {
+  /* :where() contributes no specificity, so a route's own class always wins.
+     <Page rootClasses="community"> puts both on one element, and with equal
+     specificity in one layer the winner would otherwise depend on the order the
+     files land in the bundle. Same idiom as app/styles/reset.css. */
+  :where(.page) {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xl);
@@ -8,7 +12,7 @@
   }
 
   @container (width <= 48rem) {
-    .page {
+    :where(.page) {
       gap: var(--gap-md);
     }
   }
