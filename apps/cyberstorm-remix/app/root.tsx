@@ -36,6 +36,9 @@ import {
   ToastProvider,
   classnames,
 } from "@thunderstore/cyberstorm";
+import hubotSansBold from "@thunderstore/cyberstorm-theme/styles/fonts/hubot-sans/HubotSans-Bold.woff2?url";
+import interBold from "@thunderstore/cyberstorm-theme/styles/fonts/inter/Inter-Bold.woff2?url";
+import interRegular from "@thunderstore/cyberstorm-theme/styles/fonts/inter/Inter-Regular.woff2?url";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
@@ -334,6 +337,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
             __html:
               "try{if(localStorage.getItem('nimbus-content-width')==='wide')document.documentElement.dataset.contentWidth='wide';if(localStorage.getItem('nimbus-card-layout')==='list')document.documentElement.dataset.cardLayout='list';}catch(e){}",
           }}
+        />
+        {/* The @font-face rules live in the stylesheet, so without these no font
+            is discovered until it has been parsed. Inter 400/700 carry the nav
+            and body copy; Hubot Sans 700 the community and package titles. */}
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={interRegular}
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={interBold}
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={hubotSansBold}
+          crossOrigin="anonymous"
         />
         <Seo />
         <Meta />
