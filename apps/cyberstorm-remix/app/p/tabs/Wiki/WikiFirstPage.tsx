@@ -93,7 +93,13 @@ export const loader = ssrLoader(
               communityId: params.communityId,
               namespaceId: params.namespaceId,
               packageId: params.packageId,
-              seo: createSeo({ descriptors: [{ title: "Wiki Not Found" }] }),
+              // 200 so team members can reach the create-wiki state.
+              seo: createSeo({
+                descriptors: [
+                  { title: "Wiki Not Found" },
+                  { name: "robots", content: "noindex, follow" },
+                ],
+              }),
             };
           } else {
             throw error;
