@@ -90,15 +90,6 @@
     display: none;
   }
 
-  .package-listing-sidebar__categories {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-    padding: var(--space-16);
-    border-radius: var(--radius-md);
-    background-color: var(--color-surface-default);
-  }
-
   /* The rejection reason and the mods-only internal notes render as full-width
      cards stacked above the page header (rejection first), alongside the
      deprecation notice. */
@@ -195,122 +186,6 @@
     justify-content: space-between;
   }
 
-  .package-listing-sidebar {
-    position: sticky;
-
-    /* Offset below the sticky nav so the Install button clears it instead of
-       tucking under the header when a long changelog makes the sidebar stick. */
-    top: calc(var(--header-height) + var(--gap-md));
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    gap: var(--gap-md);
-  }
-
-  .package-listing-sidebar__main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-  }
-
-  .package-listing-sidebar__actions-skeleton,
-  .package-listing-sidebar__install-skeleton,
-  .package-listing-sidebar__skeleton {
-    width: 20rem;
-  }
-
-  .package-listing-sidebar__skeleton {
-    height: 21.4rem;
-  }
-
-  .package-listing-sidebar__install-skeleton {
-    height: 3.56rem;
-  }
-
-  .package-listing-sidebar__actions-skeleton {
-    height: 2.25rem;
-  }
-
-  .package-listing-sidebar__install {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .package-listing-sidebar__download {
-    flex-grow: 1;
-    justify-content: center;
-  }
-
-  .package-listing-sidebar__meta {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-3xs);
-
-    > :first-child {
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-    }
-
-    > :last-child {
-      border-radius: 0 0 var(--radius-md) var(--radius-md);
-    }
-  }
-
-  .package-listing-sidebar__item {
-    display: flex;
-    gap: var(--gap-3xl);
-    align-items: center;
-    padding: var(--space-8) var(--space-12);
-    background: var(--color-surface-default);
-  }
-
-  .package-listing-sidebar__content,
-  .package-listing-sidebar__dependency-string,
-  .package-listing-sidebar__label {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-sm);
-    line-height: normal;
-  }
-
-  .package-listing-sidebar__label {
-    color: var(--color-text-tertiary);
-  }
-
-  .package-listing-sidebar__content {
-    flex: 1 0 0;
-    color: var(--color-text-primary);
-    text-align: right;
-  }
-
-  .package-listing-sidebar__dependency-string-wrapper {
-    display: flex;
-    flex: 1 0 0;
-    gap: var(--gap-xs);
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .package-listing-sidebar__dependency-string {
-    max-width: 15ch;
-    color: var(--color-text-primary);
-    word-break: break-word;
-  }
-
-  .package-listing-sidebar__header {
-    display: flex;
-    align-items: center;
-  }
-
-  .package-listing-sidebar__body {
-    display: flex;
-    flex: 1 1 0;
-    flex-wrap: wrap;
-    gap: var(--gap-xs);
-    align-content: flex-start;
-    align-items: flex-start;
-    min-width: 6.25rem;
-    max-width: 18.75rem;
-  }
-
   @media (width < 41rem) {
     .package-listing-management-tools {
       flex: 1 1 0;
@@ -325,10 +200,6 @@
   @container (width <= 58rem) {
     .package-listing__narrow-actions {
       display: flex;
-    }
-
-    .package-listing-sidebar {
-      display: none;
     }
 
     .package-listing__main {

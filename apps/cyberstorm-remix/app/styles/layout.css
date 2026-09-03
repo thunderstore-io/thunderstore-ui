@@ -166,7 +166,7 @@
     padding-block: 1rem;
     padding-inline: 0;
 
-    --package-sidebar-width: 20rem;
+    --package-sidebar-width: 354px;
 
     /* Fallback for when ads are off (no .layout__main--ads to step it); the
        @media steps below override it when ads are on. */
