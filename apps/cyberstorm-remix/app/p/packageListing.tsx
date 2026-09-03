@@ -52,8 +52,8 @@ import {
   SkeletonBox,
   Tabs,
   TooltipWrapper,
-  formatFileSize,
   formatAsCount,
+  formatFileSize,
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";

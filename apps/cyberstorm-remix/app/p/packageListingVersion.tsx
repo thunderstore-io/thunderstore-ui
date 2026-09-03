@@ -32,8 +32,8 @@ import {
   SkeletonBox,
   Tabs,
   TooltipWrapper,
-  formatFileSize,
   formatAsCount,
+  formatFileSize,
   formatToDisplayName,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
