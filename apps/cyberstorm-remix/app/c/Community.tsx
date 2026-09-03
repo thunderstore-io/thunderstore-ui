@@ -47,6 +47,27 @@ import {
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+function communityDescription(name: string): string {
+  return (
+    `Install and share the best ${name} mods on Thunderstore! ` +
+    "Easily manage and update your installed mods with Thunderstore Mod Manager."
+  );
+}
+
+// No width/height: the API doesn't report the icon's real size.
+function communityOgImage(community: {
+  name: string;
+  community_icon_url: string | null;
+}) {
+  if (!community.community_icon_url) {
+    return [];
+  }
+  return [
+    { property: "og:image", content: community.community_icon_url },
+    { property: "og:image:alt", content: `${community.name} icon` },
+  ];
+}
+
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
     if (params.communityId) {
@@ -61,8 +82,11 @@ export const loader = ssrLoader(
         community: community,
         seo: createSeo({
           descriptors: [
-            { title: `The ${community.name} Mod Database` },
-            { name: "description", content: `Mods for ${community.name}` },
+            { title: `${community.name} Mods | Thunderstore` },
+            {
+              name: "description",
+              content: communityDescription(community.name),
+            },
             { property: "og:type", content: "website" },
             { property: "og:url", content: getCanonicalUrl(request) },
             {
@@ -73,17 +97,7 @@ export const loader = ssrLoader(
               property: "og:description",
               content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
             },
-            // Only emit og:image when a community icon exists (no empty tag).
-            ...(community.community_icon_url
-              ? [
-                  {
-                    property: "og:image",
-                    content: community.community_icon_url,
-                  },
-                  { property: "og:image:width", content: "88" },
-                  { property: "og:image:height", content: "88" },
-                ]
-              : []),
+            ...communityOgImage(community),
             { property: "og:site_name", content: "Thunderstore" },
           ],
         }),
