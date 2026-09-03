@@ -201,6 +201,7 @@ export const SelectSearchMultiple = React.forwardRef<
           <SelectSearchMenu
             filteredOptions={filteredOptions}
             menuId={menuId}
+            anchorRef={containerRef}
             highlightedIndex={highlightedIndex}
             onOptionSelect={handleMultipleOptionSelect}
             onOptionHighlight={highlightOption}

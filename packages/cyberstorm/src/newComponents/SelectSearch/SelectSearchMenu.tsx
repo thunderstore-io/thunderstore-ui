@@ -7,48 +7,72 @@ import { getSelectSearchOptionId } from "./useSelectSearch";
 
 const MENU_VIEWPORT_PADDING = 28;
 const MENU_MIN_HEIGHT = 90;
+const MENU_ANCHOR_GAP = 8;
 
-function useViewportConstrainedMaxHeight(
-  ref: React.RefObject<HTMLElement | null>,
+function useViewportConstrainedMenuStyle(
+  anchorRef: React.RefObject<HTMLElement | null>,
   deps: unknown[]
 ) {
-  const [maxHeight, setMaxHeight] = React.useState<number>();
+  const [style, setStyle] = React.useState<React.CSSProperties>();
 
   React.useLayoutEffect(() => {
-    const element = ref.current;
-    if (!element) return;
+    const anchor = anchorRef.current;
+    if (!anchor) return;
 
-    const updateMaxHeight = () => {
-      const { top } = element.getBoundingClientRect();
+    const updateStyle = () => {
+      const { bottom, left, width } = anchor.getBoundingClientRect();
       const viewportHeight =
         window.visualViewport?.height ?? window.innerHeight;
+      const top = bottom + MENU_ANCHOR_GAP;
 
-      setMaxHeight(
-        Math.max(viewportHeight - top - MENU_VIEWPORT_PADDING, MENU_MIN_HEIGHT)
-      );
+      setStyle({
+        top: `${top}px`,
+        left: `${left}px`,
+        width: `${width}px`,
+        maxHeight: `${Math.max(
+          viewportHeight - top - MENU_VIEWPORT_PADDING,
+          MENU_MIN_HEIGHT
+        )}px`,
+      });
     };
 
-    updateMaxHeight();
+    updateStyle();
 
-    window.addEventListener("resize", updateMaxHeight);
-    window.addEventListener("scroll", updateMaxHeight, true);
-    window.visualViewport?.addEventListener("resize", updateMaxHeight);
-    window.visualViewport?.addEventListener("scroll", updateMaxHeight);
+    window.addEventListener("resize", updateStyle);
+    window.addEventListener("scroll", updateStyle, true);
+    window.visualViewport?.addEventListener("resize", updateStyle);
+    window.visualViewport?.addEventListener("scroll", updateStyle);
 
     return () => {
-      window.removeEventListener("resize", updateMaxHeight);
-      window.removeEventListener("scroll", updateMaxHeight, true);
-      window.visualViewport?.removeEventListener("resize", updateMaxHeight);
-      window.visualViewport?.removeEventListener("scroll", updateMaxHeight);
+      window.removeEventListener("resize", updateStyle);
+      window.removeEventListener("scroll", updateStyle, true);
+      window.visualViewport?.removeEventListener("resize", updateStyle);
+      window.visualViewport?.removeEventListener("scroll", updateStyle);
     };
   }, deps);
 
-  return maxHeight;
+  return style;
+}
+
+function useShowMenuInTopLayer(ref: React.RefObject<HTMLElement | null>) {
+  React.useLayoutEffect(() => {
+    const menu = ref.current;
+    if (!menu?.showPopover) return;
+
+    menu.showPopover();
+
+    return () => {
+      if (menu.isConnected) {
+        menu.hidePopover();
+      }
+    };
+  }, [ref]);
 }
 
 type SelectSearchMenuProps = {
   filteredOptions: SelectOption<string>[];
   menuId: string;
+  anchorRef: React.RefObject<HTMLElement | null>;
   highlightedIndex: number;
   onOptionSelect: (option: SelectOption<string>) => void;
   onOptionHighlight: (index: number) => void;
@@ -58,17 +82,17 @@ type SelectSearchMenuProps = {
 export function SelectSearchMenu({
   filteredOptions,
   menuId,
+  anchorRef,
   highlightedIndex,
   onOptionSelect,
   onOptionHighlight,
   isOptionSelected,
 }: SelectSearchMenuProps) {
   const menuRef = React.useRef<HTMLDivElement>(null);
-  const maxHeight = useViewportConstrainedMaxHeight(menuRef, [
+  const menuStyle = useViewportConstrainedMenuStyle(anchorRef, [
     filteredOptions.length,
   ]);
-  const menuStyle =
-    maxHeight !== undefined ? { maxHeight: `${maxHeight}px` } : undefined;
+  useShowMenuInTopLayer(menuRef);
 
   if (filteredOptions.length === 0) {
     return (
@@ -78,6 +102,7 @@ export function SelectSearchMenu({
         className="select-search__menu select-search__no-options"
         role="status"
         style={menuStyle}
+        popover="manual"
       >
         Nothing to choose from
       </div>
@@ -92,6 +117,7 @@ export function SelectSearchMenu({
       role="listbox"
       tabIndex={-1}
       style={menuStyle}
+      popover="manual"
     >
       {filteredOptions.map((option, index) => (
         <SelectSearchItem
