@@ -54,6 +54,8 @@ export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 export {
   AdContainer,
   type AdContainerSizeVariant,
+  type AdCreative,
+  type StaticAd,
 } from "./newComponents/AdContainer/AdContainer";
 export {
   Alert as NewAlert,

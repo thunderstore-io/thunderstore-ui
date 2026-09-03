@@ -14,7 +14,7 @@
     display: inline-flex;
     flex-direction: column;
 
-    /* Transparent until an ad fills the slot (see the :has(iframe) rule at the
+    /* Transparent until an ad fills the slot (see the :has() rule at the
        end). The 1px border is always present so the reserved geometry (the
        `+ 2px` sizing) is identical whether the slot is empty or filled — only
        its colour changes. */
@@ -77,8 +77,9 @@
   /* House "support us via ads" fallback, shown while the bottom banner or a
      sidebar rectangle is unfilled (no-fill or adblock). Fills the
      reserved box; the .ad-container__content overlay covers it once an ad
-     renders, and the :has(iframe) rule below removes it. Only those two variants
-     render this markup (see AdContainer.tsx). */
+     renders, and the :has() rule below removes it. Only those two variants
+     render this markup, and only when the slot is network-served (see
+     AdContainer.tsx). */
   .ad-container__fallback {
     display: flex;
     flex-flow: wrap;
@@ -119,18 +120,41 @@
     max-height: 100%;
   }
 
-  /* Once NitroPay renders an ad (an iframe) into the slot, reveal the slot's
-     border. While unfilled the border stays transparent so the reserved box is
-     invisible. NB: this keys on any iframe in the slot — if NitroPay ever
-     injects a passback/tracking iframe on a no-fill, the border would show on a
-     genuinely empty slot; revisit if that surfaces. */
-  .ad-container:has(.ad-container__content iframe) {
+  /* The link shrink-wraps the image so the flex centering above still centres it. */
+  .ad-container__static {
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Takes <picture> out of the box tree so the <img>'s max-* below resolve
+     against the slot box, not an intermediate blockified <picture>. */
+  .ad-container__static picture {
+    display: contents;
+  }
+
+  /* Never exceeds the box, never exceeds its own intrinsic size — so artwork
+     that fits is painted pixel-for-pixel and the rest scales down. object-fit
+     keeps the aspect ratio when only one axis is clamped. */
+  .ad-container__static img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  /* Reveal the border once an ad renders. NB the iframe half keys on any iframe
+     in the slot, so a NitroPay passback iframe on a no-fill would show it. */
+  .ad-container:has(.ad-container__content :is(iframe, .ad-container__static)) {
     border-color: #1f1f42;
   }
 
-  /* Once an ad (iframe) renders, hide the fallback so it never shows through or
-     around a creative smaller than the reserved box. */
-  .ad-container:has(.ad-container__content iframe) .ad-container__fallback {
+  /* Once an ad renders, hide the fallback so it never shows through or around a
+     creative smaller than the reserved box. */
+  .ad-container:has(.ad-container__content :is(iframe, .ad-container__static))
+    .ad-container__fallback {
     display: none;
   }
 

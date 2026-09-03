@@ -36,6 +36,9 @@ import {
   ToastProvider,
   classnames,
 } from "@thunderstore/cyberstorm";
+import hubotSansBold from "@thunderstore/cyberstorm-theme/styles/fonts/hubot-sans/HubotSans-Bold.woff2?url";
+import interBold from "@thunderstore/cyberstorm-theme/styles/fonts/inter/Inter-Bold.woff2?url";
+import interRegular from "@thunderstore/cyberstorm-theme/styles/fonts/inter/Inter-Regular.woff2?url";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
@@ -63,6 +66,10 @@ import {
   teardownNimbusAds,
 } from "./commonComponents/Ads/nitroAds";
 import { scheduleWhenIdle } from "./commonComponents/Ads/scheduleWhenIdle";
+import {
+  isStaticAdPath,
+  staticAdForSlot,
+} from "./commonComponents/Ads/staticAds";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { Island, IslandContainer } from "./commonComponents/Island/Island";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
@@ -72,6 +79,12 @@ config.autoAddCss = false;
 
 // Single full-width bottom banner between content and footer.
 const BOTTOM_ADS_ENABLED = true;
+
+// Changing the key replaces the container div, which is how NitroPay learns to
+// free a creative when a route becomes directly sold, and back again.
+function adSlotKey(containerId: string, isStatic: boolean): string {
+  return isStatic ? `${containerId}--static` : containerId;
+}
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -271,10 +284,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const isLandingPage =
     location.pathname === "/" || location.pathname.startsWith("/communities");
 
-  // Load the NitroPay script (consent banner) wherever ads are allowed, but only
-  // CREATE ad slots off the landing pages.
-  const shouldLoadConsent = adsAllowedOnRoute;
-  const shouldCreateAds = adsAllowedOnRoute && !isLandingPage;
+  // Whether the ad SURFACE (the rail + bottom containers) is rendered at all.
+  const shouldShowAds = adsAllowedOnRoute && !isLandingPage;
+
+  // A campaign has taken over this route: the containers still render, but they
+  // paint its artwork instead of calling NitroPay.
+  const isStaticAdRoute = isStaticAdPath(location.pathname);
+
+  // The script raises the consent banner, so it loads wherever ads are allowed;
+  // slots are only created off the landing pages. A campaign route needs
+  // neither.
+  const shouldLoadConsent = adsAllowedOnRoute && !isStaticAdRoute;
+  const shouldCreateAds = shouldShowAds && !isStaticAdRoute;
 
   // Package-search pages all render the shared PackageSearch (a community's
   // landing, a team's packages, a package's dependants) and get the same
@@ -335,6 +356,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
               "try{if(localStorage.getItem('nimbus-content-width')==='wide')document.documentElement.dataset.contentWidth='wide';if(localStorage.getItem('nimbus-card-layout')==='list')document.documentElement.dataset.cardLayout='list';}catch(e){}",
           }}
         />
+        {/* The @font-face rules live in the stylesheet, so without these no font
+            is discovered until it has been parsed. Inter 400/700 carry the nav
+            and body copy; Hubot Sans 700 the community and package titles. */}
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={interRegular}
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={interBold}
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={hubotSansBold}
+          crossOrigin="anonymous"
+        />
         <Seo />
         <Meta />
         <link
@@ -392,8 +437,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   tabIndex={-1}
                   rootClasses={classnames(
                     "layout__main",
-                    shouldCreateAds ? "layout__main--ads" : undefined,
-                    shouldCreateAds &&
+                    shouldShowAds ? "layout__main--ads" : undefined,
+                    shouldShowAds &&
                       isPackageDetailPage &&
                       !isPackageListingWithSidebar &&
                       !isPackageSearchPage
@@ -421,7 +466,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       {children}
                     </Container>
                   )}
-                  {shouldCreateAds && (
+                  {shouldShowAds && (
                     <div className="layout__ads">
                       {/* Both routes' rail tiers live here; layout.css shows only
                           the active route's fitting-height tier (data-rail-active-
@@ -430,6 +475,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                           and everything else → community rail. */}
                       <div
                         className="layout__ads-stack"
+                        data-directly-sold={
+                          isStaticAdRoute ? "true" : undefined
+                        }
                         data-rail-active-page={
                           isPackageDetailPage && !isPackageSearchPage
                             ? "package"
@@ -439,18 +487,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         <AdErrorBoundary placement="rail">
                           {COMMUNITY_RAIL_SLOTS.map((slot) => (
                             <AdContainer
-                              key={slot.containerId}
+                              key={adSlotKey(slot.containerId, isStaticAdRoute)}
                               containerId={slot.containerId}
                               sizeVariant={slot.sizeVariant}
                               railPage="community"
+                              directlySold={isStaticAdRoute}
+                              staticAd={staticAdForSlot(
+                                slot,
+                                location.pathname
+                              )}
                             />
                           ))}
                           {PACKAGE_RAIL_SLOTS.map((slot) => (
                             <AdContainer
-                              key={slot.containerId}
+                              key={adSlotKey(slot.containerId, isStaticAdRoute)}
                               containerId={slot.containerId}
                               sizeVariant={slot.sizeVariant}
                               railPage="package"
+                              directlySold={isStaticAdRoute}
+                              staticAd={staticAdForSlot(
+                                slot,
+                                location.pathname
+                              )}
                             />
                           ))}
                         </AdErrorBoundary>
@@ -458,14 +516,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </div>
                   )}
                 </Island>
-                {shouldCreateAds && BOTTOM_ADS_ENABLED ? (
+                {shouldShowAds && BOTTOM_ADS_ENABLED ? (
                   <Island rootClasses="layout__bottom-ads">
                     <AdErrorBoundary placement="content-bottom">
                       {BOTTOM_AD_SLOTS.map((slot) => (
                         <AdContainer
-                          key={slot.containerId}
+                          key={adSlotKey(slot.containerId, isStaticAdRoute)}
                           containerId={slot.containerId}
                           sizeVariant={slot.sizeVariant}
+                          directlySold={isStaticAdRoute}
+                          staticAd={staticAdForSlot(slot, location.pathname)}
                         />
                       ))}
                     </AdErrorBoundary>
@@ -473,18 +533,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 ) : null}
                 <Footer domain={resolvedEnvVars?.VITE_API_URL || ""} />
                 {shouldCreateAds ? (
-                  /* Anchor for the single page-level floating video; NitroPay
-                     floats the player out of this empty div to a viewport corner
-                     (see FLOATING_VIDEO_* in nitroAds.ts). Taken out of flow so
-                     it adds no gap to the layout column. */
+                  /* Anchor for the page-level floating video; NitroPay floats
+                     the player out of this empty div to a viewport corner (see
+                     FLOATING_VIDEO_* in nitroAds.ts). */
                   <div
                     id={FLOATING_VIDEO_ID}
                     className="layout__floating-video-anchor"
                   />
                 ) : null}
-                {/* Load the NitroPay script (consent banner) wherever ads are
-                    allowed; AdsInit only CREATES ad slots when createAds is set,
-                    so the landing pages get consent but no ads. */}
                 {shouldLoadConsent ? (
                   <AdsInit createAds={shouldCreateAds} />
                 ) : null}
@@ -584,15 +640,10 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 // Upper bound on how long idle-waiting may delay ad work, used for both the
 // script injection and the slot creation below, so a page that never goes idle
 // still loads ads within a bounded, predictable window.
-//
-// Deliberately small, and deliberately not a fixed delay. Holding the script
-// back on a timer to push the auction past the TTI quiet window moves the lab
-// metric without reducing any work — the main thread blocks for exactly as long,
-// just later — and it costs real impressions: a short visit ends before the
-// first render, and every 30-60s slot refresh shifts by the same amount. Ad
-// revenue is the constrained resource here, so idle-gating is as far as this
-// goes: off hydration's back, still inside the visit.
 const AD_IDLE_TIMEOUT_MS = 2000;
+
+// Flat hold from `load` before the idle wait below begins.
+const AD_START_DELAY_MS = 7000;
 
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html
@@ -652,15 +703,15 @@ function AdsInit({ createAds }: { createAds: boolean }) {
       }
     };
 
-    // Inject during main-thread idle rather than the instant `load` fires, so
-    // the auction never starts midway through hydration work. See
-    // scheduleWhenIdle for why, and AD_IDLE_TIMEOUT_MS for what this
-    // deliberately does *not* do (hold the script back on a flat timer).
     let cancelIdle: (() => void) | undefined;
+    let holdTimer: ReturnType<typeof setTimeout> | undefined;
 
     const startAdLoad = () => {
       if (cancelled) return;
-      cancelIdle = scheduleWhenIdle(loadAds, AD_IDLE_TIMEOUT_MS);
+      holdTimer = setTimeout(() => {
+        if (cancelled) return;
+        cancelIdle = scheduleWhenIdle(loadAds, AD_IDLE_TIMEOUT_MS);
+      }, AD_START_DELAY_MS);
     };
 
     if (document.readyState === "complete") {
@@ -672,6 +723,9 @@ function AdsInit({ createAds }: { createAds: boolean }) {
     return () => {
       cancelled = true;
       window.removeEventListener("load", startAdLoad);
+      if (holdTimer !== undefined) {
+        clearTimeout(holdTimer);
+      }
       cancelIdle?.();
       if ($script) {
         $script.onload = null;

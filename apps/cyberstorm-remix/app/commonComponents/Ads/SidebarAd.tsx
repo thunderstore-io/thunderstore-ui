@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router";
 
 import { AdContainer } from "@thunderstore/cyberstorm";
 
@@ -10,6 +11,7 @@ import {
   removePageScopedAd,
   whenNitroAdsReady,
 } from "./nitroAds";
+import { isStaticAdPath, staticAdForSlot } from "./staticAds";
 
 /**
  * A page-scoped 300×250 sidebar ad — mounted by the community filter sidebar and
@@ -18,9 +20,23 @@ import {
  * only exists on its page, so it's created here on mount — once the NitroPay
  * script is ready — and freed on unmount. The AdContainer reserves the box and
  * shows the house fallback while unfilled.
+ *
+ * On a campaign route the slot is directly sold, so no auction runs whether or
+ * not the campaign covers this placement. The component stays mounted across a
+ * community switch, so `isStatic` is both an effect dependency and part of the
+ * container's key — React has to replace the div, or NitroPay never sees the
+ * old one removed and never frees the creative.
  */
 export function SidebarAd({ slot }: { slot: RenderedAdSlot }) {
+  const { pathname } = useLocation();
+  const isStatic = isStaticAdPath(pathname);
+  const staticAd = isStatic ? staticAdForSlot(slot, pathname) : undefined;
+
   useEffect(() => {
+    if (isStatic) {
+      return;
+    }
+
     let cancelled = false;
     let idleHandle: number | undefined;
     let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
@@ -59,13 +75,16 @@ export function SidebarAd({ slot }: { slot: RenderedAdSlot }) {
       // frees the div itself).
       removePageScopedAd(slot);
     };
-  }, [slot]);
+  }, [slot, isStatic]);
 
   return (
     <AdErrorBoundary placement={adPlacementKey(slot.containerId)}>
       <AdContainer
+        key={isStatic ? "static" : "nitro"}
         containerId={slot.containerId}
         sizeVariant={slot.sizeVariant}
+        directlySold={isStatic}
+        staticAd={staticAd}
       />
     </AdErrorBoundary>
   );
