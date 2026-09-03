@@ -1,7 +1,11 @@
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getCanonicalUrl,
+  packageCanonicalPath,
+} from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import {
@@ -125,7 +129,18 @@ export const loader = ssrLoader(
               content: `Mods that depend on ${listing.name}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: getCanonicalUrl(request) },
+            // Canonical to the listing, not this page.
+            {
+              property: "og:url",
+              content: getCanonicalUrl(
+                request,
+                packageCanonicalPath(
+                  listing.community_identifier,
+                  listing.namespace,
+                  listing.name
+                )
+              ),
+            },
             {
               property: "og:title",
               content: `Dependants of ${formatToDisplayName(

@@ -3,7 +3,11 @@ import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getCanonicalUrl,
+  packageCanonicalPath,
+} from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -66,7 +70,18 @@ function packageVersionSeo(
       },
       { name: "description", content: listing.description },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: getCanonicalUrl(request) },
+      // Canonical to the listing, not this version.
+      {
+        property: "og:url",
+        content: getCanonicalUrl(
+          request,
+          packageCanonicalPath(
+            listing.community_identifier,
+            listing.namespace,
+            listing.name
+          )
+        ),
+      },
       {
         property: "og:title",
         content: `${displayName} v${packageVersion} by ${listing.namespace}`,
