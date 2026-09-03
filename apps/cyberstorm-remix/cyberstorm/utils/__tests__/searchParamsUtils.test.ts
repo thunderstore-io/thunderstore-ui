@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildPageHref,
   parseIntListParam,
   parsePageParam,
   parseSearchParam,
@@ -118,5 +119,60 @@ describe("utils.searchParamsUtils.parseSearchParam", () => {
 
   it("trims surrounding whitespace", () => {
     expect(parseSearchParam("  bepinex  ")).toBe("bepinex");
+  });
+});
+
+describe("utils.searchParamsUtils.buildPageHref", () => {
+  const PATH = "/c/how-to-fish/";
+  const href = (page: number, query = "") =>
+    buildPageHref(PATH, new URLSearchParams(query), page);
+
+  it("links to a later page", () => {
+    expect(href(2)).toBe("/c/how-to-fish/?page=2");
+  });
+
+  it("omits the param for page 1 so it keeps a single URL", () => {
+    expect(href(1)).toBe(PATH);
+    expect(href(0)).toBe(PATH);
+  });
+
+  it("carries the active filters into the link", () => {
+    expect(href(3, "section=mods&nsfw=true")).toBe(
+      "/c/how-to-fish/?section=mods&nsfw=true&page=3"
+    );
+  });
+
+  it("replaces an existing page rather than appending a second one", () => {
+    expect(href(4, "page=2&section=mods")).toBe(
+      "/c/how-to-fish/?page=4&section=mods"
+    );
+  });
+
+  it("drops the page from a filtered first page", () => {
+    expect(href(1, "page=5&search=fish")).toBe("/c/how-to-fish/?search=fish");
+  });
+
+  it("keeps repeated params, which the category filters rely on", () => {
+    expect(href(2, "includedCategories=1&includedCategories=2")).toBe(
+      "/c/how-to-fish/?includedCategories=1&includedCategories=2&page=2"
+    );
+  });
+
+  it("normalises the pathname to the canonical trailing-slash form", () => {
+    expect(buildPageHref("/c/how-to-fish", new URLSearchParams(""), 2)).toBe(
+      "/c/how-to-fish/?page=2"
+    );
+    expect(buildPageHref("/c/how-to-fish", new URLSearchParams(""), 1)).toBe(
+      "/c/how-to-fish/"
+    );
+  });
+
+  it("returns a root-relative path, not a bare query", () => {
+    expect(href(2).startsWith("/")).toBe(true);
+  });
+
+  it("round-trips through the parser the loader uses", () => {
+    const parsed = new URL(href(7), "https://thunderstore.io").searchParams;
+    expect(parsePageParam(parsed.get("page"))).toBe(7);
   });
 });
