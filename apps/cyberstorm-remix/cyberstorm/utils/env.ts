@@ -35,6 +35,16 @@ function withTrailingSlash(path: string): string {
   return lastSegment.includes(".") ? path : `${path}/`;
 }
 
+// The one URL for a package. Use as the `og:url` of its tabs and version
+// pages so they consolidate onto the listing.
+export function packageCanonicalPath(
+  communityId: string,
+  namespaceId: string,
+  packageId: string
+): string {
+  return `/c/${communityId}/p/${namespaceId}/${packageId}/`;
+}
+
 // `?page=N` for N above 1, nothing else. Page 1 stays bare so it keeps one URL.
 function canonicalQuery(requestUrl: URL): string {
   const page = requestUrl.searchParams.get("page");
