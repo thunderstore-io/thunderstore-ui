@@ -220,7 +220,6 @@ function CommunityMainHeader({
           </div>
         </div>
         <NewButton
-          csSize="big"
           csVariant="secondary"
           primitiveType="cyberstormLink"
           linkId="PackageUpload"
