@@ -137,14 +137,14 @@ function CommunityMainHeroBackground({
 }) {
   return (
     <div className="community__background">
-      {resolvedCommunity.hero_image_url ? (
-        <div className="community__background-image">
+      <div className="community__background-image">
+        {resolvedCommunity.hero_image_url ? (
           <img
             src={resolvedCommunity.hero_image_url}
             alt={resolvedCommunity.name}
           />
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -238,7 +238,18 @@ function CommunityMainHeader({
 function CommunityMainHeaderSkeleton() {
   return (
     <div className="community__header">
-      <SkeletonBox />
+      <div className="community__background">
+        <div className="community__background-image">
+          <SkeletonBox />
+        </div>
+      </div>
+      <div className="community__content-header-wrapper">
+        <div className="community__content-header">
+          <div className="community__game-icon">
+            <SkeletonBox className="community__game-icon-image" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

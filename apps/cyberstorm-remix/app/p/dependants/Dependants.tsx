@@ -13,7 +13,10 @@ import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
-import { CommunityPackageListingHeader } from "~/c/CommunityPackageListingSubpath";
+import {
+  CommunityPackageListingHeader,
+  CommunityPackageListingHeaderSkeleton,
+} from "~/c/CommunityPackageListingSubpath";
 import { SidebarAd } from "~/commonComponents/Ads/SidebarAd";
 import { DEPENDANTS_SIDEBAR_AD } from "~/commonComponents/Ads/nitroAds";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -245,7 +248,7 @@ export default function Dependants() {
 
   return (
     <Page as="section" rootClasses="dependants">
-      <Suspense fallback={null}>
+      <Suspense fallback={<CommunityPackageListingHeaderSkeleton />}>
         <Await resolve={community}>
           {(resolvedCommunity) => (
             <CommunityPackageListingHeader

@@ -1,5 +1,7 @@
 import { Outlet } from "react-router";
 
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+
 import { type OutletContextShape } from "../root";
 import type { loader } from "./Community";
 import "./CommunityPackageListingSubpath.css";
@@ -55,6 +57,18 @@ export function CommunityPackageListingHeader({
       <CommunityPackageListingHeroBackground
         resolvedCommunity={resolvedCommunity}
       />
+    </div>
+  );
+}
+
+export function CommunityPackageListingHeaderSkeleton() {
+  return (
+    <div className="community__header community__header--compact">
+      <div className="community__background community__background--packagePage">
+        <div className="community__background-image">
+          <SkeletonBox />
+        </div>
+      </div>
     </div>
   );
 }

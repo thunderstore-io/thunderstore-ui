@@ -16,7 +16,10 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
-import { CommunityPackageListingHeader } from "~/c/CommunityPackageListingSubpath";
+import {
+  CommunityPackageListingHeader,
+  CommunityPackageListingHeaderSkeleton,
+} from "~/c/CommunityPackageListingSubpath";
 import { CommunityPromo } from "~/commonComponents/CommunityPromo/CommunityPromo";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
@@ -214,7 +217,7 @@ export default function PackageListingVersion() {
     <>
       {/* Community hero banner — its own grid row (see
           .layout__main--package-detail). */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<CommunityPackageListingHeaderSkeleton />}>
         <Await resolve={community}>
           {(resolvedCommunity) => (
             <CommunityPackageListingHeader

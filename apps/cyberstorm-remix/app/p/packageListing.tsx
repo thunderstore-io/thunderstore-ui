@@ -6,7 +6,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CommunityPackageListingHeader } from "app/c/CommunityPackageListingSubpath";
+import {
+  CommunityPackageListingHeader,
+  CommunityPackageListingHeaderSkeleton,
+} from "app/c/CommunityPackageListingSubpath";
 import { SidebarAd } from "app/commonComponents/Ads/SidebarAd";
 import { PACKAGE_SIDEBAR_AD } from "app/commonComponents/Ads/nitroAds";
 import { CommunityPromo } from "app/commonComponents/CommunityPromo/CommunityPromo";
@@ -391,7 +394,7 @@ export default function PackageListing() {
           Install lines up with the page header below it (see
           .layout__main--package-detail). Null when the community has no hero. */}
       <div className="package-listing__banner">
-        <Suspense fallback={null}>
+        <Suspense fallback={<CommunityPackageListingHeaderSkeleton />}>
           <Await resolve={community}>
             {(resolvedCommunity) => (
               <CommunityPackageListingHeader
