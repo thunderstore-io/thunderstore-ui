@@ -278,9 +278,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       (prefix) => location.pathname.startsWith(prefix)
     );
 
-  // The landing pages (community list + root) load the consent banner but show
-  // NO ads, to keep the landing uncluttered. Individual communities live under
-  // /c/, so they are unaffected.
+  // The landing pages (the home page + community list) load the consent
+  // banner but show NO ads, to keep the landing uncluttered. Individual
+  // communities live under /c/, so they are unaffected.
   const isLandingPage =
     location.pathname === "/" || location.pathname.startsWith("/communities");
 

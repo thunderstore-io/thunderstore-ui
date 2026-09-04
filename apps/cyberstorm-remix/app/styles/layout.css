@@ -32,6 +32,11 @@
     align-items: start;
     min-width: 0;
 
+    /* Swallows the scrollbar-width overshoot of full-bleed
+       calc(50% - 50vw) backdrops (the home page hero). clip, not hidden,
+       keeps the ad rail sticky. */
+    overflow-x: clip;
+
     /* Side inset for the content — <Container> no longer pads itself, so the
        grid owns the horizontal spacing. The ad layout (below) resets this to 0
        and folds the same inset into its gutter minimums instead, so it never

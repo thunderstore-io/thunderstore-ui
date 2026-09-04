@@ -209,7 +209,7 @@ export function Navigation(props: {
     [`/c/${communityId}`, `/c/${communityId}/`].includes(location.pathname);
 
   const logoLinkId =
-    communityId && !isExactCommunityPage ? "Community" : "Communities";
+    communityId && !isExactCommunityPage ? "Community" : "Index";
 
   return (
     <>
