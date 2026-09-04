@@ -1,7 +1,10 @@
 version: "3.8"
 
 x-django-service: &django-service
-  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.151.0}
+  # 0.180.0 added /api/cyberstorm/community/<id>/alerts/. Stay below 0.183.0,
+  # which moves the image to Python 3.12 and breaks run_test_backend.py's
+  # distutils import.
+  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.182.0}
   environment:
     CORS_ALLOWED_ORIGINS: "*"
     CORS_ALLOW_ALL_ORIGINS: "True"
