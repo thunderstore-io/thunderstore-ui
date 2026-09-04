@@ -17,7 +17,6 @@ export const formatInteger = (
 export const formatAsCount = (inputNumber: number) => {
   return formatInteger(inputNumber, "compact", {
     maximumFractionDigits: 1,
-    maximumSignificantDigits: 4,
     roundingMode: "trunc",
   });
 };
