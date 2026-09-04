@@ -54,6 +54,24 @@ export function buildCommunityOptions(
   }));
 }
 
+export function getCommunityIdFromPathname(
+  pathname: string | undefined
+): string | undefined {
+  if (!pathname) return undefined;
+
+  const communityMatch = new RegExp("^/c/(?<communityId>[^/]+)").exec(pathname);
+  return communityMatch?.groups?.communityId;
+}
+
+export function getPreselectedCommunity(
+  pathname: string | undefined,
+  communityOptions: CommunityOption[]
+): string | undefined {
+  const communityId = getCommunityIdFromPathname(pathname);
+  if (!communityId) return undefined;
+  return communityOptions.find((option) => option.value === communityId)?.value;
+}
+
 export function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
 

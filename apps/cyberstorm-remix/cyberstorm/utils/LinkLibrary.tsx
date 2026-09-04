@@ -1,6 +1,10 @@
 import { type PropsWithChildren } from "react";
 import React from "react";
-import { Link as RRLink, type LinkProps as RRLinkProps } from "react-router";
+import {
+  Link as RRLink,
+  type LinkProps as RRLinkProps,
+  useLocation,
+} from "react-router";
 
 import type {
   LinkLibrary,
@@ -36,6 +40,14 @@ export function shouldReloadDocument(
   }
 }
 
+export interface LinkNavigationState {
+  from: {
+    pathname: string;
+    search: string;
+    hash: string;
+  };
+}
+
 interface LinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
     PropsWithChildren,
@@ -58,6 +70,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       customRef,
       ...forwardedProps
     } = props;
+    const location = useLocation();
     const q = queryParams ? `?${queryParams}` : "";
     delete forwardedProps.package;
     delete forwardedProps.community;
@@ -71,6 +84,15 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     return (
       <RRLink
         to={`${url}${q}`}
+        state={
+          {
+            from: {
+              pathname: location.pathname,
+              search: location.search,
+              hash: location.hash,
+            },
+          } satisfies LinkNavigationState
+        }
         // passHref
         {...fProps}
         className={className}
