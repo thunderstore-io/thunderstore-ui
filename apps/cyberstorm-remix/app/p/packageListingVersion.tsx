@@ -31,8 +31,9 @@ import {
   RelativeTime,
   SkeletonBox,
   Tabs,
+  TooltipWrapper,
+  formatAsCount,
   formatFileSize,
-  formatInteger,
   formatToDisplayName,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -48,6 +49,11 @@ import {
 import "./packageListing.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
+function downloadsTooltipText(listing: PackageListingDetails) {
+  const suffix = listing.download_count === 1 ? "download" : "downloads";
+  return `${listing.download_count} ${suffix}`;
+}
 
 // Browser-tab title + share metadata, shared by the SSR loader and the
 // clientLoader so the title doesn't collapse to the root "Thunderstore"
@@ -407,14 +413,24 @@ function packageMeta(listing: PackageListingDetails) {
         <div className="package-listing-sidebar__label">Date Uploaded</div>
         <div className="package-listing-sidebar__content">
           {dateUploaded ? (
-            <RelativeTime time={dateUploaded} suppressHydrationWarning />
+            <TooltipWrapper tooltipText={new Date(dateUploaded).toUTCString()}>
+              <span>
+                <RelativeTime
+                  time={dateUploaded}
+                  disableTitle={true}
+                  suppressHydrationWarning
+                />
+              </span>
+            </TooltipWrapper>
           ) : null}
         </div>
       </div>
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Downloads</div>
         <div className="package-listing-sidebar__content">
-          {formatInteger(listing.download_count)}
+          <TooltipWrapper tooltipText={downloadsTooltipText(listing)}>
+            <span>{formatAsCount(listing.download_count)}</span>
+          </TooltipWrapper>
         </div>
       </div>
       <div className="package-listing-sidebar__item">

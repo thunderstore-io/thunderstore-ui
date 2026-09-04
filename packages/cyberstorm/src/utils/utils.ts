@@ -5,9 +5,20 @@ export const range = (start: number, end: number) => {
 
 export const formatInteger = (
   inputNumber: number,
-  notation: "standard" | "scientific" | "engineering" | "compact" = "compact"
+  notation: "standard" | "scientific" | "engineering" | "compact" = "compact",
+  formatOptions: Intl.NumberFormatOptions = {}
 ) => {
-  return Intl.NumberFormat("en", { notation: notation }).format(inputNumber);
+  return Intl.NumberFormat("en", {
+    notation: notation,
+    ...formatOptions,
+  }).format(inputNumber);
+};
+
+export const formatAsCount = (inputNumber: number) => {
+  return formatInteger(inputNumber, "compact", {
+    maximumFractionDigits: 1,
+    roundingMode: "trunc",
+  });
 };
 
 export const numberWithSpaces = (x: number) => {

@@ -51,8 +51,9 @@ import {
   RelativeTime,
   SkeletonBox,
   Tabs,
+  TooltipWrapper,
+  formatAsCount,
   formatFileSize,
-  formatInteger,
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
@@ -341,12 +342,28 @@ export default function PackageListing() {
 
     setLastUpdated(
       lastUpdatedTime ? (
-        <RelativeTime time={lastUpdatedTime} suppressHydrationWarning />
+        <TooltipWrapper tooltipText={new Date(lastUpdatedTime).toUTCString()}>
+          <span>
+            <RelativeTime
+              time={lastUpdatedTime}
+              disableTitle={true}
+              suppressHydrationWarning
+            />
+          </span>
+        </TooltipWrapper>
       ) : undefined
     );
     setFirstUploaded(
       firstUploadedTime ? (
-        <RelativeTime time={firstUploadedTime} suppressHydrationWarning />
+        <TooltipWrapper tooltipText={new Date(firstUploadedTime).toUTCString()}>
+          <span>
+            <RelativeTime
+              time={firstUploadedTime}
+              disableTitle={true}
+              suppressHydrationWarning
+            />
+          </span>
+        </TooltipWrapper>
       ) : undefined
     );
   }, []);
@@ -746,6 +763,20 @@ function packageBoxes(
   );
 }
 
+function downloadsTooltipText(
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>
+) {
+  const suffix = listing.download_count === 1 ? "download" : "downloads";
+  return `${listing.download_count} ${suffix}`;
+}
+
+function likesTooltipText(
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>
+) {
+  const suffix = listing.rating_count === 1 ? "like" : "likes";
+  return `${listing.rating_count} ${suffix}`;
+}
+
 function packageMeta(
   lastUpdated: ReactElement | undefined,
   firstUploaded: ReactElement | undefined,
@@ -764,13 +795,17 @@ function packageMeta(
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Downloads</div>
         <div className="package-listing-sidebar__content">
-          {formatInteger(listing.download_count)}
+          <TooltipWrapper tooltipText={downloadsTooltipText(listing)}>
+            <span>{formatAsCount(listing.download_count)}</span>
+          </TooltipWrapper>
         </div>
       </div>
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Likes</div>
         <div className="package-listing-sidebar__content">
-          {formatInteger(listing.rating_count)}
+          <TooltipWrapper tooltipText={likesTooltipText(listing)}>
+            <span>{formatAsCount(listing.rating_count)}</span>
+          </TooltipWrapper>
         </div>
       </div>
       <div className="package-listing-sidebar__item">
