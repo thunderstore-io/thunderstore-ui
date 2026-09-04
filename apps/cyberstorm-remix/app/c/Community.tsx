@@ -57,12 +57,16 @@ export const loader = ssrLoader(
           sessionId: undefined,
         };
       });
-      const community = await dapper.getCommunity(params.communityId);
+      // Independent requests, so don't serialize them: this is the layout
+      // route for all of /c/*, and the alerts are awaited to keep the alert in
+      // the server HTML (no layout shift).
+      const [community, alerts] = await Promise.all([
+        dapper.getCommunity(params.communityId),
+        dapper.getCommunityAlerts(params.communityId).catch(() => []),
+      ]);
       return {
         community: community,
-        alerts: await dapper
-          .getCommunityAlerts(params.communityId)
-          .catch(() => []),
+        alerts: alerts,
         seo: createSeo({
           descriptors: [
             { title: `The ${community.name} Mod Database` },
