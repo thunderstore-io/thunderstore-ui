@@ -33,9 +33,9 @@ it("executes getCommunityFilters without errors", async () => {
 });
 
 it("executes getCommunityAlerts without errors", async () => {
-  await expect(
-    dapper.getCommunityAlerts(communityId)
-  ).resolves.not.toThrowError();
+  await expect(dapper.getCommunityAlerts(communityId)).resolves.toEqual(
+    expect.any(Array)
+  );
 });
 
 // TODO: this should be tested/mocked with sessionId too.
