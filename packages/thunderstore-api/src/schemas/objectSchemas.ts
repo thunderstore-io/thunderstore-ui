@@ -92,6 +92,25 @@ export const communityFiltersSchema = z.object({
 
 export type CommunityFilters = z.infer<typeof communityFiltersSchema>;
 
+export const communityAlertVariantSchema = z.enum([
+  "info",
+  "success",
+  "warning",
+  "danger",
+]);
+
+export type CommunityAlertVariant = z.infer<typeof communityAlertVariantSchema>;
+
+export const communityAlertSchema = z.object({
+  id: z.number().int(),
+  message: z.string(),
+  variant: communityAlertVariantSchema.catch("info"),
+  datetime_created: z.string().datetime(),
+  datetime_updated: z.string().datetime(),
+});
+
+export type CommunityAlert = z.infer<typeof communityAlertSchema>;
+
 export const serviceAccountSchema = z.object({
   identifier: z.string().min(1),
   name: z.string().min(1),

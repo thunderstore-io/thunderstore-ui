@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  communityAlertSchema,
   communityFiltersSchema,
   communitySchema,
   currentUserTeamPermissionsSchema,
@@ -68,6 +69,13 @@ export const communityFiltersResponseDataSchema = communityFiltersSchema;
 
 export type CommunityFiltersResponseData = z.infer<
   typeof communityFiltersResponseDataSchema
+>;
+
+// CommunityAlertsResponse
+export const communityAlertsResponseDataSchema = z.array(communityAlertSchema);
+
+export type CommunityAlertsResponseData = z.infer<
+  typeof communityAlertsResponseDataSchema
 >;
 
 // PackageListingsResponse

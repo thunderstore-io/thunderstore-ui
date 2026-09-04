@@ -1,0 +1,15 @@
+@layer nimbus-components {
+  .community-alerts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+
+    /* Grid item on .community; without this its automatic minimum size is the
+       alerts' min-content width and long messages blow out the page column. */
+    min-width: 0;
+  }
+
+  .community-alerts:empty {
+    display: none;
+  }
+}

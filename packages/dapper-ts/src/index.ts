@@ -2,6 +2,7 @@ import type { DapperInterface } from "@thunderstore/dapper";
 import type { RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { getCommunities, getCommunity } from "./methods/communities";
+import { getCommunityAlerts } from "./methods/communityAlerts";
 import { getCommunityFilters } from "./methods/communityFilters";
 import {
   getCurrentUser,
@@ -38,6 +39,7 @@ import {
 export {
   getCommunities,
   getCommunity,
+  getCommunityAlerts,
   getCommunityFilters,
   getCurrentUser,
   getCurrentUserTeamPermissions,
@@ -79,6 +81,7 @@ export class DapperTs implements DapperTsInterface {
     this.getDynamicHTML = this.getDynamicHTML.bind(this);
     this.getCommunities = this.getCommunities.bind(this);
     this.getCommunity = this.getCommunity.bind(this);
+    this.getCommunityAlerts = this.getCommunityAlerts.bind(this);
     this.getCommunityFilters = this.getCommunityFilters.bind(this);
     this.getRatedPackages = this.getRatedPackages.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
@@ -111,6 +114,7 @@ export class DapperTs implements DapperTsInterface {
   public getDynamicHTML = getDynamicHTML;
   public getCommunities = getCommunities;
   public getCommunity = getCommunity;
+  public getCommunityAlerts = getCommunityAlerts;
   public getCommunityFilters = getCommunityFilters;
   public getRatedPackages = getRatedPackages;
   public getCurrentUser = getCurrentUser;

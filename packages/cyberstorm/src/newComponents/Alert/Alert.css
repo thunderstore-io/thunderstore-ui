@@ -26,5 +26,11 @@
     font-weight: var(--alert-font-weight);
     font-size: var(--alert-font-size);
     line-height: var(--alert-line-height);
+
+    /* Keep newlines in messages that come from data (e.g. community alerts),
+       while still wrapping long lines. Safe for JSX children, which never
+       contain literal newlines. */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 }

@@ -23,6 +23,7 @@ export * from "./delete/teamServiceAccountRemove";
 export * from "./delete/userDelete";
 export * from "./delete/userLinkedAccountDisconnect";
 export * from "./get/community";
+export * from "./get/communityAlerts";
 export * from "./get/communityFilters";
 export * from "./get/communityList";
 export * from "./get/communityPackageListings";

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-import { GetCommunities } from "@thunderstore/dapper/types";
+import { GetCommunities, GetCommunityAlerts } from "@thunderstore/dapper/types";
 
 import {
   getFakeImg,
@@ -90,6 +90,28 @@ export const getFakeCommunities: GetCommunities = async (
     hasMore: page > fullPages + 1,
     results: pageCommunities,
   };
+};
+
+export const getFakeCommunityAlerts: GetCommunityAlerts = async (
+  communityId: string
+) => {
+  setSeed(communityId);
+  const created = faker.date.recent().toISOString();
+
+  return [
+    {
+      id: 1,
+      message: faker.word.words({ count: { min: 5, max: 14 } }),
+      variant: faker.helpers.arrayElement([
+        "info",
+        "success",
+        "warning",
+        "danger",
+      ] as const),
+      datetime_created: created,
+      datetime_updated: created,
+    },
+  ];
 };
 
 export const getFakeCommunityFilters = async (communityId: string) => {
