@@ -138,6 +138,7 @@ export const SelectSearchSingle = React.forwardRef<
           <SelectSearchMenu
             filteredOptions={filteredOptions}
             menuId={menuId}
+            anchorRef={containerRef}
             highlightedIndex={highlightedIndex}
             onOptionSelect={handleSingleOptionSelect}
             onOptionHighlight={highlightOption}
