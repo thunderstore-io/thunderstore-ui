@@ -27,6 +27,7 @@ export function postPackageVersionMarkdown(
         cache: "no-store",
         body: JSON.stringify(data),
       },
+      bodyRaw: data,
       useSession: true,
     },
     requestSchema: packageVersionMarkdownRequestDataSchema,

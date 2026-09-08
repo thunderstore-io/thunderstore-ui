@@ -4,8 +4,14 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { useEffect, useRef, useState } from "react";
-import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useBeforeUnload,
+  useBlocker,
+  useLoaderData,
+  useOutletContext,
+  useSearchParams,
+} from "react-router";
 import { useDebounce } from "use-debounce";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { Page } from "~/commonComponents/Page/Page";
@@ -24,6 +30,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
+  type PackageVersionRawMarkdownResponseData,
   type RequestConfig,
   fetchPackageVersionMarkdownRaw,
   fetchPackageVersionOverrideRaw,
@@ -46,16 +53,40 @@ type DocumentKey = "readme" | "changelog";
 
 interface DocumentState {
   markdown: string;
+  baseline: string;
+  needsReload: boolean;
   is_edited: boolean;
   edited_at: string | null;
 }
 
+function getEditorParams(params: Route.LoaderArgs["params"]) {
+  const { communityId, namespaceId, packageId, packageVersion } = params;
+  if (!communityId || !namespaceId || !packageId || !packageVersion) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return { communityId, namespaceId, packageId, packageVersion };
+}
+
+function createDocumentState(
+  document?: Partial<PackageVersionRawMarkdownResponseData> | null
+): DocumentState {
+  return {
+    markdown: document?.markdown ?? "",
+    baseline: document?.markdown ?? "",
+    needsReload: false,
+    is_edited: document?.is_edited ?? false,
+    edited_at: document?.edited_at ?? null,
+  };
+}
+
 async function fetchEditorData(
   config: () => RequestConfig,
-  communityId: string,
-  namespaceId: string,
-  packageId: string,
-  packageVersion: string
+  {
+    communityId,
+    namespaceId,
+    packageId,
+    packageVersion,
+  }: ReturnType<typeof getEditorParams>
 ) {
   const dapper = new DapperTs(config);
   const listing = await dapper.getPackageListingDetails(
@@ -71,22 +102,16 @@ async function fetchEditorData(
     version: packageVersion,
   };
 
-  // The experimental raw endpoints sit behind a server-side cache, so right
-  // after an edit they can serve pre-edit content. The download endpoint has
-  // no server-side cache and is fetched with no-store, so prefer the override
-  // from there and use the cached endpoint only for the packaged baseline,
-  // which never changes for a version.
-  const loadDocument = async (document: "readme" | "changelog") => {
+  // Prefer the uncached override download so reopening the editor immediately
+  // after saving does not load stale content from the experimental endpoint.
+  const loadDocument = async (document: DocumentKey) => {
     const shared = { config, params, data: {}, queryParams: {}, document };
-    const override = await fetchPackageVersionOverrideRaw(shared).catch(
-      () => null
-    );
+    const override = await fetchPackageVersionOverrideRaw(shared);
     if (override !== null) {
       return { markdown: override, is_edited: true, edited_at: null };
     }
     try {
-      const raw = await fetchPackageVersionMarkdownRaw(shared);
-      return { ...raw, is_edited: false };
+      return await fetchPackageVersionMarkdownRaw(shared);
     } catch (error) {
       if (isApiError(error) && error.response.status === 404) return null;
       throw error;
@@ -103,30 +128,17 @@ async function fetchEditorData(
   return { listing, isLatest, readme, changelog };
 }
 
-export const loader = async ({ params }: Route.LoaderArgs) => {
-  if (
-    !params.communityId ||
-    !params.namespaceId ||
-    !params.packageId ||
-    !params.packageVersion
-  ) {
-    throw new Response("Not Found", { status: 404 });
-  }
+export const loader = async ({ params: routeParams }: Route.LoaderArgs) => {
+  const params = getEditorParams(routeParams);
 
   const data = await fetchEditorData(
     () => ({ apiHost: getApiHostForSsr(), sessionId: undefined }),
-    params.communityId,
-    params.namespaceId,
-    params.packageId,
-    params.packageVersion
+    params
   );
 
   return {
     ...data,
-    communityId: params.communityId,
-    namespaceId: params.namespaceId,
-    packageId: params.packageId,
-    packageVersion: params.packageVersion,
+    ...params,
     seo: createSeo({
       descriptors: [
         {
@@ -140,17 +152,10 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
 export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
 export async function clientLoader({
-  params,
+  params: routeParams,
   request,
 }: Route.ClientLoaderArgs) {
-  if (
-    !params.communityId ||
-    !params.namespaceId ||
-    !params.packageId ||
-    !params.packageVersion
-  ) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  const params = getEditorParams(routeParams);
 
   const tools = getSessionTools();
   const sessionId = tools?.getConfig().sessionId;
@@ -161,7 +166,7 @@ export async function clientLoader({
 
   const config = () => ({
     apiHost: tools?.getConfig().apiHost,
-    sessionId: sessionId,
+    sessionId,
   });
   const dapper = new DapperTs(config);
 
@@ -174,20 +179,11 @@ export async function clientLoader({
     throw new Response("Unauthorized", { status: 403 });
   }
 
-  const data = await fetchEditorData(
-    config,
-    params.communityId,
-    params.namespaceId,
-    params.packageId,
-    params.packageVersion
-  );
+  const data = await fetchEditorData(config, params);
 
   return {
     ...data,
-    communityId: params.communityId,
-    namespaceId: params.namespaceId,
-    packageId: params.packageId,
-    packageVersion: params.packageVersion,
+    ...params,
   };
 }
 
@@ -200,11 +196,38 @@ type PreviewState = {
 
 export default function ReadmeEdit() {
   const data = useLoaderData<typeof loader | typeof clientLoader>();
+  // Reset drafts when the package version changes, but preserve them when
+  // the same route revalidates.
+  const key = [
+    data.communityId,
+    data.namespaceId,
+    data.packageId,
+    data.packageVersion,
+  ].join("/");
+  return <ReadmeEditor key={key} data={data} />;
+}
+
+function ReadmeEditor({
+  data,
+}: {
+  data: Awaited<ReturnType<typeof fetchEditorData>> &
+    ReturnType<typeof getEditorParams>;
+}) {
   const outletContext = useOutletContext() as OutletContextShape;
   const toast = useToast();
 
   const { communityId, namespaceId, packageId, packageVersion, isLatest } =
     data;
+
+  const markdownRequest = {
+    config: outletContext.requestConfig,
+    params: {
+      namespace: namespaceId,
+      package: packageId,
+      version: packageVersion,
+    },
+    queryParams: {},
+  };
 
   const [searchParams] = useSearchParams();
   const [selectedDoc, setSelectedDoc] = useState<DocumentKey>(() =>
@@ -215,24 +238,8 @@ export default function ReadmeEdit() {
   const [documents, setDocuments] = useState<
     Record<DocumentKey, DocumentState | null>
   >({
-    readme: {
-      markdown: data.readme.markdown ?? "",
-      is_edited: data.readme.is_edited ?? false,
-      edited_at: data.readme.edited_at ?? null,
-    },
-    changelog: data.changelog
-      ? {
-          markdown: data.changelog.markdown ?? "",
-          is_edited: data.changelog.is_edited ?? false,
-          edited_at: data.changelog.edited_at ?? null,
-        }
-      : isLatest
-        ? { markdown: "", is_edited: false, edited_at: null }
-        : null,
-  });
-  const [baselines, setBaselines] = useState<Record<DocumentKey, string>>({
-    readme: data.readme.markdown ?? "",
-    changelog: data.changelog?.markdown ?? "",
+    readme: createDocumentState(data.readme),
+    changelog: isLatest ? createDocumentState(data.changelog) : null,
   });
 
   const [previewHtml, setPreviewHtml] = useState<string | undefined>(undefined);
@@ -245,6 +252,17 @@ export default function ReadmeEdit() {
   const [previousOverride, setPreviousOverride] =
     useState<PreviousOverride | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // File.text() cannot be aborted. Ignore its result after another read,
+  // an edit, a save, a discard, or unmount supersedes it.
+  const fileReadIds = useRef({ readme: 0, changelog: 0 });
+
+  useEffect(() => {
+    const reads = fileReadIds.current;
+    return () => {
+      reads.readme++;
+      reads.changelog++;
+    };
+  }, []);
 
   // Keyed on the live edit state, not the loader snapshot, so discarding a
   // site edit in-session brings the offer back without a reload.
@@ -267,16 +285,49 @@ export default function ReadmeEdit() {
     return () => {
       cancelled = true;
     };
-  }, [namespaceId, packageId, packageVersion, readmeIsEdited]);
+  }, [
+    namespaceId,
+    packageId,
+    packageVersion,
+    readmeIsEdited,
+    outletContext.requestConfig,
+  ]);
 
   const current = documents[selectedDoc];
+  const documentLabel = selectedDoc === "readme" ? "README" : "CHANGELOG";
   const currentText = current?.markdown ?? "";
-  const isDirty = current !== null && currentText !== baselines[selectedDoc];
-  const overLimit = currentText.length > MAX_MARKDOWN_SIZE;
+  const isDirty = current !== null && currentText !== current.baseline;
+  const hasUnsavedChanges = Object.values(documents).some(
+    (doc) => doc !== null && !doc.needsReload && doc.markdown !== doc.baseline
+  );
+  const blocker = useBlocker(hasUnsavedChanges);
+  useEffect(() => {
+    if (blocker.state !== "blocked") return;
+    if (
+      window.confirm("Leave without saving your README or CHANGELOG changes?")
+    ) {
+      blocker.proceed();
+    } else {
+      blocker.reset();
+    }
+  }, [blocker]);
+  useBeforeUnload(
+    useCallback(
+      (event) => {
+        if (!hasUnsavedChanges) return;
+        event.preventDefault();
+        event.returnValue = "";
+      },
+      [hasUnsavedChanges]
+    )
+  );
+
+  const characterCount = Array.from(currentText).length;
+  const overLimit = characterCount > MAX_MARKDOWN_SIZE;
   const barState: PreviewState = overLimit
     ? {
         status: "failure",
-        message: `Too long: ${currentText.length.toLocaleString()} / ${MAX_MARKDOWN_SIZE.toLocaleString()} characters`,
+        message: `Too long: ${characterCount.toLocaleString()} / ${MAX_MARKDOWN_SIZE.toLocaleString()} characters`,
       }
     : preview;
 
@@ -292,7 +343,11 @@ export default function ReadmeEdit() {
     setPreview({ status: "processing" });
     toolsMarkdownPreview({
       config: outletContext.requestConfig,
-      data: { markdown: debouncedText.slice(0, MAX_MARKDOWN_SIZE) },
+      data: {
+        markdown: Array.from(debouncedText)
+          .slice(0, MAX_MARKDOWN_SIZE)
+          .join(""),
+      },
       params: {},
       queryParams: {},
     })
@@ -316,47 +371,42 @@ export default function ReadmeEdit() {
     return () => {
       cancelled = true;
     };
-  }, [debouncedText]);
+  }, [debouncedText, outletContext.requestConfig]);
 
-  const setCurrentText = (value: string) => {
+  function updateDocument(
+    document: DocumentKey,
+    state: Partial<DocumentState>
+  ) {
+    fileReadIds.current[document]++;
     setDocuments((docs) => ({
       ...docs,
-      [selectedDoc]: {
-        ...(docs[selectedDoc] ?? {
-          markdown: "",
-          is_edited: false,
-          edited_at: null,
-        }),
-        markdown: value,
-      },
+      [document]: { ...(docs[document] ?? createDocumentState()), ...state },
     }));
+  }
+
+  function setDocumentText(document: DocumentKey, markdown: string) {
+    updateDocument(document, { markdown });
     setDiscardConfirming(false);
-  };
+  }
+
+  const canSave = isDirty && !overLimit && !saving && !current?.needsReload;
 
   async function save() {
-    if (!isDirty || overLimit || saving) return;
+    if (!canSave) return;
+    fileReadIds.current[selectedDoc]++;
     setSaving(true);
     try {
       const response = await postPackageVersionMarkdown({
-        config: outletContext.requestConfig,
-        params: {
-          namespace: namespaceId,
-          package: packageId,
-          version: packageVersion,
-        },
+        ...markdownRequest,
         data: { [selectedDoc]: currentText },
-        queryParams: {},
       });
-      const state = response[selectedDoc];
-      setDocuments((docs) => ({
-        ...docs,
-        [selectedDoc]: {
+      updateDocument(
+        selectedDoc,
+        createDocumentState({
+          ...response[selectedDoc],
           markdown: currentText,
-          is_edited: state.is_edited,
-          edited_at: state.edited_at,
-        },
-      }));
-      setBaselines((b) => ({ ...b, [selectedDoc]: currentText }));
+        })
+      );
       toast.addToast({
         csVariant: "success",
         children:
@@ -383,40 +433,20 @@ export default function ReadmeEdit() {
       return;
     }
     setDiscardConfirming(false);
+    fileReadIds.current[selectedDoc]++;
     setSaving(true);
     try {
       await postPackageVersionMarkdown({
-        config: outletContext.requestConfig,
-        params: {
-          namespace: namespaceId,
-          package: packageId,
-          version: packageVersion,
-        },
+        ...markdownRequest,
         data: { [selectedDoc]: null },
-        queryParams: {},
       });
-      const raw = await fetchPackageVersionMarkdownRaw({
-        config: outletContext.requestConfig,
-        params: {
-          namespace: namespaceId,
-          package: packageId,
-          version: packageVersion,
-        },
-        data: {},
-        queryParams: {},
-        document: selectedDoc,
-      }).catch(() => null);
-      const markdown = raw?.markdown ?? "";
-      setDocuments((docs) => ({
-        ...docs,
-        [selectedDoc]: { markdown, is_edited: false, edited_at: null },
-      }));
-      setBaselines((b) => ({ ...b, [selectedDoc]: markdown }));
-      toast.addToast({
-        csVariant: "success",
-        children: "Site edit discarded, the packaged content is restored.",
-        duration: 6000,
+      updateDocument(selectedDoc, {
+        markdown: currentText,
+        is_edited: false,
+        edited_at: null,
+        needsReload: true,
       });
+      await reloadPackagedContent();
     } catch (error) {
       toast.addToast({
         csVariant: "danger",
@@ -430,16 +460,43 @@ export default function ReadmeEdit() {
     }
   }
 
+  async function reloadPackagedContent() {
+    setSaving(true);
+    try {
+      const raw = await fetchPackageVersionMarkdownRaw({
+        ...markdownRequest,
+        data: {},
+        document: selectedDoc,
+      }).catch((error) => {
+        if (isApiError(error) && error.response.status === 404) return null;
+        throw error;
+      });
+      // A successful discard can still be followed by a cached override.
+      // Keep the editor locked until the packaged content is available.
+      if (raw?.is_edited) {
+        throw new Error("The cached README or changelog has not updated yet.");
+      }
+      const markdown = raw?.markdown ?? "";
+      updateDocument(selectedDoc, createDocumentState({ markdown }));
+      toast.addToast({
+        csVariant: "success",
+        children: "Site edit discarded, the packaged content is restored.",
+        duration: 6000,
+      });
+    } catch {
+      toast.addToast({
+        csVariant: "danger",
+        children: `The original ${documentLabel} was restored, but the editor couldn’t reload it.`,
+        duration: 8000,
+      });
+    } finally {
+      setSaving(false);
+    }
+  }
+
   function loadPreviousOverride() {
     if (!previousOverride) return;
-    setDocuments((docs) => ({
-      ...docs,
-      readme: {
-        ...(docs.readme ?? { markdown: "", is_edited: false, edited_at: null }),
-        markdown: previousOverride.markdown,
-      },
-    }));
-    setDiscardConfirming(false);
+    setDocumentText("readme", previousOverride.markdown);
     setPreviousOverride(null);
   }
 
@@ -455,15 +512,30 @@ export default function ReadmeEdit() {
       });
       return;
     }
-    file.text().then(setCurrentText);
+    const readId = ++fileReadIds.current[selectedDoc];
+    file
+      .text()
+      .then((text) => {
+        if (fileReadIds.current[selectedDoc] === readId) {
+          setDocumentText(selectedDoc, text);
+        }
+      })
+      .catch(() => {
+        if (fileReadIds.current[selectedDoc] !== readId) return;
+        toast.addToast({
+          csVariant: "danger",
+          children: "The file could not be read. Please try again.",
+          duration: 6000,
+        });
+      });
   }
 
   const editedTitle = (doc: DocumentState | null, label: string) =>
-    `This ${label} has a site edit${
+    `This ${label.toUpperCase()} has a site edit${
       doc?.edited_at
-        ? `, last saved ${new Date(doc.edited_at).toLocaleString()}`
+        ? `, last saved ${new Date(doc.edited_at).toISOString().slice(0, 10)}`
         : ""
-    }. The downloaded package keeps its original file.`;
+    }.`;
 
   return (
     <Page rootClasses="readme-edit">
@@ -524,7 +596,25 @@ export default function ReadmeEdit() {
         </NewAlert>
       ) : null}
 
-      {selectedDoc === "readme" && !current?.is_edited && previousOverride ? (
+      {current?.needsReload ? (
+        <NewAlert csVariant="warning">
+          The original {documentLabel} was restored, but the editor couldn’t
+          reload it.
+          <NewButton
+            csSize="small"
+            csVariant="secondary"
+            onClick={reloadPackagedContent}
+            disabled={saving}
+          >
+            Reload {documentLabel}
+          </NewButton>
+        </NewAlert>
+      ) : null}
+
+      {selectedDoc === "readme" &&
+      !current?.is_edited &&
+      !documents.readme?.needsReload &&
+      previousOverride ? (
         <NewAlert csVariant="info">
           <div className="readme-edit__migrate">
             <span>
@@ -549,8 +639,11 @@ export default function ReadmeEdit() {
         <div className="readme-edit__panes">
           <CodeInput
             placeholder="# Package markdown"
-            onChange={(e) => setCurrentText(e.currentTarget.value)}
+            onChange={(e) =>
+              setDocumentText(selectedDoc, e.currentTarget.value)
+            }
             value={currentText}
+            disabled={saving || current?.needsReload}
             rootClasses="readme-edit__editor"
           />
           <div className="readme-edit__preview">
@@ -577,7 +670,7 @@ export default function ReadmeEdit() {
               csSize="small"
               csVariant="secondary"
               onClick={() => fileInputRef.current?.click()}
-              disabled={saving}
+              disabled={saving || current?.needsReload}
             >
               Load from file
             </NewButton>
@@ -597,7 +690,7 @@ export default function ReadmeEdit() {
               csSize="small"
               csVariant="accent"
               onClick={save}
-              disabled={!isDirty || overLimit || saving}
+              disabled={!canSave}
             >
               {saving ? "Saving…" : "Save"}
             </NewButton>

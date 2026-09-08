@@ -272,8 +272,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // Routes where the ad surface is allowed at all. The NitroPay script (and its
   // consent banner) loads on these; account / login / upload / tools routes get
   // neither. (/auth is backend-proxied, so the app never renders it.)
+  const isReadmeEditPage = matches.some(
+    (m) => m.id === "p/readmeEdit/ReadmeEdit"
+  );
   const adsAllowedOnRoute =
     !adsDisabled &&
+    !isReadmeEditPage &&
     !["/teams", "/settings", "/package/create", "/tools", "/login"].some(
       (prefix) => location.pathname.startsWith(prefix)
     );
@@ -308,11 +312,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       "p/team/Team",
       "p/dependants/Dependants",
     ].includes(m.id)
-  );
-
-  // We obviously don't need ads on the readme edit page.
-  const isReadmeEditPage = matches.some(
-    (m) => m.id === "p/readmeEdit/ReadmeEdit"
   );
 
   // Tell NitroPay a new pageview happened on client-side navigation. Without
@@ -521,7 +520,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </div>
                   )}
                 </Island>
-                {shouldShowAds && BOTTOM_ADS_ENABLED && !isReadmeEditPage ? (
+                {shouldShowAds && BOTTOM_ADS_ENABLED ? (
                   <Island rootClasses="layout__bottom-ads">
                     <AdErrorBoundary placement="content-bottom">
                       {BOTTOM_AD_SLOTS.map((slot) => (

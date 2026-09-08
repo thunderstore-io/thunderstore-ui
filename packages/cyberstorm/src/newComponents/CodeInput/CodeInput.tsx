@@ -128,15 +128,15 @@ export function ValidationBar(props: {
         props.rootClasses
       )}
     >
-      {props.status === "processing" ? (
-        <NewIcon csMode="inline" rootClasses="validation-bar--spin">
-          <FontAwesomeIcon icon={state.icon} />
-        </NewIcon>
-      ) : (
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={state.icon} />
-        </NewIcon>
-      )}
+      <NewIcon
+        csMode="inline"
+        noWrapper
+        rootClasses={
+          props.status === "processing" ? "validation-bar--spin" : undefined
+        }
+      >
+        <FontAwesomeIcon icon={state.icon} />
+      </NewIcon>
       {props.message ?? state.defaultMessage}
       {props.children}
     </div>
