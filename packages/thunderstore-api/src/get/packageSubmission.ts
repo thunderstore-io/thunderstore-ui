@@ -11,7 +11,7 @@ export function fetchPackageSubmissionStatus(
 ): Promise<PackageSubmissionStatusResponseData> {
   const { config, params } = props;
   const request = { cache: "no-store" as RequestCache };
-  const path = `/api/experimental/submission/poll-async/${params.submission_id}`;
+  const path = `/api/experimental/submission/poll-async/${params.submission_id}/`;
 
   return apiFetch({
     args: {
