@@ -10,7 +10,7 @@ export async function fetchDynamicHTML(
   props: ApiEndpointProps<DynamicHTMLRequestParams, object, object>
 ): Promise<DynamicHTMLResponseData> {
   const { config, params } = props;
-  const path = `api/cyberstorm/dynamichtml/${params.placement}`;
+  const path = `api/cyberstorm/dynamichtml/${params.placement}/`;
 
   return await apiFetch({
     args: { config, path, request: { cache: "no-store" as RequestCache } },
