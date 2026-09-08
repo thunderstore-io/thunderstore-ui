@@ -421,4 +421,87 @@
       padding: var(--space-16);
     }
   }
+
+  /* Phone tier. .home is the container, so this fires at roughly a 512px
+     viewport and below — the type scale above is desktop-only and leaves the
+     hero, the section headers and the manager panel oversized on a phone. */
+  @container (width <= 30rem) {
+    .home {
+      gap: var(--gap-xl);
+      padding-block-end: var(--gap-xl);
+    }
+
+    .home__hero {
+      gap: var(--gap-xl);
+      padding-block-start: var(--space-40);
+    }
+
+    /* Shorter box means cover crops the wide collage less aggressively. */
+    .home__hero::before {
+      height: 20rem;
+    }
+
+    /* The clamp's 5cqw term never beats its 2rem floor at these widths. */
+    .home__hero-heading {
+      font-size: var(--space-28);
+    }
+
+    .home__hero-tagline {
+      font-size: var(--font-size-body-lg);
+    }
+
+    .home__section {
+      gap: var(--gap-md);
+    }
+
+    /* At 2rem the heading wraps and pushes "See all" out of the header row. */
+    .home__section-heading {
+      font-size: var(--font-size-body-xxxxl);
+    }
+
+    .home__section-icon {
+      font-size: var(--font-size-body-xxl);
+    }
+
+    /* Below ~340px the header row runs out of space; let the heading take the
+       second line rather than breaking a two-word link. */
+    .home__see-all {
+      white-space: nowrap;
+    }
+
+    .home__manager {
+      --manager-pad-block: var(--space-16);
+      --manager-pad-inline: var(--space-16);
+    }
+
+    .home__manager-body {
+      padding-block: 0;
+    }
+
+    /* display--size--2 is 3.188rem, which wraps to five lines here. */
+    .home__manager-heading {
+      font-size: var(--space-28);
+    }
+
+    .home__manager-desc {
+      margin-block-end: var(--space-8);
+      font-size: var(--font-size-body-lg);
+    }
+
+    .home__resource-card {
+      gap: var(--gap-md);
+      padding: var(--space-24);
+    }
+
+    /* Re-centred on the icon after the padding drop: 24 padding + half the 48px
+       icon - half the 20px glyph. */
+    .home__resource-arrow {
+      top: var(--space-38);
+      right: var(--space-24);
+    }
+
+    .home__resource-title {
+      font-size: var(--font-size-body-xl);
+    }
+  }
 }
