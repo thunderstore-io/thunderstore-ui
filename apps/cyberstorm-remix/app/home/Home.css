@@ -188,7 +188,14 @@
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: var(--gap-3xl);
     align-items: center;
-    padding: var(--space-24) var(--space-48);
+
+    /* The media bleeds out of the panel by cancelling this padding with a
+       negative margin, so both sides read the same custom properties and the
+       narrower tiers only have to restate the padding. */
+    --manager-pad-block: var(--space-24);
+    --manager-pad-inline: var(--space-48);
+
+    padding: var(--manager-pad-block) var(--manager-pad-inline);
     border: var(--button-special-border--default);
     border-color: var(--button-special-border-color--default);
     border-radius: var(--radius-xl);
@@ -248,8 +255,8 @@
     overflow: hidden;
     filter: drop-shadow(-36px -36px 40px rgb(0 0 0 / 0.35));
     aspect-ratio: 952 / 811;
-    margin-block: var(--space-24) calc(-1 * var(--space-24) - 2px);
-    margin-inline-end: calc(-1 * var(--space-48) - 2px);
+    margin-block: var(--space-24) calc(-1 * var(--manager-pad-block) - 2px);
+    margin-inline-end: calc(-1 * var(--manager-pad-inline) - 2px);
   }
 
   .home__manager-media img {
@@ -378,13 +385,17 @@
 
     .home__manager {
       grid-template-columns: minmax(0, 1fr);
-      padding: var(--space-32);
+
+      --manager-pad-block: var(--space-32);
+      --manager-pad-inline: var(--space-32);
     }
 
+    /* Stacked, the media spans the whole column and its negative inline margin
+       carries it past the panel edge. Both declarations are needed: stretch
+       degrades to start whenever the item has a definite size. */
     .home__manager-media {
-      justify-self: start;
-      margin-block-end: calc(-1 * var(--space-32) - 2px);
-      margin-inline-end: calc(-1 * var(--space-32) - 2px);
+      justify-self: stretch;
+      width: auto;
     }
   }
 
