@@ -86,19 +86,21 @@ export default function Readme() {
         resolve={readme}
         errorElement={<FetchErrorState message="Failed to load readme." />}
       >
-        {(resolvedValue) =>
-          resolvedValue && resolvedValue.html ? (
-            <div className="markdown-wrapper">
-              <DocEditedReporter doc={resolvedValue} />
-              <div
-                dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
-                className="markdown"
-              />
-            </div>
-          ) : (
-            <TabFetchState variant="info" message="No details available" />
-          )
-        }
+        {(resolvedValue) => (
+          <>
+            {resolvedValue ? <DocEditedReporter doc={resolvedValue} /> : null}
+            {resolvedValue?.html ? (
+              <div className="markdown-wrapper">
+                <div
+                  dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
+                  className="markdown"
+                />
+              </div>
+            ) : (
+              <TabFetchState variant="info" message="No details available" />
+            )}
+          </>
+        )}
       </Await>
     </Suspense>
   );

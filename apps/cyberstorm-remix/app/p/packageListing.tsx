@@ -398,11 +398,13 @@ export default function PackageListing() {
         {docEdited ? (
           <div
             className="package-listing__edited-note"
-            title="This content has been edited on the site and may not match the downloaded package."
+            title={`${
+              currentTab === "changelog" ? "CHANGELOG" : "README"
+            } edited on Thunderstore.`}
           >
             Edited
             {docEdited.edited_at
-              ? ` · ${new Date(docEdited.edited_at).toLocaleDateString()}`
+              ? ` · ${new Date(docEdited.edited_at).toISOString().slice(0, 10)}`
               : ""}
           </div>
         ) : null}

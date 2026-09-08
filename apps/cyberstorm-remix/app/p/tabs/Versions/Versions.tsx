@@ -16,14 +16,18 @@ import {
   NewTable,
   type NewTableLabels,
   NewTableSort,
-  NewTag,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/Versions";
 import "./Versions.css";
-import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import {
+  DownloadLink,
+  EditedTag,
+  InstallLink,
+  ModManagerBanner,
+} from "./common";
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -132,15 +136,7 @@ export default function Versions() {
                         >
                           {v.version_number}
                         </NewLink>
-                        {v.is_edited ? (
-                          <NewTag
-                            csSize="xsmall"
-                            rootClasses="package-versions__edited"
-                            tooltipText="This version was edited on site and may not match the downloaded package."
-                          >
-                            Edited
-                          </NewTag>
-                        ) : null}
+                        {v.is_edited ? <EditedTag /> : null}
                       </>
                     ),
                     sortValue: v.version_number,

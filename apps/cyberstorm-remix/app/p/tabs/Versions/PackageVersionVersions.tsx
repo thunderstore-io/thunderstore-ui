@@ -21,7 +21,12 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import type { Route } from "./+types/PackageVersionVersions";
 import { columns } from "./Versions";
 import "./Versions.css";
-import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import {
+  DownloadLink,
+  EditedTag,
+  InstallLink,
+  ModManagerBanner,
+} from "./common";
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -126,17 +131,20 @@ export default function Versions() {
                 rows={resolvedValue.map((v) => [
                   {
                     value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
-                        package={packageId}
-                        community={communityId}
-                        namespace={namespaceId}
-                        version={v.version_number}
-                        csVariant="primary"
-                      >
-                        {v.version_number}
-                      </NewLink>
+                      <>
+                        <NewLink
+                          primitiveType="cyberstormLink"
+                          linkId="PackageVersion"
+                          package={packageId}
+                          community={communityId}
+                          namespace={namespaceId}
+                          version={v.version_number}
+                          csVariant="primary"
+                        >
+                          {v.version_number}
+                        </NewLink>
+                        {v.is_edited ? <EditedTag /> : null}
+                      </>
                     ),
                     sortValue: v.version_number,
                   },

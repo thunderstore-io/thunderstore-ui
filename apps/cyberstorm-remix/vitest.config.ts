@@ -9,6 +9,8 @@ export default defineProject({
   resolve: {
     alias: {
       cyberstorm: cyberstormRoot,
+      app: path.join(projectDir, "app"),
+      "~": path.join(projectDir, "app"),
     },
   },
   test: {

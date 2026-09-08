@@ -6,10 +6,23 @@ import {
   NewAlert,
   NewButton,
   NewIcon,
+  NewTag,
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm";
 
 import "./common.css";
+
+export function EditedTag() {
+  return (
+    <NewTag
+      csSize="xsmall"
+      rootClasses="package-versions__edited"
+      tooltipText="README or CHANGELOG edited on Thunderstore."
+    >
+      Edited
+    </NewTag>
+  );
+}
 
 export const ModManagerBanner = memo(function ModManagerBanner() {
   return (
