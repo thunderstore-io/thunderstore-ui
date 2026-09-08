@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { useOutletContext } from "react-router";
 
 import { NewAlert, NewButton, useToast } from "@thunderstore/cyberstorm";
-import { isApiError } from "@thunderstore/thunderstore-api";
+import {
+  isApiError,
+  postPackageVersionMarkdown,
+} from "@thunderstore/thunderstore-api";
 
 import {
   type PreviousOverride,
   downloadOverrideText,
   findPreviousReadmeOverride,
-  migrateReadmeOverride,
 } from "../../p/readmeEdit/overrideMigration";
 import type { OutletContextShape } from "../../root";
 
@@ -60,16 +62,15 @@ export function OverrideMigrationNotice({
     };
   }, [namespace, packageName, newVersion]);
 
-  const keep = async (override: PreviousOverride) => {
+  async function copyReadme(override: PreviousOverride) {
     setBusy(true);
     try {
-      await migrateReadmeOverride(
-        outletContext.requestConfig,
-        namespace,
-        packageName,
-        newVersion,
-        override.markdown
-      );
+      await postPackageVersionMarkdown({
+        config: outletContext.requestConfig,
+        params: { namespace, package: packageName, version: newVersion },
+        data: { readme: override.markdown },
+        queryParams: {},
+      });
       toast.addToast({
         csVariant: "success",
         children:
@@ -88,12 +89,12 @@ export function OverrideMigrationNotice({
     } finally {
       setBusy(false);
     }
-  };
+  }
 
   useEffect(() => {
     if (!autoCarry || !previous || autoCarryAttempted.current) return;
     autoCarryAttempted.current = true;
-    keep(previous);
+    copyReadme(previous);
   }, [autoCarry, previous]);
 
   if (!previous || done) return null;
@@ -102,17 +103,18 @@ export function OverrideMigrationNotice({
     <NewAlert csVariant="info">
       <div className="override-migration-notice">
         <span>
-          Version {previous.versionNumber} has a site-edited README. This upload
-          starts from the packaged file, so the edit is no longer shown.
+          Version {newVersion} uses the README included in your package. Version{" "}
+          {previous.versionNumber} still has its edited README. You can copy
+          that README to this version’s Thunderstore page.
         </span>
         <span className="override-migration-notice__actions">
           <NewButton
             csSize="small"
             csVariant="accent"
-            onClick={() => keep(previous)}
+            onClick={() => copyReadme(previous)}
             disabled={busy}
           >
-            {busy ? "Carrying over…" : "Carry it over"}
+            {busy ? "Copying…" : "Copy edited README"}
           </NewButton>
           <NewButton
             csSize="small"
@@ -120,7 +122,7 @@ export function OverrideMigrationNotice({
             onClick={() => downloadOverrideText(previous.markdown)}
             disabled={busy}
           >
-            Download it
+            Download edited README
           </NewButton>
         </span>
       </div>

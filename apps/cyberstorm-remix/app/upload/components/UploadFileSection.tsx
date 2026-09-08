@@ -171,23 +171,27 @@ export function UploadFileSection({
         <NewAlert csVariant="warning" rootClasses="upload__alert">
           <div className="upload-override-warning">
             <span>
-              Version {previousOverride.versionNumber} has a site-edited
-              README.
+              Version {previousOverride.versionNumber} has a README edited on
+              Thunderstore. This upload uses the README in your package unless
+              you choose to copy that edit.
             </span>
             <span className="upload-override-warning__actions">
               <span className="upload-override-warning__carry">
                 <NewSwitch
+                  id="carry-readme-override"
                   value={carryOverride}
                   onChange={onCarryOverrideChange}
                 />
-                Use it
+                <label htmlFor="carry-readme-override">
+                  Copy edited README
+                </label>
               </span>
               <NewButton
                 csSize="small"
                 csVariant="secondary"
                 onClick={() => downloadOverrideText(previousOverride.markdown)}
               >
-                Download it
+                Download edited README
               </NewButton>
             </span>
           </div>

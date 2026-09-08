@@ -281,12 +281,27 @@ export async function readZipEntryText(
     if (entry.method === COMPRESSION_STORED) {
       bytes = await data.arrayBuffer();
     } else if (entry.method === COMPRESSION_DEFLATE) {
+      let decompressedSize = 0;
       bytes = await new Response(
-        data.stream().pipeThrough(new DecompressionStream("deflate-raw"))
+        data
+          .stream()
+          .pipeThrough(new DecompressionStream("deflate-raw"))
+          .pipeThrough(
+            new TransformStream<Uint8Array, Uint8Array>({
+              transform(chunk, controller) {
+                decompressedSize += chunk.byteLength;
+                if (decompressedSize > MAX_ENTRY_SIZE) {
+                  throw new Error("ZIP entry exceeds the size limit");
+                }
+                controller.enqueue(chunk);
+              },
+            })
+          )
       ).arrayBuffer();
     } else {
       return null;
     }
+    if (bytes.byteLength !== entry.uncompressedSize) return null;
     return new TextDecoder("utf-8").decode(bytes);
   } catch {
     return null;

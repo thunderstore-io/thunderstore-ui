@@ -2,7 +2,6 @@ import {
   type RequestConfig,
   fetchPackageVersionOverrideRaw,
   fetchPackageVersions,
-  postPackageVersionMarkdown,
 } from "@thunderstore/thunderstore-api";
 
 export interface PreviousOverride {
@@ -56,26 +55,6 @@ export async function findPreviousReadmeOverride(
   }
 
   return null;
-}
-
-/** Copies a README override onto the target version. */
-export async function migrateReadmeOverride(
-  config: () => RequestConfig,
-  namespace: string,
-  packageName: string,
-  targetVersion: string,
-  markdown: string
-): Promise<void> {
-  await postPackageVersionMarkdown({
-    config,
-    params: {
-      namespace,
-      package: packageName,
-      version: targetVersion,
-    },
-    data: { readme: markdown },
-    queryParams: {},
-  });
 }
 
 /** Hands the override text to the browser as a README.md download. */

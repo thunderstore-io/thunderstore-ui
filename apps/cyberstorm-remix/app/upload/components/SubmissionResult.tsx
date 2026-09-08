@@ -25,13 +25,15 @@ export function SubmissionResult({
   submissionStatusResult,
   carryReadmeOverride,
 }: SubmissionResultProps) {
+  const { package_version: version, available_communities: communities } =
+    submissionStatusResult;
   return (
     <Island rootClasses="upload__submission-result">
       <PageHeader
         headingLevel="1"
         headingSize="3"
-        image={submissionStatusResult.package_version.icon}
-        description={submissionStatusResult.package_version.description}
+        image={version.icon}
+        description={version.description}
         variant="detailed"
         meta={
           <>
@@ -39,16 +41,16 @@ export function SubmissionResult({
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faUsers} />
               </NewIcon>
-              By {submissionStatusResult.package_version.namespace}
+              By {version.namespace}
             </span>
-            {submissionStatusResult.package_version.website_url ? (
+            {version.website_url ? (
               <NewLink
                 primitiveType="link"
-                href={submissionStatusResult.package_version.website_url}
+                href={version.website_url}
                 csVariant="cyber"
                 rootClasses="page-header__meta-item"
               >
-                {submissionStatusResult.package_version.website_url}
+                {version.website_url}
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faArrowUpRight} />
                 </NewIcon>
@@ -57,13 +59,13 @@ export function SubmissionResult({
           </>
         }
       >
-        {submissionStatusResult.package_version.name}
+        {version.name}
       </PageHeader>
 
       <OverrideMigrationNotice
-        namespace={submissionStatusResult.package_version.namespace}
-        packageName={submissionStatusResult.package_version.name}
-        newVersion={submissionStatusResult.package_version.version_number}
+        namespace={version.namespace}
+        packageName={version.name}
+        newVersion={version.version_number}
         autoCarry={carryReadmeOverride}
       />
 
@@ -74,12 +76,8 @@ export function SubmissionResult({
               Success!
             </Heading>
             <p>
-              The package is listed in{" "}
-              {submissionStatusResult.available_communities.length}{" "}
-              {submissionStatusResult.available_communities.length !== 1
-                ? "communities"
-                : "community"}
-              :
+              The package is listed in {communities.length}{" "}
+              {communities.length !== 1 ? "communities" : "community"}:
             </p>
           </>
         }
@@ -100,16 +98,16 @@ export function SubmissionResult({
             columnClasses: "versions__downloads",
           },
         ]}
-        rows={submissionStatusResult.available_communities.map((v) => [
+        rows={communities.map((listing) => [
           {
-            value: v.community.name,
-            sortValue: v.community.name,
+            value: listing.community.name,
+            sortValue: listing.community.name,
           },
           {
             value: (
               <NewLink
                 primitiveType="link"
-                href={`/c/${v.community.identifier}/p/${submissionStatusResult.package_version.namespace}/${submissionStatusResult.package_version.name}/`}
+                href={`/c/${listing.community.identifier}/p/${version.namespace}/${version.name}/`}
                 target="_blank"
                 rel="noopener noreferrer"
                 csVariant="cyber"
@@ -117,19 +115,19 @@ export function SubmissionResult({
                 View listing
               </NewLink>
             ),
-            sortValue: v.url,
+            sortValue: listing.url,
           },
           {
             value: (
               <div className="submission-result__categories">
-                {v.categories.map((c) => (
+                {listing.categories.map((c) => (
                   <NewTag key={c.slug} csSize="small">
                     {c.name}
                   </NewTag>
                 ))}
               </div>
             ),
-            sortValue: v.categories.map((c) => c.name).join(", "),
+            sortValue: listing.categories.map((c) => c.name).join(", "),
           },
         ])}
         sortDirection={NewTableSort.ASC}

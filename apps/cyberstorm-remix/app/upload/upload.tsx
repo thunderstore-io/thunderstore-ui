@@ -351,6 +351,7 @@ export default function Upload() {
           availableTeams={availableTeams}
           authorName={formInputs.author_name}
           onAuthorNameChange={(authorName) => {
+            setCarryOverride(false);
             updateFormFieldState({
               field: "author_name",
               value: authorName,
