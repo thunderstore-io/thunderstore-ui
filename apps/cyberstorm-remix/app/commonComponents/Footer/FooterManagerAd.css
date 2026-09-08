@@ -26,4 +26,14 @@
     aspect-ratio: 2 / 1;
     filter: drop-shadow(-36px -36px 40px rgb(0 0 0 / 0.35));
   }
+
+  /* Below ~672px the footer column is narrower than the image and the section
+     clips the overhang, so the screenshot lost its right half. Only the bottom
+     is meant to bleed. Scoped, because the column also dips under 40rem on wide
+     viewports where the overhang has room and is not clipped. */
+  @container footer (width <= 42rem) {
+    .footer-manager__media {
+      width: 100%;
+    }
+  }
 }
