@@ -67,6 +67,14 @@ export const Tag = React.forwardRef<
       ...forwardedProps
     } = props;
 
+    // Interactive tags (buttons and links) are always hoverable, so the hover
+    // styles from Tag.css apply without every call site having to opt in.
+    const interactiveModifiers: TagModifiers[] = csModifiers?.includes(
+      "hoverable"
+    )
+      ? csModifiers
+      : [...(csModifiers ?? []), "hoverable"];
+
     if (csMode === "button") {
       const fProps = forwardedProps as ActionableButtonProps;
       const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
@@ -76,7 +84,7 @@ export const Tag = React.forwardRef<
           primitiveType={"button"}
           rootClasses={classnames(
             "tag",
-            ...componentClasses("tag", csVariant, csSize, csModifiers),
+            ...componentClasses("tag", csVariant, csSize, interactiveModifiers),
             rootClasses
           )}
           ref={fRef}
@@ -95,7 +103,7 @@ export const Tag = React.forwardRef<
           primitiveType={"link"}
           rootClasses={classnames(
             "tag",
-            ...componentClasses("tag", csVariant, csSize, csModifiers),
+            ...componentClasses("tag", csVariant, csSize, interactiveModifiers),
             rootClasses
           )}
           ref={fRef}
@@ -113,7 +121,7 @@ export const Tag = React.forwardRef<
           primitiveType={"cyberstormLink"}
           rootClasses={classnames(
             "tag",
-            ...componentClasses("tag", csVariant, csSize, csModifiers),
+            ...componentClasses("tag", csVariant, csSize, interactiveModifiers),
             rootClasses
           )}
           ref={forwardedRef as React.ForwardedRef<HTMLAnchorElement>}
