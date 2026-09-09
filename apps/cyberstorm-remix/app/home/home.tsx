@@ -9,15 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import {
-  getCachedCommunityList,
-  seedCommunityListCache,
-} from "cyberstorm/utils/communityListCache";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
-import { Suspense, memo, useEffect } from "react";
+import { Suspense, memo } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
 import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
 import { Page } from "~/commonComponents/Page/Page";
@@ -119,17 +115,14 @@ export const loader = ssrLoader(
   { cache: true }
 );
 
-export async function clientLoader() {
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const dapper = getDapperForRequest(request);
   return {
-    popular: getCachedCommunityList(dapper, CommunityListOrderingEnum.Popular),
-    newest: getCachedCommunityList(dapper, CommunityListOrderingEnum.Latest),
+    popular: dapper.getCommunities(
+      undefined,
+      CommunityListOrderingEnum.Popular
+    ),
+    newest: dapper.getCommunities(undefined, CommunityListOrderingEnum.Latest),
   };
 }
 
@@ -139,13 +132,6 @@ export default function HomePage() {
   >();
   const outletContext = useOutletContext() as OutletContextShape;
   const domain = outletContext.domain;
-
-  // Prime the client cache with the SSR-fetched lists so the first
-  // navigation to /communities doesn't refetch.
-  useEffect(() => {
-    seedCommunityListCache(popular, CommunityListOrderingEnum.Popular);
-    seedCommunityListCache(newest, CommunityListOrderingEnum.Latest);
-  }, [popular, newest]);
 
   const resources = [
     {
