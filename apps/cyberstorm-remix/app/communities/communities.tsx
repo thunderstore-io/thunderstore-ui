@@ -5,11 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import {
-  getCachedCommunityList,
-  seedCommunityListCache,
-} from "cyberstorm/utils/communityListCache";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { parseSearchParam } from "cyberstorm/utils/searchParamsUtils";
@@ -147,23 +143,16 @@ export const loader = ssrLoader(
 );
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
+  const dapper = getDapperForRequest(request);
   const searchParams = new URL(request.url).searchParams;
   const order = searchParams.get("order");
   const search = parseSearchParam(searchParams.get("search"));
   const page = undefined;
   return {
-    communities: getCachedCommunityList(
-      dapper,
+    communities: dapper.getCommunities(
+      page,
       order ?? SortOptions.Popular,
-      search,
-      page
+      search
     ),
   };
 }
@@ -175,17 +164,6 @@ export default function CommunitiesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   // TODO: Disabled until we can figure out how a proper way to display skeletons
   // const navigation = useNavigation();
-
-  // After a document load the list came from the SSR loader. Priming the client
-  // cache with it lets in-app navigation back to this page (or to the frontpage,
-  // which shares the popular list) skip the refetch.
-  useEffect(() => {
-    seedCommunityListCache(
-      communities,
-      searchParams.get("order") ?? SortOptions.Popular,
-      parseSearchParam(searchParams.get("search"))
-    );
-  }, [communities, searchParams]);
 
   const changeOrder = (v: SortOptions) => {
     if (v === SortOptions.Popular) {
