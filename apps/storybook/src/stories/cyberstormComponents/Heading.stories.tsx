@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Heading } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
   HeadingModifiersList,
   HeadingSizesList,
   HeadingVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Heading",

@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Modal, NewButton } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
-import {
-  ModalSizesList,
-  ModalVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import { ModalSizesList, ModalVariantsList } from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Modal",
