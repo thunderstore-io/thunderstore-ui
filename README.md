@@ -66,6 +66,28 @@ backend-plus-frontend setup.
   (components), `@thunderstore/cyberstorm-theme` (design system), and the data and
   uploader packages.
 
+### UI library architecture
+
+The component UI is split into two packages with a strict one-way dependency:
+
+- **`@thunderstore/cyberstorm`** — the self-contained component library. It owns
+  the components, their API types (variant/size/modifier lists), and **structural
+  CSS only**, so it renders functional-but-ugly with no theme. See
+  [`packages/cyberstorm/README.md`](packages/cyberstorm/README.md).
+- **`@thunderstore/cyberstorm-theme`** — a **pure-CSS skin** (colors, sizes,
+  tokens, fonts) layered on top for the production look; no runtime exports. See
+  [`packages/cyberstorm-theme/README.md`](packages/cyberstorm-theme/README.md).
+
+Styling uses three CSS cascade layers, later overriding earlier:
+
+```css
+@layer cyberstorm, cyberstorm-theme, nimbus;
+```
+
+`cyberstorm` (structural defaults) < `cyberstorm-theme` (the skin) < `nimbus`
+(remix app-level overrides). Consumers load `@thunderstore/cyberstorm/css` and
+then, for the production look, `@thunderstore/cyberstorm-theme/css` on top.
+
 Two tools tie it together:
 
 - [pnpm workspaces](https://pnpm.io/workspaces) manage the
@@ -93,21 +115,36 @@ When adding components to `@thunderstore/cyberstorm`, add stories for them under
 for examples. To upgrade Storybook when it reports a new version, run the suggested
 `npx storybook@latest upgrade` command in the `apps/storybook` directory.
 
+Every exported Cyberstorm component should have a story — Storybook is the gate
+that catches component breakage. Use the **Theme** toolbar toggle to view any
+story with `@thunderstore/cyberstorm-theme` on (the production look) or off (the
+barebones `@thunderstore/cyberstorm`-only render), which verifies components still
+work without the theme.
+
 ### Chromatic
 
 [Chromatic](https://www.chromatic.com/docs/) runs in CI to host Storybook and
-detect visual changes to stories. Visual changes must be reviewed before the
-related PR can merge:
+detect visual changes to stories. Every story is captured in **two theme modes**
+— `themed` (the production look) and `barebones` (theme off) — via the
+`@chromatic-com/storybook` addon and the modes defined in
+[`apps/storybook/.storybook/modes.ts`](apps/storybook/.storybook/modes.ts), so
+breakage is caught both with and without the theme. Visual changes must be
+reviewed before the related PR can merge:
 
 1. Push your changes as usual. The `chromatic-deployment` job in
-   `.github/workflows/test.yml` builds and uploads Storybook to Chromatic. This
-   step only fails if the build or upload itself fails — component changes are
-   not flagged here.
+   `.github/workflows/test.yml` builds and uploads Storybook to Chromatic. It runs
+   **last, only after the other gates (pre-commit, build, test) pass** — if any of
+   them fail the job is skipped, so it doesn't spend Chromatic snapshots on
+   already-broken changes. The job **fails on any visual change** (it does not
+   auto-accept), so component regressions block CI.
 2. Open a PR as usual.
 3. If there were visual changes, GitHub shows a pending check (_"UI Tests Pending —
    N changes must be accepted as baselines"_). Open its **Details** link to review
    and accept or reject the changes in Chromatic. The PR cannot merge until they
    are accepted.
+
+> To make Chromatic a hard merge gate, mark `chromatic-deployment` as a required
+> status check in the repo's branch-protection settings.
 
 `pnpm --filter @thunderstore/storybook exec chromatic` uploads a Storybook manually
 (rarely needed, since CI automates it). The Chromatic CLI reads the project
