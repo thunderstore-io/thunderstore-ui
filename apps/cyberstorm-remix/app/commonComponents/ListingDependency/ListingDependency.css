@@ -4,7 +4,7 @@
     gap: var(--gap-xl);
     align-items: flex-start;
     width: 100%;
-    padding: var(--space-16);
+    padding: 1rem;
     border-radius: var(--radius-md);
     background: var(--surface-dim);
   }

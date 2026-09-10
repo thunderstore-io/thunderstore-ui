@@ -41,7 +41,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: var(--space-8) var(--space-4);
+      padding: 0.5rem 0.25rem;
       font-weight: 700;
       font-size: var(--font-size-body-sm);
       line-height: 125%;
@@ -51,7 +51,7 @@
 
     .table__header-text {
       margin: 0;
-      padding: var(--space-4) var(--space-12);
+      padding: 0.25rem 0.75rem;
       font-weight: 700;
       font-size: var(--font-size-body-md);
       line-height: 150%;
@@ -110,8 +110,8 @@
       display: flex;
       gap: 1rem;
       align-items: center;
-      height: var(--space-32);
-      padding: 0 var(--space-12);
+      height: 2rem;
+      padding: 0 0.75rem;
       border-radius: var(--radius-md);
       background: transparent;
     }

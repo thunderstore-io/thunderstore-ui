@@ -127,10 +127,7 @@
     /* Never drops below 90rem so ads can't steal content width; falls to the
        viewport (minus both gutters' padding + the two column gaps) when 90rem
        won't fit, so nothing overflows. */
-    --content-floor: min(
-      90rem,
-      100% - 2 * var(--container-padding) - 2 * var(--space-32)
-    );
+    --content-floor: min(90rem, 100% - 2 * var(--container-padding) - 2 * 2rem);
 
     grid-template-columns:
       minmax(var(--container-padding), 1fr)
@@ -138,7 +135,7 @@
       minmax(var(--ad-gutter-min), 1fr);
 
     /* 32px between the content and the rail (and the opposite margin). */
-    column-gap: var(--space-32);
+    column-gap: 2rem;
   }
 
   /* Package pages put the rail in the LEFT gutter; the right gutter becomes the
@@ -297,25 +294,25 @@
      the gutter automatically via the nimbus-ad-gutter container queries below. */
   @media (width >= 1700px) {
     .layout__main--ads {
-      --ad-gutter-min: calc(120px + 2px + var(--space-8));
+      --ad-gutter-min: calc(120px + 2px + 0.5rem);
     }
   }
 
   @media (width >= 1740px) {
     .layout__main--ads {
-      --ad-gutter-min: calc(160px + 2px + var(--space-8));
+      --ad-gutter-min: calc(160px + 2px + 0.5rem);
     }
   }
 
   @media (width >= 1760px) {
     .layout__main--ads {
-      --ad-gutter-min: calc(180px + 2px + var(--space-8));
+      --ad-gutter-min: calc(180px + 2px + 0.5rem);
     }
   }
 
   @media (width >= 1880px) {
     .layout__main--ads {
-      --ad-gutter-min: calc(300px + 2px + var(--space-8));
+      --ad-gutter-min: calc(300px + 2px + 0.5rem);
     }
   }
 
@@ -348,7 +345,7 @@
        only ad+2+8 wide, so at the reveal point the rail sits just beside the 32px
        content gap; on wider screens the gutter's extra width falls on the far
        side (auto margin). */
-    margin-inline: auto var(--space-8);
+    margin-inline: auto 0.5rem;
 
     /* Discrete width: the stack snaps to a standard rail width — 120/160/180/300
        (+ the slot's 1px borders) — the largest that fits the gutter, chosen by
@@ -378,7 +375,7 @@
      already the inner/content edge — so they keep the default and their rail
      also sits beside the content. */
   .layout__main--content-toggle .layout__ads-stack {
-    margin-inline: var(--space-8) auto;
+    margin-inline: 0.5rem auto;
   }
 
   /* Reveal the rail once its gutter can hold the narrowest (120px) unit, then
@@ -517,7 +514,7 @@
      measured box (fittingSizes, nitroAds.ts), so there are no per-width slots.
      The 250px-tall box is set by the bottom-banner variant in AdContainer.css. */
   .layout__bottom-ads {
-    padding: var(--space-16);
+    padding: 1rem;
   }
 
   .layout__bottom-ads .ad-container[data-size="bottom-banner"] {

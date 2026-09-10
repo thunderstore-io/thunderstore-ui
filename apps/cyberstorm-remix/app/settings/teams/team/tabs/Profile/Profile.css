@@ -22,7 +22,7 @@
   }
 
   .team-profile__island {
-    padding: var(--space-16) var(--space-32);
+    padding: 1rem 2rem;
     border-radius: var(--radius-md);
     overflow-x: auto;
     background-color: var(--color-surface-default);
@@ -30,7 +30,7 @@
 
   @container form-section-content (width <= 40rem) {
     .team-profile__island {
-      padding: var(--space-12) var(--space-24);
+      padding: 0.75rem 1.5rem;
     }
 
     .team-profile__label {
@@ -40,7 +40,7 @@
 
   @container form-section-content (width <= 24rem) {
     .team-profile__island {
-      padding: var(--space-10) var(--space-20);
+      padding: 0.625rem 1.25rem;
     }
 
     .team-profile__label {

@@ -3,7 +3,7 @@
   .dropdown {
     --dropdown-box-shadow: var(--shadow-lg);
     --dropdown-animation: fade-in var(--animation-duration-md) ease;
-    --dropdown-border: var(--space-px) var(--dropdown-border-color) solid;
+    --dropdown-border: 1px var(--dropdown-border-color) solid;
   }
 
   .dropdown:where(.dropdown--size--medium) {

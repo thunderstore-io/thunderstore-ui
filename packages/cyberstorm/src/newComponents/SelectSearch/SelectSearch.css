@@ -22,7 +22,7 @@
     --select-search-font-weight: var(--font-weight-regular);
     --select-search-control-height: 1rem;
     --select-search-tag-height: 1.5rem;
-    --select-search-padding-inline: var(--space-16);
+    --select-search-padding-inline: 1rem;
   }
 
   .select-search:hover {
@@ -57,7 +57,7 @@
   .select-search__chrome {
     display: flex;
     flex: 0 0 auto;
-    gap: var(--space-16);
+    gap: 1rem;
     align-items: center;
     align-self: center;
     margin-left: auto;
@@ -93,7 +93,7 @@
   .select-search__selected {
     display: flex;
     flex-flow: row wrap;
-    gap: var(--space-8);
+    gap: 0.5rem;
     align-items: center;
     min-width: 0;
     max-width: 100%;
@@ -111,7 +111,7 @@
   .select-search__selected-and-input-container {
     display: flex;
     flex-flow: row nowrap;
-    gap: var(--space-16);
+    gap: 1rem;
     align-items: center;
     width: 100%;
     min-height: var(--select-search-min-height);
@@ -127,7 +127,7 @@
     display: flex;
     flex: 1 1 0;
     flex-flow: row wrap;
-    gap: var(--space-8);
+    gap: 0.5rem;
     align-items: center;
     align-self: center;
     min-width: 0;
@@ -136,7 +136,7 @@
   .select-search__divider {
     flex-shrink: 0;
     align-self: center;
-    width: var(--space-px);
+    width: 1px;
     height: var(--select-search-tag-height);
     margin: calc(var(--select-search-padding-block) * -1) 0;
     background: var(--color-surface-9);
