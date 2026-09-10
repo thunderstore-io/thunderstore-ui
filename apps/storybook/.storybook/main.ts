@@ -16,6 +16,9 @@ const config: StorybookConfig = {
   addons: [
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-onboarding"),
+    // Enables Chromatic "modes" so each story is snapshotted with the theme
+    // both ON (production look) and OFF (barebones cyberstorm) — see modes.ts.
+    getAbsolutePath("@chromatic-com/storybook"),
   ],
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),

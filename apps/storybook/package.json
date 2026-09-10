@@ -38,6 +38,7 @@
   },
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/apps/storybook",
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.3.1",
     "@types/node": "24.12.0"
   }
 }
