@@ -1,15 +1,11 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import {
-  type AvatarSizes,
-  type AvatarVariants,
-} from "@thunderstore/cyberstorm-theme";
-
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Avatar.css";
+import { type AvatarSizes, type AvatarVariants } from "./Avatar.types";
 
 export interface AvatarProps extends PrimitiveComponentDefaultProps {
   csVariant?: AvatarVariants;

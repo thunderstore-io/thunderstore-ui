@@ -3,11 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode, memo, useState } from "react";
 
 import {
-  type DrawerSizes,
-  type DrawerVariants,
-} from "@thunderstore/cyberstorm-theme";
-
-import {
   Frame,
   type FramePopoverProps,
 } from "../../primitiveComponents/Frame/Frame";
@@ -17,6 +12,7 @@ import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Drawer.css";
+import { type DrawerSizes, type DrawerVariants } from "./Drawer.types";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   csVariant?: DrawerVariants;

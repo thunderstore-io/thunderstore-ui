@@ -11,15 +11,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixToast from "@radix-ui/react-toast";
 import React from "react";
 
-import {
-  type ToastSizes,
-  type ToastVariants,
-} from "@thunderstore/cyberstorm-theme";
-
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Toast.css";
+import { type ToastSizes, type ToastVariants } from "./Toast.types";
 
 // export type ToastProps = {
 //   variant?: "info" | "danger" | "warning" | "success";

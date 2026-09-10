@@ -8,18 +8,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { type ReactNode } from "react";
 
 import {
-  type CodeInputModifiers,
-  type CodeInputSizes,
-  type CodeInputVariants,
-} from "@thunderstore/cyberstorm-theme";
-
-import {
   Input,
   type InputTextAreaProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./CodeInput.css";
+import {
+  type CodeInputModifiers,
+  type CodeInputSizes,
+  type CodeInputVariants,
+} from "./CodeInput.types";
 
 export interface CodeInputProps
   extends Omit<InputTextAreaProps, "primitiveType"> {

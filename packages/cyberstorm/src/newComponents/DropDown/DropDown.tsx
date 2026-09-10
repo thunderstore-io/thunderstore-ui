@@ -13,6 +13,10 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { type ReactElement, type ReactNode, memo, useContext } from "react";
 
+import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
+import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./DropDown.css";
 import {
   type DropDownDividerModifiers,
   type DropDownDividerSizes,
@@ -23,12 +27,7 @@ import {
   type DropDownModifiers,
   type DropDownSizes,
   type DropDownVariants,
-} from "@thunderstore/cyberstorm-theme";
-
-import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
-import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
-import { classnames, componentClasses } from "../../utils/utils";
-import "./DropDown.css";
+} from "./DropDown.types";
 
 interface DropDownProps extends PrimitiveComponentDefaultProps {
   defaultOpen?: boolean;
