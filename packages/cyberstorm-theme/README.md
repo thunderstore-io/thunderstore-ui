@@ -17,6 +17,27 @@ tokens, and fonts — layered on top of Cyberstorm's barebones structural CSS.
   `componentsMiscs.css`) — plus per-component skin rules.
 - Font assets under `src/styles/fonts/*`.
 
+## How it layers on top of Cyberstorm
+
+Every rule in this package is authored inside a single CSS cascade layer:
+
+```css
+@layer cyberstorm-theme {
+  /* colors, sizes, tokens, per-component skin rules */
+}
+```
+
+The canonical layer order (declared by the consuming app) is:
+
+```css
+@layer cyberstorm, cyberstorm-theme, nimbus;
+```
+
+Because `cyberstorm-theme` sits **above** `cyberstorm`, loading this package
+overrides Cyberstorm's barebones placeholder token defaults (see
+`packages/cyberstorm/src/defaults.css`) and turns the ugly-but-functional
+components into the production design — without any change to Cyberstorm's markup.
+
 ## Usage
 
 Load Cyberstorm's structural CSS first, then this skin on top:
