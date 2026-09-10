@@ -1,4 +1,4 @@
-@layer components {
+@layer cyberstorm {
   .modal__overlay {
     position: fixed;
     z-index: 1000;

@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* VARIANTS DEFAULT STATE */
   .link:where(.link--variant--primary) {
     --link-color: var(--link-primary-color--default);

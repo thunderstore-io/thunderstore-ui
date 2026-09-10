@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .package-search {
     --package-search-sidebar-width: 15.5rem;
 

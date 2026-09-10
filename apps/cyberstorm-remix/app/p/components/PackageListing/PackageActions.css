@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .package-actions {
     display: grid;
     grid-template-rows: 57px auto;

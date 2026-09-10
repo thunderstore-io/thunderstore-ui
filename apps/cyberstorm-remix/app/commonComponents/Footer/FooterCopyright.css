@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .footer-copyright {
     display: flex;
     flex-direction: column;

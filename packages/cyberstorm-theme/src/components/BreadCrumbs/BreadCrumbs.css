@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* Breadcrumb segments use background hover, not link underlines (reset + cyber link). */
   .breadcrumbs :is(a, .link) {
     text-decoration: none;

@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* theme base styles */
   .button {
     --button-line-height: var(--line-height-auto);

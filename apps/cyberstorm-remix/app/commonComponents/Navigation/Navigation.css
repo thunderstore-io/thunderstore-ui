@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .navigation-header {
     position: sticky;
     top: 0;

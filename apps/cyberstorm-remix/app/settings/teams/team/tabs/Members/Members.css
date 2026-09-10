@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .members__user {
     display: flex;
     flex-direction: row;

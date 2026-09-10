@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .version-install-link__icon {
     display: inline-flex;
     align-items: center;

@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .footer-manager {
     display: flex;
     flex-direction: column;

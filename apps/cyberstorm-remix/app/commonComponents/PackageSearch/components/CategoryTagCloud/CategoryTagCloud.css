@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .category-tag-cloud {
     display: flex;
     flex-flow: row wrap;

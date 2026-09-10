@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .select-search:where(.select-search--variant--disabled) {
     cursor: not-allowed;
     opacity: 0.5;

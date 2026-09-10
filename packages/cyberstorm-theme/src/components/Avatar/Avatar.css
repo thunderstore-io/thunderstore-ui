@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .avatar {
     > .avatar__image {
       --avatar-image-width: var(--size);

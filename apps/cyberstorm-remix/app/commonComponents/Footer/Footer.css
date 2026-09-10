@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .footer {
     --footer-width: min(var(--container-width), 90rem);
     --footer-inner-padding-inline: var(--container-padding);

@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .radio-group {
     display: flex;
     flex-direction: column;

@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .upload-progress {
     align-self: stretch;
     width: 100%;

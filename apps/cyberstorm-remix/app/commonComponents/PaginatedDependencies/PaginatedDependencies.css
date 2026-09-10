@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .paginated-dependencies {
     display: flex;
     flex-direction: column;

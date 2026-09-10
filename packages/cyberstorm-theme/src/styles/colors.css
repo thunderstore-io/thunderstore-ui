@@ -1,4 +1,4 @@
-@layer theme-colors {
+@layer cyberstorm-theme {
   :root {
     /* Figma common colors */
     --skeletor-bg: var(--color-surface-a3);

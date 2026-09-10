@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .footer-links {
     display: flex;
     flex-wrap: wrap;

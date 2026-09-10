@@ -1,4 +1,4 @@
-@layer nimbus-colors {
+@layer nimbus {
   :root {
     --color-body-bg-color: var(--color-surface-2);
     --color-header-bg-color: hsl(240deg 42% 11% / 0.85);

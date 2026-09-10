@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .home {
     container-type: inline-size;
     gap: var(--gap-7xl);

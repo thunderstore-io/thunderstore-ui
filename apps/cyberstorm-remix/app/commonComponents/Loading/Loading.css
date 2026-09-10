@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .loading-message {
     padding: 32px;
   }

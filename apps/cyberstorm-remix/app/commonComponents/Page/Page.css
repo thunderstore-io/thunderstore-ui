@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .page {
     display: flex;
     flex-direction: column;

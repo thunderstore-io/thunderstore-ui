@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* SIZES */
   .toast:where(.toast--size--medium) {
     --toast-gap: var(--toast-md-gap);

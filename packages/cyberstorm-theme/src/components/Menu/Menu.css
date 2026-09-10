@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* VARIANTS DEFAULT STATE */
   .menu:where(.menu--variant--primary) {
     --menu-color: var(--menu-primary-color--default);

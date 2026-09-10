@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .manage-package__block {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
