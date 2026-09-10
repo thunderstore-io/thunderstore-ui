@@ -2,13 +2,13 @@
   .page-header {
     display: flex;
     flex-direction: row;
-    gap: var(--space-32);
+    gap: 2rem;
     align-items: flex-start;
     border-radius: var(--radius-md);
   }
 
   .page-header--detailed {
-    padding: var(--space-24);
+    padding: 1.5rem;
     background-color: var(--color-surface-dim);
   }
 
@@ -102,17 +102,17 @@
     word-break: break-all;
 
     svg {
-      inline-size: var(--space-16);
+      inline-size: 1rem;
     }
   }
 
   @media (width <= 48rem) {
     .page-header {
-      gap: var(--space-16);
+      gap: 1rem;
     }
 
     .page-header--detailed {
-      padding: var(--space-8) 0;
+      padding: 0.5rem 0;
     }
 
     .page-header__image {
@@ -126,7 +126,7 @@
     .page-header__content-detailed .page-header__meta,
     .page-header__content-simple .page-header__meta {
       flex-wrap: wrap;
-      gap: var(--space-16);
+      gap: 1rem;
     }
   }
 

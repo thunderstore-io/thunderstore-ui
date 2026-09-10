@@ -2,7 +2,7 @@
   z-index: 1100;
   max-width: 75vw;
 
-  padding: var(--space-8) var(--space-12);
+  padding: 0.5rem 0.75rem;
   border-radius: var(--radius-md);
   color: var(--color-text--default);
 

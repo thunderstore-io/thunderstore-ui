@@ -48,7 +48,7 @@
   .menu__wrapper {
     display: none;
     flex-direction: column;
-    gap: var(--space-16);
+    gap: 1rem;
     width: 80%;
     min-width: 16rem;
     height: 100%;

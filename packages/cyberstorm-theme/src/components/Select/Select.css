@@ -7,7 +7,7 @@
     --select-border-color: var(--select-border-color--default);
     --select-box-shadow: var(--shadow-lg);
     --select-animation: fade-in var(--animation-duration-md) ease;
-    --select-border: var(--space-px) var(--select-border-color) solid;
+    --select-border: 1px var(--select-border-color) solid;
   }
 
   /* SIZES */

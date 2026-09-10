@@ -8,7 +8,7 @@
   .report-package__block {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 0.25rem;
   }
 
   .report-package__label {
@@ -21,7 +21,7 @@
   .report-package__textarea {
     > textarea {
       height: 10.75rem;
-      padding: var(--space-12);
+      padding: 0.75rem;
     }
   }
 

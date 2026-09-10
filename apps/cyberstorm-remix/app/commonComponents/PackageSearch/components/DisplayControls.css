@@ -7,7 +7,7 @@
 
   /* Icon + chevron trigger button (one per menu). */
   .display-controls__trigger {
-    gap: var(--space-8);
+    gap: 0.5rem;
   }
 
   .display-controls__chevron {
@@ -43,7 +43,7 @@
 
   /* Non-interactive "Cards" / "View" heading at the top of the menu. */
   .display-controls__header {
-    padding-bottom: var(--space-4);
+    padding-bottom: 0.25rem;
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-body-sm);
@@ -52,7 +52,7 @@
 
   .display-controls__option {
     display: flex;
-    gap: var(--space-8);
+    gap: 0.5rem;
     align-items: center;
     width: 100%;
     border: none;

@@ -2,7 +2,7 @@
   .collapsible-text {
     display: flex;
     flex-direction: row;
-    gap: var(--space-8);
+    gap: 0.5rem;
     align-items: center;
     min-width: 0;
     max-width: 100%;

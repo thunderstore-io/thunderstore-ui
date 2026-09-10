@@ -15,7 +15,7 @@
     gap: var(--gap-md);
     align-self: stretch;
     justify-content: space-between;
-    padding: var(--space-8) var(--space-12);
+    padding: 0.5rem 0.75rem;
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-lg);
   }
