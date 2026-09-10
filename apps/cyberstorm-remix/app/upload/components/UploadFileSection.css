@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .drag-n-drop {
     display: flex;
     flex: 1 0 0;

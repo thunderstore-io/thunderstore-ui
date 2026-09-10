@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .package-count {
     display: flex;
     flex: 1;

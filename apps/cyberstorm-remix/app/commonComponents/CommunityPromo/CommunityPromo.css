@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   /* Structure + values mirror the Figma spec: a dark purple container with the
      "AD" marker pinned over its top-left corner, light purple body copy, and a
      light-green Tag (xsmall) for the deal. */

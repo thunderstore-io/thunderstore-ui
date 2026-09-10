@@ -1,4 +1,4 @@
-@layer components {
+@layer cyberstorm {
   .drawer__wrapper {
     z-index: 1;
     display: flex;

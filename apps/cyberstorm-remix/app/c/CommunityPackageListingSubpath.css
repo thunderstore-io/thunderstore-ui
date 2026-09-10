@@ -1,11 +1,11 @@
-@layer nimbus-layout {
+@layer nimbus {
   .community--packageListingSubpath {
     gap: var(--gap-xl);
   }
 
   /* Chain the base class (specificity 0-2-0) so these compact overrides beat the
      base .community__header / .community__background (0-1-0) regardless of CSS
-     bundle order. Both live in @layer nimbus-layout, so equal-specificity rules
+     bundle order. Both live in @layer nimbus, so equal-specificity rules
      are decided by source order — and package pages now import this file in a
      different order than the community layout did, which let the base win (the
      banner rendered at the full 12rem / aspect 4:1 / opacity 0.8 instead of the

@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .package-versions__skeleton {
     height: 500px;
   }

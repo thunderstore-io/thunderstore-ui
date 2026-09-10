@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .submission-result__categories {
     display: flex;
     flex-wrap: wrap;

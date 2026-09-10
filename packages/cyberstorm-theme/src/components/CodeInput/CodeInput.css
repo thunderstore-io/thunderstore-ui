@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .code-input__wrapper {
     --code-input-wrapper-background-color: var(
       --code-input-wrapper-bg-color--default

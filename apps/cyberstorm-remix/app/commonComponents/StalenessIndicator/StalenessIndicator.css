@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .staleness-indicator__wrapper {
     opacity: 0.5;
   }
