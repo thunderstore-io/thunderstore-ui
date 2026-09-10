@@ -981,6 +981,13 @@ export function MobileNavigationMenu(props: {
           >
             News
           </NewLink>
+          <NewLink
+            primitiveType="link"
+            href="https://wiki.thunderstore.io/"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
+          >
+            Wiki
+          </NewLink>
         </section>
         <div className="mobile-navigation__divider" />
         <section>
