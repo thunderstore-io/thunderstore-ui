@@ -345,7 +345,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           our layer system.
         */}
         <style>
-          {`@layer utils, colors, layout, cyberstorm, overrides, theme, cyberstorm-theme, nimbus, nimbus-overrides;`}
+          {`@layer utils, cyberstorm, cyberstorm-theme, nimbus, nimbus-overrides;`}
         </style>
         {/* Reflect the saved display preferences before hydration so the package
             search paints at the chosen content width and card layout with no
