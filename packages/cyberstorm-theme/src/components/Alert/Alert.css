@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* SIZES */
   .alert:where(.alert--size--small) {
     --alert-gap: var(--alert-sm-gap);

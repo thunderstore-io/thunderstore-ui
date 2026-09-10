@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .card-package {
     --card-package-border-radius: var(--radius-md);
 

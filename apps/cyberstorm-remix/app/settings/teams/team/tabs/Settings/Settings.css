@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .team-settings__form {
     display: flex;
     flex-direction: column;

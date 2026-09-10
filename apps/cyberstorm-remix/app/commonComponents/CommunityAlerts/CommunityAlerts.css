@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .community-alerts {
     display: flex;
     flex-direction: column;

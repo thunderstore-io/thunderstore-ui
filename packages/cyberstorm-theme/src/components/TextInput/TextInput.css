@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .text-input {
     --text-input-width: 100%;
     --text-input-padding: var(--space-8) var(--space-10);

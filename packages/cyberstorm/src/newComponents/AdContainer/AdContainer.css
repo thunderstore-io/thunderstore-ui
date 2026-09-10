@@ -1,4 +1,4 @@
-@layer components {
+@layer cyberstorm {
   /* Each size variant reserves its box on the container. An unfilled slot keeps
      the reserved geometry but renders nothing visible (transparent border, no
      content), so ads load without shifting the layout and blocked/empty slots

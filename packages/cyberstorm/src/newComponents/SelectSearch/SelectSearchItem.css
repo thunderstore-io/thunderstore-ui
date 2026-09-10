@@ -1,4 +1,4 @@
-@layer components {
+@layer cyberstorm {
   .select-search__item {
     padding: var(--space-12) var(--space-16);
     font-weight: var(--select-search-font-weight);

@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .island-container {
     gap: var(--island-gap);
     container-type: inline-size;

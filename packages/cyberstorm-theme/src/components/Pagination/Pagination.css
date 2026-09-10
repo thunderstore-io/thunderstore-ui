@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .pagination {
     --pagination-gap: var(--gap-xs);
   }

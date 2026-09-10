@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .teams-table__cell {
     display: flex;
     align-items: center;
