@@ -13,7 +13,7 @@
   .code-view__scroll {
     position: relative;
     width: 100%;
-    padding: var(--space-8) 0;
+    padding: 0.5rem 0;
     border: 1px solid var(--color-surface-8);
     border-radius: var(--radius-md);
     overflow: auto;
@@ -34,7 +34,7 @@
     position: absolute;
     left: 0;
     display: flex;
-    gap: var(--space-16);
+    gap: 1rem;
     align-items: flex-start;
     width: 100%;
     height: var(--code-view-line-height);
@@ -48,7 +48,7 @@
 
     /* Wide enough for a six-digit line number; decompiled assemblies get long. */
     width: 6ch;
-    padding-right: var(--space-8);
+    padding-right: 0.5rem;
     color: var(--color-text-tertiary);
     text-align: right;
     background-color: var(--color-surface-1);

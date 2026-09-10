@@ -13,7 +13,7 @@
     flex-direction: column;
     gap: 2rem;
     align-items: center;
-    padding: var(--space-32);
+    padding: 2rem;
   }
 
   .not-logged-in__logo {
