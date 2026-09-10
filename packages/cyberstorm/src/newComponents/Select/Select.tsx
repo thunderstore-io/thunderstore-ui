@@ -10,18 +10,17 @@ import {
 } from "@radix-ui/react-select";
 import React, { type ReactElement, memo, useContext } from "react";
 
-import {
-  type SelectModifiers,
-  type SelectSizes,
-  type SelectVariants,
-} from "@thunderstore/cyberstorm-theme";
-
 import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Select.css";
+import {
+  type SelectModifiers,
+  type SelectSizes,
+  type SelectVariants,
+} from "./Select.types";
 
 type _SelectProps<T> = {
   variant?: "default" | "accent" | "wide";

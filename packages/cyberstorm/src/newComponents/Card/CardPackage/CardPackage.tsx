@@ -11,10 +11,6 @@ import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
-import {
-  type CardPackageModifiers,
-  type CardPackageSizes,
-} from "@thunderstore/cyberstorm-theme";
 import { type PackageListing } from "@thunderstore/dapper/types";
 
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
@@ -33,6 +29,10 @@ import { Link as NewLink } from "../../Link/Link";
 import { MetaItem as NewMetaItem } from "../../MetaItem/MetaItem";
 import { Tag as NewTag } from "../../Tag/Tag";
 import "./CardPackage.css";
+import {
+  type CardPackageModifiers,
+  type CardPackageSizes,
+} from "./CardPackage.types";
 
 interface Props {
   packageData: PackageListing;

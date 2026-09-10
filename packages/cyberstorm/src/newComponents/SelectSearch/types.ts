@@ -1,6 +1,5 @@
-import { type SelectSearchModifiers } from "@thunderstore/cyberstorm-theme";
-
 import type { SelectOption } from "../../utils/types";
+import { type SelectSearchModifiers } from "./SelectSearch.types";
 
 export type SelectSearchBaseProps = {
   options: SelectOption<string>[];

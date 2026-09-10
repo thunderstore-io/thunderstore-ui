@@ -1,13 +1,12 @@
 import React, { memo } from "react";
 
-import { type IconVariants } from "@thunderstore/cyberstorm-theme";
-
 import {
   Frame,
   type FrameIconProps,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import "./Icon.css";
+import { type IconVariants } from "./Icon.types";
 
 interface IconProps extends Omit<FrameIconProps, "primitiveType"> {
   csVariant?: IconVariants;

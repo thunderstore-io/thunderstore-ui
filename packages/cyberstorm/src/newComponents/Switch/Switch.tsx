@@ -1,14 +1,13 @@
 import * as RadixSwitch from "@radix-ui/react-switch";
 import React, { memo } from "react";
 
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Switch.css";
 import {
   type SwitchModifiers,
   type SwitchSizes,
   type SwitchVariants,
-} from "@thunderstore/cyberstorm-theme";
-
-import { classnames, componentClasses } from "../../utils/utils";
-import "./Switch.css";
+} from "./Switch.types";
 
 export interface SwitchProps {
   value: boolean;

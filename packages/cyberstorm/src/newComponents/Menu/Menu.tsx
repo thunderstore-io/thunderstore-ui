@@ -2,8 +2,6 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode } from "react";
 
-import { type MenuVariants } from "@thunderstore/cyberstorm-theme";
-
 import {
   Frame,
   type FramePopoverProps,
@@ -12,6 +10,7 @@ import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Menu.css";
+import { type MenuVariants } from "./Menu.types";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   trigger?: ReactNode;
