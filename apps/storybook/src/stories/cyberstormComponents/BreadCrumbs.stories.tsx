@@ -7,7 +7,6 @@ import {
   NewBreadCrumbsItem,
   NewBreadCrumbsLink,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 import catHeim from "../assets/catheim.png";
 

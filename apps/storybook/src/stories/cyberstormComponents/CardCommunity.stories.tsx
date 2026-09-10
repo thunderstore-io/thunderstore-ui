@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { CardCommunity } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 import catHeim from "../assets/catheim.png";
 

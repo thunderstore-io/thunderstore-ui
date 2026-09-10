@@ -8,8 +8,7 @@ import {
   type NewSelectSearchSingleProps,
   type SelectOption,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
-import { SelectSearchModifiersList } from "@thunderstore/cyberstorm-theme/src/components";
+import { SelectSearchModifiersList } from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/SelectSearch",
