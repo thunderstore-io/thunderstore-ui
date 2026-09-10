@@ -5,6 +5,7 @@ Please keep imports alphabetical.
 Add new component CSS here.
 Used by consumers via imports like '@thunderstore/cyberstorm/css'.
 */
+@import "./defaults.css";
 @import "./components/CodeBox/CodeBox.css";
 @import "./components/CopyButton/CopyButton.css";
 @import "./newComponents/AdContainer/AdContainer.css";

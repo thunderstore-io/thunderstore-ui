@@ -1,7 +1,5 @@
 import { memo } from "react";
 
-import { type LinkVariants } from "@thunderstore/cyberstorm-theme";
-
 import {
   Actionable,
   type ActionableCyberstormLinkProps,
@@ -9,6 +7,7 @@ import {
 } from "../../primitiveComponents/Actionable/Actionable";
 import { classnames } from "../../utils/utils";
 import "./Link.css";
+import { type LinkVariants } from "./Link.types";
 
 export interface LinkProps extends ActionableLinkProps {
   csVariant?: LinkVariants;

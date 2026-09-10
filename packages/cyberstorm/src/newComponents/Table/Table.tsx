@@ -7,15 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type CSSProperties, type ReactNode, useState } from "react";
 import React from "react";
 
+import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
+import "./Table.css";
 import {
   type TableModifiers,
   type TableSizes,
   type TableVariants,
-} from "@thunderstore/cyberstorm-theme";
-
-import { classnames, componentClasses } from "../../utils/utils";
-import { Icon as NewIcon } from "../Icon/Icon";
-import "./Table.css";
+} from "./Table.types";
 
 interface SortButtonProps {
   identifier: number;
