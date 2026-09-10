@@ -1,5 +1,67 @@
 # Cyberstorm UI library
 
+`@thunderstore/cyberstorm` is the **self-contained** React component library for
+Thunderstore. It owns the component code, the component **API types**
+(variant/size/modifier lists such as `ButtonVariantsList`), and **structural CSS
+only** (layout, sizing, and placeholder token defaults). It renders
+functional-but-ugly on its own, with **zero dependency** on the theme;
+[`@thunderstore/cyberstorm-theme`](../cyberstorm-theme/README.md) is a pure-CSS
+skin layered on top for the production look.
+
+## Architecture
+
+### Package responsibilities
+
+- **This package (`cyberstorm`)** — components, their API types, and structural
+  CSS. Ships **no colors of its own**; it references themeable custom properties
+  (`var(--button-background-color)`, …) and provides barebones **structural**
+  fallbacks for them.
+- **`cyberstorm-theme`** — pure CSS: colors, component sizes, misc tokens, and
+  fonts. No TypeScript/runtime exports.
+
+The dependency direction is one-way: `cyberstorm` does **not** depend on
+`cyberstorm-theme`. Consumers import Cyberstorm and then, optionally, add the
+theme on top.
+
+### `defaults.css` (barebones tokens)
+
+`src/defaults.css` defines placeholder values for the **structural** design
+tokens the components rely on — spacing, radii, gaps, border widths, the
+typography scale, and animation lengths. It deliberately ships **no color
+tokens**: unset colors are the "ugly" part of the barebones state. These defaults
+live in `@layer cyberstorm` (the lowest layer), so whenever the theme is loaded
+it overrides all of them — `defaults.css` is a no-op for themed output and only
+takes effect when Cyberstorm is used without the theme.
+
+### CSS layers
+
+Styling is organized into three cascade layers, later overriding earlier:
+
+```css
+@layer cyberstorm, cyberstorm-theme, nimbus;
+```
+
+- `cyberstorm` — this package's structural CSS + `defaults.css`.
+- `cyberstorm-theme` — the skin (see the theme package).
+- `nimbus` — app-level (remix) overrides.
+
+The order is declared explicitly by consumers so precedence never depends on
+import order.
+
+### Usage
+
+```ts
+// Barebones (functional, unstyled, system fonts):
+import "@thunderstore/cyberstorm/css";
+
+// Production look — add the theme on top:
+import "@thunderstore/cyberstorm-theme/css";
+import "@thunderstore/cyberstorm-theme/fonts.css";
+
+// Components and their API types both come from this package:
+import { NewButton, ButtonVariantsList } from "@thunderstore/cyberstorm";
+```
+
 ## Storybook
 
 [Storybook](https://storybook.js.org/docs/react/get-started/introduction)
