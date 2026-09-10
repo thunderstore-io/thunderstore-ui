@@ -157,7 +157,6 @@ jobs:
 
   test:
     name: Test
-    continue-on-error: true
     runs-on: ubuntu-latest
     needs: [get-node-version, pre-commit, build]
     env:
@@ -213,6 +212,9 @@ jobs:
 
   chromatic-deployment:
     runs-on: ubuntu-latest
+    # Runs last, only after every other gate (pre-commit, build, test) has
+    # passed. If any of them fail the job is skipped, so we don't spend
+    # Chromatic snapshots on changes that are already known-broken.
     needs: [get-node-version, pre-commit, build, test]
     strategy:
       matrix:
@@ -243,4 +245,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets[matrix.projects.token] }}
           workingDir: ${{ matrix.projects.dir }}
-          exitOnceUploaded: true
+          # Block the job on visual changes/errors so component breakage fails
+          # CI (do NOT exit-once-uploaded). Each story is captured in both the
+          # "themed" and "barebones" modes (see apps/storybook/.storybook/modes.ts).
+          # New/changed snapshots must be reviewed & approved in Chromatic.
+          # To make this a hard merge gate, mark "chromatic-deployment" as a
+          # required status check in the repo's branch-protection settings.
+          exitZeroOnChanges: false
