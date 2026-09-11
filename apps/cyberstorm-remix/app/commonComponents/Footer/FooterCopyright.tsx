@@ -27,6 +27,13 @@ export function FooterCopyright() {
         >
           News
         </NewLink>
+        <NewLink
+          primitiveType="link"
+          rootClasses="footer-link"
+          href="https://wiki.thunderstore.io/"
+        >
+          Wiki
+        </NewLink>
       </nav>
       <div className="footer-copyright__footnote">
         © 2026 Thunderstore and contributors.{" "}
