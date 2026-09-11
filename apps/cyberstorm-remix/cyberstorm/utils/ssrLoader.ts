@@ -7,7 +7,10 @@ import {
   data,
 } from "react-router";
 
-import { isApiError } from "@thunderstore/thunderstore-api";
+import {
+  isApiError,
+  isCloudflareChallengeError,
+} from "@thunderstore/thunderstore-api";
 
 interface SsrLoaderOptions {
   /** Cache options. Set to true for default CDN caching, or pass an object to customize. Defaults to false (no caching). */
@@ -164,6 +167,19 @@ export function ssrLoader<A extends LoaderFunctionArgs, T>(
     } catch (error) {
       if (isApiError(error)) {
         const { status, statusText, url } = error.response;
+
+        if (isCloudflareChallengeError(error)) {
+          throw new Response(
+            JSON.stringify({ status, statusText, url, cfChallenge: true }),
+            {
+              status: 503,
+              headers: {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-store",
+              },
+            }
+          );
+        }
 
         if (status >= 500) {
           let apiUrl: string;

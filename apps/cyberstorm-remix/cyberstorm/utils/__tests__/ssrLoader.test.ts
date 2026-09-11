@@ -404,3 +404,53 @@ describe("ssrLoader with a data() result (e.g. gatedSsr404)", () => {
     );
   });
 });
+
+describe("ssrLoader Cloudflare challenge conversion", () => {
+  function createChallengeError(): ApiError {
+    return new ApiError({
+      message: "403: Forbidden",
+      response: {
+        headers: { "cf-mitigated": "challenge" },
+        status: 403,
+        statusText: "Forbidden",
+        url: "http://localhost/api/cyberstorm/listing/",
+      },
+    });
+  }
+
+  it("converts a challenge ApiError into a 503 Response marked with cfChallenge", async () => {
+    const loader = ssrLoader(async () => {
+      throw createChallengeError();
+    });
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.status).toBe(503);
+    const body = await response.json();
+    expect(body).toEqual({
+      status: 403,
+      statusText: "Forbidden",
+      url: "http://localhost/api/cyberstorm/listing/",
+      cfChallenge: true,
+    });
+  });
+
+  it("never caches a challenge response, even on a cacheable route", async () => {
+    const loader = ssrLoader(
+      async () => {
+        throw createChallengeError();
+      },
+      { cache: true }
+    );
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+  });
+
+  it("does not mark a plain 403 without the challenge header", async () => {
+    const loader = ssrLoader(async () => {
+      throw createApiError(403, "Forbidden");
+    });
+    const response = await thrownResponse(() => loader(fakeLoaderArgs()));
+    expect(response.status).toBe(403);
+    const body = await response.json();
+    expect(body.cfChallenge).toBeUndefined();
+  });
+});
