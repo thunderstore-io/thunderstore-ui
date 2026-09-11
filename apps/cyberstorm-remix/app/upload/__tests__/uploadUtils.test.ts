@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCommunityOptions,
+  buildSelectedCommunities,
   formatBytes,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
@@ -101,6 +102,31 @@ describe("buildCommunityOptions", () => {
       { value: "risk-of-rain", label: "Risk of Rain" },
       { value: "valheim", label: "Valheim" },
     ]);
+  });
+});
+
+describe("buildSelectedCommunities", () => {
+  const communityOptions = [
+    { value: "risk-of-rain", label: "Risk of Rain" },
+    { value: "valheim", label: "Valheim" },
+  ];
+
+  it("selects the community when it matches an available option", () => {
+    expect(buildSelectedCommunities(communityOptions, "valheim")).toEqual([
+      "valheim",
+    ]);
+  });
+
+  it("returns an empty array when the community param is null", () => {
+    expect(buildSelectedCommunities(communityOptions, null)).toEqual([]);
+  });
+
+  it("returns an empty array when the community param is unknown", () => {
+    expect(buildSelectedCommunities(communityOptions, "unknown")).toEqual([]);
+  });
+
+  it("returns an empty array when there are no community options", () => {
+    expect(buildSelectedCommunities([], "valheim")).toEqual([]);
   });
 });
 

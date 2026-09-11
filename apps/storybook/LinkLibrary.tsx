@@ -200,9 +200,20 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
-  PackageUpload: (p) => (
-    <Link {...p} url={"/package/create/"} ref={p.customRef} />
-  ),
+  PackageUpload: (p) => {
+    const queryParams = new URLSearchParams();
+    if (p.community) {
+      queryParams.set("community", p.community);
+    }
+    return (
+      <Link
+        {...p}
+        url={"/package/create/"}
+        queryParams={queryParams.toString()}
+        ref={p.customRef}
+      />
+    );
+  },
   Settings: (p) => <Link {...p} url={`/settings/`} ref={p.customRef} />,
   SettingsAccount: (p) => (
     <Link {...p} url={`/settings/account/`} ref={p.customRef} />
