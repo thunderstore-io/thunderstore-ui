@@ -2,18 +2,16 @@
  * Chromatic capture "modes".
  *
  * Each mode is a set of Storybook `globals` overrides that Chromatic applies
- * when snapshotting. We drive the `theme` global that the ThemeDecorator in
- * `preview.tsx` reads, so every story is captured twice:
+ * when snapshotting. We drive `csTheme` (not `theme` — that name collides with
+ * Storybook/Chromatic built-ins) so the preview decorator can set
+ * `html[data-cs-theme]`. Theme CSS is scoped to `html[data-cs-theme="on"]`
+ * (see prefixCyberstormThemeCss.ts), so this attribute is the actual visual
+ * switch:
  *
- *   - `themed`    — @thunderstore/cyberstorm-theme applied (production look).
- *                   This is the neutrality baseline; it must stay pixel-identical.
- *   - `barebones` — theme disabled, only @thunderstore/cyberstorm CSS in effect
- *                   (functional-but-ugly), so component breakage without the
- *                   theme is caught by the gate too.
- *
- * Requires the `@chromatic-com/storybook` addon (registered in main.ts).
+ *   - `themed`    — production look (@thunderstore/cyberstorm-theme).
+ *   - `barebones` — theme rules do not match; only @layer cyberstorm.
  */
 export const allModes = {
-  themed: { theme: "on" },
-  barebones: { theme: "off" },
+  themed: { csTheme: "on" },
+  barebones: { csTheme: "off" },
 } as const;
