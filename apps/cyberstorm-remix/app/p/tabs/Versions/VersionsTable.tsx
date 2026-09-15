@@ -11,12 +11,7 @@ import {
 import type { PackageVersion } from "@thunderstore/dapper/types";
 
 import "./Versions.css";
-import {
-  DownloadLink,
-  EditedTag,
-  InstallLink,
-  ModManagerBanner,
-} from "./common";
+import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
 export function VersionsTable({
   versions,
@@ -43,20 +38,17 @@ export function VersionsTable({
           rows={versions.map((version) => [
             {
               value: (
-                <>
-                  <NewLink
-                    primitiveType="cyberstormLink"
-                    linkId="PackageVersion"
-                    package={packageId}
-                    community={communityId}
-                    namespace={namespaceId}
-                    version={version.version_number}
-                    csVariant="primary"
-                  >
-                    {version.version_number}
-                  </NewLink>
-                  {version.is_edited ? <EditedTag /> : null}
-                </>
+                <NewLink
+                  primitiveType="cyberstormLink"
+                  linkId="PackageVersion"
+                  package={packageId}
+                  community={communityId}
+                  namespace={namespaceId}
+                  version={version.version_number}
+                  csVariant="primary"
+                >
+                  {version.version_number}
+                </NewLink>
               ),
               sortValue: version.version_number,
             },
