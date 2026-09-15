@@ -17,8 +17,8 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
-import { columns } from "./Versions";
 import "./Versions.css";
+import { columns } from "./VersionsTable";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
 export async function loader({ params }: LoaderFunctionArgs) {
