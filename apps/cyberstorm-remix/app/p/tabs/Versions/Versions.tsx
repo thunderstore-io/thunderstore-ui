@@ -3,26 +3,15 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
-import { Await } from "react-router";
-import { useLoaderData } from "react-router";
+import { Await, useLoaderData } from "react-router";
 
-import {
-  Heading,
-  LocalDateTime,
-  NewLink,
-  NewTable,
-  type NewTableLabels,
-  NewTableSort,
-  SkeletonBox,
-} from "@thunderstore/cyberstorm";
+import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/Versions";
-import "./Versions.css";
-import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import { VersionsTable } from "./VersionsTable";
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -106,78 +95,14 @@ export default function Versions() {
         }
       >
         {(resolvedValue) => (
-          <div className="package-versions">
-            <ModManagerBanner />
-            <div className="package-versions__table-wrapper">
-              <NewTable
-                titleRowContent={
-                  <Heading csSize="3" csLevel="3">
-                    Versions
-                  </Heading>
-                }
-                headers={columns}
-                rows={resolvedValue.map((v) => [
-                  {
-                    value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
-                        package={packageId}
-                        community={communityId}
-                        namespace={namespaceId}
-                        version={v.version_number}
-                        csVariant="primary"
-                      >
-                        {v.version_number}
-                      </NewLink>
-                    ),
-                    sortValue: v.version_number,
-                  },
-                  {
-                    value: <LocalDateTime time={v.datetime_created} />,
-                    sortValue: v.datetime_created,
-                  },
-                  {
-                    value: v.download_count.toLocaleString(),
-                    sortValue: v.download_count,
-                  },
-                  {
-                    value: (
-                      <div className="package-versions__actions">
-                        <DownloadLink {...v} />
-                        <InstallLink {...v} />
-                      </div>
-                    ),
-                    sortValue: 0,
-                  },
-                ])}
-                sortDirection={NewTableSort.DESC}
-                csModifiers={["alignLastColumnRight"]}
-                customSortCompare={{ 0: rowSemverCompare }}
-              />
-            </div>
-          </div>
+          <VersionsTable
+            versions={resolvedValue}
+            communityId={communityId}
+            namespaceId={namespaceId}
+            packageId={packageId}
+          />
         )}
       </Await>
     </Suspense>
   );
 }
-
-export const columns: NewTableLabels = [
-  {
-    value: "Version",
-    disableSort: false,
-    columnClasses: "package-versions__version",
-  },
-  {
-    value: "Upload date",
-    disableSort: false,
-    columnClasses: "package-versions__upload-date",
-  },
-  {
-    value: "Downloads",
-    disableSort: false,
-    columnClasses: "package-versions__downloads",
-  },
-  { value: "Actions", disableSort: true },
-];

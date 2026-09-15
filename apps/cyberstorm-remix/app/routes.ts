@@ -74,6 +74,10 @@ export default [
   ),
   */
   route(
+    "/c/:communityId/p/:namespaceId/:packageId/v/:packageVersion/readme/edit",
+    "p/readmeEdit/ReadmeEdit.tsx"
+  ),
+  route(
     "/c/:communityId/p/:namespaceId/:packageId/dependants",
     "p/dependants/Dependants.tsx"
   ),

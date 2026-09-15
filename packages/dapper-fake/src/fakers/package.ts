@@ -281,6 +281,7 @@ export const getFakePackageVersions = async (
       download_count: faker.number.int({ min: 0, max: 200000 }),
       download_url: `https://thunderstore.io/package/download/${namespace}/${name}/${versionNumber}/`,
       install_url: `ror2mm://v1/install/thunderstore.io/${namespace}/${name}/${versionNumber}/`,
+      is_edited: false,
     };
   });
 };

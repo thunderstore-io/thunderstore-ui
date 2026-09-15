@@ -1,7 +1,8 @@
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowUpRight, faEdit } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
@@ -25,6 +26,7 @@ import {
   Drawer,
   Heading,
   NewAlert,
+  NewButton,
   NewIcon,
   NewLink,
   RelativeTime,
@@ -45,6 +47,7 @@ import { PackageMeta } from "./components/PackageListing/PackageListingSidebar";
 import {
   getPrivateListing,
   getPublicListing,
+  getUserPermissions,
   isGithubUrl,
 } from "./listingUtils";
 import "./packageListing.css";
@@ -126,6 +129,7 @@ export const loader = ssrLoader(
       return gatedSsr404({
         community,
         listing: undefined,
+        permissions: undefined,
         packageVersion,
         team,
         seo: createSeo({ descriptors: [] }),
@@ -140,6 +144,7 @@ export const loader = ssrLoader(
     return {
       community,
       listing,
+      permissions: undefined,
       packageVersion,
       team,
       seo: packageVersionSeo(listing, packageVersion, request),
@@ -172,6 +177,13 @@ export async function clientLoader({
   return {
     community: dapper.getCommunity(communityId),
     listing,
+    permissions: getUserPermissions(
+      getSessionTools(),
+      dapper,
+      communityId,
+      namespaceId,
+      packageId
+    ),
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
     // Match the SSR title so hydration doesn't drop it (see packageVersionSeo).
@@ -197,9 +209,8 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 export default function PackageListingVersion() {
-  const { community, listing, packageVersion, team } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { community, listing, permissions, packageVersion, team } =
+    useLoaderData<typeof loader | typeof clientLoader>();
 
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
@@ -210,6 +221,35 @@ export default function PackageListingVersion() {
   if (!listing) {
     return <div>Loading listing...</div>;
   }
+
+  const editButton =
+    currentTab === "details" ? (
+      <Suspense fallback={null}>
+        <Await resolve={permissions}>
+          {(resolvedPermissions) =>
+            resolvedPermissions?.permissions.can_manage_wiki ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                csModifiers={["ghost"]}
+                primitiveType="cyberstormLink"
+                linkId="PackageVersionReadmeEdit"
+                community={listing.community_identifier}
+                namespace={listing.namespace}
+                package={listing.name}
+                version={packageVersion}
+                queryParams="from=version"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faEdit} />
+                </NewIcon>
+                Edit
+              </NewButton>
+            ) : null
+          }
+        </Await>
+      </Suspense>
+    ) : null;
 
   return (
     <>
@@ -371,7 +411,13 @@ export default function PackageListingVersion() {
           >
             Versions
           </NewLink>
+          {editButton ? (
+            <div className="package-listing__tabs-slot">{editButton}</div>
+          ) : null}
         </Tabs>
+        {editButton ? (
+          <div className="package-listing__doc-controls-row">{editButton}</div>
+        ) : null}
 
         <div className="package-listing__content">
           <Outlet context={outletContext} />

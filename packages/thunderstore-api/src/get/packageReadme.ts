@@ -20,6 +20,9 @@ export async function fetchPackageReadme(
     args: {
       config: config,
       path: path,
+      // Keep the browser HTTP cache out of the way so a site edit is
+      // visible on the next navigation. Shared caches still apply.
+      request: { cache: "no-store" },
     },
     requestSchema: undefined,
     queryParamsSchema: undefined,

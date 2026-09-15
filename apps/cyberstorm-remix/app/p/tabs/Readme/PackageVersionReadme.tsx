@@ -35,7 +35,7 @@ export const loader = ssrLoader(
     return {
       status: "error",
       message: "Failed to load readme",
-      readme: { html: "" },
+      readme: { html: "", is_edited: false, edited_at: null },
       seo: createSeo({
         descriptors: [{ title: "Readme Not Found | Thunderstore" }],
       }),
@@ -66,7 +66,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return {
     status: "error",
     message: "Failed to load readme",
-    readme: { html: "" },
+    readme: { html: "", is_edited: false, edited_at: null },
   };
 }
 
@@ -90,18 +90,31 @@ export default function PackageVersionReadme() {
           />
         }
       >
-        {(resolvedValue) =>
-          resolvedValue && resolvedValue.html ? (
-            <div className="markdown-wrapper">
+        {(resolvedValue) => (
+          <div className="markdown-wrapper">
+            {resolvedValue?.is_edited ? (
+              <div
+                className="markdown-edited-note"
+                title="README edited on Thunderstore."
+              >
+                Edited
+                {resolvedValue.edited_at
+                  ? ` · ${new Date(resolvedValue.edited_at)
+                      .toISOString()
+                      .slice(0, 10)}`
+                  : ""}
+              </div>
+            ) : null}
+            {resolvedValue?.html ? (
               <div
                 dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
                 className="markdown"
               />
-            </div>
-          ) : (
-            <TabFetchState variant="info" message="No details available" />
-          )
-        }
+            ) : (
+              <TabFetchState variant="info" message="No details available" />
+            )}
+          </div>
+        )}
       </Await>
     </Suspense>
   );
