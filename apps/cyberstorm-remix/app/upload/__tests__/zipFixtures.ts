@@ -1,8 +1,4 @@
-/**
- * Builds minimal ZIP archives for tests: local headers, central directory and
- * EOCD only, which is all the upload form's reader parses. Entries are stored
- * (uncompressed) and empty unless `contents` provides data for them.
- */
+/** Builds ZIP fixtures with independently adjustable headers and payloads. */
 
 export interface ZipEntryContent {
   /** Compression method as written to the headers: 0 stored, 8 deflate. */
@@ -10,6 +6,7 @@ export interface ZipEntryContent {
   /** Bytes written after the local header, already compressed for method 8. */
   data: Uint8Array;
   uncompressedSize: number;
+  crc32?: number;
   /** Overrides the compressed size written to the headers. */
   compressedSize?: number;
 }
@@ -37,6 +34,7 @@ export function buildZip(
     view.setUint16(4, 20, true);
     view.setUint16(6, 0x0800, true);
     view.setUint16(8, content?.method ?? 0, true);
+    view.setUint32(14, content?.crc32 ?? 0, true);
     view.setUint32(
       18,
       content?.compressedSize ?? content?.data.length ?? 0,
@@ -62,6 +60,7 @@ export function buildZip(
     view.setUint16(6, 20, true);
     view.setUint16(8, 0x0800, true);
     view.setUint16(10, content?.method ?? 0, true);
+    view.setUint32(16, content?.crc32 ?? 0, true);
     view.setUint32(
       20,
       content?.compressedSize ?? content?.data.length ?? 0,
@@ -106,9 +105,20 @@ export function zipFile(
   });
 }
 
+function crc32(data: Uint8Array): number {
+  let crc = 0xffffffff;
+  for (const byte of data) {
+    crc ^= byte;
+    for (let bit = 0; bit < 8; bit++) {
+      crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+    }
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
 export function storedEntry(text: string): ZipEntryContent {
   const data = new TextEncoder().encode(text);
-  return { method: 0, data, uncompressedSize: data.length };
+  return { method: 0, data, uncompressedSize: data.length, crc32: crc32(data) };
 }
 
 export async function deflatedEntry(text: string): Promise<ZipEntryContent> {
@@ -120,5 +130,6 @@ export async function deflatedEntry(text: string): Promise<ZipEntryContent> {
     method: 8,
     data: new Uint8Array(compressed),
     uncompressedSize: raw.length,
+    crc32: crc32(raw),
   };
 }

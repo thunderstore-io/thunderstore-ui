@@ -1,3 +1,9 @@
+import {
+  BlobWriter,
+  TextReader,
+  ZipWriter,
+  configure,
+} from "@zip.js/zip.js/index-native.js";
 import { describe, expect, it, vi } from "vitest";
 
 import { readZipEntryText, readZipFilenames } from "../readZipFilenames";
@@ -97,6 +103,7 @@ describe("readZipEntryText", () => {
         writable = new WritableStream();
       }
     );
+    configure({ DecompressionStream: globalThis.DecompressionStream });
     try {
       const file = zipFile(["manifest.json"], "package.zip", {
         "manifest.json": {
@@ -110,6 +117,7 @@ describe("readZipEntryText", () => {
       expect(chunksRead).toBeLessThan(32);
     } finally {
       vi.unstubAllGlobals();
+      configure({ DecompressionStream: globalThis.DecompressionStream });
     }
   });
 
@@ -129,6 +137,56 @@ describe("readZipEntryText", () => {
       await expect(readZipEntryText(file, "manifest.json")).resolves.toBeNull();
     }
   );
+
+  it("reads metadata from a ZIP64 archive", async () => {
+    const writer = new ZipWriter(new BlobWriter(), {
+      zip64: true,
+      useWebWorkers: false,
+    });
+    await writer.add("manifest.json", new TextReader(MANIFEST), {
+      zip64: true,
+    });
+    const file = new File([await writer.close()], "package.zip");
+    await expect(readZipFilenames(file)).resolves.toEqual(["manifest.json"]);
+    await expect(readZipEntryText(file, "manifest.json")).resolves.toBe(
+      MANIFEST
+    );
+  });
+
+  it("reads metadata without buffering the package payload", async () => {
+    const file = zipFile(["manifest.json", "payload.bin"], "package.zip", {
+      "manifest.json": storedEntry(MANIFEST),
+      "payload.bin": storedEntry("x".repeat(2 * 1024 * 1024)),
+    });
+    const wholeFileRead = vi.spyOn(file, "arrayBuffer");
+    const slices = vi.spyOn(file, "slice");
+    try {
+      await expect(readZipFilenames(file)).resolves.toEqual([
+        "manifest.json",
+        "payload.bin",
+      ]);
+      await expect(readZipEntryText(file, "manifest.json")).resolves.toBe(
+        MANIFEST
+      );
+      expect(wholeFileRead).not.toHaveBeenCalled();
+      const bytesRead = slices.mock.results.reduce(
+        (size, result) => size + result.value.size,
+        0
+      );
+      expect(bytesRead).toBeLessThan(192 * 1024);
+    } finally {
+      wholeFileRead.mockRestore();
+      slices.mockRestore();
+    }
+  });
+
+  it("rejects content with an invalid checksum", async () => {
+    const entry = storedEntry(MANIFEST);
+    const file = zipFile(["manifest.json"], "package.zip", {
+      "manifest.json": { ...entry, crc32: entry.crc32! ^ 1 },
+    });
+    await expect(readZipEntryText(file, "manifest.json")).resolves.toBeNull();
+  });
 
   it("returns null for something that is not a ZIP", async () => {
     const file = new File(["zip"], "package.zip", { type: "application/zip" });
