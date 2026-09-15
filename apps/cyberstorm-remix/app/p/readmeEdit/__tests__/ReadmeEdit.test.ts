@@ -99,6 +99,7 @@ vi.mock("@thunderstore/cyberstorm", () => ({
     message?: string;
   }) => React.createElement("div", null, message, children),
   Tabs: ({ children }: { children: React.ReactNode }) => children,
+  TooltipWrapper: ({ children }: { children: React.ReactNode }) => children,
   classnames: (...args: unknown[]) => args.filter(Boolean).join(" "),
   isRecord: (value: unknown) => !!value && typeof value === "object",
   useToast: () => ({ addToast: mocks.toast }),
@@ -117,7 +118,11 @@ const documentState = (markdown: string, is_edited = false) => ({
 });
 let cleanup: (() => void) | undefined;
 
-async function renderEditor(readme = "Packaged README", edited = false) {
+async function renderEditor(
+  readme = "Packaged README",
+  edited = false,
+  isLatest = true
+) {
   const container = document.createElement("div");
   document.body.appendChild(container);
   const root = createRoot(container);
@@ -136,7 +141,7 @@ async function renderEditor(readme = "Packaged README", edited = false) {
             loader: ({ params: routeParams }) => ({
               ...params,
               packageVersion: routeParams.version ?? params.packageVersion,
-              isLatest: true,
+              isLatest,
               readme: documentState(
                 routeParams.version ? `README ${routeParams.version}` : readme,
                 edited
@@ -252,6 +257,21 @@ describe("README editor loading", () => {
 });
 
 describe("README editor", () => {
+  it("keeps an unavailable changelog tab focusable without switching documents", async () => {
+    const { container } = await renderEditor("Historical README", false, false);
+    const tab = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "CHANGELOG"
+    )!;
+    expect(tab.getAttribute("aria-disabled")).toBe("true");
+    tab.focus();
+    expect(document.activeElement).toBe(tab);
+    await act(async () => tab.click());
+    expect(container.querySelector("textarea")?.value).toBe(
+      "Historical README"
+    );
+    expect(tab.getAttribute("aria-current")).toBe("false");
+  });
+
   it("loads fresh state when navigating to another package version", async () => {
     const { container, router } = await renderEditor();
     await act(async () => {

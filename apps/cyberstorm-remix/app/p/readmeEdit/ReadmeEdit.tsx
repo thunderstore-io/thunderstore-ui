@@ -24,6 +24,7 @@ import {
   NewIcon,
   NewValidationBar,
   Tabs,
+  TooltipWrapper,
   classnames,
   isRecord,
   useToast,
@@ -230,6 +231,9 @@ function ReadmeEditor({
   };
 
   const [searchParams] = useSearchParams();
+  // The latest version can be opened from either listing. Keep an explicit
+  // return target so refreshes and opening the editor in a new tab work too.
+  const returnToVersion = searchParams.get("from") === "version" || !isLatest;
   const [selectedDoc, setSelectedDoc] = useState<DocumentKey>(() =>
     isLatest && searchParams.get("document") === "changelog"
       ? "changelog"
@@ -539,63 +543,6 @@ function ReadmeEditor({
 
   return (
     <Page rootClasses="readme-edit">
-      <Tabs>
-        <NewButton
-          csModifiers={["ghost"]}
-          csVariant="secondary"
-          csSize="small"
-          primitiveType="cyberstormLink"
-          linkId="Package"
-          community={communityId}
-          namespace={namespaceId}
-          package={packageId}
-          rootClasses="readme-edit__back"
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </NewIcon>
-          Go back
-        </NewButton>
-        {(["readme", "changelog"] as const).map((doc) =>
-          doc === "changelog" && !isLatest ? null : (
-            <button
-              key={doc}
-              onClick={() => {
-                setSelectedDoc(doc);
-                setDiscardConfirming(false);
-              }}
-              aria-current={selectedDoc === doc}
-              className={classnames(
-                "readme-edit__tab",
-                "tabs-item",
-                selectedDoc === doc ? "tabs-item--current" : undefined
-              )}
-            >
-              {doc.toUpperCase()}
-              {documents[doc]?.is_edited ? (
-                <span
-                  className="readme-edit__tab-edited"
-                  title={editedTitle(documents[doc], doc)}
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faEdit} />
-                  </NewIcon>
-                </span>
-              ) : null}
-            </button>
-          )
-        )}
-        <span className="readme-edit__identity">
-          {namespaceId}-{packageId} {packageVersion}
-        </span>
-      </Tabs>
-
-      {!isLatest ? (
-        <NewAlert csVariant="info">
-          Changelogs can only be edited on the latest version.
-        </NewAlert>
-      ) : null}
-
       {current?.needsReload ? (
         <NewAlert csVariant="warning">
           The original {documentLabel} was restored, but the editor couldn’t
@@ -611,33 +558,72 @@ function ReadmeEditor({
         </NewAlert>
       ) : null}
 
-      {selectedDoc === "readme" &&
-      !current?.is_edited &&
-      !documents.readme?.needsReload &&
-      previousOverride ? (
-        <NewAlert csVariant="info">
-          <div className="readme-edit__migrate">
-            <span>
-              Version {previousOverride.versionNumber} has a site-edited README
-              that this version does not carry.
-            </span>
-            <span className="readme-edit__migrate-actions">
-              <NewButton
-                csSize="small"
-                csVariant="accent"
-                onClick={loadPreviousOverride}
-                disabled={saving}
-              >
-                Load site edit from {previousOverride.versionNumber}
-              </NewButton>
-            </span>
-          </div>
-        </NewAlert>
-      ) : null}
-
       <div className="readme-edit__workspace">
+        <Tabs rootClasses="readme-edit__toolbar">
+          <NewButton
+            csModifiers={["ghost"]}
+            csVariant="secondary"
+            csSize="small"
+            primitiveType="cyberstormLink"
+            linkId={returnToVersion ? "PackageVersion" : "Package"}
+            community={communityId}
+            namespace={namespaceId}
+            package={packageId}
+            version={packageVersion}
+            rootClasses="readme-edit__back"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </NewIcon>
+            Go back
+          </NewButton>
+          {(["readme", "changelog"] as const).map((doc) => {
+            const unavailable = doc === "changelog" && !isLatest;
+            return (
+              <TooltipWrapper
+                key={doc}
+                tooltipText={
+                  unavailable
+                    ? "Changelogs can only be edited on the latest version."
+                    : undefined
+                }
+              >
+                <button
+                  aria-disabled={unavailable || undefined}
+                  onClick={() => {
+                    if (unavailable) return;
+                    setSelectedDoc(doc);
+                    setDiscardConfirming(false);
+                  }}
+                  aria-current={selectedDoc === doc}
+                  className={classnames(
+                    "readme-edit__tab",
+                    "tabs-item",
+                    selectedDoc === doc ? "tabs-item--current" : undefined
+                  )}
+                >
+                  {doc.toUpperCase()}
+                  {documents[doc]?.is_edited ? (
+                    <span
+                      className="readme-edit__tab-edited"
+                      title={editedTitle(documents[doc], doc)}
+                    >
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faEdit} />
+                      </NewIcon>
+                    </span>
+                  ) : null}
+                </button>
+              </TooltipWrapper>
+            );
+          })}
+          <span className="readme-edit__identity">
+            {namespaceId}-{packageId} {packageVersion}
+          </span>
+        </Tabs>
         <div className="readme-edit__panes">
           <CodeInput
+            aria-label={`${documentLabel} source`}
             placeholder="# Package markdown"
             onChange={(e) =>
               setDocumentText(selectedDoc, e.currentTarget.value)
@@ -656,6 +642,19 @@ function ReadmeEditor({
           rootClasses="readme-edit__bar"
         >
           <span className="readme-edit__bar-actions">
+            {selectedDoc === "readme" &&
+            !current?.is_edited &&
+            !current?.needsReload &&
+            previousOverride ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                onClick={loadPreviousOverride}
+                disabled={saving}
+              >
+                Load site edit from {previousOverride.versionNumber}
+              </NewButton>
+            ) : null}
             <input
               ref={fileInputRef}
               type="file"

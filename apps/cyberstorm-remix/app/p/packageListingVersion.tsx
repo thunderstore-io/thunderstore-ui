@@ -238,6 +238,7 @@ export default function PackageListingVersion() {
                 namespace={listing.namespace}
                 package={listing.name}
                 version={packageVersion}
+                queryParams="from=version"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faEdit} />
