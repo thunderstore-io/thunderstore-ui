@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Link, Outlet, RouterProvider, createMemoryRouter } from "react-router";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import ReadmeEdit, { clientLoader } from "../ReadmeEdit";
+import ReadmeEdit, { clientLoader, loader } from "../ReadmeEdit";
 
 (
   globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }
@@ -226,6 +226,30 @@ afterEach(() => {
 });
 
 describe("README editor loading", () => {
+  it("allows an authenticated retry after an anonymous listing 404", async () => {
+    mocks.listing.mockRejectedValueOnce({ response: { status: 404 } });
+    const response = await loader({ params } as never);
+    expect(response).toMatchObject({
+      init: { status: 404 },
+      data: { ...params, __gatedSsr404: true },
+    });
+    expect(mocks.download).not.toHaveBeenCalled();
+    expect(clientLoader.hydrate).toBe(true);
+
+    const result = await clientLoader({
+      params,
+      request: new Request("https://example.invalid/edit"),
+    } as never);
+    expect(result).toMatchObject({ readme: documentState("Packaged README") });
+    expect(mocks.permissions).toHaveBeenCalled();
+  });
+
+  it("does not treat an SSR backend failure as a hidden listing", async () => {
+    const error = { response: { status: 503 } };
+    mocks.listing.mockRejectedValueOnce(error);
+    await expect(loader({ params } as never)).rejects.toBe(error);
+  });
+
   it("does not hide an override download failure behind the cached endpoint", async () => {
     mocks.download.mockRejectedValue(
       new Error("Override download failed: 503")

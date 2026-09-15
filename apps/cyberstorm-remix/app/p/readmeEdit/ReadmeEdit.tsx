@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { gatedSsr404, isGatedSsrData } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -131,23 +132,25 @@ async function fetchEditorData(
 
 export const loader = async ({ params: routeParams }: Route.LoaderArgs) => {
   const params = getEditorParams(routeParams);
+  const seo = createSeo({
+    descriptors: [
+      {
+        title: `Edit ${params.namespaceId}-${params.packageId} | Thunderstore`,
+      },
+    ],
+  });
 
-  const data = await fetchEditorData(
-    () => ({ apiHost: getApiHostForSsr(), sessionId: undefined }),
-    params
-  );
-
-  return {
-    ...data,
-    ...params,
-    seo: createSeo({
-      descriptors: [
-        {
-          title: `Edit ${params.namespaceId}-${params.packageId} | Thunderstore`,
-        },
-      ],
-    }),
-  };
+  try {
+    const data = await fetchEditorData(
+      () => ({ apiHost: getApiHostForSsr(), sessionId: undefined }),
+      params
+    );
+    return { ...data, ...params, seo };
+  } catch (error) {
+    if (!isApiError(error) || error.response.status !== 404) throw error;
+    // Hidden listings must reach the client loader for an authenticated retry.
+    return gatedSsr404({ ...params, seo });
+  }
 };
 
 export { noStoreHeaders as headers } from "cyberstorm/utils/ssrLoader";
@@ -197,6 +200,7 @@ type PreviewState = {
 
 export default function ReadmeEdit() {
   const data = useLoaderData<typeof loader | typeof clientLoader>();
+  if (isGatedSsrData(data)) return null;
   // Reset drafts when the package version changes, but preserve them when
   // the same route revalidates.
   const key = [
