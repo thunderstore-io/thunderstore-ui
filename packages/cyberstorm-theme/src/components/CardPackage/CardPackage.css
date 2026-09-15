@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .card-package {
     --card-package-border-radius: var(--radius-md);
 
@@ -9,7 +9,7 @@
         ease-out,
       box-shadow var(--animation-duration-xs) ease-out;
     --card-package-focus-outline: 0.2rem solid var(--color-cyber-green-5);
-    --card-package-focus-outline-offset: var(--space-8);
+    --card-package-focus-outline-offset: 0.5rem;
     --card-package-background-color: var(--color-surface-a4);
     --card-package-hover-background-color: var(--color-surface-a5);
     --card-package-hover-box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 0.4),

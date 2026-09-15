@@ -1,16 +1,16 @@
-@layer components {
+@layer cyberstorm {
   .breadcrumbs {
     --breadcrumb-skew: -30deg;
     --breadcrumb-unskew: 30deg;
     --breadcrumb-segment-height: 2rem;
-    --breadcrumb-cap-width: var(--space-32);
+    --breadcrumb-cap-width: 2rem;
     --breadcrumb-cap-inset: 1rem;
 
     display: flex;
-    gap: var(--space-4);
+    gap: 0.25rem;
     width: 100%;
     margin-bottom: var(--gap-xl);
-    padding-left: var(--space-16);
+    padding-left: 1rem;
     overflow: auto;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
@@ -29,7 +29,7 @@
     align-items: center;
     justify-content: center;
     height: var(--breadcrumb-segment-height);
-    padding-inline: var(--space-16);
+    padding-inline: 1rem;
     background-color: var(--breadcrumb-item-bg-color--default);
     transform: skew(var(--breadcrumb-skew));
 
@@ -84,7 +84,7 @@
 
     &::before {
       left: calc(-1 * var(--breadcrumb-cap-inset));
-      border-radius: var(--space-8) 0 0 var(--space-8);
+      border-radius: 0.5rem 0 0 0.5rem;
       background-color: var(--breadcrumb-item-bg-color--default);
     }
 
@@ -97,7 +97,7 @@
 
   .breadcrumbs > :last-child::after {
     right: calc(-1 * var(--breadcrumb-cap-inset));
-    border-radius: 0 var(--space-8) var(--space-8) 0;
+    border-radius: 0 0.5rem 0.5rem 0;
     background-color: var(--breadcrumb-item-bg-color--hover);
   }
 

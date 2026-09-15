@@ -1,12 +1,12 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .pagination {
     --pagination-gap: var(--gap-xs);
   }
 
   /* VARIANTS STATELESS */
   .pagination__item {
-    --pagination-item-height: var(--space-36);
-    --pagination-item-padding: var(--space-8) var(--space-12);
+    --pagination-item-height: 2.25rem;
+    --pagination-item-padding: 0.5rem 0.75rem;
     --pagination-item-font-weight: var(--font-weight-regular);
     --pagination-item-border-radius: var(--radius-md);
     --pagination-item-font-size: var(--font-size-body-lg);

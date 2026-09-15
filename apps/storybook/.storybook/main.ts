@@ -2,6 +2,8 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import module from "node:module";
 import path from "node:path";
 
+import { prefixCyberstormThemePostcss } from "./prefixCyberstormThemeCss.ts";
+
 const require = module.createRequire(import.meta.url);
 
 /**
@@ -11,15 +13,40 @@ const require = module.createRequire(import.meta.url);
 function getAbsolutePath(value: string) {
   return path.dirname(require.resolve(path.join(value, "package.json")));
 }
+
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-onboarding"),
+    // Enables Chromatic "modes" so each story is snapshotted with the theme
+    // both ON (production look) and OFF (barebones cyberstorm) — see modes.ts.
+    getAbsolutePath("@chromatic-com/storybook"),
   ],
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),
     options: {},
+  },
+  async viteFinal(viteConfig) {
+    const existingPostcss = viteConfig.css?.postcss;
+    const existingPlugins =
+      existingPostcss &&
+      typeof existingPostcss === "object" &&
+      "plugins" in existingPostcss &&
+      Array.isArray(existingPostcss.plugins)
+        ? existingPostcss.plugins
+        : [];
+
+    viteConfig.css = {
+      ...viteConfig.css,
+      postcss: {
+        ...(typeof existingPostcss === "object" && existingPostcss
+          ? existingPostcss
+          : {}),
+        plugins: [...existingPlugins, prefixCyberstormThemePostcss()],
+      },
+    };
+    return viteConfig;
   },
 };
 export default config;

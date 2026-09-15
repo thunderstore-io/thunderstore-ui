@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .community {
     z-index: 1;
     display: grid;
@@ -158,7 +158,7 @@
     white-space: nowrap;
 
     > svg {
-      inline-size: var(--space-16);
+      inline-size: 1rem;
     }
   }
 

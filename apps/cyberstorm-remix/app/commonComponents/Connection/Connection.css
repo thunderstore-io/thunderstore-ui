@@ -1,16 +1,16 @@
-@layer nimbus-components {
+@layer nimbus {
   .connection {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: var(--gap-3xl);
     align-items: center;
     min-width: min-content;
-    padding: var(--space-16) var(--space-32);
+    padding: 1rem 2rem;
     border-radius: var(--radius-md);
     background: var(--surface-dim);
 
     @container (width < 625px) {
-      padding: var(--space-16);
+      padding: 1rem;
 
       .connection__info {
         grid-template-columns: 1fr;
@@ -45,8 +45,8 @@
   }
 
   .connection__icon {
-    width: var(--space-40);
-    height: var(--space-40);
+    width: 2.5rem;
+    height: 2.5rem;
 
     & svg {
       width: 100%;

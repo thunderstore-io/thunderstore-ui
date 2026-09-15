@@ -1,6 +1,6 @@
-@layer components {
+@layer cyberstorm {
   .select-search:where(.select-search--multiple) {
-    --select-search-padding-block: var(--space-8);
+    --select-search-padding-block: 0.5rem;
     --select-search-min-height: calc(
       var(--select-search-tag-height) + var(--select-search-padding-block) * 2
     );

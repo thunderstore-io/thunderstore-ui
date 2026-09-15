@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .submission-processing__header {
     display: flex;
     gap: var(--gap-md);

@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { NewTable } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
   TableModifiersList,
   TableSizesList,
   TableVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Table",

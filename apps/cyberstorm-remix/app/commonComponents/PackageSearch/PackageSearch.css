@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .package-search {
     --package-search-sidebar-width: 15.5rem;
 
@@ -22,7 +22,7 @@
     flex-direction: column;
     gap: var(--gap-sm);
     max-height: calc(100vh - var(--header-height) - 2rem);
-    padding-top: var(--space-16);
+    padding-top: 1rem;
     border-radius: var(--radius-md);
     overflow-y: auto;
     scrollbar-width: none;
@@ -69,9 +69,9 @@
   .package-search__content {
     display: flex;
     flex-direction: column;
-    gap: var(--space-24);
+    gap: 1.5rem;
     min-width: 0;
-    padding-top: var(--space-16);
+    padding-top: 1rem;
   }
 
   .package-search__pagination {
@@ -80,7 +80,7 @@
     gap: var(--gap-xl);
     align-items: center;
     justify-content: center;
-    padding: var(--space-16) 0;
+    padding: 1rem 0;
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
 

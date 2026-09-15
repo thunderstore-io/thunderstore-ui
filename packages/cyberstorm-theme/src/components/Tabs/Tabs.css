@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* Tabs */
   .tabs {
     --tabs-box-shadow-height: 3px;
@@ -18,7 +18,7 @@
       }
 
       .tabs-number-slate {
-        --tabs-item-number-slate-padding: var(--space-2) var(--space-4);
+        --tabs-item-number-slate-padding: 0.125rem 0.25rem;
         --tabs-item-number-slate-gap: 0.5rem;
         --tabs-item-number-slate-border-radius: var(--radius-sm);
         --tabs-item-number-slate-background-color: var(--color-surface-a4);

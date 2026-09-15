@@ -7,15 +7,11 @@ import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
-import {
-  type AlertSizes,
-  type AlertVariants,
-} from "@thunderstore/cyberstorm-theme";
-
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Alert.css";
+import { type AlertSizes, type AlertVariants } from "./Alert.types";
 
 export interface AlertProps extends PrimitiveComponentDefaultProps {
   csVariant?: AlertVariants;

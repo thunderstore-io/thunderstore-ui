@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .members__user {
     display: flex;
     flex-direction: row;
@@ -58,7 +58,7 @@
   }
 
   .add-member-form__error {
-    margin-top: var(--space-2);
+    margin-top: 0.125rem;
     color: var(--color-accent-red-7);
     font-size: var(--font-size-body-sm);
   }

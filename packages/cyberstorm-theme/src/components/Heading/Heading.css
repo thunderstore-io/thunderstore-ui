@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* Heading base tokens */
   .heading {
     --heading-font-weight: var(--font-weight-bold);
@@ -9,30 +9,30 @@
 
   .heading:where(.heading--size--1) {
     --heading-font-weight: var(--font-weight-extra-bold);
-    --heading-font-size: var(--space-54);
+    --heading-font-size: 3.375rem;
     --heading-font-family: var(--font-family--hubot);
     --heading-line-height: 115%;
   }
 
   .heading:where(.heading--size--2) {
-    --heading-font-size: var(--space-32);
+    --heading-font-size: 2rem;
     --heading-line-height: var(--line-height-sm);
   }
 
   .heading:where(.heading--size--3) {
-    --heading-font-size: var(--space-20);
+    --heading-font-size: 1.25rem;
   }
 
   .heading:where(.heading--size--4) {
-    --heading-font-size: var(--space-16);
+    --heading-font-size: 1rem;
   }
 
   .heading:where(.heading--size--5) {
-    --heading-font-size: var(--space-14);
+    --heading-font-size: 0.875rem;
   }
 
   .heading:where(.heading--size--6) {
-    --heading-font-size: var(--space-12);
+    --heading-font-size: 0.75rem;
   }
 
   /* Display base tokens */
@@ -46,32 +46,32 @@
   .display:where(.display--size--1) {
     --display-font-weight: var(--font-weight-extra-bold);
     --display-font-family: var(--font-family--hubot);
-    --display-font-size: var(--space-54);
+    --display-font-size: 3.375rem;
     --display-line-height: 115%; /* 62.1px */
   }
 
   .display:where(.display--size--2) {
     --display-font-weight: var(--font-weight-extra-bold);
     --display-font-family: var(--font-family--hubot);
-    --display-font-size: var(--space-51);
+    --display-font-size: 3.188rem;
   }
 
   .display:where(.display--size--3) {
     --display-font-weight: var(--font-weight-bold);
     --display-font-family: var(--font-family--hubot);
-    --display-font-size: var(--space-38);
+    --display-font-size: 2.375rem;
   }
 
   .display:where(.display--size--4) {
-    --display-font-size: var(--space-16);
+    --display-font-size: 1rem;
   }
 
   .display:where(.display--size--5) {
-    --display-font-size: var(--space-14);
+    --display-font-size: 0.875rem;
   }
 
   .display:where(.display--size--6) {
-    --display-font-size: var(--space-12);
+    --display-font-size: 0.75rem;
   }
 
   /* VARIANTS DEFAULT STATE */

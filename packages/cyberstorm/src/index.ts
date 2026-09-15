@@ -1,5 +1,9 @@
 import { config } from "@fortawesome/fontawesome-svg-core";
 
+// Barebones structural token defaults (see defaults.css). Lives in
+// `@layer cyberstorm`, so cyberstorm-theme overrides it whenever loaded.
+import "./defaults.css";
+
 config.autoAddCss = false;
 
 // primitiveComponents
@@ -121,7 +125,6 @@ export {
 } from "./newComponents/TextInput/TextInput";
 export { useToast } from "./newComponents/Toast/Provider";
 export { Provider as ToastProvider } from "./newComponents/Toast/Provider";
-export { Viewport as ToastViewport } from "./newComponents/Toast/Viewport";
 export { Toast } from "./newComponents/Toast/Toast";
 export type { ToastProps } from "./newComponents/Toast/Toast";
 export {
@@ -154,3 +157,171 @@ export {
   ThunderstoreLogo,
   ThunderstoreLogoHorizontal,
 } from "./svg/svg";
+
+// Component API types (variant/size/modifier lists)
+export {
+  type ButtonVariants,
+  ButtonVariantsList,
+  type ButtonSizes,
+  ButtonSizesList,
+  type ButtonModifiers,
+  ButtonModifiersList,
+} from "./newComponents/Button/Button.types";
+export {
+  type HeadingVariants,
+  HeadingVariantsList,
+  type HeadingSizes,
+  HeadingSizesList,
+  type HeadingModifiers,
+  HeadingModifiersList,
+} from "./newComponents/Heading/Heading.types";
+export {
+  type DropDownVariants,
+  DropDownVariantsList,
+  type DropDownSizes,
+  DropDownSizesList,
+  type DropDownModifiers,
+  DropDownModifiersList,
+  type DropDownItemVariants,
+  DropDownItemVariantsList,
+  type DropDownItemSizes,
+  DropDownItemSizesList,
+  type DropDownItemModifiers,
+  DropDownItemModifiersList,
+  type DropDownDividerVariants,
+  DropDownDividerVariantsList,
+  type DropDownDividerSizes,
+  DropDownDividerSizesList,
+  type DropDownDividerModifiers,
+  DropDownDividerModifiersList,
+} from "./newComponents/DropDown/DropDown.types";
+export {
+  type SelectVariants,
+  SelectVariantsList,
+  type SelectSizes,
+  SelectSizesList,
+  type SelectModifiers,
+  SelectModifiersList,
+} from "./newComponents/Select/Select.types";
+export {
+  type TableVariants,
+  TableVariantsList,
+  type TableSizes,
+  TableSizesList,
+  type TableModifiers,
+  TableModifiersList,
+} from "./newComponents/Table/Table.types";
+export {
+  type TextInputVariants,
+  TextInputVariantsList,
+  type TextInputSizes,
+  TextInputSizesList,
+  type TextInputModifiers,
+  TextInputModifiersList,
+} from "./newComponents/TextInput/TextInput.types";
+export {
+  type CodeInputVariants,
+  CodeInputVariantsList,
+  type CodeInputSizes,
+  CodeInputSizesList,
+  type CodeInputModifiers,
+  CodeInputModifiersList,
+} from "./newComponents/CodeInput/CodeInput.types";
+export {
+  type IconVariants,
+  IconVariantsList,
+} from "./newComponents/Icon/Icon.types";
+export {
+  type BreadCrumbsVariants,
+  BreadCrumbsVariantsList,
+  type BreadCrumbsSizes,
+  BreadCrumbsSizesList,
+  type BreadCrumbsModifiers,
+  BreadCrumbsModifiersList,
+} from "./newComponents/BreadCrumbs/BreadCrumbs.types";
+export {
+  type TagVariants,
+  TagVariantsList,
+  type TagSizes,
+  TagSizesList,
+  type TagModifiers,
+  TagModifiersList,
+} from "./newComponents/Tag/Tag.types";
+export {
+  type AlertVariants,
+  AlertVariantsList,
+  type AlertSizes,
+  AlertSizesList,
+} from "./newComponents/Alert/Alert.types";
+export {
+  type ToastVariants,
+  ToastVariantsList,
+  type ToastSizes,
+  ToastSizesList,
+} from "./newComponents/Toast/Toast.types";
+export {
+  type MetaItemVariants,
+  MetaItemVariantsList,
+  type MetaItemSizes,
+  MetaItemSizesList,
+} from "./newComponents/MetaItem/MetaItem.types";
+export {
+  type TabsVariants,
+  TabsVariantsList,
+  type TabsSizes,
+  TabsSizesList,
+} from "./newComponents/Tabs/Tabs.types";
+export {
+  type LinkVariants,
+  LinkVariantsList,
+} from "./newComponents/Link/Link.types";
+export {
+  type ImageVariants,
+  ImageVariantsList,
+} from "./newComponents/Image/Image.types";
+export {
+  type MenuVariants,
+  MenuVariantsList,
+} from "./newComponents/Menu/Menu.types";
+export {
+  type DrawerSizes,
+  DrawerSizesList,
+  type DrawerVariants,
+  DrawerVariantsList,
+} from "./newComponents/Drawer/Drawer.types";
+export {
+  type ModalVariants,
+  ModalVariantsList,
+  type ModalSizes,
+  ModalSizesList,
+} from "./newComponents/Modal/Modal.types";
+export {
+  type AdContainerVariants,
+  AdContainerVariantsList,
+} from "./newComponents/AdContainer/AdContainer.types";
+export {
+  type CardPackageVariants,
+  CardPackageVariantsList,
+  type CardPackageSizes,
+  CardPackageSizesList,
+  type CardPackageModifiers,
+  CardPackageModifiersList,
+} from "./newComponents/Card/CardPackage/CardPackage.types";
+export {
+  type SelectSearchModifiers,
+  SelectSearchModifiersList,
+} from "./newComponents/SelectSearch/SelectSearch.types";
+export {
+  type SwitchVariants,
+  SwitchVariantsList,
+  type SwitchSizes,
+  SwitchSizesList,
+  type SwitchModifiers,
+  SwitchModifiersList,
+} from "./newComponents/Switch/Switch.types";
+export {
+  type AvatarVariants,
+  AvatarVariantsList,
+  type AvatarSizes,
+  AvatarSizesList,
+} from "./newComponents/Avatar/Avatar.types";

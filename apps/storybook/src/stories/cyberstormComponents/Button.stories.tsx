@@ -2,12 +2,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { NewButton } from "@thunderstore/cyberstorm";
 // import { fn } from 'storybook/test';
-import "@thunderstore/cyberstorm-theme";
 import {
   ButtonModifiersList,
   ButtonSizesList,
   ButtonVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

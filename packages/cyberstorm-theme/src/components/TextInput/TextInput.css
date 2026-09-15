@@ -1,7 +1,7 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .text-input {
     --text-input-width: 100%;
-    --text-input-padding: var(--space-8) var(--space-10);
+    --text-input-padding: 0.5rem 0.625rem;
     --text-input-border: var(--border-width--px) solid
       var(--text-input-border-color);
     --text-input-border-radius: var(--radius-md);
@@ -13,7 +13,7 @@
 
   .text-input__left-icon {
     --text-input-left-icon-position: absolute;
-    --text-input-left-icon-margin: var(--space-10) var(--space-16);
+    --text-input-left-icon-margin: 0.625rem 1rem;
     --text-input-left-icon-color: var(--input-icon-color--default);
     --text-input-left-icon-pointer-events: none;
   }
@@ -39,24 +39,22 @@
 
   .text-input:where(.text-input--size--default) {
     --text-input-height: var(--input-md-height);
-    --text-input-padding: var(--space-12)
-      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-12)
-      calc(var(--space-16) + var(--left-padding-bonus, 0px));
+    --text-input-padding: 0.75rem calc(1rem + var(--right-padding-bonus, 0px))
+      0.75rem calc(1rem + var(--left-padding-bonus, 0px));
   }
 
   .text-input:where(.text-input--size--small) {
     --text-input-height: var(--input-sm-height);
-    --text-input-padding: var(--space-10)
-      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
-      calc(var(--space-16) + var(--left-padding-bonus, 0px));
+    --text-input-padding: 0.625rem calc(1rem + var(--right-padding-bonus, 0px))
+      0.625rem calc(1rem + var(--left-padding-bonus, 0px));
   }
 
   .text-input:where(.text-input--has-left-icon) {
-    --left-padding-bonus: var(--space-24);
+    --left-padding-bonus: 1.5rem;
   }
 
   .text-input:where(.text-input--has-clear-value) {
-    --right-padding-bonus: var(--space-16);
+    --right-padding-bonus: 1rem;
   }
 
   .text-input:where(.text-input--invalid),
@@ -94,12 +92,12 @@
 
   .text-input__right-icon {
     --text-input-right-icon-position: absolute;
-    --text-input-right-icon-padding: var(--space-14) var(--space-16);
+    --text-input-right-icon-padding: 0.875rem 1rem;
     --text-input-right-icon-color: var(--color-text-secondary);
   }
 
   .text-input__clear-value-button {
-    --text-input-clear-value-button-right: var(--space-16);
+    --text-input-clear-value-button-right: 1rem;
     --text-input-clear-value-button-color: var(--color-text-secondary);
     --text-input-clear-value-button-opacity: 0.5;
   }

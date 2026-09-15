@@ -1,8 +1,8 @@
-@layer nimbus-components {
+@layer nimbus {
   .category-tag-cloud {
     display: flex;
     flex-flow: row wrap;
-    gap: var(--space-8);
+    gap: 0.5rem;
   }
 
   .category-tag-cloud__search-tag {

@@ -1,0 +1,80 @@
+/*
+Barebones placeholder defaults for @thunderstore/cyberstorm.
+
+These live in `@layer cyberstorm` — the LOWEST of the three layers
+(cyberstorm < cyberstorm-theme < nimbus) — so whenever
+@thunderstore/cyberstorm-theme is loaded it overrides every one of these
+values (layer order beats specificity). That makes this file a no-op for
+themed output: it only takes effect when cyberstorm is used WITHOUT the
+theme, giving a functional-but-ugly barebones render.
+
+Scope is intentionally limited to STRUCTURAL design tokens (spacing, radii,
+gaps, border widths, typography scale, animation lengths). Cyberstorm ships
+NO colors of its own — color tokens stay unset in the barebones state (that
+is the "ugly" part) and are wired up entirely by cyberstorm-theme.
+
+Values mirror the theme's own token scale so barebones spacing/typography is
+sensible; they are still overridden by the theme in the themed build.
+*/
+@layer cyberstorm {
+  :root {
+    /* Layout gaps */
+    --gap-3xs: 0.125rem;
+    --gap-2xs: 0.25rem;
+    --gap-xs: 0.5rem;
+    --gap-sm: 0.75rem;
+    --gap-md: 1rem;
+    --gap-lg: 1.25rem;
+    --gap-xl: 1.5rem;
+    --gap-2xl: 1.75rem;
+    --gap-3xl: 2rem;
+    --gap-4xl: 2.25rem;
+    --gap-5xl: 2.5rem;
+    --gap-6xl: 2.75rem;
+    --gap-7xl: 3rem;
+
+    /* Border widths */
+    --border-width--px: 1px;
+    --border-width--2: 0.125rem;
+    --border-width--4: 0.25rem;
+
+    /* Corner radii */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 64rem;
+
+    /* Animation lengths */
+    --animation-duration-xs: 80ms;
+    --animation-duration-sm: 120ms;
+    --animation-duration-md: 150ms;
+    --animation-duration-lg: 300ms;
+
+    /* Container sizing */
+    --container-padding: clamp(1rem, calc(1rem + (100vw - 90rem) * 0.1), 4rem);
+    --container-width: 90rem;
+
+    /* Typography scale */
+    --line-height-auto: normal;
+    --line-height-xs: 100%;
+    --line-height-sm: 120%;
+    --line-height-md: 150%;
+    --line-height-lg: 170%;
+    --font-size-body-xs: 0.625rem;
+    --font-size-body-sm: 0.75rem;
+    --font-size-body-md: 0.875rem;
+    --font-size-body-lg: 1rem;
+    --font-size-body-xl: 1.125rem;
+    --font-size-body-xxl: 1.25rem;
+    --font-size-body-xxxl: 1.375rem;
+    --font-size-body-xxxxl: 1.5rem;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extra-bold: 800;
+    --font-family--inter: inter, sans-serif;
+    --font-family--hubot: hubot-sans, sans-serif;
+  }
+}

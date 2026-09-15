@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Drawer, NewButton } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
-import {
-  DrawerSizesList,
-  DrawerVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import { DrawerSizesList, DrawerVariantsList } from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Drawer",

@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { NewSelect } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
   SelectModifiersList,
   SelectSizesList,
   SelectVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Select",

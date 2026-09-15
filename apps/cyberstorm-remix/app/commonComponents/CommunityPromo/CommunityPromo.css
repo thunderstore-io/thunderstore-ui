@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   /* Structure + values mirror the Figma spec: a dark purple container with the
      "AD" marker pinned over its top-left corner, light purple body copy, and a
      light-green Tag (xsmall) for the deal. */
@@ -14,7 +14,7 @@
        makes that the whole untruncated sentence — which grew the page past the
        viewport instead of ellipsising. */
     min-width: 0;
-    padding: var(--space-12) var(--space-16) var(--space-12) var(--space-48);
+    padding: 0.75rem 1rem 0.75rem 3rem;
     border: 2px solid var(--color-accent-purple-4);
     border-radius: var(--radius-md);
     text-decoration: none;
@@ -42,8 +42,8 @@
     left: 0;
     display: inline-flex;
     align-items: center;
-    height: var(--space-24);
-    padding: var(--space-4) var(--space-8);
+    height: 1.5rem;
+    padding: 0.25rem 0.5rem;
     border-radius: var(--radius-md) 0;
     color: var(--color-accent-purple-11);
     font-weight: var(--font-weight-bold);

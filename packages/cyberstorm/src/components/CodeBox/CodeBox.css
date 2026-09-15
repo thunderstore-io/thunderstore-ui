@@ -1,4 +1,4 @@
-@layer components {
+@layer cyberstorm {
   .codebox-wrapper {
     position: relative;
     display: flex;
@@ -12,8 +12,8 @@
 
   .codebox-copy-button {
     position: absolute;
-    top: var(--space-8);
-    right: var(--space-8);
+    top: 0.5rem;
+    right: 0.5rem;
 
     /* Ensure it is above the code/scrollbar */
     z-index: 10;

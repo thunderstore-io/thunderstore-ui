@@ -1,11 +1,11 @@
-@layer nimbus-layout {
+@layer nimbus {
   .error {
     display: flex;
     flex-direction: column;
-    gap: var(--space-32);
+    gap: 2rem;
     align-items: center;
     justify-content: center;
-    padding: var(--space-24) 0;
+    padding: 1.5rem 0;
 
     --glitch-color-1: var(--old--color-cyber-green-50);
     --glitch-color-2: var(--old--color-accent-pink-50);
@@ -13,8 +13,8 @@
 
   .error__glitch {
     position: relative;
-    margin-top: var(--space-32);
-    margin-bottom: var(--space-48);
+    margin-top: 2rem;
+    margin-bottom: 3rem;
     font-weight: var(--font-weight-extra-bold);
     font-size: 12rem;
     line-height: 1;
@@ -62,7 +62,7 @@
 
   .error__flavor {
     font-weight: var(--font-weight-bold);
-    font-size: var(--space-32);
+    font-size: 2rem;
     line-height: 1;
     text-align: center;
   }

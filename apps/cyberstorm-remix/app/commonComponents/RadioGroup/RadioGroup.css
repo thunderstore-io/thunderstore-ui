@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .radio-group {
     display: flex;
     flex-direction: column;
@@ -12,7 +12,7 @@
     gap: 0.75rem;
     align-items: center;
     justify-content: flex-start;
-    padding: var(--space-8) var(--space-16);
+    padding: 0.5rem 1rem;
     border-radius: var(--radius-md);
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-regular);
@@ -50,7 +50,7 @@
 
   .radio-group__divider {
     height: var(--divider-height);
-    margin: var(--space-8) 0;
+    margin: 0.5rem 0;
     background-color: var(--divider-bg-color);
   }
 
@@ -59,15 +59,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--space-18);
-    height: var(--space-18);
+    width: 1.125rem;
+    height: 1.125rem;
     background: transparent;
 
     > svg {
       position: absolute;
       display: block;
-      width: var(--space-18);
-      height: var(--space-18);
+      width: 1.125rem;
+      height: 1.125rem;
     }
   }
 }

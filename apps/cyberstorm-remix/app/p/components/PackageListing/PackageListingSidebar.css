@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   .package-listing-sidebar {
     position: sticky;
 
@@ -71,7 +71,7 @@
     display: flex;
     gap: var(--gap-3xl);
     align-items: center;
-    padding: var(--space-8) var(--space-12);
+    padding: 0.5rem 0.75rem;
     background: var(--color-surface-default);
   }
 

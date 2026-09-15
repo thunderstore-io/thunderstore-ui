@@ -6,12 +6,11 @@ import {
   NewDropDownDivider,
   NewDropDownItem,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
   DropDownModifiersList,
   DropDownSizesList,
   DropDownVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/DropDown",

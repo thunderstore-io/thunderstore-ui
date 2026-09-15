@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { NewAlert } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
-import {
-  AlertSizesList,
-  AlertVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import { AlertSizesList, AlertVariantsList } from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Alert",

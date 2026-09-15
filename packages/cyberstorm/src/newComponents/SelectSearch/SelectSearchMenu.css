@@ -1,4 +1,4 @@
-@layer components {
+@layer cyberstorm {
   .select-search__menu {
     position: absolute;
     bottom: -0.5rem;
@@ -8,8 +8,8 @@
     flex-direction: column;
     width: 100%;
     min-height: 1.5rem;
-    padding: var(--space-8);
-    border: var(--space-px) var(--color-surface-6) solid;
+    padding: 0.5rem;
+    border: 1px var(--color-surface-6) solid;
     border-radius: var(--radius-md);
     overflow: hidden;
     overflow-y: auto;
@@ -20,7 +20,7 @@
   }
 
   .select-search__no-options {
-    padding: var(--space-12);
+    padding: 0.75rem;
     color: var(--color-text-tertiary);
     text-align: center;
   }
