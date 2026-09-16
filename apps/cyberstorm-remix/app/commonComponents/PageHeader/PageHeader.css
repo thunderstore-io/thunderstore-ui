@@ -8,6 +8,8 @@
   }
 
   .page-header--detailed {
+    display: flex;
+    align-items: center;
     padding: 1.5rem;
     background-color: var(--color-surface-dim);
   }
