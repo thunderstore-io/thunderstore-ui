@@ -5,15 +5,21 @@ import {
   isExpectedRouteError,
   toReportableError,
 } from "cyberstorm/utils/sentry";
+import { isRecord } from "cyberstorm/utils/typeChecks";
 import { type JSX, useCallback, useEffect, useRef } from "react";
 import {
   isRouteErrorResponse,
   useLocation,
   useNavigate,
+  useNavigationType,
   useRouteError,
 } from "react-router";
 
-import { isApiError } from "@thunderstore/thunderstore-api";
+import { NewButton } from "@thunderstore/cyberstorm";
+import {
+  isApiError,
+  isCloudflareChallengeError,
+} from "@thunderstore/thunderstore-api";
 
 type StatusCode = number | "???";
 
@@ -26,6 +32,7 @@ export function RouteErrorBoundary() {
   const error = useRouteError();
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
 
   // One forced session lookup shared by the classify + redirect effects below
   // — a 401 page would otherwise fetch /current-user twice. Forced (true)
@@ -143,7 +150,33 @@ export function RouteErrorBoundary() {
     resolveAnonymous,
   ]);
 
-  const errorTitle = errorTitles[statusCode] ?? "Unexpected error";
+  useEffect(() => {
+    if (!isSsrChallengeResponse(error) || navigationType === "REPLACE") return;
+    navigate(location.pathname + location.search + location.hash, {
+      replace: true,
+    });
+  }, [
+    error,
+    navigationType,
+    navigate,
+    location.pathname,
+    location.search,
+    location.hash,
+  ]);
+
+  const challenge = isChallengeError(error);
+  const errorTitle = challenge
+    ? "Verification required"
+    : errorTitles[statusCode] ?? "Unexpected error";
+
+  if (isSsrChallengeResponse(error) && navigationType !== "REPLACE") {
+    return (
+      <>
+        <title>{`${errorTitle} | Thunderstore`}</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </>
+    );
+  }
 
   return (
     <>
@@ -160,14 +193,36 @@ export function RouteErrorBoundary() {
         </h1>
         <h2 className="error-boundary__title">{errorTitle}</h2>
         <p className="error-boundary__description">
-          {errorDescriptions[statusCode] ?? "Try again in a moment!"}
+          {challenge
+            ? "Our security provider needs to verify your browser. Reload the page to complete the check."
+            : errorDescriptions[statusCode] ?? "Try again in a moment!"}
         </p>
+        {challenge ? (
+          <NewButton
+            csVariant="primary"
+            onClick={() => window.location.reload()}
+          >
+            Reload page
+          </NewButton>
+        ) : null}
       </div>
     </>
   );
 }
 
 RouteErrorBoundary.displayName = "RouteErrorBoundary";
+
+function isSsrChallengeResponse(error: unknown): boolean {
+  return (
+    isRouteErrorResponse(error) &&
+    isRecord(error.data) &&
+    error.data.cfChallenge === true
+  );
+}
+
+function isChallengeError(error: unknown): boolean {
+  return isCloudflareChallengeError(error) || isSsrChallengeResponse(error);
+}
 
 const errorTitles: Record<StatusCode, string> = {
   400: "Sus request",
