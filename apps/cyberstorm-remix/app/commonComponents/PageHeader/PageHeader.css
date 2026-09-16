@@ -10,6 +10,8 @@
   .page-header--detailed {
     padding: var(--space-24);
     background-color: var(--color-surface-dim);
+    display: flex;
+    align-items: center;
   }
 
   .page-header--simple {
