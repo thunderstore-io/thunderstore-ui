@@ -51,6 +51,17 @@ an outage (every client re-firing N times → accidental DDoS) and could duplica
 non-idempotent writes. So a failed fetch fails fast and waits for the user (or a
 revalidation) to retry, rather than hammering the origin on its own.
 
+**Cloudflare challenges are the one failure a retry can never fix.** A challenge
+response carries `cf-mitigated: challenge` (`isCloudflareChallengeError` in
+`thunderstore-api`); only a document navigation can pass it, which sets the
+`cf_clearance` cookie for every later request including API fetches. So
+`FetchErrorState` and `RouteErrorBoundary` render "Verification required" with a
+**Reload page** button for these instead of a fetch retry. The SSR server can
+never pass a challenge: `ssrLoader` marks such a failure (`cfChallenge: true` in
+the 403 body) and `RouteErrorBoundary` re-runs the loaders once in the browser
+on hydration, where the visitor's cookie applies. Nothing retries a fetch
+automatically.
+
 Two ways to use it:
 
 1. **As an `<Await errorElement>`** for a deferred fetch — the most common case:
@@ -88,8 +99,8 @@ Hydration in this context means the browser-side process where React/React-Route
 3. Browser loads JS bundles and starts hydration.
 4. During hydration, `clientLoader` runs only if `loader` was not defined or `clientLoader.hydrate=true` is set.
 5. Once hydration completes the page is fully interactive, causing client-side navigation to act as "soft load":
-    - If the target route has a `clientLoader`, it runs on the browser. `loader` is not invoked by default.
-    - If the target route has only SSR `loader`, a request is sent to the server, which executes the `loader` and returns the data (only the data, not full HTML).
+   - If the target route has a `clientLoader`, it runs on the browser. `loader` is not invoked by default.
+   - If the target route has only SSR `loader`, a request is sent to the server, which executes the `loader` and returns the data (only the data, not full HTML).
 
 ## Example
 
