@@ -148,7 +148,7 @@
   /* Reveal the border once an ad renders. NB the iframe half keys on any iframe
      in the slot, so a NitroPay passback iframe on a no-fill would show it. */
   .ad-container:has(.ad-container__content :is(iframe, .ad-container__static)) {
-    border-color: #1f1f42;
+    border-color: var(--ad-container-border-color);
   }
 
   /* Once an ad renders, hide the fallback so it never shows through or around a

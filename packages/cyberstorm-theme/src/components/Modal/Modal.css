@@ -1,4 +1,8 @@
 @layer cyberstorm-theme {
+  .modal__overlay {
+    background: var(--overlay-backdrop-color);
+  }
+
   /* VARIANTS */
   .modal:where(.modal--variant--default) {
     --modal-color: var(--modal-text-color--default);

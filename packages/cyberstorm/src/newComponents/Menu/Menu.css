@@ -42,7 +42,7 @@
   }
 
   .menu::backdrop {
-    background: hsl(0deg 0% 0% / 0.6);
+    background: var(--overlay-backdrop-color);
   }
 
   .menu__wrapper {
@@ -54,7 +54,7 @@
     height: 100%;
     padding: 1.5rem;
     overflow-y: auto;
-    background: #15152d;
+    background: var(--menu-background);
   }
 
   .menu:popover-open > .menu__wrapper {

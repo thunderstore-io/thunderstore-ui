@@ -1,5 +1,4 @@
 @layer cyberstorm-theme {
-  /* These variables are copied from Figma with the plugin variables2css */
   :root {
     --code-input-transition--default: ease-out var(--animation-duration-xs);
     --switch-transition--default: ease-in-out var(--animation-duration-md);

@@ -9,9 +9,9 @@ themed output: it only takes effect when cyberstorm is used WITHOUT the
 theme, giving a functional-but-ugly barebones render.
 
 Scope is intentionally limited to STRUCTURAL design tokens (spacing, radii,
-gaps, border widths, typography scale, animation lengths). Cyberstorm ships
-NO colors of its own — color tokens stay unset in the barebones state (that
-is the "ugly" part) and are wired up entirely by cyberstorm-theme.
+gaps, border widths, typography scale, animation lengths). This file ships
+NO color tokens — colors stay unset in the barebones state (that is the
+"ugly" part) and are wired up entirely by cyberstorm-theme.
 
 Values mirror the theme's own token scale so barebones spacing/typography is
 sensible; they are still overridden by the theme in the themed build.
