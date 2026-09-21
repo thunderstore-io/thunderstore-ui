@@ -2,9 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { NewIcon } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
-import { IconVariantsList } from "@thunderstore/cyberstorm-theme/src/components";
+import { IconVariantsList, NewIcon } from "@thunderstore/cyberstorm";
 
 import "./Icon.css";
 

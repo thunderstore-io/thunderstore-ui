@@ -1,11 +1,6 @@
 import React from "react";
 
 import {
-  type MetaItemSizes,
-  type MetaItemVariants,
-} from "@thunderstore/cyberstorm-theme";
-
-import {
   Actionable,
   type ActionableButtonProps,
 } from "../../primitiveComponents/Actionable/Actionable";
@@ -15,6 +10,7 @@ import {
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import "./MetaItem.css";
+import { type MetaItemSizes, type MetaItemVariants } from "./MetaItem.types";
 
 interface MetaItemProps extends Omit<FrameWindowProps, "primitiveType"> {
   csVariant?: MetaItemVariants;

@@ -13,14 +13,10 @@
     "types": "dist/index.d.ts",
     "style": "dist/cyberstorm-theme.css",
     "exports": {
-      ".": {
-        "import": "./dist/thunderstore-cyberstorm-theme.js",
-        "types": "./dist/index.d.ts"
-      },
       "./css": "./dist/cyberstorm-theme.css",
       "./fonts.css": "./dist/fonts.css",
-      "./package.json": "./package.json",
-      "./src/components": "./src/components.tsx"
+      "./styles/fonts/*": "./dist/fonts/*",
+      "./package.json": "./package.json"
     }
   },
   "style": "dist/cyberstorm-theme.css",
@@ -40,11 +36,9 @@
     "vite-plugin-dts": "4.5.4"
   },
   "exports": {
-    ".": "./src/index.tsx",
     "./css": "./src/index.css",
     "./fonts.css": "./src/styles/fonts.css",
     "./styles/fonts/*": "./src/styles/fonts/*",
-    "./package.json": "./package.json",
-    "./src/components": "./src/components.tsx"
+    "./package.json": "./package.json"
   }
 }

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Toast, ToastProvider } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
+  Toast,
+  ToastProvider,
   ToastSizesList,
   ToastVariantsList,
-} from "@thunderstore/cyberstorm-theme";
+} from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Toast",

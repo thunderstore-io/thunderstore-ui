@@ -2,9 +2,7 @@ import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties, ComponentProps } from "react";
 
-import { Image } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
-import { ImageVariantsList } from "@thunderstore/cyberstorm-theme/src/components";
+import { Image, ImageVariantsList } from "@thunderstore/cyberstorm";
 
 import catHeim from "../assets/catheim.png";
 

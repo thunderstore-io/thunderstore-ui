@@ -13,15 +13,14 @@ import {
   useState,
 } from "react";
 
-import { type ModalVariants } from "@thunderstore/cyberstorm-theme";
-import { type ModalSizes } from "@thunderstore/cyberstorm-theme";
-
 import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
 import { type ButtonComponentProps } from "../Button/Button";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Modal.css";
+import { type ModalVariants } from "./Modal.types";
+import { type ModalSizes } from "./Modal.types";
 
 /**
  * Props for the `Modal` component.

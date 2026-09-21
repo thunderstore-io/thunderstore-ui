@@ -2,8 +2,6 @@ import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
-import { type ImageVariants } from "@thunderstore/cyberstorm-theme";
-
 import {
   Frame,
   type FrameWindowProps,
@@ -11,6 +9,7 @@ import {
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Image.css";
+import { type ImageVariants } from "./Image.types";
 
 export interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null | undefined;

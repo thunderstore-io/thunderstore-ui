@@ -2,12 +2,6 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { type ReactElement, memo } from "react";
 
-import {
-  type TextInputModifiers,
-  type TextInputSizes,
-  type TextInputVariants,
-} from "@thunderstore/cyberstorm-theme";
-
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import {
@@ -18,6 +12,11 @@ import {
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./TextInput.css";
+import {
+  type TextInputModifiers,
+  type TextInputSizes,
+  type TextInputVariants,
+} from "./TextInput.types";
 
 export interface TextInputProps
   extends Omit<InputTextInputProps, "primitiveType"> {
