@@ -8,16 +8,21 @@
  * when modes flip the decorator.
  *
  * Fonts stay global (@font-face layers are skipped). @keyframes selectors
- * (`from` / `to`) are left untouched.
+ * (`from` / `to`) are left untouched. Nested rules (`&:hover`, `> .child`)
+ * inherit the prefixed parent — prefixing them again would produce
+ * impossible descendant-of-html selectors.
  */
 const THEME_ATTR = 'html[data-cs-theme="on"]';
 
-function isInsideKeyframes(node: { parent?: unknown }): boolean {
+function shouldSkipPrefix(node: { parent?: unknown }): boolean {
   let current: { type?: string; name?: string; parent?: unknown } | undefined =
     node.parent as
       | { type?: string; name?: string; parent?: unknown }
       | undefined;
   while (current) {
+    if (current.type === "rule") {
+      return true;
+    }
     if (
       current.type === "atrule" &&
       (current.name === "keyframes" || current.name === "-webkit-keyframes")
@@ -79,7 +84,7 @@ export function prefixCyberstormThemePostcss() {
           return;
         }
         atRule.walkRules((rule) => {
-          if (isInsideKeyframes(rule)) {
+          if (shouldSkipPrefix(rule)) {
             return;
           }
           rule.selectors = rule.selectors.map(prefixThemeSelector);
