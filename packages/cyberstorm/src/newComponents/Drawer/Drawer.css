@@ -25,7 +25,7 @@
   }
 
   .drawer__wrapper::backdrop {
-    background: hsl(0deg 0% 0% / 0.6);
+    background: var(--overlay-backdrop-color);
   }
 
   .drawer__fake-backdrop {

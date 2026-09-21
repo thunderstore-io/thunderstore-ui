@@ -13,9 +13,11 @@ skin layered on top for the production look.
 ### Package responsibilities
 
 - **This package (`cyberstorm`)** — components, their API types, and structural
-  CSS. Ships **no colors of its own**; it references themeable custom properties
-  (`var(--button-background-color)`, …) and provides barebones **structural**
-  fallbacks for them.
+  CSS. Active `newComponents/` CSS ships **no colors of its own**; it references
+  themeable custom properties (`var(--button-background-color)`, …) and provides
+  barebones **structural** fallbacks (`transparent`, `currentColor`, `inherit`).
+  Exceptions: frozen legacy `src/components/` CSS modules and SVG brand marks in
+  `src/svg/` still contain hardcoded fills until those folders are migrated.
 - **`cyberstorm-theme`** — pure CSS: colors, component sizes, misc tokens, and
   fonts. No TypeScript/runtime exports.
 
@@ -28,10 +30,11 @@ theme on top.
 `src/defaults.css` defines placeholder values for the **structural** design
 tokens the components rely on — spacing, radii, gaps, border widths, the
 typography scale, and animation lengths. It deliberately ships **no color
-tokens**: unset colors are the "ugly" part of the barebones state. These defaults
-live in `@layer cyberstorm` (the lowest layer), so whenever the theme is loaded
-it overrides all of them — `defaults.css` is a no-op for themed output and only
-takes effect when Cyberstorm is used without the theme.
+tokens**: unset colors are the "ugly" part of the barebones state (including
+overlay dimming and panel fills). These defaults live in `@layer cyberstorm`
+(the lowest layer), so whenever the theme is loaded it overrides all of them —
+`defaults.css` is a no-op for themed output and only takes effect when
+Cyberstorm is used without the theme.
 
 ### CSS layers
 

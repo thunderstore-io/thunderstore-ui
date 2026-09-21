@@ -21,4 +21,8 @@
     --drawer-border: 1px solid hsl(240deg 35% 37% / 0.44);
     --drawer-background: hsl(240deg 38% 13% / 1);
   }
+
+  .drawer__wrapper::backdrop {
+    background: var(--overlay-backdrop-color);
+  }
 }

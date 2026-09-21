@@ -1,5 +1,4 @@
 @layer cyberstorm-theme {
-  /* These variables are copied from Figma with the plugin variables2css */
   :root {
     --alert-danger-bg-color--default: var(--color-accent-red-2);
     --alert-danger-border-color--default: var(--color-accent-red-7);
@@ -17,6 +16,7 @@
     --alert-warning-border-color--default: var(--color-accent-yellow-7);
     --alert-warning-icon-color--default: var(--color-accent-yellow-7);
     --alert-warning-text-color--default: var(--color-accent-yellow-11);
+    --ad-container-border-color: var(--color-nightsky-5);
     --breadcrumb-item-bg-color--default: var(--color-nightsky-6);
     --breadcrumb-item-bg-color--hover: var(--color-nightsky-8);
     --breadcrumb-item-text-color--current: var(--color-text-primary);
@@ -171,6 +171,8 @@
     --dropdown-item-disabled-icon-color--hover: var(--color-text-tertiary);
     --dropdown-item-disabled-text-color--default: var(--color-text-tertiary);
     --dropdown-item-disabled-text-color--hover: var(--color-text-tertiary);
+    --empty-state-icon-color: rgb(99 90 159);
+    --empty-state-message-color: #9c9cc4;
     --heading-danger-text-color--default: var(--color-accent-red-7);
     --heading-info-text-color--default: var(--color-accent-blue-7);
     --heading-primary-text-color--default: var(--color-text-primary);
@@ -265,6 +267,7 @@
     --link-primary-color--hover: var(--color-text-primary);
     --link-cyber-color--default: var(--color-cyber-green-7);
     --link-cyber-color--hover: var(--color-cyber-green-9);
+    --menu-bg-color--default: var(--color-nightsky-3);
     --menu-primary-color--default: var(--color-text-accent);
     --menu-primary-color--hover: var(--color-text-primary);
     --meta-item-icon-color--default: var(--color-text-tertiary);
@@ -272,6 +275,7 @@
     --modal-bg-color--default: var(--color-nightsky-3);
     --modal-border-color--default: var(--color-nightsky-a6);
     --modal-text-color--default: var(--color-text-secondary);
+    --overlay-backdrop-color: rgb(0 0 0 / 0.6);
     --pagination-item-bg-color--active: var(--color-nightsky-a6);
     --pagination-item-bg-color--current: hsl(256deg 60% 52%);
     --pagination-item-bg-color--default: var(--color-nightsky-a7);
