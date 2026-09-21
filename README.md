@@ -66,6 +66,23 @@ backend-plus-frontend setup.
   (components), `@thunderstore/cyberstorm-theme` (design system), and the data and
   uploader packages.
 
+### UI library architecture
+
+The component UI is split into two packages with a strict one-way dependency:
+
+- **`@thunderstore/cyberstorm`** — the self-contained component library. It owns
+  the components, their API types (variant/size/modifier lists), and **structural
+  CSS only**, so it renders functional-but-ugly with no theme. See
+  [`packages/cyberstorm/README.md`](packages/cyberstorm/README.md).
+- **`@thunderstore/cyberstorm-theme`** — a **pure-CSS skin** (colors, sizes,
+  tokens, fonts) layered on top for the production look; no runtime exports. See
+  [`packages/cyberstorm-theme/README.md`](packages/cyberstorm-theme/README.md).
+
+Consumers load `@thunderstore/cyberstorm/css` and then, for the production look,
+`@thunderstore/cyberstorm-theme/css` on top. Cyberstorm's `defaults.css` lives in
+`@layer cyberstorm`, which consumers declare early in their `@layer` order so the
+theme overrides those placeholders.
+
 Two tools tie it together:
 
 - [pnpm workspaces](https://pnpm.io/workspaces) manage the
