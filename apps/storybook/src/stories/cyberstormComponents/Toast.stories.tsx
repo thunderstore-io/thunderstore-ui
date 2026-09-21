@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Toast, ToastProvider } from "@thunderstore/cyberstorm";
 import { ToastSizesList, ToastVariantsList } from "@thunderstore/cyberstorm";
 
-// Note: The default export from Toast has .Provider and .Viewport attached
 const meta = {
   title: "Cyberstorm/Toast",
   component: Toast,
