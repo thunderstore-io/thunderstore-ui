@@ -1,3 +1,6 @@
+// `@layer` order — must precede package stylesheets (first-encounter wins).
+import "./styles.css";
+
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import type { Preview } from "@storybook/react-vite";
 
@@ -7,7 +10,6 @@ import "@thunderstore/cyberstorm-theme/fonts.css";
 import "@thunderstore/cyberstorm/css";
 
 import { LinkLibrary } from "../LinkLibrary";
-import "./styles.css";
 
 const preview: Preview = {
   parameters: {
