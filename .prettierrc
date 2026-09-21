@@ -19,6 +19,7 @@
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": [
     "^\\./styles/cyberstorm\\.css$",
+    "^\\./styles\\.css$",
     "<THIRD_PARTY_MODULES>",
     "^@thunderstore/(.*)$",
     "^[./]"

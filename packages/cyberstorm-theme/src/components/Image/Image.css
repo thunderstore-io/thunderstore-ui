@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   /* VARIANTS DEFAULT STATE */
   .image:where(.image--variant--primary) {
     --image-color: var(--image-primary-color--default);

@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .code-view {
     display: flex;
     flex-direction: column;

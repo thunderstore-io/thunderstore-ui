@@ -1,4 +1,4 @@
-@layer theme-components {
+@layer cyberstorm-theme {
   .tag:where(.tag--size--medium) {
     --tag-gap: var(--space-8);
     --tag-padding-block: var(--space-4);

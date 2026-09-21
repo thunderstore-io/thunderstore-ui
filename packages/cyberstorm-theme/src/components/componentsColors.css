@@ -1,4 +1,4 @@
-@layer theme-components-colors {
+@layer cyberstorm-theme {
   /* These variables are copied from Figma with the plugin variables2css */
   :root {
     --alert-danger-bg-color--default: var(--color-accent-red-2);

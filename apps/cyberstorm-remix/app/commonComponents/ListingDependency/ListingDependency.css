@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .listing-dependency {
     display: flex;
     gap: var(--gap-xl);

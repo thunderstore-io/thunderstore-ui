@@ -1,4 +1,4 @@
-@layer nimbus-utils {
+@layer nimbus {
   .markdown-wrapper {
     max-width: 100%;
     overflow-x: scroll;

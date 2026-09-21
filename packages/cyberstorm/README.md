@@ -13,11 +13,11 @@ skin layered on top for the production look.
 ### Package responsibilities
 
 - **This package (`cyberstorm`)** — components, their API types, and structural
-  CSS. It references themeable custom properties
+  CSS. Ships **no colors of its own**; it references themeable custom properties
   (`var(--button-background-color)`, …) and provides barebones **structural**
   fallbacks for them.
-- **`cyberstorm-theme`** — CSS: colors, component sizes, misc tokens, and fonts.
-  No TypeScript/runtime exports.
+- **`cyberstorm-theme`** — pure CSS: colors, component sizes, misc tokens, and
+  fonts. No TypeScript/runtime exports.
 
 The dependency direction is one-way: `cyberstorm` does **not** depend on
 `cyberstorm-theme`. Consumers import Cyberstorm and then, optionally, add the
@@ -29,10 +29,52 @@ theme on top.
 tokens the components rely on — spacing, radii, gaps, border widths, the
 typography scale, and animation lengths. It deliberately ships **no color
 tokens**: unset colors are the "ugly" part of the barebones state. These defaults
-live in `@layer cyberstorm`, which consumers must list in their `@layer` order
-**before** theme layers so the theme overrides them. `defaults.css` is a no-op
-for themed output and only takes effect when Cyberstorm is used without the
-theme.
+live in `@layer cyberstorm` (the lowest layer), so whenever the theme is loaded
+it overrides all of them — `defaults.css` is a no-op for themed output and only
+takes effect when Cyberstorm is used without the theme.
+
+### CSS layers
+
+Styling is organized into three cascade layers, later overriding earlier:
+
+```css
+@layer cyberstorm, cyberstorm-theme, nimbus;
+```
+
+- `cyberstorm` — this package's structural CSS + `defaults.css`.
+- `cyberstorm-theme` — the skin (see the theme package).
+- `nimbus` — app-level (remix) overrides.
+
+The order is declared explicitly by consumers so precedence never depends on
+import order.
+
+### Directory structure
+
+Component code is organized by responsibility. When adding or moving a
+component, follow this split:
+
+- **`src/primitiveComponents/`** — unstyled, low-level building blocks
+  (`Actionable`, `Frame`, `Input`) plus shared primitive utils. Everything else
+  composes these; primitives never compose other Cyberstorm components. Reach
+  for these only when building a new component, not from feature code.
+- **`src/newComponents/`** — the one canonical, actively-maintained component
+  set and the public API of the library. New components go here. Styling is
+  plain `.css` in `@layer cyberstorm`, themed by `cyberstorm-theme`.
+- **`src/components/`** — **legacy, frozen.** Components here predate the
+  primitives model and some still use the old `*.module.css` pattern. Do **not**
+  add anything here; existing entries are migration debt to move into
+  `newComponents/` (converting their CSS to the layered model) and then remove.
+- **`src/svg/`** — SVG-as-React logo/icon components.
+- **`src/utils/`** — non-component helpers only (formatting, class utilities,
+  type guards).
+
+App-specific composites (page sections, navigation, etc.) do **not** belong in
+this package — they live in the consuming app (e.g. the remix app's
+`commonComponents/`).
+
+> The `New*` export prefix (`NewButton`, `NewAlert`, …) is a migration holdover
+> from when old and new versions coexisted. The old versions are gone, so the
+> prefix will be dropped once the legacy `components/` folder is emptied.
 
 ### Usage
 

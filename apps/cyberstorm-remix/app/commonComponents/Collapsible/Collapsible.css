@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .collapsible {
     display: flex;
     flex: 1;

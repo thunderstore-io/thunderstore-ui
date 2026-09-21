@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer nimbus {
   .collapsible-text {
     display: flex;
     flex-direction: row;

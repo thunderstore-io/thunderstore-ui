@@ -78,10 +78,15 @@ The component UI is split into two packages with a strict one-way dependency:
   tokens, fonts) layered on top for the production look; no runtime exports. See
   [`packages/cyberstorm-theme/README.md`](packages/cyberstorm-theme/README.md).
 
-Consumers load `@thunderstore/cyberstorm/css` and then, for the production look,
-`@thunderstore/cyberstorm-theme/css` on top. Cyberstorm's `defaults.css` lives in
-`@layer cyberstorm`, which consumers declare early in their `@layer` order so the
-theme overrides those placeholders.
+Styling uses three CSS cascade layers, later overriding earlier:
+
+```css
+@layer cyberstorm, cyberstorm-theme, nimbus;
+```
+
+`cyberstorm` (structural defaults) < `cyberstorm-theme` (the skin) < `nimbus`
+(remix app-level overrides). Consumers load `@thunderstore/cyberstorm/css` and
+then, for the production look, `@thunderstore/cyberstorm-theme/css` on top.
 
 Two tools tie it together:
 

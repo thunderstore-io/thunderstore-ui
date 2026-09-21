@@ -1,4 +1,4 @@
-@layer nimbus-layout {
+@layer nimbus {
   :root {
     /* Header dimensions */
     --header-height: 3.5rem;
