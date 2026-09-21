@@ -251,12 +251,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets[matrix.projects.token] }}
           workingDir: ${{ matrix.projects.dir }}
-          # a) No visual changes → this job and Chromatic's "UI Tests" check both pass.
-          # b) Visual changes → this job still passes. Chromatic's "UI Tests" check
-          #    stays yellow ("N changes must be accepted") until approved in Chromatic.
-          #    Mark "UI Tests" as a required status check so that blocks merge.
-          # c) Storybook/Chromatic build or capture errors → this job fails (do NOT
-          #    exit once uploaded) and "UI Tests" fails, which also blocks merge.
+          # Visual-change gate = Chromatic's "UI Tests" GitHub check, not this job.
+          # exitZeroOnChanges: true — this job stays green on diffs so accepting
+          #   baselines in Chromatic can flip UI Tests without a CI re-run.
+          # exitOnceUploaded: false — wait for capture; fail this job only on
+          #   Storybook/Chromatic build or capture errors.
+          #
+          # Branch protection: require "UI Tests". Do not treat this job as the
+          # visual-change gate (it is green while diffs are unapproved). Optionally
+          # also require this job so an install/build failure that never reaches
+          # Chromatic still blocks at the Actions level.
           # Each story is captured in both "themed" and "barebones" modes
           # (see apps/storybook/.storybook/modes.ts).
           exitZeroOnChanges: true
