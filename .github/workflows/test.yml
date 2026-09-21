@@ -216,6 +216,12 @@ jobs:
     # passed. If any of them fail the job is skipped, so we don't spend
     # Chromatic snapshots on changes that are already known-broken.
     needs: [get-node-version, pre-commit, build, test]
+    # GITHUB_TOKEN must be able to post Chromatic's commit statuses (UI Tests).
+    permissions:
+      contents: read
+      checks: write
+      statuses: write
+      pull-requests: write
     strategy:
       matrix:
         projects: [
@@ -245,10 +251,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets[matrix.projects.token] }}
           workingDir: ${{ matrix.projects.dir }}
-          # Block the job on visual changes/errors so component breakage fails
-          # CI (do NOT exit-once-uploaded). Each story is captured in both the
-          # "themed" and "barebones" modes (see apps/storybook/.storybook/modes.ts).
-          # New/changed snapshots must be reviewed & approved in Chromatic.
-          # To make this a hard merge gate, mark "chromatic-deployment" as a
-          # required status check in the repo's branch-protection settings.
-          exitZeroOnChanges: false
+          # a) No visual changes → this job and Chromatic's "UI Tests" check both pass.
+          # b) Visual changes → this job still passes. Chromatic's "UI Tests" check
+          #    stays yellow ("N changes must be accepted") until approved in Chromatic.
+          #    Mark "UI Tests" as a required status check so that blocks merge.
+          # c) Storybook/Chromatic build or capture errors → this job fails (do NOT
+          #    exit once uploaded) and "UI Tests" fails, which also blocks merge.
+          # Each story is captured in both "themed" and "barebones" modes
+          # (see apps/storybook/.storybook/modes.ts).
+          exitZeroOnChanges: true
+          exitOnceUploaded: false
