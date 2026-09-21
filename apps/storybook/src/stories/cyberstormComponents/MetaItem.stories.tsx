@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { NewMetaItem } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
   MetaItemSizesList,
   MetaItemVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+  NewMetaItem,
+} from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/MetaItem",

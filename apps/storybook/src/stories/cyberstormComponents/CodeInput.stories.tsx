@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { CodeInput } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
+  CodeInput,
   CodeInputModifiersList,
   CodeInputSizesList,
   CodeInputVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 
 import "./CodeInput.css";
 

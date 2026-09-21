@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { NewTextInput } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
+  NewTextInput,
   TextInputModifiersList,
   TextInputSizesList,
   TextInputVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/TextInput",

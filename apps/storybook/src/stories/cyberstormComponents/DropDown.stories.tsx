@@ -1,17 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
+  DropDownModifiersList,
+  DropDownSizesList,
+  DropDownVariantsList,
   NewButton,
   NewDropDown,
   NewDropDownDivider,
   NewDropDownItem,
 } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
-import {
-  DropDownModifiersList,
-  DropDownSizesList,
-  DropDownVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
 
 const meta = {
   title: "Cyberstorm/DropDown",

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { NewAvatar } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 import {
   AvatarSizesList,
   AvatarVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+  NewAvatar,
+} from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 
 import catboy from "../assets/catboy.png";
 
