@@ -115,21 +115,46 @@ When adding components to `@thunderstore/cyberstorm`, add stories for them under
 for examples. To upgrade Storybook when it reports a new version, run the suggested
 `npx storybook@latest upgrade` command in the `apps/storybook` directory.
 
+Every exported Cyberstorm component should have a story — Storybook is the gate
+that catches component breakage. Use the **Theme** toolbar toggle to view any
+story with `@thunderstore/cyberstorm-theme` on (the production look) or off (the
+barebones `@thunderstore/cyberstorm`-only render), which verifies components still
+work without the theme.
+
 ### Chromatic
 
 [Chromatic](https://www.chromatic.com/docs/) runs in CI to host Storybook and
-detect visual changes to stories. Visual changes must be reviewed before the
-related PR can merge:
+detect visual changes to stories. Every story is captured in **two theme modes**
+— `themed` (the production look) and `barebones` (theme off) — via the
+`@chromatic-com/storybook` addon and the modes defined in
+[`apps/storybook/.storybook/modes.ts`](apps/storybook/.storybook/modes.ts), so
+breakage is caught both with and without the theme.
 
-1. Push your changes as usual. The `chromatic-deployment` job in
-   `.github/workflows/test.yml` builds and uploads Storybook to Chromatic. This
-   step only fails if the build or upload itself fails — component changes are
-   not flagged here.
-2. Open a PR as usual.
-3. If there were visual changes, GitHub shows a pending check (_"UI Tests Pending —
-   N changes must be accepted as baselines"_). Open its **Details** link to review
-   and accept or reject the changes in Chromatic. The PR cannot merge until they
-   are accepted.
+The `chromatic-deployment` job in `.github/workflows/test.yml` builds and uploads
+Storybook to Chromatic. It runs **last, only after the other gates (pre-commit,
+build, test) pass** — if any of them fail the job is skipped, so it doesn't spend
+Chromatic snapshots on already-broken changes.
+
+`exitZeroOnChanges: true` is intentional: this Actions job is **not** the
+visual-change gate. It stays green when Chromatic finds diffs so reviewers can
+accept baselines in Chromatic without re-running CI. The merge gate is Chromatic's
+separately posted **UI Tests** check.
+
+How the checks behave:
+
+1. **No visual changes** — `chromatic-deployment` and **UI Tests** both pass.
+2. **Visual changes** — `chromatic-deployment` still passes. **UI Tests** stays
+   yellow (_"N changes must be accepted as baselines"_). Open **Details**, review
+   in Chromatic, and accept or reject. Once accepted, **UI Tests** turns green
+   without a CI re-run.
+3. **Storybook/Chromatic build or capture failure** — `chromatic-deployment`
+   fails (red) and **UI Tests** fails.
+
+**Branch protection:** require Chromatic's **UI Tests** check. That is the only
+status that stays non-green on unapproved visual changes. Requiring
+`chromatic-deployment` *instead of* **UI Tests** will not block visual diffs.
+Optionally also require `chromatic-deployment` so an install/build failure that
+never reaches Chromatic still blocks merge at the Actions level.
 
 `pnpm --filter @thunderstore/storybook exec chromatic` uploads a Storybook manually
 (rarely needed, since CI automates it). The Chromatic CLI reads the project

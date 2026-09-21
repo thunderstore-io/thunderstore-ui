@@ -48,7 +48,8 @@ import "@thunderstore/cyberstorm-theme/css";
 import "@thunderstore/cyberstorm-theme/fonts.css";
 ```
 
-Omit the two theme imports to get the barebones (unstyled, system-font) render.
+Omit the two theme imports to get the barebones (unstyled, system-font) render —
+that is exactly what the Storybook "Theme off" toggle does.
 
 ### Exports
 

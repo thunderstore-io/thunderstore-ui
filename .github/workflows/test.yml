@@ -157,7 +157,6 @@ jobs:
 
   test:
     name: Test
-    continue-on-error: true
     runs-on: ubuntu-latest
     needs: [get-node-version, pre-commit, build]
     env:
@@ -213,7 +212,16 @@ jobs:
 
   chromatic-deployment:
     runs-on: ubuntu-latest
+    # Runs last, only after every other gate (pre-commit, build, test) has
+    # passed. If any of them fail the job is skipped, so we don't spend
+    # Chromatic snapshots on changes that are already known-broken.
     needs: [get-node-version, pre-commit, build, test]
+    # GITHUB_TOKEN must be able to post Chromatic's commit statuses (UI Tests).
+    permissions:
+      contents: read
+      checks: write
+      statuses: write
+      pull-requests: write
     strategy:
       matrix:
         projects: [
@@ -243,4 +251,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets[matrix.projects.token] }}
           workingDir: ${{ matrix.projects.dir }}
-          exitOnceUploaded: true
+          # Visual-change gate = Chromatic's "UI Tests" GitHub check, not this job.
+          # exitZeroOnChanges: true — this job stays green on diffs so accepting
+          #   baselines in Chromatic can flip UI Tests without a CI re-run.
+          # exitOnceUploaded: false — wait for capture; fail this job only on
+          #   Storybook/Chromatic build or capture errors.
+          #
+          # Branch protection: require "UI Tests". Do not treat this job as the
+          # visual-change gate (it is green while diffs are unapproved). Optionally
+          # also require this job so an install/build failure that never reaches
+          # Chromatic still blocks at the Actions level.
+          # Each story is captured in both "themed" and "barebones" modes
+          # (see apps/storybook/.storybook/modes.ts).
+          exitZeroOnChanges: true
+          exitOnceUploaded: false
