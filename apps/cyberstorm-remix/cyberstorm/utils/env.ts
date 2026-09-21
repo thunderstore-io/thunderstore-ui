@@ -1,4 +1,5 @@
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { parsePageParam } from "cyberstorm/utils/searchParamsUtils";
 import { isRecord } from "cyberstorm/utils/typeChecks";
 
 /**
@@ -46,12 +47,10 @@ export function packageCanonicalPath(
 }
 
 // `?page=N` for N above 1, nothing else. Page 1 stays bare so it keeps one URL.
+// Parsed the way the loaders parse it, so the canonical names the page served.
 function canonicalQuery(requestUrl: URL): string {
-  const page = requestUrl.searchParams.get("page");
-  if (page === null || !/^\d+$/.test(page) || Number(page) <= 1) {
-    return "";
-  }
-  return `?page=${Number(page)}`;
+  const page = parsePageParam(requestUrl.searchParams.get("page"));
+  return page !== undefined && page > 1 ? `?page=${page}` : "";
 }
 
 /**

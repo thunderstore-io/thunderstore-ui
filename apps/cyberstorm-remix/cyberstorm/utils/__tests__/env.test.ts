@@ -87,6 +87,19 @@ describe("getCanonicalUrl", () => {
       }
     );
 
+    // The loaders parse ?page with parsePageParam, which serves page 1 here.
+    it("drops a page past the safe-integer range", () => {
+      expect(
+        canonical(`${ORIGIN}/c/how-to-fish/?page=99999999999999999999`)
+      ).toBe(`${ORIGIN}/c/how-to-fish/`);
+    });
+
+    it("keeps a whitespace-padded page, which the loaders accept", () => {
+      expect(canonical(`${ORIGIN}/c/how-to-fish/?page=%202%20`)).toBe(
+        `${ORIGIN}/c/how-to-fish/?page=2`
+      );
+    });
+
     it("never carries a query on an explicitly passed pathname", () => {
       expect(canonical(`${ORIGIN}/c/how-to-fish/?page=2`, "/communities")).toBe(
         `${ORIGIN}/communities/`
