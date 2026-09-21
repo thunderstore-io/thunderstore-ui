@@ -6,7 +6,6 @@ import {
   ToastSizesList,
   ToastVariantsList,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Toast",

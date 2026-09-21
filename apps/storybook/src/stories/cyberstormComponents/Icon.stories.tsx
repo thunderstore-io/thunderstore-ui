@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { IconVariantsList, NewIcon } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 import "./Icon.css";
 

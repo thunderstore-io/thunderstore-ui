@@ -6,7 +6,6 @@ import {
   HeadingSizesList,
   HeadingVariantsList,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Heading",

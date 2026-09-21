@@ -5,7 +5,6 @@ import {
   AvatarVariantsList,
   NewAvatar,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 import catboy from "../assets/catboy.png";
 

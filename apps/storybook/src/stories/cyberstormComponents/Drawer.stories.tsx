@@ -6,7 +6,6 @@ import {
   DrawerVariantsList,
   NewButton,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Drawer",

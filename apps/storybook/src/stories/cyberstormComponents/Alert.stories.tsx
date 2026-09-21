@@ -5,7 +5,6 @@ import {
   AlertVariantsList,
   NewAlert,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Alert",

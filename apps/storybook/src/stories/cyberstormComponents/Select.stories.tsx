@@ -6,7 +6,6 @@ import {
   SelectSizesList,
   SelectVariantsList,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Select",

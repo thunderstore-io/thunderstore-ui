@@ -6,7 +6,6 @@ import {
   TextInputSizesList,
   TextInputVariantsList,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/TextInput",

@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties, ComponentProps } from "react";
 
 import { Image, ImageVariantsList } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
 
 import catHeim from "../assets/catheim.png";
 
