@@ -133,22 +133,28 @@ breakage is caught both with and without the theme.
 The `chromatic-deployment` job in `.github/workflows/test.yml` builds and uploads
 Storybook to Chromatic. It runs **last, only after the other gates (pre-commit,
 build, test) pass** — if any of them fail the job is skipped, so it doesn't spend
-Chromatic snapshots on already-broken changes. How the checks behave:
+Chromatic snapshots on already-broken changes.
 
-1. **No visual changes** — `chromatic-deployment` and Chromatic's **UI Tests**
-   check both pass.
-2. **Visual changes** — `chromatic-deployment` still passes. GitHub shows
-   Chromatic's **UI Tests** check as yellow (_"N changes must be accepted as
-   baselines"_). Open **Details**, review in Chromatic, and accept or reject.
-   The PR cannot merge until they are accepted.
+`exitZeroOnChanges: true` is intentional: this Actions job is **not** the
+visual-change gate. It stays green when Chromatic finds diffs so reviewers can
+accept baselines in Chromatic without re-running CI. The merge gate is Chromatic's
+separately posted **UI Tests** check.
+
+How the checks behave:
+
+1. **No visual changes** — `chromatic-deployment` and **UI Tests** both pass.
+2. **Visual changes** — `chromatic-deployment` still passes. **UI Tests** stays
+   yellow (_"N changes must be accepted as baselines"_). Open **Details**, review
+   in Chromatic, and accept or reject. Once accepted, **UI Tests** turns green
+   without a CI re-run.
 3. **Storybook/Chromatic build or capture failure** — `chromatic-deployment`
-   fails (red) and **UI Tests** fails, which blocks the PR.
+   fails (red) and **UI Tests** fails.
 
-> To make (2) and (3) hard merge gates, mark Chromatic's **UI Tests** check as
-> required in the repo's branch-protection settings. Requiring only
-> `chromatic-deployment` is not enough for (2): that job is green when there are
-> unapproved visual changes. Optionally keep `chromatic-deployment` required as
-> well so a Chromatic/Storybook crash still blocks merge at the Actions level.
+**Branch protection:** require Chromatic's **UI Tests** check. That is the only
+status that stays non-green on unapproved visual changes. Requiring
+`chromatic-deployment` *instead of* **UI Tests** will not block visual diffs.
+Optionally also require `chromatic-deployment` so an install/build failure that
+never reaches Chromatic still blocks merge at the Actions level.
 
 `pnpm --filter @thunderstore/storybook exec chromatic` uploads a Storybook manually
 (rarely needed, since CI automates it). The Chromatic CLI reads the project
