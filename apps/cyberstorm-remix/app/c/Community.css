@@ -158,7 +158,7 @@
     white-space: nowrap;
 
     > svg {
-      inline-size: var(--space-16);
+      inline-size: 1rem;
     }
   }
 

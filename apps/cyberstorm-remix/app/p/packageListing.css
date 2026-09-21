@@ -100,7 +100,7 @@
   .package-listing__banner-notes {
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
+    gap: 0.5rem;
     align-items: stretch;
   }
 
@@ -114,7 +114,7 @@
     gap: var(--gap-sm);
     box-sizing: border-box;
     width: 100%;
-    padding: var(--space-12);
+    padding: 0.75rem;
     border-radius: var(--radius-md);
     background-color: var(--color-surface-1);
   }
@@ -135,8 +135,8 @@
      cancelling the card padding so it reaches the edges. */
   .package-listing__banner-note-header--bar {
     box-sizing: border-box;
-    margin: calc(-1 * var(--space-12)) calc(-1 * var(--space-12)) 0;
-    padding: var(--space-8) var(--space-12);
+    margin: calc(-1 * 0.75rem) calc(-1 * 0.75rem) 0;
+    padding: 0.5rem 0.75rem;
     border: none;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     color: inherit;
@@ -152,7 +152,7 @@
 
   /* When collapsed the header is the card's only child, so round it fully. */
   .package-listing__banner-note-header--bar:last-child {
-    margin-bottom: calc(-1 * var(--space-12));
+    margin-bottom: calc(-1 * 0.75rem);
     border-radius: var(--radius-md);
   }
 

@@ -1,4 +1,12 @@
 @layer cyberstorm-theme {
+  .menu {
+    --menu-background: var(--menu-bg-color--default);
+  }
+
+  .menu::backdrop {
+    background: var(--overlay-backdrop-color);
+  }
+
   /* VARIANTS DEFAULT STATE */
   .menu:where(.menu--variant--primary) {
     --menu-color: var(--menu-primary-color--default);

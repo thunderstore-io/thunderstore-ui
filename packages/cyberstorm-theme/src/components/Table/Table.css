@@ -8,7 +8,7 @@
     --table-border-color: var(--dropdown-border-color--default);
     --table-box-shadow: var(--shadow-lg);
     --table-animation: fade-in var(--animation-duration-md) ease;
-    --table-border: var(--space-px) var(--select-border-color) solid; */
+    --table-border: 1px var(--select-border-color) solid; */
 
     .table__row {
       &:hover {

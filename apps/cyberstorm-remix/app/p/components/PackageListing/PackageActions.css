@@ -2,7 +2,7 @@
   .package-actions {
     display: grid;
     grid-template-rows: 57px auto;
-    gap: var(--space-12);
+    gap: 0.75rem;
   }
 
   .package-actions__install-link-icon {

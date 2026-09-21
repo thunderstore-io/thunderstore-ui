@@ -78,7 +78,7 @@
   }
 
   .home-search__input {
-    --text-input-height: var(--space-54);
+    --text-input-height: 3.375rem;
   }
 
   .home-search__pane {
@@ -88,7 +88,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-xl);
-    padding: var(--space-32);
+    padding: 2rem;
     border: 1px solid var(--dropdown-border-color--default);
     border-radius: var(--radius-lg);
     background-color: var(--dropdown-bg-color--default);
@@ -199,8 +199,8 @@
     /* The media bleeds out of the panel by cancelling this padding with a
        negative margin, so both sides read the same custom properties and the
        narrower tiers only have to restate the padding. */
-    --manager-pad-block: var(--space-24);
-    --manager-pad-inline: var(--space-48);
+    --manager-pad-block: 1.5rem;
+    --manager-pad-inline: 3rem;
 
     padding: var(--manager-pad-block) var(--manager-pad-inline);
     border: var(--button-special-border--default);
@@ -233,7 +233,7 @@
     flex-direction: column;
     gap: var(--gap-md);
     align-items: start;
-    padding-block: var(--space-24);
+    padding-block: 1.5rem;
   }
 
   .home__manager-heading-gradient {
@@ -262,7 +262,7 @@
     overflow: hidden;
     filter: drop-shadow(-36px -36px 40px rgb(0 0 0 / 0.35));
     aspect-ratio: 952 / 811;
-    margin-block: var(--space-24) calc(-1 * var(--manager-pad-block) - 2px);
+    margin-block: 1.5rem calc(-1 * var(--manager-pad-block) - 2px);
     margin-inline-end: calc(-1 * var(--manager-pad-inline) - 2px);
   }
 
@@ -283,7 +283,7 @@
   .home__resource-arrow {
     position: absolute;
     top: 2.875rem;
-    right: var(--space-48);
+    right: 3rem;
     color: var(--color-text-primary);
     font-size: var(--font-size-body-xxl);
     opacity: 0;
@@ -296,7 +296,7 @@
     flex-direction: column;
     gap: var(--gap-xl);
     align-items: start;
-    padding: var(--space-32);
+    padding: 2rem;
     border-radius: var(--radius-md);
     background-color: var(--surface-dim);
 
@@ -313,8 +313,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--space-48);
-    height: var(--space-48);
+    width: 3rem;
+    height: 3rem;
     border-radius: var(--radius-md);
     font-size: var(--font-size-body-xxl);
   }
@@ -393,8 +393,8 @@
     .home__manager {
       grid-template-columns: minmax(0, 1fr);
 
-      --manager-pad-block: var(--space-32);
-      --manager-pad-inline: var(--space-32);
+      --manager-pad-block: 2rem;
+      --manager-pad-inline: 2rem;
     }
 
     /* Stacked, the media spans the whole column and its negative inline margin
@@ -425,7 +425,7 @@
     }
 
     .home-search__pane {
-      padding: var(--space-16);
+      padding: 1rem;
     }
   }
 
@@ -440,7 +440,7 @@
 
     .home__hero {
       gap: var(--gap-xl);
-      padding-block-start: var(--space-40);
+      padding-block-start: 2.5rem;
     }
 
     /* Shorter box means cover crops the wide collage less aggressively. */
@@ -450,7 +450,7 @@
 
     /* The clamp's 5cqw term never beats its 2rem floor at these widths. */
     .home__hero-heading {
-      font-size: var(--space-28);
+      font-size: 1.75rem;
     }
 
     .home__hero-tagline {
@@ -477,8 +477,8 @@
     }
 
     .home__manager {
-      --manager-pad-block: var(--space-16);
-      --manager-pad-inline: var(--space-16);
+      --manager-pad-block: 1rem;
+      --manager-pad-inline: 1rem;
     }
 
     .home__manager-body {
@@ -487,24 +487,24 @@
 
     /* display--size--2 is 3.188rem, which wraps to five lines here. */
     .home__manager-heading {
-      font-size: var(--space-28);
+      font-size: 1.75rem;
     }
 
     .home__manager-desc {
-      margin-block-end: var(--space-8);
+      margin-block-end: 0.5rem;
       font-size: var(--font-size-body-lg);
     }
 
     .home__resource-card {
       gap: var(--gap-md);
-      padding: var(--space-24);
+      padding: 1.5rem;
     }
 
     /* Re-centred on the icon after the padding drop: 24 padding + half the 48px
        icon - half the 20px glyph. */
     .home__resource-arrow {
-      top: var(--space-38);
-      right: var(--space-24);
+      top: 2.375rem;
+      right: 1.5rem;
     }
 
     .home__resource-title {

@@ -35,7 +35,7 @@
     table,
     ul {
       margin-top: 0;
-      margin-bottom: var(--space-16);
+      margin-bottom: 1rem;
     }
 
     h1,
@@ -52,7 +52,7 @@
 
     h1,
     h2 {
-      margin: var(--space-32) 0 var(--space-8);
+      margin: 2rem 0 0.5rem;
       border-bottom: var(--border-width--px) solid var(--color-surface-a7);
     }
 
@@ -60,8 +60,8 @@
     h4,
     h5,
     h6 {
-      margin-top: var(--space-24);
-      margin-bottom: var(--space-8);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
     }
 
     h1 {
@@ -91,8 +91,8 @@
 
     hr {
       align-self: stretch;
-      height: var(--space-4);
-      margin: var(--space-24) 0;
+      height: 0.25rem;
+      margin: 1.5rem 0;
       background: var(--color-surface-a8);
     }
 
@@ -121,7 +121,7 @@
     }
 
     pre {
-      padding: var(--space-16);
+      padding: 1rem;
       border: var(--border-width--px) solid var(--color-surface-8);
       border-radius: var(--radius-md);
       overflow-x: scroll;
@@ -156,7 +156,7 @@
       flex-direction: column;
       gap: var(--gap-md);
       align-self: stretch;
-      padding-left: var(--space-32);
+      padding-left: 2rem;
       border-left: var(--border-width--4) solid var(--color-surface-9);
       color: var(--color-text-secondary);
       font-weight: var(--font-weight-regular);
@@ -186,7 +186,7 @@
 
     table tr th,
     table tr td {
-      padding: var(--space-12) var(--space-16);
+      padding: 0.75rem 1rem;
       border-right: var(--border-width--px) solid var(--color-surface-a8);
       border-bottom: var(--border-width--px) solid var(--color-surface-a8);
       color: var(--color-text-primary);
@@ -210,19 +210,19 @@
     }
 
     table tr:first-child th:first-child {
-      border-top-left-radius: var(--space-8);
+      border-top-left-radius: 0.5rem;
     }
 
     table tr:first-child th:last-child {
-      border-top-right-radius: var(--space-8);
+      border-top-right-radius: 0.5rem;
     }
 
     table tr:last-child td:first-child {
-      border-bottom-left-radius: var(--space-8);
+      border-bottom-left-radius: 0.5rem;
     }
 
     table tr:last-child td:last-child {
-      border-bottom-right-radius: var(--space-8);
+      border-bottom-right-radius: 0.5rem;
     }
   }
 }

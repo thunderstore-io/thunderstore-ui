@@ -768,7 +768,7 @@ export function MobileUserMenu(props: {
                 primitiveType="link"
                 href={`/c/${communityId}/p/${teamName}/`}
                 rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
-                style={{ paddingLeft: "var(--space-32)" }}
+                style={{ paddingLeft: "2rem" }}
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faUsers} />

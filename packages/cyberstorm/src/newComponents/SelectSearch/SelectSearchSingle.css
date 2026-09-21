@@ -2,7 +2,7 @@
   .select-search--single {
     --select-search-border-color: transparent;
     --select-search-background-color: var(--button-secondary-bg-color--default);
-    --select-search-padding-block: var(--space-12);
+    --select-search-padding-block: 0.75rem;
     --select-search-min-height: 2.75rem;
     --select-search-text-color: var(--button-secondary-text-color--default);
   }
