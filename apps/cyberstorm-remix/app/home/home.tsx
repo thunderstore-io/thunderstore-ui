@@ -61,7 +61,7 @@ export const loader = ssrLoader(
     const description = `Download mods for your favorite games. Choose from over ${PACKAGE_COUNT_TEXT} mods across ${GAME_COUNT_TEXT} games.`;
     const [popular, newest] = await Promise.all([
       dapper.getCommunities(undefined, CommunityListOrderingEnum.Popular),
-      dapper.getCommunities(undefined, CommunityListOrderingEnum.Latest),
+      dapper.getCommunities(1, CommunityListOrderingEnum.Latest),
     ]);
     return {
       popular,
@@ -122,7 +122,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
       undefined,
       CommunityListOrderingEnum.Popular
     ),
-    newest: dapper.getCommunities(undefined, CommunityListOrderingEnum.Latest),
+    newest: dapper.getCommunities(1, CommunityListOrderingEnum.Latest),
   };
 }
 

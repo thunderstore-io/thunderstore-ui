@@ -6,6 +6,7 @@ import {
 
 import type { DapperTsInterface } from "../index";
 
+/** Returns all communities matching the filters unless a specific page is requested. */
 export async function getCommunities(
   this: DapperTsInterface,
   page?: number,
@@ -22,25 +23,33 @@ export async function getCommunities(
   ) {
     supportedOrdering = ordering as CommunityListOrderingEnum;
   }
-  const data = await fetchCommunityList({
-    config: this.config,
-    queryParams: [
-      { key: "page", value: page, impotent: 1 },
-      {
-        key: "ordering",
-        value: supportedOrdering,
-        impotent: CommunityListOrderingEnum.Name,
-      },
-      { key: "search", value: search },
-    ],
-    params: {},
-    data: {},
-  });
+  const fetchPage = (page?: number) =>
+    fetchCommunityList({
+      config: this.config,
+      queryParams: [
+        { key: "page", value: page, impotent: 1 },
+        {
+          key: "ordering",
+          value: supportedOrdering,
+          impotent: CommunityListOrderingEnum.Name,
+        },
+        { key: "search", value: search },
+      ],
+      params: {},
+      data: {},
+    });
+
+  let data = await fetchPage(page);
+  const results = [...data.results];
+  for (let nextPage = 2; page === undefined && data.next; nextPage++) {
+    data = await fetchPage(nextPage);
+    results.push(...data.results);
+  }
 
   return {
     count: data.count,
     hasMore: Boolean(data.next),
-    results: data.results,
+    results,
   };
 }
 
