@@ -121,6 +121,7 @@ export {
 } from "./newComponents/TextInput/TextInput";
 export { useToast } from "./newComponents/Toast/Provider";
 export { Provider as ToastProvider } from "./newComponents/Toast/Provider";
+export { Viewport as ToastViewport } from "./newComponents/Toast/Viewport";
 export { Toast } from "./newComponents/Toast/Toast";
 export type { ToastProps } from "./newComponents/Toast/Toast";
 export {

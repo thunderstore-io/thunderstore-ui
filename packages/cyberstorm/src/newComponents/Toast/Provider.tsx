@@ -7,7 +7,8 @@ import {
 } from "react";
 import { v4 as uuid } from "uuid";
 
-import { Toast, type ToastProps } from "./Toast";
+import { type ToastProps } from "./Toast";
+import { Viewport } from "./Viewport";
 
 const initState: {
   toasts: ToastProps[];
@@ -69,13 +70,7 @@ export function Provider(props: { toastDuration: number } & PropsWithChildren) {
     <ToastContext value={value}>
       <RadixToast.Provider swipeDirection="left" duration={props.toastDuration}>
         {props.children}
-        <RadixToast.Viewport asChild>
-          <div className="toast__viewport">
-            {state.toasts.map((toast) => (
-              <Toast key={toast.id} {...toast} />
-            ))}
-          </div>
-        </RadixToast.Viewport>
+        <Viewport toasts={state.toasts} />
       </RadixToast.Provider>
     </ToastContext>
   );
