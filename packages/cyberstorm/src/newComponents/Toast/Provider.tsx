@@ -80,7 +80,7 @@ export const useToast = (): ContextInterface => {
   const contextState = useContext(ToastContext);
 
   if (contextState === null) {
-    throw new Error("useToast must be used within a Toast.Provider tag");
+    throw new Error("useToast must be used within a ToastProvider");
   }
 
   return contextState;
