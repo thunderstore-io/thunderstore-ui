@@ -2,16 +2,13 @@ name: "Visual diff"
 
 on:
   push:
-    branches:
-      - "master"
-  pull_request:
-    branches:
-      - "**"
+    tags:
+      - "*"
+  workflow_dispatch:
 
 jobs:
   get-node-version:
     name: Get Node version
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     outputs:
       node-version: ${{ steps.get-node-version.outputs.node-version }}
@@ -24,6 +21,7 @@ jobs:
       - name: Get Node version
         id: get-node-version
         uses: ./.github/actions/get-node-version
+
   visual-diff:
     name: "Generate visual diffs"
     continue-on-error: true
@@ -65,6 +63,7 @@ jobs:
         run: |
           cd tools/visual-diff-ci/
           poetry install
+      # Optional: uploads snapshots to Percy on tags. Does not gate releases.
       - name: Run visual diffing script
         run: |
           cd tools/visual-diff-ci/

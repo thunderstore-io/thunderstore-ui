@@ -5,7 +5,11 @@
 
 The visual diffing pipeline consists of several components/steps which can be
 found in the tools directory here (+ the github actions `visual-diff.yml`
-workflow)
+workflow).
+
+CI runs Visual diff on tag pushes (and optionally via `workflow_dispatch`), not
+on every PR. It is informational only: a Percy diff or a failed run does not
+block tagging, GitHub (pre)releases, or Infra.
 
 The steps to produce visual diffs are as follows:
 
@@ -72,7 +76,7 @@ results to percy
 
 Can be run by `poetry run python run_ci_script.py`, will need a `PERCY_TOKEN`
 environment variable to be set in order for the snapshots to get uploaded
-for review (this is automated on the CI).
+for review (this is automated on tagged Visual diff runs in CI).
 
 **NOTE:** This project currently includes a handful of hardcoded assumptions in
 regards to where server(s) are hosted in order to glue everything together.
