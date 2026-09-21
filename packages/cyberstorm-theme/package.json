@@ -15,6 +15,7 @@
     "exports": {
       "./css": "./dist/cyberstorm-theme.css",
       "./fonts.css": "./dist/fonts.css",
+      "./styles/fonts/*": "./dist/fonts/*",
       "./package.json": "./package.json"
     }
   },
