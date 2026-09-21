@@ -7,7 +7,6 @@ import {
   ToastVariantsList,
 } from "@thunderstore/cyberstorm-theme";
 
-// Note: The default export from Toast has .Provider and .Viewport attached
 const meta = {
   title: "Cyberstorm/Toast",
   component: Toast,
