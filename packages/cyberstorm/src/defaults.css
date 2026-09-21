@@ -101,7 +101,9 @@ sensible; they are still overridden by the theme in the themed build.
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --font-weight-extra-bold: 800;
-    --font-family--inter: inter, sans-serif;
-    --font-family--hubot: hubot-sans, sans-serif;
+
+    /* Generic families so globally loaded @font-face cannot leak into barebones. */
+    --font-family--inter: sans-serif;
+    --font-family--hubot: sans-serif;
   }
 }
