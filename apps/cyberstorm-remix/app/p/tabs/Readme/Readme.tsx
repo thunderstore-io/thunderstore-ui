@@ -1,4 +1,5 @@
 import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
+import { MarkdownEditedNote } from "app/p/components/MarkdownEditedNote/MarkdownEditedNote";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -85,18 +86,19 @@ export default function Readme() {
         resolve={readme}
         errorElement={<FetchErrorState message="Failed to load readme." />}
       >
-        {(resolvedValue) =>
-          resolvedValue && resolvedValue.html ? (
-            <div className="markdown-wrapper">
+        {(resolvedValue) => (
+          <div className="markdown-wrapper">
+            <MarkdownEditedNote doc={resolvedValue} label="README" />
+            {resolvedValue?.html ? (
               <div
                 dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
                 className="markdown"
               />
-            </div>
-          ) : (
-            <TabFetchState variant="info" message="No details available" />
-          )
-        }
+            ) : (
+              <TabFetchState variant="info" message="No details available" />
+            )}
+          </div>
+        )}
       </Await>
     </Suspense>
   );
