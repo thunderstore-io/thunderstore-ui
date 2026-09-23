@@ -24,6 +24,7 @@ export interface ActionableLinkProps
   href: string;
   disabled?: boolean;
   ref?: React.Ref<HTMLAnchorElement>;
+  preventScrollReset?: boolean;
 }
 
 export interface ActionableCyberstormLinkProps
@@ -35,6 +36,7 @@ export interface ActionableCyberstormLinkProps
   queryParams?: string;
   disabled?: boolean;
   ref?: React.Ref<HTMLAnchorElement>;
+  preventScrollReset?: boolean;
 }
 
 export const Actionable = memo(function Actionable(
