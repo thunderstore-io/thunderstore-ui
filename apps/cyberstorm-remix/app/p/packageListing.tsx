@@ -51,6 +51,7 @@ import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/packageListing";
+import { EditMarkdownButton } from "./components/EditMarkdownButton/EditMarkdownButton";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageCategoriesAndTags } from "./components/PackageListing/PackageCategoriesAndTags";
 import { PackageDependencyString } from "./components/PackageListing/PackageDependencyString";
@@ -381,6 +382,22 @@ export default function PackageListing() {
     return <SkeletonBox />;
   }
 
+  // Duplicated below the tab strip for narrow screens, where the strip scrolls
+  // the slot out of view.
+  const editButton =
+    currentTab === "details" || currentTab === "changelog" ? (
+      <EditMarkdownButton
+        permissions={permissions}
+        community={community_identifier}
+        namespace={namespace_id}
+        package={package_id}
+        version={listing.latest_version_number}
+        queryParams={
+          currentTab === "changelog" ? "document=changelog" : undefined
+        }
+      />
+    ) : null;
+
   // TODO: some variables are available in props (communityId, namespaceId, packageId)
   return (
     <>
@@ -598,7 +615,13 @@ export default function PackageListing() {
             >
               Analysis
             </NewLink>
+            {editButton ? (
+              <div className="package-listing__tabs-slot">{editButton}</div>
+            ) : null}
           </Tabs>
+          {editButton ? (
+            <div className="package-listing__edit-button-row">{editButton}</div>
+          ) : null}
 
           <div className="package-listing__content">
             <Outlet
