@@ -41,6 +41,7 @@ export type CyberstormLinkIds =
   | "PackageVersion"
   | "PackageVersionRequired"
   | "PackageVersionVersions"
+  | "PackageVersionReadmeEdit"
   | "PackageVersionWithoutCommunity"
   | "PackageVersionWithoutCommunityRequired"
   | "PackageVersionWithoutCommunityVersions"
