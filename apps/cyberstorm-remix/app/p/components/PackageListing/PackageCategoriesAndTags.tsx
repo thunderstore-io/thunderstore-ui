@@ -2,7 +2,12 @@ import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Heading, NewIcon, NewTag } from "@thunderstore/cyberstorm";
+import {
+  Heading,
+  NewIcon,
+  NewTag,
+  orderCategories,
+} from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
 
 import "./PackageCategoriesAndTags.css";
@@ -18,7 +23,7 @@ function categoryTags(
   listing: PackageDetailListing,
   community: PackageDetailCommunity
 ) {
-  return listing.categories.map((category) => {
+  return orderCategories(listing.categories).map((category) => {
     return (
       <NewTag
         key={category.name}
