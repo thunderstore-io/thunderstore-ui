@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { orderCategories } from "@thunderstore/cyberstorm";
 import { type PackageSubmissionStatus } from "@thunderstore/dapper/types";
 import {
   type IBaseUploadHandle,
@@ -277,10 +278,12 @@ export function useUploadCategoryOptions(
               ...prev,
               {
                 communityId: community,
-                categories: filters.package_categories.map((cat) => ({
-                  value: cat.slug,
-                  label: cat.name,
-                })),
+                categories: orderCategories(filters.package_categories).map(
+                  (cat) => ({
+                    value: cat.slug,
+                    label: cat.name,
+                  })
+                ),
               },
             ];
           });
