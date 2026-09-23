@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatAsCount } from "../utils";
+import { formatAsCount, orderCategories } from "../utils";
 
 describe("formatAsCount", () => {
   it("leaves counts below the compact threshold untouched", () => {
@@ -38,5 +38,26 @@ describe("formatAsCount", () => {
         expect(formatted).toMatch(/^\d{1,3}(\.\d)?[KMBT]?$/);
       }
     }
+  });
+});
+
+describe("orderCategories", () => {
+  it("sorts a copy by slug and leaves the input unchanged", () => {
+    const categories = [
+      { name: "Weapons", slug: "weapons" },
+      { name: "Asset Libraries", slug: "asset-libraries" },
+      { name: "QoL", slug: "qol" },
+    ];
+
+    expect(orderCategories(categories)).toEqual([
+      { name: "Asset Libraries", slug: "asset-libraries" },
+      { name: "QoL", slug: "qol" },
+      { name: "Weapons", slug: "weapons" },
+    ]);
+    expect(categories.map((category) => category.slug)).toEqual([
+      "weapons",
+      "asset-libraries",
+      "qol",
+    ]);
   });
 });
