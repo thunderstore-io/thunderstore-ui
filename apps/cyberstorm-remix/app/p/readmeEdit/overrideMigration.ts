@@ -1,5 +1,8 @@
+import semverCompare from "semver/functions/compare";
+
 import {
   type RequestConfig,
+  fetchPackageVersionChangelogOverrideRaw,
   fetchPackageVersionReadmeOverrideRaw,
   fetchPackageVersions,
 } from "@thunderstore/thunderstore-api";
@@ -63,12 +66,41 @@ export async function findPreviousReadmeOverride(
   return null;
 }
 
-export function downloadOverrideText(markdown: string): void {
+/** CHANGELOG override on the version that newVersion replaced as latest. */
+export async function findHiddenChangelogOverride(
+  config: () => RequestConfig,
+  namespace: string,
+  packageName: string,
+  newVersion: string
+): Promise<PreviousOverride | null> {
+  const versions = await fetchVersionsUncached(config, namespace, packageName);
+
+  // Latest by semver like the backend, not by upload time.
+  const latest = versions
+    .map((v) => v.version_number)
+    .filter((v) => v !== newVersion)
+    .sort(semverCompare)
+    .pop();
+  if (!latest || semverCompare(newVersion, latest) <= 0) return null;
+
+  const markdown = await fetchPackageVersionChangelogOverrideRaw({
+    config,
+    params: { namespace, package: packageName, version: latest },
+    data: {},
+    queryParams: {},
+  });
+  return markdown === null ? null : { versionNumber: latest, markdown };
+}
+
+export function downloadOverrideText(
+  markdown: string,
+  filename = "README.md"
+): void {
   const blob = new Blob([markdown], { type: "text/markdown" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "README.md";
+  anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
 }
