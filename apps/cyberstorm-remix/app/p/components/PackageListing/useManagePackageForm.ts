@@ -1,7 +1,7 @@
 import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useRevalidator } from "react-router";
 
-import { type useToast } from "@thunderstore/cyberstorm";
+import { orderCategories, type useToast } from "@thunderstore/cyberstorm";
 import {
   type CommunityFilters,
   type RequestConfig,
@@ -103,10 +103,12 @@ export function useManagePackageForm({
 
   const categoryOptions = useMemo(
     () =>
-      communityFilters?.package_categories.map((category) => ({
-        value: category.slug,
-        label: category.name,
-      })) ?? [],
+      orderCategories(communityFilters?.package_categories ?? []).map(
+        (category) => ({
+          value: category.slug,
+          label: category.name,
+        })
+      ),
     [communityFilters?.package_categories]
   );
 
