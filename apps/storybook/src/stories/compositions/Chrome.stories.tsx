@@ -105,9 +105,13 @@ function Chrome({ scope }: { scope: string }) {
           <FontAwesomeIcon icon={faStar} />
         </Icon>
         <DropDown trigger={<Button csVariant="secondary">More</Button>}>
-          <DropDownItem>Settings</DropDownItem>
+          <DropDownItem>
+            <span>Settings</span>
+          </DropDownItem>
           <DropDownDivider />
-          <DropDownItem>Report</DropDownItem>
+          <DropDownItem>
+            <span>Report</span>
+          </DropDownItem>
         </DropDown>
         <Menu
           popoverId={`${scope}-chrome-menu`}
@@ -223,7 +227,9 @@ function Chrome({ scope }: { scope: string }) {
             csModifiers={modifier === "ghost" ? ["ghost"] : undefined}
             trigger={<Button csVariant="secondary">{modifier}</Button>}
           >
-            <DropDownItem csModifiers={[modifier]}>{modifier}</DropDownItem>
+            <DropDownItem csModifiers={[modifier]}>
+              <span>{modifier}</span>
+            </DropDownItem>
           </DropDown>
         ))}
       </States>

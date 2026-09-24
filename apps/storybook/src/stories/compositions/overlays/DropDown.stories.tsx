@@ -36,10 +36,16 @@ function OpenDropDown() {
         defaultOpen
         trigger={<Button csVariant="secondary">More</Button>}
       >
-        <DropDownItem>Settings</DropDownItem>
-        <DropDownItem csModifiers={["ghost"]}>Ghost</DropDownItem>
+        <DropDownItem>
+          <span>Settings</span>
+        </DropDownItem>
+        <DropDownItem csModifiers={["ghost"]}>
+          <span>Ghost</span>
+        </DropDownItem>
         <DropDownDivider />
-        <DropDownItem csModifiers={["disabled"]}>Disabled</DropDownItem>
+        <DropDownItem csModifiers={["disabled"]}>
+          <span>Disabled</span>
+        </DropDownItem>
       </DropDown>
     </div>
   );
