@@ -408,3 +408,21 @@ export const getFakeRatedPackages = async () => {
     rated_packages: [],
   };
 };
+
+export const getFakePackageDownloadHistory = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _namespaceId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _packageName: string
+) => {
+  const now = new Date();
+  now.setUTCMinutes(0, 0, 0);
+
+  return Array.from({ length: 24 }, (_, i) => {
+    const hour = new Date(now.getTime() - (23 - i) * 60 * 60 * 1000);
+    return {
+      hour: hour.toISOString(),
+      downloads: faker.number.int({ min: 0, max: 500 }),
+    };
+  });
+};

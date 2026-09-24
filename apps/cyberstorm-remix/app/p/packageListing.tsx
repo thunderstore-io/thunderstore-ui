@@ -65,6 +65,7 @@ import {
   RejectionReason,
 } from "./components/PackageListing/ReviewInformation";
 import {
+  canViewPackageAnalytics,
   getPackageListingStatusWhenNeeded,
   getPrivateListing,
   getPublicListing,
@@ -598,6 +599,28 @@ export default function PackageListing() {
             >
               Analysis
             </NewLink>
+            <Suspense fallback={null}>
+              <Await resolve={permissions} errorElement={null}>
+                {(resolvedPermissions) =>
+                  canViewPackageAnalytics(resolvedPermissions) ? (
+                    <NewLink
+                      key="analytics"
+                      primitiveType="cyberstormLink"
+                      linkId="PackageAnalytics"
+                      community={listing.community_identifier}
+                      namespace={listing.namespace}
+                      package={listing.name}
+                      aria-current={currentTab === "analytics"}
+                      rootClasses={`tabs-item${
+                        currentTab === "analytics" ? " tabs-item--current" : ""
+                      }`}
+                    >
+                      Analytics
+                    </NewLink>
+                  ) : null
+                }
+              </Await>
+            </Suspense>
           </Tabs>
 
           <div className="package-listing__content">

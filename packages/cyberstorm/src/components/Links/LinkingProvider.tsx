@@ -101,6 +101,8 @@ export interface LinkLibrary {
   PackageVersions: (props: AnyProps & PackageProps) => RE | null;
   /** Package's source view */
   PackageSource: (props: AnyProps & PackageProps) => RE | null;
+  /** Package's download analytics view (team members only) */
+  PackageAnalytics: (props: AnyProps & PackageProps) => RE | null;
   /** View listing other packages that depend on this package */
   PackageDependants: (props: AnyProps & PackageProps) => RE | null;
   /** Package format docs */
@@ -170,6 +172,7 @@ const library: LinkLibrary = {
   PackageChangelog: noop,
   PackageVersions: noop,
   PackageSource: noop,
+  PackageAnalytics: noop,
   PackageDependants: noop,
   PackageFormatDocs: noop,
   PackageVersion: noop,

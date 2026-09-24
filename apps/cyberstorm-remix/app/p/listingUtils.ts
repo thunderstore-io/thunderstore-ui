@@ -19,6 +19,12 @@ export function isGithubUrl(url: string): boolean {
   }
 }
 
+export function canViewPackageAnalytics(
+  permissions: PackagePermissions | undefined
+): boolean {
+  return Boolean(permissions?.permissions.can_manage_wiki);
+}
+
 export interface ListingIdentifiers {
   communityId: string;
   namespaceId: string;

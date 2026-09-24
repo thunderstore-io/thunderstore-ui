@@ -25,6 +25,7 @@ export type apiFetchArgs<B, QP> = {
   request?: Omit<RequestInit, "headers" | "body"> & { body?: string };
   useSession?: boolean;
   bodyRaw?: B;
+  hostOverride?: string;
 };
 
 type schemaOrUndefined<A> = A extends z.ZodSchema
@@ -55,7 +56,14 @@ export async function apiFetch(props: {
     }
   }
 
-  const { config, path, request, queryParams, useSession = false } = args;
+  const {
+    config,
+    path,
+    request,
+    queryParams,
+    useSession = false,
+    hostOverride,
+  } = args;
   const usedConfig: RequestConfig = useSession
     ? config()
     : {
@@ -64,7 +72,7 @@ export async function apiFetch(props: {
       };
   // TODO: Query params have stronger types, but they are not just shown here.
   // Look into furthering the ensuring of passing proper query params.
-  const url = getUrl(usedConfig, path, queryParams);
+  const url = getUrl(hostOverride ?? usedConfig.apiHost, path, queryParams);
 
   const response = await fetch(url, {
     ...(request ?? {}),
@@ -97,12 +105,12 @@ function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
 }
 
 function getUrl(
-  config: RequestConfig,
+  host: string,
   path: string,
   queryParams?: { key: string; value: string; impotent?: string }[]
 ) {
   const fullPath = queryParams
     ? `${path}?${serializeQueryString(queryParams)}`
     : path;
-  return new URL(fullPath, config.apiHost);
+  return new URL(fullPath, host);
 }

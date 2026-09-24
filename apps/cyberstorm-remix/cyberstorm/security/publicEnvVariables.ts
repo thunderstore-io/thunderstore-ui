@@ -6,6 +6,7 @@ export type publicEnvVariablesKeys =
   | "SITE_URL"
   | "BETA_SITE_URL"
   | "API_URL"
+  | "QUERY_SERVICE_URL"
   | "COOKIE_DOMAIN"
   | "AUTH_BASE_URL"
   | "AUTH_RETURN_URL"
@@ -29,6 +30,7 @@ export const ROOT_PUBLIC_ENV_VARIABLES: PublicPrefix<publicEnvVariablesKeys>[] =
     "VITE_SITE_URL",
     "VITE_BETA_SITE_URL",
     "VITE_API_URL",
+    "VITE_QUERY_SERVICE_URL",
     "VITE_COOKIE_DOMAIN",
     "VITE_AUTH_BASE_URL",
     "VITE_AUTH_RETURN_URL",
