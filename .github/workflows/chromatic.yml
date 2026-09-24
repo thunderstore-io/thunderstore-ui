@@ -1,8 +1,12 @@
 name: Chromatic
 
 # Pull requests and master only. Feature-branch pushes still run Test and do
-# not upload snapshots. Fork PRs are excluded: they cannot read
-# CHROMATIC_CYBERSTORM_TOKEN.
+# not upload snapshots. Fork and Dependabot pull requests are excluded: forks
+# never receive Actions secrets, and Dependabot workflows only receive
+# Dependabot secrets. ui-tests-fork.yml and ui-tests-dependabot.yml post the
+# required UI Tests status for those pulls. Do not drop that exclusion; running
+# this job there fails closed or would build untrusted code with the token.
+
 on:
   pull_request:
   push:
@@ -18,7 +22,14 @@ concurrency:
 jobs:
   chromatic-deployment:
     name: chromatic-deployment
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    # user.login, not actor: a re-run is still a Dependabot pull, and GitHub
+    # keeps withholding Actions secrets from that run.
+    if: >-
+      github.event_name != 'pull_request' ||
+      (
+        github.event.pull_request.head.repo.full_name == github.repository &&
+        github.event.pull_request.user.login != 'dependabot[bot]'
+      )
     runs-on: ubuntu-latest
     # GITHUB_TOKEN must be able to post Chromatic's commit statuses (UI Tests).
     permissions:

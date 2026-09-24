@@ -1,0 +1,73 @@
+name: UI Tests Dependabot exemption
+
+# Dependabot pull requests use this repository as the head, so they are not
+# forks, but GitHub still withholds Actions secrets and makes GITHUB_TOKEN
+# read-only — including on pull_request_target. Chromatic cannot post
+# "UI Tests". workflow_run is the run that has a write token.
+#
+# Listens to the Chromatic workflow, which skips these pulls. Do not check out
+# the Dependabot head or pass CHROMATIC_CYBERSTORM_TOKEN into a build of it.
+
+on:
+  workflow_run:
+    workflows: ["Chromatic"]
+    types: [completed]
+
+permissions: {}
+
+jobs:
+  pass-ui-tests:
+    name: pass-ui-tests
+    if: >-
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      (
+        github.event.workflow_run.conclusion == 'success' ||
+        github.event.workflow_run.conclusion == 'skipped'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+      pull-requests: read
+    steps:
+      - name: Mark UI Tests successful
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          post() {
+            echo "Posting UI Tests success for ${1}"
+            gh api --method POST \
+              "repos/${GITHUB_REPOSITORY}/statuses/${1}" \
+              -f state=success \
+              -f "context=UI Tests" \
+              -f "description=Skipped: Dependabot has no Actions secret for Chromatic. Not a visual review." \
+              -f "target_url=${TARGET_URL}"
+          }
+
+          posted=0
+          count=$(jq '.workflow_run.pull_requests | length' "$GITHUB_EVENT_PATH")
+          if [ "$count" -gt 0 ]; then
+            while IFS= read -r sha; do
+              [ -n "${sha}" ] && [ "${sha}" != "null" ] || continue
+              post "${sha}"
+              posted=1
+            done < <(jq -r '.workflow_run.pull_requests[].head.sha' "$GITHUB_EVENT_PATH")
+          fi
+          if [ "${posted}" -eq 1 ]; then
+            exit 0
+          fi
+
+          # Same-repo pull_request runs normally include pull_requests. If that
+          # array is empty, the workflow head SHA is the synthetic merge commit;
+          # resolve the pull request head from it.
+          merge_sha=$(jq -r '.workflow_run.head_sha' "$GITHUB_EVENT_PATH")
+          sha=$(gh api --jq '.[0].head.sha // empty' \
+            "repos/${GITHUB_REPOSITORY}/commits/${merge_sha}/pulls")
+          if [ -z "${sha}" ]; then
+            echo "Could not resolve the Dependabot pull request head SHA."
+            exit 1
+          fi
+          post "${sha}"

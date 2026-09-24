@@ -40,7 +40,14 @@ When a build runs:
 
 - **Pull requests** from this repository, and **pushes to `master`**. A push to
   any other branch still runs the Test workflow and does not upload snapshots.
-  Fork pull requests are skipped (they do not have `CHROMATIC_CYBERSTORM_TOKEN`).
+  Fork and Dependabot pull requests do not upload. Forks never receive
+  `CHROMATIC_CYBERSTORM_TOKEN`. Dependabot-triggered workflows only receive
+  Dependabot secrets, so the Actions secret is missing there too. Both still
+  get a successful **UI Tests** status from
+  [`ui-tests-fork.yml`](../../.github/workflows/ui-tests-fork.yml) and
+  [`ui-tests-dependabot.yml`](../../.github/workflows/ui-tests-dependabot.yml)
+  so the required check does not stay pending. That status is not a visual
+  review.
 - **After Test succeeds** on that commit. The job waits for the **Test** check
   and does not install or upload while tests are still running. A failed Test
   check does not spend snapshots. The skipped Test check that a same-repo pull
@@ -86,10 +93,16 @@ How the checks behave:
    **UI Tests** turns green without a CI re-run.
 4. **Storybook/Chromatic build or capture failure** — `chromatic-deployment`
    fails (red) and **UI Tests** fails.
-5. **Push to `master`** — visual changes are accepted automatically.
+5. **Fork or Dependabot pull request** — Chromatic does not run. **UI Tests**
+   is posted as successful and its description says it was skipped. Visual
+   changes on these pulls are not reviewed. To snapshot a fork, push that
+   branch to this repository and open the pull request from there.
+6. **Push to `master`** — visual changes are accepted automatically.
 
-**Branch protection:** require Chromatic's **UI Tests** check. That is the only
-status that stays non-green on unapproved visual changes. Requiring
+**Branch protection:** require Chromatic's **UI Tests** check. Fork and
+Dependabot pulls satisfy that check with the skip status above; other pulls
+still block until visual changes are accepted. That is the only status that
+stays non-green on unapproved visual changes. Requiring
 `chromatic-deployment` _instead of_ **UI Tests** will not block visual diffs.
 Optionally also require `chromatic-deployment` so an install/build failure that
 never reaches Chromatic still blocks merge at the Actions level.
