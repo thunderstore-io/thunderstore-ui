@@ -83,10 +83,9 @@ green without a CI re-run.
 
 How the checks behave:
 
-1. **No relevant UI changes** — Chromatic is called with `skip`, so no snapshots
-   are taken. **UI Tests** is still reported and is **successful**: there is
-   nothing new to review, and a required **UI Tests** check does not stay
-   pending.
+1. **No relevant UI changes** — Chromatic is not called and no snapshots are
+   taken. The workflow posts **UI Tests: cyberstorm** and **UI Review:
+   cyberstorm** as successful, so those required checks do not stay pending.
 2. **Relevant changes, no visual diff** — `chromatic-deployment` and **UI Tests**
    both pass.
 3. **Visual changes on a pull request** — `chromatic-deployment` still passes.

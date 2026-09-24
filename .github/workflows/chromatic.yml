@@ -154,18 +154,25 @@ jobs:
           echo "Timed out waiting for the Test check."
           exit 1
 
-      - name: Skip Chromatic capture
+      - name: Mark UI Tests successful
         if: steps.changes.outputs.capture != 'true'
-        uses: chromaui/action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_CYBERSTORM_TOKEN }}
-          workingDir: apps/storybook
-          branchName: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
-          chromaticSha: ${{ github.event.pull_request.head.sha || github.sha }}
-          # No snapshots. Chromatic still marks the commit passed so a required
-          # UI Tests check does not stay pending.
-          skip: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          # skip: true does not post Chromatic's commit statuses. Branch
+          # protection requires these exact contexts; a same-repo pull request
+          # with no UI changes would otherwise stay pending.
+          for context in "UI Tests: cyberstorm" "UI Review: cyberstorm"; do
+            gh api --method POST \
+              "repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}" \
+              -f state=success \
+              -f "context=${context}" \
+              -f "description=Skipped: no relevant UI changes. No snapshots taken." \
+              -f "target_url=${TARGET_URL}"
+          done
 
       - name: Check get-node-version version
         if: steps.changes.outputs.capture == 'true'
