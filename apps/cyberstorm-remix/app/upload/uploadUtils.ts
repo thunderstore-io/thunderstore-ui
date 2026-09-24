@@ -54,6 +54,15 @@ export function buildCommunityOptions(
   }));
 }
 
+export function buildSelectedCommunities(
+  communityOptions: CommunityOption[],
+  community: string | null
+): string[] {
+  if (!community) return [];
+  const isValid = communityOptions.some((c) => c.value === community);
+  return isValid ? [community] : [];
+}
+
 export function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
 

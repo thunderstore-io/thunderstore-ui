@@ -233,6 +233,7 @@ function CommunityMainHeader({
           primitiveType="cyberstormLink"
           linkId="PackageUpload"
           rootClasses="community__upload-button"
+          community={resolvedCommunity.identifier}
         >
           <NewIcon noWrapper csMode="inline">
             <FontAwesomeIcon icon={faDownload} />
