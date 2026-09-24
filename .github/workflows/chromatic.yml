@@ -94,10 +94,13 @@ jobs:
           set -euo pipefail
           # Test (including its build) can take a while. A failed or unfinished
           # suite must not spend snapshots or mark UI Tests green.
+          # Same-repo pull requests skip the Test workflow, which still posts a
+          # Test check with conclusion "skipped" on this SHA. Ignore that and
+          # wait for the run from the branch push.
           for attempt in $(seq 1 90); do
             line=$(gh api --paginate \
               "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/check-runs?per_page=100" \
-              --jq '.check_runs[] | select(.name == "Test") | [(.started_at // ""), .status, (.conclusion // "")] | @tsv' \
+              --jq '.check_runs[] | select(.name == "Test" and .conclusion != "skipped") | [(.started_at // ""), .status, (.conclusion // "")] | @tsv' \
               | sort | tail -n 1 || true)
             echo "Test check on ${HEAD_SHA}: ${line:-missing} (attempt ${attempt})"
             case "${line}" in

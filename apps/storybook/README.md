@@ -43,7 +43,8 @@ When a build runs:
   Fork pull requests are skipped (they do not have `CHROMATIC_CYBERSTORM_TOKEN`).
 - **After Test succeeds** on that commit. The job waits for the **Test** check
   and does not install or upload while tests are still running. A failed Test
-  check does not spend snapshots.
+  check does not spend snapshots. The skipped Test check that a same-repo pull
+  request posts is ignored; the run that counts is the one from the branch push.
 - **Only when UI files changed.** The diff (against the pull request base, or
   the previous `master` commit) must touch `apps/storybook`,
   `packages/cyberstorm`, or `packages/cyberstorm-theme`. A change to
