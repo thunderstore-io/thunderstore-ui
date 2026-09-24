@@ -1,8 +1,8 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import {
   faBook,
-  faDownload,
   faGamepad,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -235,7 +235,7 @@ function CommunityMainHeader({
           rootClasses="community__upload-button"
         >
           <NewIcon noWrapper csMode="inline">
-            <FontAwesomeIcon icon={faDownload} />
+            <FontAwesomeIcon icon={faUpload} />
           </NewIcon>
           Upload package
         </NewButton>
