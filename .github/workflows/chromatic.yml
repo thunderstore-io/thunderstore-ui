@@ -1,0 +1,213 @@
+name: Chromatic
+
+# Pull requests and master only. Feature-branch pushes still run Test and do
+# not upload snapshots. Fork PRs are excluded: they cannot read
+# CHROMATIC_CYBERSTORM_TOKEN.
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+# A newer commit on the same PR (or on master) aborts an upload that has not
+# finished.
+concurrency:
+  group: chromatic-${{ github.event.pull_request.number || 'master' }}
+  cancel-in-progress: true
+
+jobs:
+  chromatic-deployment:
+    name: chromatic-deployment
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    # GITHUB_TOKEN must be able to post Chromatic's commit statuses (UI Tests).
+    permissions:
+      contents: read
+      checks: write
+      statuses: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # pull_request's github.sha is the synthetic merge commit. TurboSnap
+          # needs the head commit, which is the one Test ran against.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Fetch the pull request base
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: git fetch --no-tags origin "${BASE_REF}"
+
+      - name: Detect Storybook and component changes
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          capture=false
+          full=false
+
+          if [ -z "${BASE_SHA}" ] || [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "Base commit is unavailable (${BASE_SHA:-empty}); forcing a full capture."
+            echo "capture=true" >> "$GITHUB_OUTPUT"
+            echo "full=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "${EVENT_NAME}" = "pull_request" ]; then
+            diff_args=("${BASE_SHA}...HEAD")
+          else
+            diff_args=("${BASE_SHA}" "HEAD")
+          fi
+
+          while IFS= read -r file; do
+            [ -z "${file}" ] && continue
+            case "${file}" in
+              pnpm-lock.yaml|\
+              apps/storybook/.storybook/preview.tsx|\
+              apps/storybook/.storybook/prefixCyberstormThemeCss.ts)
+                # These affect every composition, and the lockfile is outside
+                # the story import graph. Capture everything.
+                capture=true
+                full=true
+                ;;
+              apps/storybook|apps/storybook/*|\
+              packages/cyberstorm|packages/cyberstorm/*|\
+              packages/cyberstorm-theme|packages/cyberstorm-theme/*)
+                capture=true
+                ;;
+            esac
+          done < <(git diff --name-only "${diff_args[@]}")
+
+          echo "capture=${capture}" >> "$GITHUB_OUTPUT"
+          echo "full=${full}" >> "$GITHUB_OUTPUT"
+          echo "Relevant UI changes: ${capture}; full capture: ${full}"
+
+      - name: Wait for the Test check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          # Test (including its build) can take a while. A failed or unfinished
+          # suite must not spend snapshots or mark UI Tests green.
+          for attempt in $(seq 1 90); do
+            line=$(gh api --paginate \
+              "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/check-runs?per_page=100" \
+              --jq '.check_runs[] | select(.name == "Test") | [(.started_at // ""), .status, (.conclusion // "")] | @tsv' \
+              | sort | tail -n 1 || true)
+            echo "Test check on ${HEAD_SHA}: ${line:-missing} (attempt ${attempt})"
+            case "${line}" in
+              "")
+                sleep 30
+                ;;
+              *$'\tcompleted\tsuccess')
+                exit 0
+                ;;
+              *$'\tqueued\t'*|*$'\tin_progress\t'*)
+                sleep 30
+                ;;
+              *$'\tcompleted\t'*)
+                echo "The Test check finished as ${line##*$'\t'}. Not capturing snapshots."
+                exit 1
+                ;;
+              *)
+                echo "Unexpected Test check state (${line}). Not capturing snapshots."
+                exit 1
+                ;;
+            esac
+          done
+          echo "Timed out waiting for the Test check."
+          exit 1
+
+      - name: Skip Chromatic capture
+        if: steps.changes.outputs.capture != 'true'
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_CYBERSTORM_TOKEN }}
+          workingDir: apps/storybook
+          branchName: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          chromaticSha: ${{ github.event.pull_request.head.sha || github.sha }}
+          # No snapshots. Chromatic still marks the commit passed so a required
+          # UI Tests check does not stay pending.
+          skip: true
+
+      - name: Check get-node-version version
+        if: steps.changes.outputs.capture == 'true'
+        uses: ./.github/actions/get-node-version
+        with:
+          package-json: .github/actions/get-node-version/package.json
+
+      - name: Get Node version
+        id: get-node-version
+        if: steps.changes.outputs.capture == 'true'
+        uses: ./.github/actions/get-node-version
+
+      - uses: pnpm/action-setup@v4
+        if: steps.changes.outputs.capture == 'true'
+
+      - name: Setup Node
+        if: steps.changes.outputs.capture == 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ steps.get-node-version.outputs.node-version }}
+          cache: "pnpm"
+
+      - name: Set fontawesome token
+        if: steps.changes.outputs.capture == 'true'
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
+
+      - name: Install pnpm dependencies
+        if: steps.changes.outputs.capture == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build dependencies
+        if: steps.changes.outputs.capture == 'true'
+        run: pnpm run build
+
+      - name: Publish to Chromatic (TurboSnap)
+        if: steps.changes.outputs.capture == 'true' && steps.changes.outputs.full != 'true'
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_CYBERSTORM_TOKEN }}
+          workingDir: apps/storybook
+          branchName: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          chromaticSha: ${{ github.event.pull_request.head.sha || github.sha }}
+          onlyChanged: true
+          # Chromatic matches externals from the repository root. workingDir
+          # does not apply to these globs; a workingDir-relative path would
+          # match nothing. A change under either package disables TurboSnap
+          # and recaptures every story.
+          externals: |
+            packages/cyberstorm/**
+            packages/cyberstorm-theme/**
+          # Visual-change gate = Chromatic's "UI Tests" GitHub check, not this job.
+          # exitZeroOnChanges: true — this job stays green on diffs so accepting
+          #   baselines in Chromatic can flip UI Tests without a CI re-run.
+          # exitOnceUploaded: false — wait for capture; fail this job only on
+          #   Storybook/Chromatic build or capture errors.
+          # autoAcceptChanges: master — a merge does not wait for a second
+          #   visual review. This does not reduce the snapshot count.
+          exitZeroOnChanges: true
+          exitOnceUploaded: false
+          autoAcceptChanges: master
+
+      - name: Publish to Chromatic (full capture)
+        if: steps.changes.outputs.capture == 'true' && steps.changes.outputs.full == 'true'
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_CYBERSTORM_TOKEN }}
+          workingDir: apps/storybook
+          branchName: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          chromaticSha: ${{ github.event.pull_request.head.sha || github.sha }}
+          exitZeroOnChanges: true
+          exitOnceUploaded: false
+          autoAcceptChanges: master
