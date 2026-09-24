@@ -226,9 +226,9 @@ jobs:
           externals: |
             packages/cyberstorm/**
             packages/cyberstorm-theme/**
-          # Visual-change gate = Chromatic's "UI Tests" GitHub check, not this job.
+          # Visual-change gate = Chromatic's "UI Tests: cyberstorm" status, not this job.
           # exitZeroOnChanges: true — this job stays green on diffs so accepting
-          #   baselines in Chromatic can flip UI Tests without a CI re-run.
+          #   baselines in Chromatic can flip UI Tests: cyberstorm without a CI re-run.
           # exitOnceUploaded: false — wait for capture; fail this job only on
           #   Storybook/Chromatic build or capture errors.
           # autoAcceptChanges: master — a merge does not wait for a second

@@ -2,8 +2,9 @@ name: UI Tests Dependabot exemption
 
 # Dependabot pull requests use this repository as the head, so they are not
 # forks, but GitHub still withholds Actions secrets and makes GITHUB_TOKEN
-# read-only — including on pull_request_target. Chromatic cannot post
-# "UI Tests". workflow_run is the run that has a write token.
+# read-only — including on pull_request_target. Chromatic cannot post its
+# checks. Those checks are exactly "UI Tests: cyberstorm" and
+# "UI Review: cyberstorm". workflow_run is the run that has a write token.
 #
 # Listens to the Chromatic workflow, which skips these pulls. Do not check out
 # the Dependabot head or pass CHROMATIC_CYBERSTORM_TOKEN into a build of it.
@@ -40,13 +41,15 @@ jobs:
           set -euo pipefail
 
           post() {
-            echo "Posting UI Tests success for ${1}"
-            gh api --method POST \
-              "repos/${GITHUB_REPOSITORY}/statuses/${1}" \
-              -f state=success \
-              -f "context=UI Tests" \
-              -f "description=Skipped: Dependabot has no Actions secret for Chromatic. Not a visual review." \
-              -f "target_url=${TARGET_URL}"
+            echo "Posting Chromatic skip statuses for ${1}"
+            for context in "UI Tests: cyberstorm" "UI Review: cyberstorm"; do
+              gh api --method POST \
+                "repos/${GITHUB_REPOSITORY}/statuses/${1}" \
+                -f state=success \
+                -f "context=${context}" \
+                -f "description=Skipped: Dependabot has no Actions secret for Chromatic. Not a visual review." \
+                -f "target_url=${TARGET_URL}"
+            done
           }
 
           is_dependabot_pr() {

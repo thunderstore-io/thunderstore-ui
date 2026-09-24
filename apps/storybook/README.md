@@ -43,11 +43,12 @@ When a build runs:
   Fork and Dependabot pull requests do not upload. Forks never receive
   `CHROMATIC_CYBERSTORM_TOKEN`. Dependabot-triggered workflows only receive
   Dependabot secrets, so the Actions secret is missing there too. Both still
-  get a successful **UI Tests** status from
+  get successful **UI Tests: cyberstorm** and **UI Review: cyberstorm**
+  statuses from
   [`ui-tests-fork.yml`](../../.github/workflows/ui-tests-fork.yml) and
   [`ui-tests-dependabot.yml`](../../.github/workflows/ui-tests-dependabot.yml)
-  so the required check does not stay pending. That status is not a visual
-  review.
+  so those required checks do not stay pending. Those statuses are not a
+  visual review.
 - **After Test succeeds** on that commit. The job waits for the **Test** check
   and does not install or upload while tests are still running. A failed Test
   check does not spend snapshots. The skipped Test check that a same-repo pull
@@ -77,39 +78,44 @@ taken.
 
 `exitZeroOnChanges: true` is intentional: this Actions job is **not** the
 visual-change gate. It stays green when Chromatic finds diffs so reviewers can
-accept baselines in Chromatic without re-running CI. The merge gate is Chromatic's
-separately posted **UI Tests** check. Accepting the baselines turns **UI Tests**
-green without a CI re-run.
+accept baselines in Chromatic without re-running CI. The merge gates are the
+statuses Chromatic posts, named exactly **UI Tests: cyberstorm** and **UI
+Review: cyberstorm**. A status named only **UI Tests** does not satisfy them.
+Accepting the baselines turns **UI Tests: cyberstorm** green without a CI
+re-run.
 
 How the checks behave:
 
 1. **No relevant UI changes** — Chromatic is not called and no snapshots are
    taken. The workflow posts **UI Tests: cyberstorm** and **UI Review:
    cyberstorm** as successful, so those required checks do not stay pending.
-2. **Relevant changes, no visual diff** — `chromatic-deployment` and **UI Tests**
-   both pass.
+2. **Relevant changes, no visual diff** — `chromatic-deployment` and **UI
+   Tests: cyberstorm** both pass.
 3. **Visual changes on a pull request** — `chromatic-deployment` still passes.
-   **UI Tests** stays yellow (_"N changes must be accepted as baselines"_). Open
-   **Details**, review in Chromatic, and accept or reject. Once accepted,
-   **UI Tests** turns green without a CI re-run.
+   **UI Tests: cyberstorm** stays yellow (_"N changes must be accepted as
+   baselines"_). Open **Details**, review in Chromatic, and accept or reject.
+   Once accepted, **UI Tests: cyberstorm** turns green without a CI re-run.
 4. **Storybook/Chromatic build or capture failure** — once Chromatic has
-   started, `chromatic-deployment` fails (red) and **UI Tests** fails. An
-   install or `pnpm run build` failure before that step leaves **UI Tests**
-   pending; only the Actions job reports failure.
-5. **Fork or Dependabot pull request** — Chromatic does not run. **UI Tests**
-   is posted as successful and its description says it was skipped. Visual
-   changes on these pulls are not reviewed. To snapshot a fork, push that
-   branch to this repository and open the pull request from there.
+   started, `chromatic-deployment` fails (red) and **UI Tests: cyberstorm**
+   fails. An install or `pnpm run build` failure before that step leaves **UI
+   Tests: cyberstorm** and **UI Review: cyberstorm** pending; only the Actions
+   job reports failure.
+5. **Fork or Dependabot pull request** — Chromatic does not run. **UI Tests:
+   cyberstorm** and **UI Review: cyberstorm** are posted as successful and the
+   description says they were skipped. Visual changes on these pulls are not
+   reviewed. To snapshot a fork, push that branch to this repository and open
+   the pull request from there.
 6. **Push to `master`** — visual changes are accepted automatically.
 
-**Branch protection:** require Chromatic's **UI Tests** check. Fork and
-Dependabot pulls satisfy that check with the skip status above; other pulls
-still block until visual changes are accepted. That is the only status that
-stays non-green on unapproved visual changes. Requiring
-`chromatic-deployment` _instead of_ **UI Tests** will not block visual diffs.
-Optionally also require `chromatic-deployment` so an install/build failure that
-never reaches Chromatic still blocks merge at the Actions level (**UI Tests**
-alone stays pending in that case). The historical matrix name
+**Branch protection:** require **UI Tests: cyberstorm** and **UI Review:
+cyberstorm**. Those are the status names Chromatic writes. Fork and Dependabot
+pulls satisfy both with the skip statuses above; other pulls still block until
+visual changes are accepted. **UI Tests: cyberstorm** is the status that stays
+non-green on unapproved visual changes. Requiring `chromatic-deployment` in
+place of **UI Tests: cyberstorm** will not block visual diffs. Optionally also
+require `chromatic-deployment` so an install/build failure that never reaches
+Chromatic still blocks merge at the Actions level (both Chromatic statuses stay
+pending in that case). The historical matrix name
 `chromatic-deployment (apps/storybook, CHROMATIC_CYBERSTORM_TOKEN)` is still
 reported, because branch protection requires that exact check.
 

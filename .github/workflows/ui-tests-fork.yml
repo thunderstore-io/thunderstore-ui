@@ -2,7 +2,8 @@ name: UI Tests fork exemption
 
 # Fork pull requests cannot read CHROMATIC_CYBERSTORM_TOKEN, and the
 # pull_request token cannot write commit statuses, so Chromatic never posts
-# the required "UI Tests" status. This workflow posts that status as success.
+# its checks. Those checks are exactly "UI Tests: cyberstorm" and
+# "UI Review: cyberstorm". A status named "UI Tests" does not satisfy them.
 #
 # pull_request_target runs this file from the base branch and can write
 # statuses for forks. Do not check out the pull request head, and do not read
@@ -29,9 +30,11 @@ jobs:
           TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
-          gh api --method POST \
-            "repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}" \
-            -f state=success \
-            -f "context=UI Tests" \
-            -f "description=Skipped: fork PR has no Chromatic token. Visual changes are not reviewed." \
-            -f "target_url=${TARGET_URL}"
+          for context in "UI Tests: cyberstorm" "UI Review: cyberstorm"; do
+            gh api --method POST \
+              "repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}" \
+              -f state=success \
+              -f "context=${context}" \
+              -f "description=Skipped: fork PR has no Chromatic token. Visual changes are not reviewed." \
+              -f "target_url=${TARGET_URL}"
+          done
