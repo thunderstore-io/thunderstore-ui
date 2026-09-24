@@ -1,6 +1,7 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import module from "node:module";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { prefixCyberstormThemePostcss } from "./prefixCyberstormThemeCss.ts";
 
@@ -19,8 +20,6 @@ const config: StorybookConfig = {
   addons: [
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-onboarding"),
-    // Enables Chromatic "modes" so each story is snapshotted with the theme
-    // both ON (production look) and OFF (barebones cyberstorm) — see modes.ts.
     getAbsolutePath("@chromatic-com/storybook"),
   ],
   framework: {
@@ -28,6 +27,18 @@ const config: StorybookConfig = {
     options: {},
   },
   async viteFinal(viteConfig) {
+    // Composition stories import component modules directly so TurboSnap
+    // does not follow the package barrel.
+    const csSrc = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../../../packages/cyberstorm/src"
+    );
+    const existingAlias = viteConfig.resolve?.alias;
+    const alias = Array.isArray(existingAlias)
+      ? [...existingAlias, { find: "@cs", replacement: csSrc }]
+      : { ...existingAlias, "@cs": csSrc };
+    viteConfig.resolve = { ...viteConfig.resolve, alias };
+
     const existingPostcss = viteConfig.css?.postcss;
     const existingPlugins =
       existingPostcss &&

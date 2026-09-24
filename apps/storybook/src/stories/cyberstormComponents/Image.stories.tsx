@@ -40,6 +40,9 @@ const meta = {
   title: "Cyberstorm/Image",
   component: ImageStory,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: ImageVariantsList },
     fallbackIcon: {

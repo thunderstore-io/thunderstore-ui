@@ -41,7 +41,7 @@ const meta = {
   },
   render: (args) => <Modal {...args} />,
   parameters: {
-    chromatic: { delay: 300 },
+    chromatic: { disableSnapshot: true },
   },
 } satisfies Meta<typeof Modal>;
 

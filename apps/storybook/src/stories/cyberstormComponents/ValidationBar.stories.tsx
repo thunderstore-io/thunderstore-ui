@@ -8,6 +8,9 @@ const meta = {
   title: "Cyberstorm/ValidationBar (legacy)",
   component: ValidationBar,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     status: {
       control: "select",

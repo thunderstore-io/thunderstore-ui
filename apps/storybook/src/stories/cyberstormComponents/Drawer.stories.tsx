@@ -11,6 +11,9 @@ const meta = {
   title: "Cyberstorm/Drawer",
   component: Drawer,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: DrawerVariantsList },
     csSize: { control: "select", options: DrawerSizesList },

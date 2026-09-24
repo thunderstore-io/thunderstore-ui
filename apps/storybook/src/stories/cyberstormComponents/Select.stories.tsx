@@ -11,7 +11,10 @@ const meta = {
   title: "Cyberstorm/Select",
   component: NewSelect,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: SelectVariantsList },
     csSize: { control: "select", options: SelectSizesList },

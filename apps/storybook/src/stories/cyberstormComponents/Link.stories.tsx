@@ -6,7 +6,10 @@ const meta = {
   title: "Cyberstorm/Link",
   component: NewLink,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     primitiveType: { control: "select", options: ["link"] },
     href: { control: "text" },

@@ -13,7 +13,10 @@ const meta = {
   title: "Cyberstorm/CodeInput",
   component: CodeInput,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: CodeInputVariantsList },
     csSize: { control: "select", options: CodeInputSizesList },
