@@ -18,8 +18,10 @@ permissions: {}
 jobs:
   pass-ui-tests:
     name: pass-ui-tests
+    # Cheap filter only: a Dependabot PR may be reopened by a maintainer, so
+    # the Chromatic workflow_run actor is not always dependabot[bot]. The
+    # script below checks the pull request author before posting.
     if: >-
-      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
       github.event.workflow_run.event == 'pull_request' &&
       (
         github.event.workflow_run.conclusion == 'success' ||
@@ -47,16 +49,32 @@ jobs:
               -f "target_url=${TARGET_URL}"
           }
 
+          is_dependabot_pr() {
+            local author
+            author=$(gh api --jq '.user.login // empty' \
+              "repos/${GITHUB_REPOSITORY}/pulls/${1}")
+            [ "${author}" = "dependabot[bot]" ]
+          }
+
           posted=0
           count=$(jq '.workflow_run.pull_requests | length' "$GITHUB_EVENT_PATH")
           if [ "$count" -gt 0 ]; then
-            while IFS= read -r sha; do
+            while IFS=$'\t' read -r number sha; do
+              [ -n "${number}" ] && [ "${number}" != "null" ] || continue
               [ -n "${sha}" ] && [ "${sha}" != "null" ] || continue
+              if ! is_dependabot_pr "${number}"; then
+                echo "PR #${number} is not authored by dependabot[bot]; not posting UI Tests."
+                continue
+              fi
               post "${sha}"
               posted=1
-            done < <(jq -r '.workflow_run.pull_requests[].head.sha' "$GITHUB_EVENT_PATH")
+            done < <(jq -r '.workflow_run.pull_requests[] | [.number, .head.sha] | @tsv' "$GITHUB_EVENT_PATH")
           fi
           if [ "${posted}" -eq 1 ]; then
+            exit 0
+          fi
+          if [ "$count" -gt 0 ]; then
+            # Associated pulls were present but none were Dependabot-authored.
             exit 0
           fi
 
@@ -64,10 +82,16 @@ jobs:
           # array is empty, the workflow head SHA is the synthetic merge commit;
           # resolve the pull request head from it.
           merge_sha=$(jq -r '.workflow_run.head_sha' "$GITHUB_EVENT_PATH")
-          sha=$(gh api --jq '.[0].head.sha // empty' \
-            "repos/${GITHUB_REPOSITORY}/commits/${merge_sha}/pulls")
+          read -r sha author < <(gh api --jq '
+            .[0] as $pr |
+            if $pr == null then "\t" else "\($pr.head.sha // "")\t\($pr.user.login // "")" end
+            ' "repos/${GITHUB_REPOSITORY}/commits/${merge_sha}/pulls")
           if [ -z "${sha}" ]; then
-            echo "Could not resolve the Dependabot pull request head SHA."
+            echo "Could not resolve a pull request head SHA for ${merge_sha}."
             exit 1
+          fi
+          if [ "${author}" != "dependabot[bot]" ]; then
+            echo "Resolved PR author is ${author:-unknown}, not dependabot[bot]; not posting UI Tests."
+            exit 0
           fi
           post "${sha}"

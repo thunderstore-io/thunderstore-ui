@@ -85,6 +85,16 @@ jobs:
                 capture=true
                 full=true
                 ;;
+              *.md|\
+              */.gitignore|\
+              apps/storybook/Dockerfile|\
+              apps/storybook/nginx.conf|\
+              *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|\
+              */vitest.config.ts)
+                # Docs, Storybook deploy config, and unit tests do not change
+                # captured pixels. Matched before the directory patterns so a
+                # README under apps/storybook does not force a build.
+                ;;
               apps/storybook|apps/storybook/*|\
               packages/cyberstorm|packages/cyberstorm/*|\
               packages/cyberstorm-theme|packages/cyberstorm-theme/*)
@@ -105,31 +115,34 @@ jobs:
           set -euo pipefail
           # Test (including its build) can take a while. A failed or unfinished
           # suite must not spend snapshots or mark UI Tests green.
-          # Same-repo pull requests skip the Test workflow, which still posts a
-          # Test check with conclusion "skipped" on this SHA. Ignore that and
-          # wait for the run from the branch push.
+          # Same-repo pull requests skip the Test workflow (see test.yml), which
+          # still posts a Test check with conclusion "skipped" on this SHA.
+          # Ignore that pull_request run and wait for the branch-push Test
+          # workflow. On that push run, a skipped Test means Run pre-commit or
+          # Build failed (Test needs those jobs), so a non-success conclusion
+          # must fail this step promptly instead of polling until timeout.
           for attempt in $(seq 1 90); do
-            line=$(gh api --paginate \
-              "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/check-runs?per_page=100" \
-              --jq '.check_runs[] | select(.name == "Test" and .conclusion != "skipped") | [(.started_at // ""), .status, (.conclusion // "")] | @tsv' \
-              | sort | tail -n 1 || true)
-            echo "Test check on ${HEAD_SHA}: ${line:-missing} (attempt ${attempt})"
+            line=$(gh api \
+              "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=${HEAD_SHA}&event=push&per_page=1" \
+              --jq '.workflow_runs[0] // empty | [(.status // ""), (.conclusion // "")] | @tsv' \
+              || true)
+            echo "Test workflow (push) on ${HEAD_SHA}: ${line:-missing} (attempt ${attempt})"
             case "${line}" in
               "")
                 sleep 30
                 ;;
-              *$'\tcompleted\tsuccess')
+              completed$'\t'success)
                 exit 0
                 ;;
-              *$'\tqueued\t'*|*$'\tin_progress\t'*)
+              queued$'\t'*|in_progress$'\t'*|requested$'\t'*|waiting$'\t'*|pending$'\t'*)
                 sleep 30
                 ;;
-              *$'\tcompleted\t'*)
-                echo "The Test check finished as ${line##*$'\t'}. Not capturing snapshots."
+              completed$'\t'*)
+                echo "The Test workflow finished as ${line##*$'\t'}. Not capturing snapshots."
                 exit 1
                 ;;
               *)
-                echo "Unexpected Test check state (${line}). Not capturing snapshots."
+                echo "Unexpected Test workflow state (${line}). Not capturing snapshots."
                 exit 1
                 ;;
             esac
@@ -225,3 +238,26 @@ jobs:
           exitZeroOnChanges: true
           exitOnceUploaded: false
           autoAcceptChanges: master
+
+  # Branch protection still requires the matrix job name from when this lived
+  # in test.yml. The job id above reports "chromatic-deployment" only, so the
+  # old name stayed "Expected" and the pull request waited forever.
+  # TODO: After this branch is merged, require Chromatic / chromatic-deployment
+  # and drop "chromatic-deployment (apps/storybook, CHROMATIC_CYBERSTORM_TOKEN)"
+  # from required checks. Then delete this job.
+  chromatic-deployment-status:
+    name: chromatic-deployment (apps/storybook, CHROMATIC_CYBERSTORM_TOKEN)
+    needs: chromatic-deployment
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report the required check
+        env:
+          RESULT: ${{ needs.chromatic-deployment.result }}
+        run: |
+          set -euo pipefail
+          echo "chromatic-deployment result: ${RESULT}"
+          case "${RESULT}" in
+            success|skipped) exit 0 ;;
+            *) exit 1 ;;
+          esac

@@ -53,8 +53,10 @@ When a build runs:
   check does not spend snapshots. The skipped Test check that a same-repo pull
   request posts is ignored; the run that counts is the one from the branch push.
 - **Only when UI files changed.** The diff (against the pull request base, or
-  the previous `master` commit) must touch `apps/storybook`,
-  `packages/cyberstorm`, or `packages/cyberstorm-theme`. A change to
+  the previous `master` commit) must touch a rendering file under
+  `apps/storybook`, `packages/cyberstorm`, or `packages/cyberstorm-theme`.
+  Markdown, `.gitignore`, `apps/storybook/Dockerfile`,
+  `apps/storybook/nginx.conf`, and unit tests do not count. A change to
   `pnpm-lock.yaml`, `apps/storybook/.storybook/preview.tsx`, or
   `apps/storybook/.storybook/prefixCyberstormThemeCss.ts` forces a full capture
   instead of TurboSnap. Any other diff skips capture.
@@ -91,8 +93,10 @@ How the checks behave:
    **UI Tests** stays yellow (_"N changes must be accepted as baselines"_). Open
    **Details**, review in Chromatic, and accept or reject. Once accepted,
    **UI Tests** turns green without a CI re-run.
-4. **Storybook/Chromatic build or capture failure** — `chromatic-deployment`
-   fails (red) and **UI Tests** fails.
+4. **Storybook/Chromatic build or capture failure** — once Chromatic has
+   started, `chromatic-deployment` fails (red) and **UI Tests** fails. An
+   install or `pnpm run build` failure before that step leaves **UI Tests**
+   pending; only the Actions job reports failure.
 5. **Fork or Dependabot pull request** — Chromatic does not run. **UI Tests**
    is posted as successful and its description says it was skipped. Visual
    changes on these pulls are not reviewed. To snapshot a fork, push that
@@ -105,7 +109,10 @@ still block until visual changes are accepted. That is the only status that
 stays non-green on unapproved visual changes. Requiring
 `chromatic-deployment` _instead of_ **UI Tests** will not block visual diffs.
 Optionally also require `chromatic-deployment` so an install/build failure that
-never reaches Chromatic still blocks merge at the Actions level.
+never reaches Chromatic still blocks merge at the Actions level (**UI Tests**
+alone stays pending in that case). The historical matrix name
+`chromatic-deployment (apps/storybook, CHROMATIC_CYBERSTORM_TOKEN)` is still
+reported, because branch protection requires that exact check.
 
 `pnpm --filter @thunderstore/storybook exec chromatic` uploads a Storybook manually
 (rarely needed, since CI automates it). The Chromatic CLI reads the project
