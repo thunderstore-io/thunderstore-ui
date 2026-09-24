@@ -1,4 +1,17 @@
-@layer utils, cyberstorm, cyberstorm-theme, storybook-stories;
+@layer utils, cyberstorm-theme-reset, cyberstorm, cyberstorm-theme, storybook-stories;
+
+/*
+ * The app reset (apps/cyberstorm-remix/app/styles/reset.css) sets this.
+ * Components size themselves with width: 100% plus padding, which overflows
+ * under the user-agent content-box model.
+ */
+@layer utils {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+}
 
 /* Fills the canvas so the themed wrapper paints the page background. */
 .cs-story-frame {

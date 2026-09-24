@@ -56,6 +56,7 @@ const config: StorybookConfig = {
         ...(typeof existingPostcss === "object" && existingPostcss
           ? existingPostcss
           : {}),
+        // Prefixes cyberstorm-theme and cyberstorm-theme-reset onto [data-cs-theme="on"].
         plugins: [...existingPlugins, prefixCyberstormThemePostcss()],
       },
     };

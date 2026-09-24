@@ -1,0 +1,25 @@
+/*
+ * Drop browser chrome (margin, padding, border, fill) on native controls once
+ * the theme is on, and let them inherit the surrounding type. This layer is
+ * below `cyberstorm`, so a component that sets its own border, padding,
+ * background, or font still wins.
+ *
+ * Storybook prefixes the layer onto [data-cs-theme="on"]. The barebones column
+ * does not match, and keeps user-agent styles.
+ */
+@layer cyberstorm-theme-reset {
+  button,
+  input,
+  textarea,
+  [popover] {
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: inherit;
+    font: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    background: transparent;
+  }
+}

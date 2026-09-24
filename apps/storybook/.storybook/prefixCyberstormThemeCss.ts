@@ -7,7 +7,9 @@
  * paint a div. Barebones tokens stay on `:root` in the unprefixed cyberstorm
  * layer, so the other column does not inherit the theme background.
  *
- * Fonts stay global (@font-face layers are skipped). @keyframes selectors
+ * The native-control reset lives in `@layer cyberstorm-theme-reset` and is
+ * prefixed the same way, so barebones keeps user-agent styles. Fonts stay
+ * global (@font-face layers are skipped). @keyframes selectors
  * (`from` / `to`) are left untouched. Nested rules (`&:hover`, `> .child`)
  * inherit the prefixed parent — prefixing them again would produce
  * impossible selectors.
@@ -72,7 +74,11 @@ export function prefixCyberstormThemePostcss() {
     postcssPlugin: "prefix-cyberstorm-theme",
     Once(root: PostcssRoot) {
       root.walkAtRules("layer", (atRule) => {
-        if (atRule.params.trim() !== "cyberstorm-theme") {
+        const layer = atRule.params.trim();
+        if (
+          layer !== "cyberstorm-theme" &&
+          layer !== "cyberstorm-theme-reset"
+        ) {
           return;
         }
         let hasFontFace = false;

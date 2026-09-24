@@ -1,3 +1,4 @@
+@import "./styles/nativeReset.css";
 @import "./components/componentsColors.css";
 @import "./components/componentsMiscs.css";
 @import "./components/componentsSizes.css";
