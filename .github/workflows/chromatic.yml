@@ -34,6 +34,7 @@ jobs:
     # GITHUB_TOKEN must be able to post Chromatic's commit statuses (UI Tests).
     permissions:
       contents: read
+      actions: read
       checks: write
       statuses: write
       pull-requests: write
