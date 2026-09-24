@@ -78,6 +78,9 @@ jobs:
           while IFS= read -r file; do
             [ -z "${file}" ] && continue
             case "${file}" in
+              apps/storybook/.storybook/*|\
+              apps/storybook/LinkLibrary.tsx|\
+              apps/storybook/package.json|\
               pnpm-lock.yaml|\
               apps/storybook/.storybook/preview.tsx|\
               apps/storybook/.storybook/prefixCyberstormThemeCss.ts)
