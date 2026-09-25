@@ -1,11 +1,12 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { type LinkNavigationState } from "cyberstorm/utils/LinkLibrary";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
-import { useEffect, useMemo, useReducer, useState } from "react";
-import { useLoaderData, useOutletContext } from "react-router";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useLoaderData, useLocation, useOutletContext } from "react-router";
 
 import { NewAlert, NewLink } from "@thunderstore/cyberstorm";
 import {
@@ -41,6 +42,7 @@ import {
 import {
   type UploadFormFieldAction,
   buildCommunityOptions,
+  getPreselectedCommunity,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
   getUploadProgressPercent,
@@ -169,6 +171,28 @@ export default function Upload() {
     dapper,
     formInputs.communities
   );
+
+  const location = useLocation();
+  const navigationState = location.state as LinkNavigationState | null;
+  const preselectedCommunity = useMemo(
+    () =>
+      getPreselectedCommunity(
+        navigationState?.from?.pathname,
+        communityOptions
+      ),
+    [navigationState?.from?.pathname, communityOptions]
+  );
+
+  const hasPreselectedCommunity = useRef(false);
+  useEffect(() => {
+    if (hasPreselectedCommunity.current || !preselectedCommunity) return;
+
+    hasPreselectedCommunity.current = true;
+    updateFormFieldState({
+      field: "communities",
+      value: [preselectedCommunity],
+    });
+  }, [preselectedCommunity]);
 
   type SubmitorOutput = Awaited<
     ReturnType<typeof postPackageSubmissionMetadata>

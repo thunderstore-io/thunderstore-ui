@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildCommunityOptions,
   formatBytes,
+  getPreselectedCommunity,
   getSubmissionErrorMessages,
   getSubmissionErrorsBySection,
   getUploadProgressPercent,
@@ -273,5 +274,35 @@ describe("getSubmissionErrorMessages", () => {
       "Invalid category",
       "General error",
     ]);
+  });
+});
+
+describe("getPreselectedCommunity", () => {
+  const options = [
+    { value: "riskofrain2", label: "Risk of Rain 2" },
+    { value: "valheim", label: "Valheim" },
+  ];
+
+  it("picks the community from a community-scoped path", () => {
+    expect(getPreselectedCommunity("/c/valheim/", options)).toBe("valheim");
+  });
+
+  it("picks the community from a nested community path", () => {
+    expect(
+      getPreselectedCommunity("/c/riskofrain2/p/Team/Package/", options)
+    ).toBe("riskofrain2");
+  });
+
+  it("returns undefined for paths outside a community", () => {
+    expect(getPreselectedCommunity("/communities/", options)).toBeUndefined();
+    expect(getPreselectedCommunity("/teams/", options)).toBeUndefined();
+  });
+
+  it("returns undefined when no path is available", () => {
+    expect(getPreselectedCommunity(undefined, options)).toBeUndefined();
+  });
+
+  it("returns undefined for a community that isn't in the selectable", () => {
+    expect(getPreselectedCommunity("/c/unknown/", options)).toBeUndefined();
   });
 });
