@@ -1,7 +1,7 @@
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ReactNode } from "react";
-import { useRevalidator } from "react-router";
+import { useAsyncError, useRevalidator } from "react-router";
 
 import {
   NewAlert,
@@ -9,6 +9,7 @@ import {
   NewButton,
   NewIcon,
 } from "@thunderstore/cyberstorm";
+import { isCloudflareChallengeError } from "@thunderstore/thunderstore-api";
 
 import "./FetchErrorState.css";
 
@@ -31,15 +32,29 @@ export function FetchErrorState({
   onRetry,
 }: Props) {
   const revalidator = useRevalidator();
-  const handleRetry = onRetry ?? (() => revalidator.revalidate());
+  const challenge = isCloudflareChallengeError(useAsyncError());
+  const handleRetry = challenge
+    ? () => window.location.reload()
+    : onRetry ?? (() => revalidator.revalidate());
   // Reflect the revalidator's busy state only on the default (revalidate) path.
-  const isRetrying = !onRetry && revalidator.state !== "idle";
+  const isRetrying = !challenge && !onRetry && revalidator.state !== "idle";
+
+  let label = "Retry";
+  if (challenge) {
+    label = "Reload page";
+  } else if (isRetrying) {
+    label = "Retrying…";
+  }
 
   return (
     <div className="fetch-error-state">
       <NewAlert csVariant={variant}>
         <div className="fetch-error-state__content">
-          <span className="fetch-error-state__message">{message}</span>
+          <span className="fetch-error-state__message">
+            {challenge
+              ? "Our security provider needs to verify your browser. Reload the page to complete the check."
+              : message}
+          </span>
           <NewButton
             csVariant="secondary"
             csSize="small"
@@ -50,7 +65,7 @@ export function FetchErrorState({
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faRotateRight} />
             </NewIcon>
-            {isRetrying ? "Retrying…" : "Retry"}
+            {label}
           </NewButton>
         </div>
       </NewAlert>
