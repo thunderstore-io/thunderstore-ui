@@ -123,14 +123,6 @@ export const loader = ssrLoader(
                   "@type": "WebSite",
                   name: "Thunderstore",
                   url: origin,
-                  potentialAction: {
-                    "@type": "SearchAction",
-                    target: {
-                      "@type": "EntryPoint",
-                      urlTemplate: `${origin}/communities?search={search_term_string}`,
-                    },
-                    "query-input": "required name=search_term_string",
-                  },
                 },
               ],
             },

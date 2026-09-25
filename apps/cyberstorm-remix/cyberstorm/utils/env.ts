@@ -1,4 +1,5 @@
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { parsePageParam } from "cyberstorm/utils/searchParamsUtils";
 import { isRecord } from "cyberstorm/utils/typeChecks";
 
 /**
@@ -25,6 +26,33 @@ export function getApiHostForSsr(): string {
   return apiHost;
 }
 
+// Both slash forms answer 200, so one has to be picked. A dotted final
+// segment is a file, not a route.
+function withTrailingSlash(path: string): string {
+  if (path.endsWith("/")) {
+    return path;
+  }
+  const lastSegment = path.slice(path.lastIndexOf("/") + 1);
+  return lastSegment.includes(".") ? path : `${path}/`;
+}
+
+// The one URL for a package. Use as the `og:url` of its tabs and version
+// pages so they consolidate onto the listing.
+export function packageCanonicalPath(
+  communityId: string,
+  namespaceId: string,
+  packageId: string
+): string {
+  return `/c/${communityId}/p/${namespaceId}/${packageId}/`;
+}
+
+// `?page=N` for N above 1, nothing else. Page 1 stays bare so it keeps one URL.
+// Parsed the way the loaders parse it, so the canonical names the page served.
+function canonicalQuery(requestUrl: URL): string {
+  const page = parsePageParam(requestUrl.searchParams.get("page"));
+  return page !== undefined && page > 1 ? `?page=${page}` : "";
+}
+
 /**
  * Canonical absolute URL for a page, used for `og:url` and `rel=canonical`. The
  * SSR proxy terminates TLS and forwards over http, so `request.url` reports
@@ -33,11 +61,19 @@ export function getApiHostForSsr(): string {
  * is unset/invalid. In every case we force the `https` scheme for any non-local
  * host, so a misconfigured `VITE_SITE_URL` (e.g. `http://thunderstore.dev`) can
  * never emit an insecure, redirecting canonical/og:url. `pathname` defaults to
- * the request path (query strings dropped for a stable URL).
+ * the request path.
+ *
+ * Query strings are dropped except `?page=N`, so a paginated listing stays
+ * self-canonical rather than collapsing into page 1.
  */
 export function getCanonicalUrl(request: Request, pathname?: string): string {
   const requestUrl = new URL(request.url);
-  const path = pathname ?? requestUrl.pathname;
+  const path =
+    pathname !== undefined
+      ? withTrailingSlash(pathname)
+      : `${withTrailingSlash(requestUrl.pathname)}${canonicalQuery(
+          requestUrl
+        )}`;
 
   let resolved: URL | undefined;
   const { VITE_SITE_URL } = getPublicEnvVariables(["VITE_SITE_URL"]);

@@ -135,6 +135,8 @@ export function CardPackage(props: Props) {
         <Image
           src={packageData.icon_url}
           fallbackIcon={faBan}
+          // The icon is the link's only content, so alt names the link.
+          alt={`${formatToDisplayName(packageData.name)} icon`}
           rootClasses="card-package__image-wrapper"
           square
           intrinsicWidth={256}

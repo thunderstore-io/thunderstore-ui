@@ -1,7 +1,10 @@
 import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+import {
+  buildPageHref,
+  setParamsBlobValue,
+} from "cyberstorm/utils/searchParamsUtils";
 import { ALL_SECTIONS, getSectionSelection } from "cyberstorm/utils/section";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
@@ -12,7 +15,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { Await, useNavigationType, useSearchParams } from "react-router";
+import {
+  Await,
+  useLocation,
+  useNavigationType,
+  useSearchParams,
+} from "react-router";
 import { useDebounce } from "use-debounce";
 import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorState";
 
@@ -140,6 +148,11 @@ export function PackageSearch(props: Props) {
   const [currentPage, setCurrentPage] = useState(
     searchParams.get("page") ? Number(searchParams.get("page")) : 1
   );
+
+  const { pathname } = useLocation();
+
+  const pageHref = (page: number) =>
+    buildPageHref(pathname, searchParams, page);
 
   // Seed the section + category lists once filters are available. `filters` may
   // be a Promise (client), already resolved (SSR), or null (fetch failed). Only
@@ -613,6 +626,7 @@ export function PackageSearch(props: Props) {
                     searchParamsBlob,
                     "page"
                   )}
+                  pageHref={pageHref}
                   pageSize={PER_PAGE}
                   siblingCount={4}
                   totalCount={resolvedValue.count}

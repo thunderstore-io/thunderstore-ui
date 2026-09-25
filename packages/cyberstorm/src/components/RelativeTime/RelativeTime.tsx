@@ -24,13 +24,18 @@ export const RelativeTime = (props: Props) => {
     disableTitle = false,
   } = props;
   const dt = typeof time === "string" ? new Date(time) : time;
+  // Guarded: an unparseable input makes toISOString throw.
+  const machineReadable = Number.isNaN(dt.getTime())
+    ? undefined
+    : dt.toISOString();
 
   return (
-    <span
+    <time
+      dateTime={machineReadable}
       suppressHydrationWarning={suppressHydrationWarning}
       title={disableTitle ? undefined : dt.toString()}
     >
       {prefix ?? null} {ago(dt)}
-    </span>
+    </time>
   );
 };
