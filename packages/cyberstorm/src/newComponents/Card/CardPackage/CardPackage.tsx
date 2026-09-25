@@ -21,6 +21,7 @@ import {
   componentClasses,
   formatInteger,
   formatToDisplayName,
+  orderCategories,
 } from "../../../utils/utils";
 import { Button as NewButton } from "../../Button/Button";
 import { Icon as NewIcon } from "../../Icon/Icon";
@@ -73,6 +74,7 @@ export function CardPackage(props: Props) {
 
   const hasDescription = packageData.description.trim().length > 0;
   const hasCategories = packageData.categories.length > 0;
+  const sortedCategories = orderCategories(packageData.categories);
   const hasImageTags =
     packageData.is_pinned || packageData.is_nsfw || packageData.is_deprecated;
 
@@ -185,7 +187,7 @@ export function CardPackage(props: Props) {
 
         {hasCategories ? (
           <div className="card-package__tags">
-            {packageData.categories.map((c) => (
+            {sortedCategories.map((c) => (
               <NewTag
                 csMode="link"
                 href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}

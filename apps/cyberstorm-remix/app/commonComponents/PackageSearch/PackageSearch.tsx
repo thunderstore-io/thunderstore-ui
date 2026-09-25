@@ -28,6 +28,7 @@ import {
   NewTextInput,
   SkeletonBox,
   classnames,
+  orderCategories,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -124,9 +125,10 @@ export function PackageSearch(props: Props) {
 
   const [categories, setCategories] = useState<CategorySelection[] | undefined>(
     possibleFilters?.package_categories
-      ? [...possibleFilters.package_categories]
-          .sort((a, b) => a.slug.localeCompare(b.slug))
-          .map((c) => ({ ...c, selection: "off" }))
+      ? orderCategories(possibleFilters.package_categories).map((c) => ({
+          ...c,
+          selection: "off",
+        }))
       : undefined
   );
 
@@ -164,9 +166,10 @@ export function PackageSearch(props: Props) {
         return section === prev.section ? prev : { ...prev, section };
       });
       setCategories(
-        [...resolved.package_categories]
-          .sort((a, b) => a.slug.localeCompare(b.slug))
-          .map((c) => ({ ...c, selection: "off" }))
+        orderCategories(resolved.package_categories).map((c) => ({
+          ...c,
+          selection: "off",
+        }))
       );
     };
     // A rejected promise is surfaced via the `filters === null` path, not here.
