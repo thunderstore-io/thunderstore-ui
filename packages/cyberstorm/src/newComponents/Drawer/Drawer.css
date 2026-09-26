@@ -1,19 +1,19 @@
 @layer cyberstorm {
   .drawer__wrapper {
     z-index: 1;
-    display: flex;
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
     height: 100%;
-    background: transparent;
-
     transform: translateY(100%);
     transition:
       transform var(--animation-duration-sm),
       display var(--animation-duration-sm) allow-discrete;
 
+    /* display:flex here would beat the UA display:none and paint the closed
+       popover, including its default border. */
     &:popover-open {
+      display: flex;
       transform: none;
 
       @starting-style {
@@ -31,7 +31,6 @@
   .drawer__fake-backdrop {
     width: 100%;
     height: 40%;
-    background: transparent;
   }
 
   .drawer {

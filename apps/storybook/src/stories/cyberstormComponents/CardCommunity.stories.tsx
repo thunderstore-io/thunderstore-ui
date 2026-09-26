@@ -26,7 +26,10 @@ const meta = {
   title: "Cyberstorm/CardCommunity",
   component: CardCommunity,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     isPopular: { control: "boolean" },
     isNew: { control: "boolean" },

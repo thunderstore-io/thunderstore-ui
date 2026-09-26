@@ -16,7 +16,6 @@ Used by consumers via imports like '@thunderstore/cyberstorm/css'.
 @import "./newComponents/Card/CardCommunity/CardCommunity.css";
 @import "./newComponents/Card/CardPackage/CardPackage.css";
 @import "./newComponents/CodeInput/CodeInput.css";
-@import "./newComponents/CycleButton/CycleButton.css";
 @import "./newComponents/Drawer/Drawer.css";
 @import "./newComponents/DropDown/DropDown.css";
 @import "./newComponents/EmptyState/EmptyState.css";

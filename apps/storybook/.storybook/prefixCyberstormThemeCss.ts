@@ -1,18 +1,20 @@
 /**
- * Storybook-only: scope cyberstorm-theme rules to html[data-cs-theme="on"].
+ * Storybook-only: scope cyberstorm-theme rules to [data-cs-theme="on"].
  *
- * Toggling a <style disabled> sheet (or relying on Vite `?inline`) is unreliable
- * in Chromatic — package-export `?inline` is often dropped, so the theme is
- * always injected, and Chrome ignores `disabled` until the sheet is in the
- * document. Gating on one html attribute is what Chromatic actually captures
- * when modes flip the decorator.
+ * The attribute sits on a wrapper, not on `html`, so one document can show the
+ * themed and barebones renders side by side. `:root`, `html`, and `body` are
+ * rewritten onto that wrapper itself — a descendant `body` selector would not
+ * paint a div. Barebones tokens stay on `:root` in the unprefixed cyberstorm
+ * layer, so the other column does not inherit the theme background.
  *
- * Fonts stay global (@font-face layers are skipped). @keyframes selectors
+ * The button/input reset (`cyberstorm.theme-reset`) is prefixed the same
+ * way, so the barebones column keeps browser styles. Fonts stay
+ * global (@font-face layers are skipped). @keyframes selectors
  * (`from` / `to`) are left untouched. Nested rules (`&:hover`, `> .child`)
  * inherit the prefixed parent — prefixing them again would produce
- * impossible descendant-of-html selectors.
+ * impossible selectors.
  */
-const THEME_ATTR = 'html[data-cs-theme="on"]';
+const THEME_ATTR = '[data-cs-theme="on"]';
 
 function shouldSkipPrefix(node: { parent?: unknown }): boolean {
   let current: { type?: string; name?: string; parent?: unknown } | undefined =
@@ -39,7 +41,7 @@ export function prefixThemeSelector(selector: string): string {
   if (!trimmed || trimmed.includes("[data-cs-theme")) {
     return trimmed;
   }
-  if (trimmed === ":root" || trimmed === "html") {
+  if (trimmed === ":root" || trimmed === "html" || trimmed === "body") {
     return THEME_ATTR;
   }
   if (trimmed.startsWith(":root")) {
@@ -47,6 +49,9 @@ export function prefixThemeSelector(selector: string): string {
   }
   if (/^html(?![\w-])/.test(trimmed)) {
     return trimmed.replace(/^html/, THEME_ATTR);
+  }
+  if (/^body(?![\w-])/.test(trimmed)) {
+    return trimmed.replace(/^body/, THEME_ATTR);
   }
   return `${THEME_ATTR} ${trimmed}`;
 }
@@ -69,7 +74,11 @@ export function prefixCyberstormThemePostcss() {
     postcssPlugin: "prefix-cyberstorm-theme",
     Once(root: PostcssRoot) {
       root.walkAtRules("layer", (atRule) => {
-        if (atRule.params.trim() !== "cyberstorm-theme") {
+        const layer = atRule.params.trim();
+        if (
+          layer !== "cyberstorm-theme" &&
+          layer !== "cyberstorm.theme-reset"
+        ) {
           return;
         }
         let hasFontFace = false;

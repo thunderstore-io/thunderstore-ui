@@ -13,6 +13,9 @@ const meta = {
   title: "Cyberstorm/Tabs",
   component: Tabs,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: TabsVariantsList },
     csSize: { control: "select", options: TabsSizesList },

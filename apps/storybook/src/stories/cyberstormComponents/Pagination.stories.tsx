@@ -9,6 +9,9 @@ const meta = {
   title: "Cyberstorm/Pagination",
   component: Pagination,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     currentPage: { control: "number" },
     onPageChange: { action: "page changed" },

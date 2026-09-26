@@ -30,6 +30,9 @@ const meta = {
   title: "Cyberstorm/CardPackage",
   component: CardPackage,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     isLiked: { control: "boolean" },
     packageData: { control: "object" },

@@ -11,7 +11,10 @@ const meta = {
   title: "Cyberstorm/Heading",
   component: Heading,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     mode: { control: "select", options: ["heading", "display"] },
     csVariant: { control: "select", options: HeadingVariantsList },

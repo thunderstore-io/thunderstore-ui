@@ -6,6 +6,9 @@ const meta = {
   title: "Cyberstorm/CopyButton",
   component: CopyButton,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 } satisfies Meta<typeof CopyButton>;
 
 export default meta;

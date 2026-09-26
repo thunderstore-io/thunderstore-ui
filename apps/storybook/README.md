@@ -17,20 +17,45 @@ When adding components to `@thunderstore/cyberstorm`, add stories for them under
 Storybook when it reports a new version, run the suggested
 `npx storybook@latest upgrade` command in this directory.
 
-Every exported Cyberstorm component should have a story — Storybook is the gate
-that catches component breakage. Use the **Theme** toolbar toggle to view any
-story with `@thunderstore/cyberstorm-theme` on (the production look) or off (the
-barebones `@thunderstore/cyberstorm`-only render), which verifies components still
-work without the theme.
+Every exported Cyberstorm component should have a story — Storybook is the
+catalog for controls and local browsing. Those stories show the themed render.
+The barebones render is the right-hand column of a composition, not a toolbar
+toggle.
+
+Chromatic does not snapshot those per-component stories. It snapshots the
+compositions under [`src/stories/compositions`](src/stories/compositions). Each
+composition renders its layout twice in one snapshot, themed on the left and
+barebones on the right.
+
+**Featuring rule.** Every exported Cyberstorm component is featured in at least
+one composition. A component with no composition slot is not covered by
+Chromatic.
+
+- Feature a component only once by default. A change then diffs that one
+  composition.
+- Feature it again only when a second appearance is mandatory for the layout,
+  or is the reasonable way to show a state the first slot does not cover.
+  Shared primitives (Button, Icon, Heading, Link) are the usual case: a form
+  with no submit button is the wrong layout. Overlay components are the other
+  case: closed in one page composition, open in their own story. Do not repeat
+  them beyond that.
+- Do not put Navigation, header, or footer on every composition. One chrome
+  change would dirty every snapshot.
+- A component rendered inside another (Button inside Modal, Pagination, or a
+  card) still diffs the composition that features the outer component. That
+  inner use is not a second featuring. Do not strip those out.
+- RelativeTime and LocalDateTime are not featured. Their labels depend on the
+  clock or the viewer's timezone, so a snapshot would not stay stable.
+  LocalDateTime has a catalog story with snapshots off.
 
 ## Chromatic
 
 [Chromatic](https://www.chromatic.com/docs/) runs in CI to host Storybook and
-detect visual changes to stories. Every story is captured in **two theme modes**
-— `themed` (the production look) and `barebones` (theme off) — via the
-`@chromatic-com/storybook` addon and the modes defined in
-[`.storybook/modes.ts`](.storybook/modes.ts), so breakage is caught both with
-and without the theme.
+detect visual changes. Captured stories are the four page compositions (Chrome,
+Listings, Form, Feedback) and six open-state overlay stories (modal, drawer,
+dropdown, menu, tooltip, toast). Both themes are in each snapshot, side by
+side, rather than as separate Chromatic modes. A full capture is 10 snapshots.
+Accepting a snapshot accepts both themes together.
 
 The `chromatic-deployment` job in
 [`../../.github/workflows/chromatic.yml`](../../.github/workflows/chromatic.yml)
@@ -64,13 +89,13 @@ When a build runs:
 - A newer commit on the same pull request (or on `master`) cancels an upload
   that has not finished.
 
-When UI files did change, TurboSnap (`onlyChanged`) captures the stories
-affected by the diff. Stories still import the `@thunderstore/cyberstorm`
-barrel, so a component change marks every story until composition snapshots
-land. `externals` lists `packages/cyberstorm/**` and
+When UI files did change, TurboSnap (`onlyChanged`) captures the compositions
+affected by the diff. Those stories import the component modules they render,
+and the preview imports theme and Cyberstorm CSS from source stylesheets rather
+than `dist`. `externals` lists `packages/cyberstorm/**` and
 `packages/cyberstorm-theme/**`. Chromatic matches those globs from the
 repository root, not from `workingDir`. A change that matches them disables
-TurboSnap for that build, so every story is retaken.
+TurboSnap for that build, so every captured story is retaken.
 
 On `master`, `autoAcceptChanges` accepts new baselines so a merge does not wait
 for a second visual review. That flag does not reduce how many snapshots are

@@ -11,7 +11,10 @@ const meta = {
   title: "Cyberstorm/TextInput",
   component: NewTextInput,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: TextInputVariantsList },
     csSize: { control: "select", options: TextInputSizesList },
