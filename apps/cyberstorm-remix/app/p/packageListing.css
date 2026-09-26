@@ -47,6 +47,28 @@
     height: 47px;
   }
 
+  .package-listing__tabs-slot {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+
+    /* Match the tab items' border-bottom so the button centers on tab text. */
+    margin-bottom: 3px;
+    margin-left: auto;
+    padding-left: var(--space-16);
+  }
+
+  /* Narrow-screen stand-in for the tab-strip slot (see packageListing.tsx). */
+  .package-listing__edit-button-row {
+    display: none;
+  }
+
+  /* The edit button renders nothing for viewers who cannot edit. */
+  .package-listing__tabs-slot:empty,
+  .package-listing__edit-button-row:empty {
+    display: none;
+  }
+
   .package-listing__content {
     display: flex;
     flex: 1 1 auto;
@@ -204,6 +226,15 @@
   @container (width <= 58rem) {
     .package-listing__narrow-actions {
       display: flex;
+    }
+
+    .package-listing__tabs-slot {
+      display: none;
+    }
+
+    .package-listing__edit-button-row {
+      display: flex;
+      align-items: center;
     }
 
     .package-listing__main {

@@ -77,6 +77,7 @@ export { CardPackage } from "./newComponents/Card/CardPackage/CardPackage";
 export {
   CodeInput,
   type CodeInputProps,
+  ValidationBar as NewValidationBar,
 } from "./newComponents/CodeInput/CodeInput";
 export {
   Container,
