@@ -4,6 +4,9 @@ import "./styles.css";
 import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import type { Preview } from "@storybook/react-vite";
+import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
+
+import { TopLayerContainerContext } from "@thunderstore/cyberstorm";
 
 // Source stylesheets, not the built dist bundles. A theme change is then a
 // preview dependency (every captured story), and a single component stylesheet
@@ -18,6 +21,34 @@ import { LinkLibrary } from "../LinkLibrary";
 // turns this off. Font Awesome's injected rules size every icon to 1em by
 // 1.25em and beat the component sizes.
 fontAwesomeConfig.autoAddCss = false;
+
+/**
+ * Catalog stories theme this frame and portal into it. Radix otherwise sends
+ * DropDown, Select, Tooltip, and Modal panels to document.body, outside the
+ * prefixed theme selectors. The context is the package export: catalog
+ * stories render that build, which has its own copy of the context.
+ * Children wait until the node exists so the first portal does not land on
+ * body. Side-by-side compositions skip this wrapper and supply the source
+ * context on their own columns.
+ */
+function ThemedFrame({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+
+  useLayoutEffect(() => {
+    setContainer(ref.current);
+  }, []);
+
+  return (
+    <div ref={ref} className="cs-story-frame" data-cs-theme="on">
+      {container ? (
+        <TopLayerContainerContext.Provider value={container}>
+          {children}
+        </TopLayerContainerContext.Provider>
+      ) : null}
+    </div>
+  );
+}
 
 const preview: Preview = {
   parameters: {
@@ -36,9 +67,9 @@ const preview: Preview = {
       const story = sideBySide ? (
         <Story />
       ) : (
-        <div className="cs-story-frame" data-cs-theme="on">
+        <ThemedFrame>
           <Story />
-        </div>
+        </ThemedFrame>
       );
       return (
         <LinkingProvider value={LinkLibrary}>
