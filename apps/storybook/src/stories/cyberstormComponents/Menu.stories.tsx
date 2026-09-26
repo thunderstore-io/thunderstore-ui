@@ -6,6 +6,9 @@ const meta = {
   title: "Cyberstorm/Menu",
   component: Menu,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 } satisfies Meta<typeof Menu>;
 
 export default meta;

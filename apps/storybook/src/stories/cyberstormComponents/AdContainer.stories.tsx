@@ -6,7 +6,10 @@ const meta = {
   title: "Cyberstorm/AdContainer",
   component: AdContainer,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   args: { containerId: "ad-1" },
 } satisfies Meta<typeof AdContainer>;
 

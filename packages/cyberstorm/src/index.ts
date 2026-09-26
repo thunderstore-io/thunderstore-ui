@@ -140,6 +140,7 @@ export { Tabs } from "./newComponents/Tabs/Tabs";
 export { Tooltip, type TooltipProps } from "./newComponents/Tooltip/Tooltip";
 
 // Utils
+export { TopLayerContainerContext } from "./utils/TopLayerContainerContext";
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";
 export type { SelectOption } from "./utils/types";
 export {

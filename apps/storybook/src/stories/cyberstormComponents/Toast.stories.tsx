@@ -11,7 +11,10 @@ const meta = {
   title: "Cyberstorm/Toast",
   component: Toast,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: ToastVariantsList },
     csSize: { control: "select", options: ToastSizesList },

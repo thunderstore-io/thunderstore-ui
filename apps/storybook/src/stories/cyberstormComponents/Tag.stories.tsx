@@ -13,6 +13,9 @@ const meta = {
   title: "Cyberstorm/Tag",
   component: NewTag,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: TagVariantsList },
     csSize: { control: "select", options: TagSizesList },

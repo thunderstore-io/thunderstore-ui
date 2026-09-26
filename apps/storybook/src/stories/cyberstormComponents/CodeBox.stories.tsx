@@ -6,6 +6,9 @@ const meta = {
   title: "Cyberstorm/CodeBox",
   component: CodeBox,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   args: { value: "npm i @thunderstore/cyberstorm", inline: false },
 } satisfies Meta<typeof CodeBox>;
 

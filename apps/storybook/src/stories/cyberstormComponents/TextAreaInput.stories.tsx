@@ -6,6 +6,9 @@ const meta = {
   title: "Cyberstorm/TextAreaInput",
   component: TextAreaInput,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   args: { placeHolder: "Write something..." },
   render: (args) => (
     <div style={{ maxWidth: "400px" }}>

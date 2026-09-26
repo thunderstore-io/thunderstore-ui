@@ -108,7 +108,7 @@ pnpm --filter @thunderstore/storybook run storybook
 ```
 
 Storybook is then available at [http://localhost:6006](http://localhost:6006).
-Stories and Chromatic are documented in
+Stories, the featuring rule, and Chromatic are documented in
 [`apps/storybook/README.md`](apps/storybook/README.md).
 
 ## Testing
@@ -146,8 +146,6 @@ New packages are scaffolded with [plop](https://plopjs.com/documentation/). Run
 [`./plopfile.mjs`](./plopfile.mjs); update them if package requirements change.
 
 ![Plop generation example](./docs/plop.png)
-
-
 
 ## Building for production
 

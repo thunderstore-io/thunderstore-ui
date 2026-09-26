@@ -19,8 +19,6 @@ const config: StorybookConfig = {
   addons: [
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-onboarding"),
-    // Enables Chromatic "modes" so each story is snapshotted with the theme
-    // both ON (production look) and OFF (barebones cyberstorm) — see modes.ts.
     getAbsolutePath("@chromatic-com/storybook"),
   ],
   framework: {
@@ -28,6 +26,21 @@ const config: StorybookConfig = {
     options: {},
   },
   async viteFinal(viteConfig) {
+    // Composition stories import component modules directly so TurboSnap
+    // does not follow the package barrel.
+    // import.meta.dirname, not fileURLToPath: `pnpm run build` is a browser
+    // bundle of this file (index.html points at it), and a named import from
+    // node:url fails that bundle. Storybook itself still runs this in Node.
+    const csSrc = path.resolve(
+      import.meta.dirname,
+      "../../../packages/cyberstorm/src"
+    );
+    const existingAlias = viteConfig.resolve?.alias;
+    const alias = Array.isArray(existingAlias)
+      ? [...existingAlias, { find: "@cs", replacement: csSrc }]
+      : { ...existingAlias, "@cs": csSrc };
+    viteConfig.resolve = { ...viteConfig.resolve, alias };
+
     const existingPostcss = viteConfig.css?.postcss;
     const existingPlugins =
       existingPostcss &&

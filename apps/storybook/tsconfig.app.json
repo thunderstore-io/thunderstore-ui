@@ -30,7 +30,8 @@
         "../../packages/*/src/index.ts",
         "../../packages/*/src/index.tsx",
         "../../packages/*"
-      ]
+      ],
+      "@cs/*": ["../../packages/cyberstorm/src/*"]
     }
   },
   "include": ["src"]

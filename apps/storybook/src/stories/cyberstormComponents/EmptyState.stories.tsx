@@ -8,7 +8,10 @@ const meta = {
   title: "Cyberstorm/EmptyState",
   component: EmptyState.Root,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
 } satisfies Meta<typeof EmptyState.Root>;
 
 export default meta;
