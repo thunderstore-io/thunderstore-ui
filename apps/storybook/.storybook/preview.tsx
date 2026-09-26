@@ -1,6 +1,7 @@
 // `@layer` order — must precede package stylesheets (first-encounter wins).
 import "./styles.css";
 
+import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import type { Preview } from "@storybook/react-vite";
 
@@ -13,24 +14,12 @@ import { LinkingProvider } from "../../../packages/cyberstorm/src/components/Lin
 import "../../../packages/cyberstorm/src/defaults.css";
 import { LinkLibrary } from "../LinkLibrary";
 
+// Composition stories do not import the package barrel, which is what normally
+// turns this off. Font Awesome's injected rules size every icon to 1em by
+// 1.25em and beat the component sizes.
+fontAwesomeConfig.autoAddCss = false;
+
 const preview: Preview = {
-  globalTypes: {
-    csTheme: {
-      description: "Toggle @thunderstore/cyberstorm-theme on/off",
-      toolbar: {
-        title: "Theme",
-        icon: "paintbrush",
-        items: [
-          { value: "on", title: "Theme on" },
-          { value: "off", title: "Theme off (barebones)" },
-        ],
-        dynamicTitle: true,
-      },
-    },
-  },
-  initialGlobals: {
-    csTheme: "on",
-  },
   parameters: {
     controls: {
       matchers: {
@@ -44,11 +33,10 @@ const preview: Preview = {
       const sideBySide = Boolean(
         (context.parameters as { csSideBySide?: boolean }).csSideBySide
       );
-      const enabled = context.globals.csTheme !== "off";
       const story = sideBySide ? (
         <Story />
       ) : (
-        <div className="cs-story-frame" data-cs-theme={enabled ? "on" : "off"}>
+        <div className="cs-story-frame" data-cs-theme="on">
           <Story />
         </div>
       );

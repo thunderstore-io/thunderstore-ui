@@ -18,9 +18,9 @@ Storybook when it reports a new version, run the suggested
 `npx storybook@latest upgrade` command in this directory.
 
 Every exported Cyberstorm component should have a story — Storybook is the
-catalog for controls and local browsing. Use the **Theme** toolbar toggle to
-view any story with `@thunderstore/cyberstorm-theme` on (the production look)
-or off (the barebones `@thunderstore/cyberstorm`-only render).
+catalog for controls and local browsing. Those stories show the themed render.
+The barebones render is the right-hand column of a composition, not a toolbar
+toggle.
 
 Chromatic does not snapshot those per-component stories. It snapshots the
 compositions under [`src/stories/compositions`](src/stories/compositions). Each
