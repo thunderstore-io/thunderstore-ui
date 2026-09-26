@@ -1,7 +1,6 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import module from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { prefixCyberstormThemePostcss } from "./prefixCyberstormThemeCss.ts";
 
@@ -29,8 +28,11 @@ const config: StorybookConfig = {
   async viteFinal(viteConfig) {
     // Composition stories import component modules directly so TurboSnap
     // does not follow the package barrel.
+    // import.meta.dirname, not fileURLToPath: `pnpm run build` is a browser
+    // bundle of this file (index.html points at it), and a named import from
+    // node:url fails that bundle. Storybook itself still runs this in Node.
     const csSrc = path.resolve(
-      path.dirname(fileURLToPath(import.meta.url)),
+      import.meta.dirname,
       "../../../packages/cyberstorm/src"
     );
     const existingAlias = viteConfig.resolve?.alias;
