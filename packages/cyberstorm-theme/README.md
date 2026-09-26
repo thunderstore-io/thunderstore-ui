@@ -44,8 +44,8 @@ import "@thunderstore/cyberstorm-theme/fonts.css";
 ```
 
 Skip the two theme imports for the barebones render: system font, no colors,
-and ordinary browser styling on buttons and inputs. That is the Storybook
-"Theme off" toggle.
+and ordinary browser styling on buttons and inputs. Storybook shows that
+render as the right-hand column of each composition.
 
 ### Exports
 

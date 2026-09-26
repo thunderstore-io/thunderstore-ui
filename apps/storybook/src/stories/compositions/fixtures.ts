@@ -21,6 +21,8 @@ export const modPackage = {
   is_pinned: true,
   is_nsfw: false,
   is_deprecated: false,
+  // Years old, so RelativeTime stays on one rounded year ("4 years ago")
+  // until the next half-year boundary. A recent timestamp would move every capture.
   last_updated: "2023-01-01T00:00:00Z",
   size: 1234567,
   slug: "cool-mod",
