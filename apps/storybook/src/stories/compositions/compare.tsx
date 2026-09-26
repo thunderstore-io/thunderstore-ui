@@ -113,17 +113,47 @@ export function States({
   );
 }
 
-/** Drawer and Menu have no open prop; open the popover once before capture. */
+/**
+ * Drawer and Menu have no open prop. Open the popover once, then pin it to
+ * its page box. An open popover is in the browser top layer, so both columns
+ * would otherwise attach to the same viewport edge.
+ */
 export function OpenPopover({ popoverId }: { popoverId: string }) {
   useLayoutEffect(() => {
     const node = document.getElementById(popoverId);
     if (!(node instanceof HTMLElement) || !node.hasAttribute("popover")) {
       return;
     }
-    if (node.matches(":popover-open")) {
+    if (!node.matches(":popover-open")) {
+      node.showPopover();
+    }
+
+    const page = node.closest(".cs-compare__page");
+    if (!(page instanceof HTMLElement)) {
       return;
     }
-    node.showPopover();
+
+    const place = () => {
+      const rect = page.getBoundingClientRect();
+      node.style.top = `${rect.top}px`;
+      node.style.left = `${rect.left}px`;
+      node.style.width = `${rect.width}px`;
+      node.style.height = `${rect.height}px`;
+      node.style.right = "auto";
+      node.style.bottom = "auto";
+      node.style.margin = "0";
+    };
+    place();
+
+    const observer = new ResizeObserver(place);
+    observer.observe(page);
+    window.addEventListener("scroll", place, true);
+    window.addEventListener("resize", place);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", place, true);
+      window.removeEventListener("resize", place);
+    };
   }, [popoverId]);
 
   return null;

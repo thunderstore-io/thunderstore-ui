@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Open drawer, including DrawerDivider between two filter groups. The closed trigger lives in Compositions/Listings. Drawer uses the Popover API and has no open prop, so this story calls showPopover once on mount. It is separate because an open drawer is a browser top-layer popover and cannot sit in a shared page canvas without covering the other components.",
+          "Open drawer, including DrawerDivider between two filter groups. The closed trigger lives in Compositions/Listings. Drawer uses the Popover API and has no open prop, so this story calls showPopover once on mount. The open panel is pinned to its column so the themed and barebones drawers do not stack on the same viewport edge.",
       },
     },
   },
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 function OpenDrawer({ scope }: { scope: string }) {
   const popoverId = `${scope}-drawer`;
   return (
-    <>
+    <div className="cs-compare__page">
       <Drawer
         popoverId={popoverId}
         trigger={<Button>Filters</Button>}
@@ -40,7 +40,7 @@ function OpenDrawer({ scope }: { scope: string }) {
         <div style={{ padding: 16 }}>Filter by author</div>
       </Drawer>
       <OpenPopover popoverId={popoverId} />
-    </>
+    </div>
   );
 }
 

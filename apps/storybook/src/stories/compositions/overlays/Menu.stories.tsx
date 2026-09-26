@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Open menu. The closed trigger lives in Compositions/Chrome. Menu uses the Popover API and has no open prop, so this story calls showPopover once on mount. It is separate because an open menu is a browser top-layer popover and cannot sit in a shared page canvas without covering the other components.",
+          "Open menu. The closed trigger lives in Compositions/Chrome. Menu uses the Popover API and has no open prop, so this story calls showPopover once on mount. The open panel is pinned to its column so the themed and barebones menus do not stack on the same viewport edge.",
       },
     },
   },
@@ -29,12 +29,12 @@ type Story = StoryObj<typeof meta>;
 function OpenMenu({ scope }: { scope: string }) {
   const popoverId = `${scope}-menu`;
   return (
-    <>
+    <div className="cs-compare__page">
       <Menu popoverId={popoverId} trigger={<Button>Menu</Button>}>
         <div style={{ padding: 16 }}>Package settings</div>
       </Menu>
       <OpenPopover popoverId={popoverId} />
-    </>
+    </div>
   );
 }
 
