@@ -78,6 +78,25 @@
     min-height: 220px;
   }
 
+  /* Room for an open drawer or menu, which is then pinned to this box. */
+  .cs-compare__page {
+    min-height: 720px;
+  }
+
+  /* Top-layer popovers paint against the viewport. Keep the dim inside this
+     page; the real ::backdrop would cover both columns. */
+  .cs-compare__page :is(.menu, .drawer__wrapper):popover-open {
+    background: var(--overlay-backdrop-color);
+  }
+
+  .cs-compare__page :is(.menu__wrapper, .drawer) {
+    box-sizing: border-box;
+  }
+
+  .cs-compare__page :is(.menu, .drawer__wrapper)::backdrop {
+    background: transparent;
+  }
+
   .cs-compare__portal-frame {
     position: relative;
     overflow: hidden;
