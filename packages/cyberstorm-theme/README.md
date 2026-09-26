@@ -19,28 +19,23 @@ tokens, and fonts — layered on top of Cyberstorm's barebones structural CSS.
 
 ## How it layers on top of Cyberstorm
 
-Every rule in this package is authored inside a single CSS cascade layer:
+From bottom to top:
 
-```css
-@layer cyberstorm-theme {
-  /* colors, sizes, tokens, per-component skin rules */
-}
-```
+1. **Browser defaults** — what buttons and inputs look like with no CSS.
+2. **`cyberstorm.theme-reset`** — this package's only reset
+   (`src/styles/nativeReset.css`). It clears that browser chrome.
+3. **`cyberstorm`** — component layout, such as a button's padding and border.
+4. **`cyberstorm-theme`** — colors, sizes, and the rest of this skin.
 
-The canonical layer order (declared by the consuming app) is:
+The reset is nested inside `cyberstorm`, under the component rules, so a
+button's own padding still wins. The component package does not mention it.
+`nimbus` is for app overrides and sits above the skin.
+
+Apps declare the top-level layers, then load Cyberstorm, then this skin:
 
 ```css
 @layer cyberstorm, cyberstorm-theme, nimbus;
 ```
-
-Because `cyberstorm-theme` sits **above** `cyberstorm`, loading this package
-overrides Cyberstorm's barebones placeholder token defaults (see
-`packages/cyberstorm/src/defaults.css`) and turns the ugly-but-functional
-components into the production design — without any change to Cyberstorm's markup.
-
-## Usage
-
-Load Cyberstorm's structural CSS first, then this skin on top:
 
 ```ts
 import "@thunderstore/cyberstorm/css";
@@ -48,8 +43,9 @@ import "@thunderstore/cyberstorm-theme/css";
 import "@thunderstore/cyberstorm-theme/fonts.css";
 ```
 
-Omit the two theme imports to get the barebones (unstyled, system-font) render —
-that is exactly what the Storybook "Theme off" toggle does.
+Skip the two theme imports for the barebones render: system font, no colors,
+and ordinary browser styling on buttons and inputs. That is the Storybook
+"Theme off" toggle.
 
 ### Exports
 
