@@ -31,25 +31,18 @@ theme on top.
 tokens the components rely on — spacing, radii, gaps, border widths, the
 typography scale, and animation lengths. It deliberately ships **no color
 tokens**: unset colors are the "ugly" part of the barebones state (including
-overlay dimming and panel fills). These defaults live in `@layer cyberstorm`
-(the lowest layer), so whenever the theme is loaded it overrides all of them —
-`defaults.css` is a no-op for themed output and only takes effect when
+overlay dimming and panel fills). These defaults live in `@layer cyberstorm`,
+below `cyberstorm-theme`, so whenever the theme is loaded it overrides all of
+them — `defaults.css` is a no-op for themed output and only takes effect when
 Cyberstorm is used without the theme.
 
 ### CSS layers
 
-Styling is organized into three cascade layers, later overriding earlier:
-
-```css
-@layer cyberstorm, cyberstorm-theme, nimbus;
-```
-
-- `cyberstorm` — this package's structural CSS + `defaults.css`.
-- `cyberstorm-theme` — the skin (see the theme package).
-- `nimbus` — app-level (remix) overrides.
-
-The order is declared explicitly by consumers so precedence never depends on
-import order.
+Component CSS and `defaults.css` live in `@layer cyberstorm`. The theme skin
+and Remix overrides sit above that, which is why a loaded theme replaces these
+defaults. The layer order, the button and input reset, and the snippet to put
+in the page are in the
+[theme README](../cyberstorm-theme/README.md#how-it-layers-on-top-of-cyberstorm).
 
 ### Directory structure
 
