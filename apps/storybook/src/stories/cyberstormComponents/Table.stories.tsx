@@ -11,6 +11,9 @@ const meta = {
   title: "Cyberstorm/Table",
   component: NewTable,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: TableVariantsList },
     csSize: { control: "select", options: TableSizesList },

@@ -8,6 +8,9 @@ const meta = {
   title: "Cyberstorm/SkeletonBox",
   component: SkeletonBox,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 } satisfies Meta<typeof SkeletonBox>;
 
 export default meta;

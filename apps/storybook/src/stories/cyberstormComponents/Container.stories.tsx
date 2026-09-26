@@ -6,6 +6,9 @@ const meta = {
   title: "Cyberstorm/Container",
   component: Container,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     size: {
       control: "inline-radio",

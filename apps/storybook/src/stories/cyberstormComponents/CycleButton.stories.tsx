@@ -6,6 +6,9 @@ const meta = {
   title: "Cyberstorm/CycleButton",
   component: CycleButton,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 } satisfies Meta<typeof CycleButton>;
 
 export default meta;

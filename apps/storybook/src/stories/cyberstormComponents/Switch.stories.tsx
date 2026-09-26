@@ -11,7 +11,10 @@ const meta = {
   title: "Cyberstorm/Switch",
   component: NewSwitch,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: SwitchVariantsList },
     csSize: { control: "select", options: SwitchSizesList },

@@ -1,0 +1,93 @@
+@layer storybook-stories {
+  .cs-compare {
+    display: grid;
+    grid-template-columns: 980px 980px;
+    gap: 40px;
+    align-items: start;
+    width: 2000px;
+  }
+
+  .cs-compare__column {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+    padding: 16px;
+
+    /* Fixed popups (modal, select, toast) position against the column. */
+    transform: translateZ(0);
+    transition: none;
+    animation: none;
+  }
+
+  .cs-compare__column * {
+    transition: none;
+    animation: none;
+  }
+
+  .cs-compare__caption {
+    margin: 0;
+    font-size: 12px;
+    font-family: sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cs-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .cs-page__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .cs-page__cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .cs-states {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cs-states__title {
+    margin: 0;
+    font-size: 12px;
+    font-family: sans-serif;
+  }
+
+  .cs-states__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Room for an open select menu so it does not cover the fields below. */
+  .cs-compare__menu-space {
+    min-height: 220px;
+  }
+
+  .cs-compare__portal-frame {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+  }
+
+  .cs-compare__split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+}

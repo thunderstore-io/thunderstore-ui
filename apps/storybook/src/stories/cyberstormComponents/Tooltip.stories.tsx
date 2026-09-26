@@ -6,7 +6,10 @@ const meta = {
   title: "Cyberstorm/Tooltip",
   component: Tooltip,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   args: { content: "Tooltip content", side: "top" },
 } satisfies Meta<typeof Tooltip>;
 
