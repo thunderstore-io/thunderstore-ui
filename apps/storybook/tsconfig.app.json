@@ -34,5 +34,5 @@
       "@cs/*": ["../../packages/cyberstorm/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", ".storybook/preview.tsx"]
 }
