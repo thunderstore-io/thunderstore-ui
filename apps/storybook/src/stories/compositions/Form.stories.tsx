@@ -1,8 +1,5 @@
-import { TextAreaInput } from "@cs/components/TextAreaInput/TextAreaInput";
-import { ValidationBar } from "@cs/components/ValidationBar/ValidationBar";
 import { CodeInput } from "@cs/newComponents/CodeInput/CodeInput";
 import { CodeInputModifiersList } from "@cs/newComponents/CodeInput/CodeInput.types";
-import { CycleButton } from "@cs/newComponents/CycleButton/CycleButton";
 import { Select } from "@cs/newComponents/Select/Select";
 import {
   SelectModifiersList,
@@ -24,9 +21,8 @@ import { SideBySide, States, compositionParameters } from "./compare";
 import { searchOptions, selectOptions } from "./fixtures";
 
 /**
- * Featuring: TextInput, TextAreaInput, Select, SelectSearch, Switch,
- * CodeInput, ValidationBar, CycleButton. The select menu is open; other
- * fields stay above it. See the featuring rule in compare.tsx.
+ * Featuring: TextInput, Select, SelectSearch, Switch, CodeInput. See the
+ * featuring rule in compare.tsx.
  */
 const meta = {
   title: "Compositions/Form",
@@ -36,7 +32,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Upload and settings form: text input, textarea, select, select search, switch, code input, validation bar, and cycle button. The select menu is open, with empty space under it so the menu does not cover the other fields. The rows under the layout are the variant, size, and modifier states from the component stories.",
+          "Upload and settings form: text input, textarea, select, select search, switch, and code input. The rows under the layout are the variant, size, and modifier states from the component stories.",
       },
     },
   },
@@ -57,7 +53,11 @@ function FormFields({ scope }: { scope: string }) {
         placeholder="Package name"
         aria-label="Package name"
       />
-      <TextAreaInput value="A cool mod for Valheim." />
+      <TextInput
+        csSize="textarea"
+        defaultValue="A cool mod for Valheim."
+        aria-label="Description"
+      />
       <SelectSearchSingle
         options={searchOptions}
         value={searchOptions[0]}
@@ -74,22 +74,12 @@ function FormFields({ scope }: { scope: string }) {
         aria-label="Manifest"
         validationBarProps={{ status: "waiting", message: "Waiting for input" }}
       />
-      <ValidationBar status="waiting" message="Waiting for input" />
-      <CycleButton
-        options={["Newest", "Oldest", "Most downloaded"]}
-        onValueChange={ignore}
-      >
-        Newest
-      </CycleButton>
-      <div className="cs-compare__menu-space">
-        <Select
-          options={selectOptions}
-          value="newest"
-          placeholder="Sort"
-          aria-label="Sort"
-          defaultOpen
-        />
-      </div>
+      <Select
+        options={selectOptions}
+        value="newest"
+        placeholder="Sort"
+        aria-label="Sort"
+      />
 
       <States title="Text input sizes and modifiers">
         {TextInputSizesList.map((size) => (
@@ -110,9 +100,6 @@ function FormFields({ scope }: { scope: string }) {
             />
           )
         )}
-      </States>
-      <States title="Textarea">
-        <TextAreaInput value="Some text..." />
       </States>
       <States title="Select sizes">
         {SelectSizesList.map((size) => (
@@ -200,16 +187,6 @@ function FormFields({ scope }: { scope: string }) {
             />
           )
         )}
-      </States>
-      <States title="Validation bar">
-        <ValidationBar status="waiting" message="Waiting for input" />
-        <ValidationBar status="success" message="Success!" />
-        <ValidationBar status="failure" message="Failure!" />
-      </States>
-      <States title="Cycle button">
-        <CycleButton noState onInteract={ignore}>
-          Click me
-        </CycleButton>
       </States>
     </div>
   );
