@@ -11,7 +11,7 @@ const link = (code: string) =>
 export const VALHEIM_LAUNCH: AdCampaign = {
   name: "valheim-1-launch",
   paths: ["/c/valheim"],
-  alt: "DatHost — Valheim server hosting, first month for one euro",
+  alt: "DatHost | Best Valheim Server Host for Modding",
 
   // The team and dependants sidebars share the community link: the advertiser
   // supplied one per page family, not per route.
