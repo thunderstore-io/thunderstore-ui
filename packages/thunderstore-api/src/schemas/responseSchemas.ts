@@ -7,6 +7,7 @@ import {
   currentUserTeamPermissionsSchema,
   emptyUserSchema,
   markdownRenderSchema,
+  packageDownloadHistorySchema,
   packageListingDetailsSchema,
   packageListingSchema,
   packageListingStatusSchema,
@@ -172,6 +173,14 @@ export const packageSourceResponseDataSchema = packageSourceSchema;
 
 export type PackageSourceResponseData = z.infer<
   typeof packageSourceResponseDataSchema
+>;
+
+// PackageDownloadHistoryResponse
+export const packageDownloadHistoryResponseDataSchema =
+  packageDownloadHistorySchema;
+
+export type PackageDownloadHistoryResponseData = z.infer<
+  typeof packageDownloadHistoryResponseDataSchema
 >;
 
 // PackageReadmeResponse

@@ -164,6 +164,13 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
+  PackageAnalytics: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/analytics`}
+      ref={p.customRef}
+    />
+  ),
   PackageDependants: (p) => (
     <Link
       {...p}

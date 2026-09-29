@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   fetchPackageChangelog,
+  fetchPackageDownloadHistory,
   fetchPackagePermissions,
   fetchPackageReadme,
   fetchPackageSource,
@@ -69,6 +70,24 @@ export async function getPackageSource(
       namespace_id: namespaceId,
       package_name: packageName,
       version_number: versionNumber,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function getPackageDownloadHistory(
+  this: DapperTsInterface,
+  namespaceId: string,
+  packageName: string
+) {
+  const data = await fetchPackageDownloadHistory({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
     },
     data: {},
     queryParams: {},
