@@ -56,6 +56,10 @@
     --icon-color: var(--validation-bar-color);
   }
 
+  .validation-bar--failure {
+    --icon-color: var(--validation-bar-icon-color--failure);
+  }
+
   .validation-bar__icon {
     width: 1em;
     height: 1em;
