@@ -5,19 +5,20 @@
     flex-direction: column;
     gap: var(--dropdown-gap);
     padding: var(--dropdown-padding);
-    border: var(--dropdown-border);
-    border-color: var(--dropdown-border-color);
+    border: 1px solid var(--dropdown-border-color);
     border-radius: var(--dropdown-border-radius);
     overflow: hidden;
-    color: var(--dropdown-text-color);
     background-color: var(--dropdown-background-color);
     box-shadow: var(--dropdown-box-shadow);
     transform-origin: var(--radix-dropdown-menu-content-transform-origin);
     animation: var(--dropdown-animation);
   }
 
-  .dropdown > *:where(:not(.dropdown__divider)) {
+  .dropdown__item {
+    display: flex;
+    flex-direction: row;
     gap: var(--dropdown-item-gap);
+    align-items: center;
     padding: var(--dropdown-item-padding);
     overflow: hidden;
     color: var(--dropdown-item-color);
@@ -25,12 +26,13 @@
     font-size: var(--dropdown-item-font-size);
     background-color: var(--dropdown-item-background-color);
     outline: none;
+    cursor: pointer;
 
     --icon-color: var(--dropdown-item-icon-color);
   }
 
-  .dropdown > *:where(:not(.dropdown__divider))[data-highlighted] {
-    z-index: 999;
+  .dropdown__item:where([data-disabled]) {
+    cursor: not-allowed;
   }
 
   .dropdown__divider {

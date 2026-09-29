@@ -161,39 +161,13 @@
     flex-shrink: 0;
   }
 
-  /* The item styling `.dropdown > *` would have applied, re-aimed one level
-     down: this scroller is what that selector matches now, so the item padding
-     and background would otherwise land on the whole list rather than the links
-     inside it. The custom properties still inherit from the scroller, so only
-     the declarations consuming them need repeating — except the highlight
-     switch, which the dropdown also scopes to its direct children and so has to
-     be redeclared for the nested items. */
-  .navigation-header__teams-dropdown > .navigation-header__teams-list > * {
-    padding: var(--dropdown-item-padding);
-    overflow: hidden;
-    background-color: var(--dropdown-item-background-color);
-    outline: none;
-
-    --icon-color: var(--dropdown-item-icon-color);
-  }
-
-  .navigation-header__teams-dropdown
-    > .navigation-header__teams-list
-    > *[data-highlighted] {
-    --dropdown-item-background-color: var(--dropdown-item-bg-color--hover);
-    --dropdown-item-color: var(--dropdown-item-text-color--hover);
-    --dropdown-item-icon-color: var(--dropdown-item-icon-color--hover);
-  }
-
   .navigation-header__teams-list {
     display: flex;
     flex-direction: column;
     gap: var(--dropdown-gap);
 
     /* min-height:0 lets this flex child shrink below its content height, so the
-       overflow (and its scrollbar) actually engages inside the capped parent.
-       padding/background are declined here because they belong to the items,
-       per the rule above. */
+       overflow (and its scrollbar) actually engages inside the capped parent. */
     min-height: 0;
     padding: 0;
     overflow-y: auto;
