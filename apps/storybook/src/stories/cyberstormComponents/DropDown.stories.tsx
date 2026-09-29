@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
-  DropDownModifiersList,
-  DropDownSizesList,
   DropDownVariantsList,
   NewButton,
   NewDropDown,
@@ -20,12 +18,10 @@ const meta = {
   },
   argTypes: {
     csVariant: { control: "select", options: DropDownVariantsList },
-    csSize: { control: "select", options: DropDownSizesList },
-    csModifiers: { control: "multi-select", options: DropDownModifiersList },
+    disabled: { control: "boolean" },
   },
   args: {
-    csModifiers: [],
-    csSize: DropDownSizesList[0],
+    disabled: false,
     csVariant: DropDownVariantsList[0],
     defaultOpen: true,
   },
