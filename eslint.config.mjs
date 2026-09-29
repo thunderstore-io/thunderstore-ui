@@ -1,9 +1,11 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
+import storybook from "eslint-plugin-storybook";
 import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -87,4 +89,5 @@ export default [
       "@typescript-eslint/no-var-requires": "off",
     },
   },
+  ...storybook.configs["flat/recommended"],
 ];
