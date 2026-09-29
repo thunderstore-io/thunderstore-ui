@@ -35,6 +35,7 @@ export const getFakeCommunity = async (communityId: string) => {
       null,
     total_download_count: faker.number.int({ min: 1000000, max: 10000000 }),
     total_package_count: faker.number.int({ min: 0, max: 100000 }),
+    has_mod_manager_support: faker.datatype.boolean(),
   };
 };
 

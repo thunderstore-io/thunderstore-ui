@@ -57,6 +57,7 @@ export const communitySchema = z.object({
   community_icon_url: z.string().nullable(),
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
+  has_mod_manager_support: z.boolean(),
 });
 
 export type Community = z.infer<typeof communitySchema>;

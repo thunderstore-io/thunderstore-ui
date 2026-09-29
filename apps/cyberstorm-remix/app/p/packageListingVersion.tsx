@@ -292,6 +292,7 @@ export default function PackageListingVersion() {
             team={team}
             installUrl={listing.install_url ?? ""}
             installDisabled={!listing.install_url}
+            community={community}
             packageDetailsNarrow={
               <>
                 <button
@@ -389,6 +390,7 @@ export default function PackageListingVersion() {
               team={team}
               installUrl={listing.install_url ?? ""}
               installDisabled={!listing.install_url}
+              community={community}
             />
           </Suspense>
 
