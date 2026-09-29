@@ -56,6 +56,7 @@ export function PackageListingSidebar(props: {
         downloadUrl={listing.download_url}
         team={team}
         installUrl={listing.install_url}
+        community={community}
         reportPackageButton={reportPackageButton}
         isLiked={isLiked}
         currentUser={currentUser}

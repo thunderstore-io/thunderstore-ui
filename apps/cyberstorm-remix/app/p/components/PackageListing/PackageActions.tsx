@@ -16,6 +16,10 @@ export type TeamDetailsLike = {
   donation_link?: string | null;
 };
 
+export type CommunityLike = {
+  has_mod_manager_support: boolean;
+};
+
 export interface PackageActionsProps {
   downloadUrl: string;
   team: Promise<TeamDetailsLike> | TeamDetailsLike;
@@ -23,6 +27,8 @@ export interface PackageActionsProps {
   installUrl?: string;
   /** When true, Install button is disabled. Use when installUrl might be empty. */
   installDisabled?: boolean;
+  /** When provided, Install button is hidden if the community has no mod manager support. */
+  community?: Promise<CommunityLike> | CommunityLike;
   /** Optional Details drawer for narrow layout */
   packageDetailsNarrow?: ReactNode;
   /** Optional Report button to render after actions */
@@ -48,6 +54,7 @@ export const PackageActions = memo(function PackageActions(
     team,
     installUrl,
     installDisabled = false,
+    community,
     packageDetailsNarrow,
     reportPackageButton,
     isLiked,
@@ -65,26 +72,33 @@ export const PackageActions = memo(function PackageActions(
 
   return (
     <div className="package-actions">
-      {installUrl !== undefined && (
-        <NewButton
-          csVariant="accent"
-          csSize="big"
-          rootClasses="package-listing-sidebar__install"
-          primitiveType="link"
-          href={installUrl}
-          disabled={installDisabled}
-          tooltipText="Install with mod manager"
-          tooltipSide="top"
-        >
-          <NewIcon
-            wrapperClasses="package-actions__install-link-icon"
-            csMode="inline"
-          >
-            <ThunderstoreLogo />
-          </NewIcon>
-          Install with App
-        </NewButton>
-      )}
+      <Suspense fallback={null}>
+        <Await resolve={community}>
+          {(resolvedCommunity) =>
+            installUrl !== undefined &&
+            resolvedCommunity?.has_mod_manager_support !== false && (
+              <NewButton
+                csVariant="accent"
+                csSize="big"
+                rootClasses="package-listing-sidebar__install"
+                primitiveType="link"
+                href={installUrl}
+                disabled={installDisabled}
+                tooltipText="Install with mod manager"
+                tooltipSide="top"
+              >
+                <NewIcon
+                  wrapperClasses="package-actions__install-link-icon"
+                  csMode="inline"
+                >
+                  <ThunderstoreLogo />
+                </NewIcon>
+                Install with App
+              </NewButton>
+            )
+          }
+        </Await>
+      </Suspense>
       {packageDetailsNarrow ?? null}
       <div className="package-listing__package-actions">
         <NewButton
