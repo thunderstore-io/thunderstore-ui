@@ -24,7 +24,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Open dropdown, portaled into this column, with the Teams submenu open beside it. The closed trigger lives in Compositions/Chrome. This story is separate because the open menu would cover the rest of a shared page canvas. Item, divider, modifier, and submenu states are inside this one open menu. DropDownItem renders its child with asChild, so each label is an element; a text node would not mount.",
+          "Open dropdown, portaled into this column, with the Teams submenu open beside it. The closed trigger lives in Compositions/Chrome. This story is separate because the open menu would cover the rest of a shared page canvas. Item, divider, danger, disabled, and submenu states are inside this one open menu. DropDownItem renders its child with asChild, so each label is an element; a text node would not mount.",
       },
     },
   },
@@ -51,11 +51,11 @@ function OpenDropDown() {
             </DropDownItem>
           </DropDownSubContent>
         </DropDownSub>
-        <DropDownItem csModifiers={["ghost"]}>
-          <span>Ghost</span>
+        <DropDownItem csVariant="danger">
+          <span>Danger</span>
         </DropDownItem>
         <DropDownDivider />
-        <DropDownItem csModifiers={["disabled"]}>
+        <DropDownItem csVariant="disabled">
           <span>Disabled</span>
         </DropDownItem>
       </DropDown>
