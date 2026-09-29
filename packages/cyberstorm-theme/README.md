@@ -12,9 +12,8 @@ tokens, and fonts — layered on top of Cyberstorm's barebones structural CSS.
 - **Only CSS (and fonts).** This package has **no TypeScript / runtime exports**.
   Component API types (variant/size/modifier lists such as `ButtonVariantsList`)
   live in `@thunderstore/cyberstorm`, not here.
-- Token values — `styles/` (colors, globals, layout, typography) and the
-  `components*` token files (`componentsColors.css`, `componentsSizes.css`,
-  `componentsMiscs.css`) — plus per-component skin rules.
+- Token values — `styles/` (colors, component colors, globals, layout,
+  typography) — plus per-component skin rules.
 - Font assets under `src/styles/fonts/*`.
 
 ## How it layers on top of Cyberstorm

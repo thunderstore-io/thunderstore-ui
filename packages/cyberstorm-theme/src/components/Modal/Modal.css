@@ -13,14 +13,14 @@
 
   /* SIZES */
   .modal:where(.modal--size--medium) {
-    --modal-border-radius: var(--modal-md-border-radius);
-    --modal-content-padding: var(--modal-md-content-padding);
-    --modal-content-gap: var(--modal-md-content-gap);
+    --modal-border-radius: var(--radius-md);
+    --modal-content-padding: 3rem 5.5rem;
+    --modal-content-gap: 2rem;
   }
 
   .modal:where(.modal--size--small) {
-    --modal-border-radius: var(--modal-sm-border-radius);
-    --modal-content-padding: var(--modal-sm-content-padding);
-    --modal-content-gap: var(--modal-sm-content-gap);
+    --modal-border-radius: var(--radius-md);
+    --modal-content-padding: 0;
+    --modal-content-gap: 0;
   }
 }

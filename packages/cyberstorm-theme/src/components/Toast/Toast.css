@@ -1,19 +1,19 @@
 @layer cyberstorm-theme {
   /* SIZES */
   .toast:where(.toast--size--medium) {
-    --toast-gap: var(--toast-md-gap);
-    --toast-padding-block: var(--toast-md-padding-block);
-    --toast-padding-inline: var(--toast-md-padding-inline);
-    --toast-font-size: var(--toast-md-font-size);
-    --toast-font-weight: var(--toast-md-font-weight);
-    --toast-line-height: var(--toast-md-line-height);
-    --toast-icon-width: var(--toast-md-icon-width);
-    --toast-icon-height: var(--toast-md-icon-height);
-    --toast-border-radius: var(--toast-md-border-radius);
-    --toast-close-width: var(--toast-md-close-width);
-    --toast-close-height: var(--toast-md-close-height);
-    --toast-close-icon-width: var(--toast-md-close-icon-width);
-    --toast-close-icon-height: var(--toast-md-close-icon-height);
+    --toast-gap: 1rem;
+    --toast-padding-block: 1rem;
+    --toast-padding-inline: 1.5rem;
+    --toast-font-size: var(--font-size-body-md);
+    --toast-font-weight: var(--font-weight-regular);
+    --toast-line-height: var(--line-height-md);
+    --toast-icon-width: 1.125rem;
+    --toast-icon-height: 1.375rem;
+    --toast-border-radius: var(--radius-sm);
+    --toast-close-width: 1.875rem;
+    --toast-close-height: 1.875rem;
+    --toast-close-icon-width: 0.875rem;
+    --toast-close-icon-height: 0.875rem;
   }
 
   /* VARIANTS */

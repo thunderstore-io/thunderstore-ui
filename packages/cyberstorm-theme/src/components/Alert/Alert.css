@@ -1,15 +1,15 @@
 @layer cyberstorm-theme {
   /* SIZES */
   .alert:where(.alert--size--small) {
-    --alert-gap: var(--alert-sm-gap);
-    --alert-padding-block: var(--alert-sm-padding-block);
-    --alert-padding-inline: var(--alert-sm-padding-inline);
-    --alert-font-size: var(--alert-sm-font-size);
-    --alert-font-weight: var(--alert-sm-font-weight);
-    --alert-line-height: var(--alert-sm-line-height);
-    --alert-icon-width: var(--alert-sm-icon-width);
-    --alert-icon-height: var(--alert-sm-icon-height);
-    --alert-border-radius: var(--alert-sm-border-radius);
+    --alert-gap: 1rem;
+    --alert-padding-block: 1rem;
+    --alert-padding-inline: 1.5rem;
+    --alert-font-size: var(--font-size-body-md);
+    --alert-font-weight: var(--font-weight-regular);
+    --alert-line-height: var(--line-height-md);
+    --alert-icon-width: 1.125rem;
+    --alert-icon-height: 1.375rem;
+    --alert-border-radius: var(--radius-sm);
   }
 
   /* VARIANTS */
