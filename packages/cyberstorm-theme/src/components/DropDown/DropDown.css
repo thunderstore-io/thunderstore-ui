@@ -7,19 +7,19 @@
   }
 
   .dropdown:where(.dropdown--size--medium) {
-    --dropdown-border-radius: var(--dropdown-md-border-radius);
-    --dropdown-padding: var(--dropdown-md-padding);
-    --dropdown-gap: var(--dropdown-md-gap);
+    --dropdown-border-radius: var(--radius-md);
+    --dropdown-padding: 0.25rem 0;
+    --dropdown-gap: 0.25rem;
 
     & > *:where(:not(.dropdown__divider)) {
-      --dropdown-item-gap: var(--dropdown-item-md-gap);
-      --dropdown-item-padding: var(--dropdown-item-md-padding);
-      --dropdown-item-font-weight: var(--dropdown-item-md-font-weight);
-      --dropdown-item-font-size: var(--dropdown-item-md-font-size);
+      --dropdown-item-gap: var(--gap-md);
+      --dropdown-item-padding: 0.75rem 1rem;
+      --dropdown-item-font-weight: var(--font-weight-regular);
+      --dropdown-item-font-size: var(--font-size-body-md);
     }
 
     & > .dropdown__divider {
-      --dropdown-divider-margin: var(--divider-md-margin);
+      --dropdown-divider-margin: 0.25rem 0rem;
     }
   }
 

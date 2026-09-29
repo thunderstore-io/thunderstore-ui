@@ -38,13 +38,13 @@
   }
 
   .text-input:where(.text-input--size--default) {
-    --text-input-height: var(--input-md-height);
+    --text-input-height: 2.5rem;
     --text-input-padding: 0.75rem calc(1rem + var(--right-padding-bonus, 0px))
       0.75rem calc(1rem + var(--left-padding-bonus, 0px));
   }
 
   .text-input:where(.text-input--size--small) {
-    --text-input-height: var(--input-sm-height);
+    --text-input-height: 2.25rem;
     --text-input-padding: 0.625rem calc(1rem + var(--right-padding-bonus, 0px))
       0.625rem calc(1rem + var(--left-padding-bonus, 0px));
   }

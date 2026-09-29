@@ -30,9 +30,7 @@
       .tabs-item {
         --tabs-item-color: var(--tab-nav-item-text-color--default);
         --tabs-item-icon-color: var(--tab-nav-item-icon-color--default);
-        --tabs-item-border-bottom-style: var(
-          --tab-nav-item-border-style--default
-        );
+        --tabs-item-border-bottom-style: solid;
         --tabs-item-border-bottom-color: var(
           --tab-nav-item-border-color--default
         );

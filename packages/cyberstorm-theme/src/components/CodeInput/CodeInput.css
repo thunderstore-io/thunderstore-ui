@@ -6,9 +6,7 @@
     --code-input-wrapper-border-color: var(
       --code-input-wrapper-border-color--default
     );
-    --code-input-wrapper-border-radius: var(
-      --code-input-wrapper-md-border-radius
-    );
+    --code-input-wrapper-border-radius: var(--radius-md);
   }
 
   .code-input__wrapper:has(.validation-bar--success) {
@@ -25,13 +23,13 @@
 
   .code-input {
     --code-input-color: var(--code-input-text-color--default);
-    --code-input-border-radius: var(--code-input-md-border-radius);
-    --code-input-padding: var(--code-input-md-padding);
-    --code-input-transition: var(--code-input-transition--default);
-    --code-input-font-family: var(--code-input-font-family--default);
-    --code-input-font-size: var(--code-input-md-font-size);
-    --code-input-font-weight: var(--code-input-md-font-weight);
-    --code-input-line-height: var(--code-input-md-line-height);
+    --code-input-border-radius: var(--radius-md);
+    --code-input-padding: 0.5rem 0.625rem;
+    --code-input-transition: ease-out var(--animation-duration-xs);
+    --code-input-font-family: var(--font-family-monospace);
+    --code-input-font-size: 0.813rem;
+    --code-input-font-weight: var(--font-weight-regular);
+    --code-input-line-height: var(--line-height-md);
   }
 
   .code-input::placeholder {
@@ -41,12 +39,12 @@
   }
 
   .validation-bar {
-    --validation-bar-padding: var(--validation-bar-md-padding);
-    --validation-bar-gap: var(--validation-bar-md-gap);
-    --validation-bar-border-radius: var(--validation-bar-md-border-radius);
-    --validation-bar-font-size: var(--validation-bar-md-font-size);
-    --validation-bar-font-weight: var(--validation-bar-md-font-weight);
-    --validation-bar-line-height: var(--validation-bar-md-line-height);
+    --validation-bar-padding: 0.75rem 1rem;
+    --validation-bar-gap: 0.75rem;
+    --validation-bar-border-radius: 0rem 0rem var(--radius-md) var(--radius-md);
+    --validation-bar-font-size: var(--font-size-body-md);
+    --validation-bar-font-weight: var(--font-weight-regular);
+    --validation-bar-line-height: var(--line-height-md);
     --validation-bar-border-top-color: var(
       --validation-bar-border-top-color--default
     );
