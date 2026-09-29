@@ -19,13 +19,9 @@ import { classnames, componentClasses } from "../../utils/utils";
 import "./DropDown.css";
 import {
   type DropDownDividerModifiers,
-  type DropDownDividerSizes,
-  type DropDownDividerVariants,
   type DropDownItemModifiers,
-  type DropDownItemSizes,
   type DropDownItemVariants,
   type DropDownModifiers,
-  type DropDownSizes,
   type DropDownVariants,
 } from "./DropDown.types";
 
@@ -36,8 +32,9 @@ interface DropDownProps extends PrimitiveComponentDefaultProps {
   defaultOpen?: boolean;
   contentAlignment?: "start" | "center" | "end";
   trigger: ReactNode | ReactElement;
+  /** Disables the trigger so the menu cannot open. */
+  disabled?: boolean;
   csVariant?: DropDownVariants;
-  csSize?: DropDownSizes;
   csModifiers?: DropDownModifiers[];
 }
 
@@ -46,8 +43,8 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
     children,
     rootClasses,
     csVariant = "primary",
-    csSize = "medium",
     csModifiers,
+    disabled = false,
     open,
     defaultOpen = false,
     contentAlignment = "start",
@@ -58,7 +55,7 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
 
   return (
     <Root modal={false} open={open} defaultOpen={defaultOpen}>
-      <Trigger asChild disabled={!children}>
+      <Trigger asChild disabled={disabled || !children}>
         {trigger}
       </Trigger>
 
@@ -68,7 +65,7 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
           sideOffset={8}
           className={classnames(
             "dropdown",
-            ...componentClasses("dropdown", csVariant, csSize, csModifiers),
+            ...componentClasses("dropdown", csVariant, undefined, csModifiers),
             rootClasses
           )}
         >
@@ -83,7 +80,6 @@ interface DropDownItemProps
   extends PrimitiveComponentDefaultProps,
     DropdownMenuItemProps {
   csVariant?: DropDownItemVariants;
-  csSize?: DropDownItemSizes;
   csModifiers?: DropDownItemModifiers[];
 }
 
@@ -94,7 +90,6 @@ export const DropDownItem = memo(function DropDownItem(
     children,
     rootClasses,
     csVariant = "primary",
-    csSize = "medium",
     csModifiers,
     ...fProps
   } = props;
@@ -102,9 +97,15 @@ export const DropDownItem = memo(function DropDownItem(
   return (
     <Item
       {...fProps}
+      disabled={csVariant === "disabled" || fProps.disabled}
       className={classnames(
         "dropdown__item",
-        ...componentClasses("dropdown__item", csVariant, csSize, csModifiers),
+        ...componentClasses(
+          "dropdown__item",
+          csVariant,
+          undefined,
+          csModifiers
+        ),
         rootClasses
       )}
       asChild
@@ -115,29 +116,21 @@ export const DropDownItem = memo(function DropDownItem(
 });
 
 interface DropDownDividerProps extends PrimitiveComponentDefaultProps {
-  csVariant?: DropDownDividerVariants;
-  csSize?: DropDownDividerSizes;
   csModifiers?: DropDownDividerModifiers[];
 }
 
 export const DropDownDivider = memo(function DropDownDivider(
   props: DropDownDividerProps
 ) {
-  const {
-    rootClasses,
-    csVariant = "primary",
-    csSize = "medium",
-    csModifiers,
-    ...fProps
-  } = props;
+  const { rootClasses, csModifiers, ...fProps } = props;
   return (
     <div
       className={classnames(
         "dropdown__divider",
         ...componentClasses(
           "dropdown__divider",
-          csVariant,
-          csSize,
+          undefined,
+          undefined,
           csModifiers
         ),
         rootClasses
@@ -153,7 +146,6 @@ interface DropDownSubTriggerProps
   extends PrimitiveComponentDefaultProps,
     DropdownMenuSubTriggerProps {
   csVariant?: DropDownItemVariants;
-  csSize?: DropDownItemSizes;
   csModifiers?: DropDownItemModifiers[];
 }
 
@@ -164,7 +156,6 @@ export const DropDownSubTrigger = memo(function DropDownSubTrigger(
     children,
     rootClasses,
     csVariant = "primary",
-    csSize = "medium",
     csModifiers,
     ...fProps
   } = props;
@@ -172,9 +163,15 @@ export const DropDownSubTrigger = memo(function DropDownSubTrigger(
   return (
     <SubTrigger
       {...fProps}
+      disabled={csVariant === "disabled" || fProps.disabled}
       className={classnames(
         "dropdown__item",
-        ...componentClasses("dropdown__item", csVariant, csSize, csModifiers),
+        ...componentClasses(
+          "dropdown__item",
+          csVariant,
+          undefined,
+          csModifiers
+        ),
         rootClasses
       )}
     >
@@ -187,7 +184,6 @@ interface DropDownSubContentProps
   extends PrimitiveComponentDefaultProps,
     DropdownMenuSubContentProps {
   csVariant?: DropDownVariants;
-  csSize?: DropDownSizes;
   csModifiers?: DropDownModifiers[];
 }
 
@@ -198,7 +194,6 @@ export const DropDownSubContent = memo(function DropDownSubContent(
     children,
     rootClasses,
     csVariant = "primary",
-    csSize = "medium",
     csModifiers,
     ...fProps
   } = props;
@@ -211,7 +206,7 @@ export const DropDownSubContent = memo(function DropDownSubContent(
         {...fProps}
         className={classnames(
           "dropdown",
-          ...componentClasses("dropdown", csVariant, csSize, csModifiers),
+          ...componentClasses("dropdown", csVariant, undefined, csModifiers),
           rootClasses
         )}
       >
