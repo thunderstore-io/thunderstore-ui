@@ -48,11 +48,6 @@ export {
 export { CyberstormLink } from "./components/Links/Links";
 export { LocalDateTime } from "./components/LocalDateTime/LocalDateTime";
 export { RelativeTime } from "./components/RelativeTime/RelativeTime";
-export {
-  TextAreaInput,
-  type TextAreaInputProps,
-} from "./components/TextAreaInput/TextAreaInput";
-export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 
 // newComponents
 export {
@@ -82,7 +77,6 @@ export {
   Container,
   type ContainerProps,
 } from "./newComponents/Container/Container";
-export { CycleButton } from "./newComponents/CycleButton/CycleButton";
 export { Drawer, DrawerDivider } from "./newComponents/Drawer/Drawer";
 export {
   DropDown as NewDropDown,
@@ -140,6 +134,7 @@ export { Tabs } from "./newComponents/Tabs/Tabs";
 export { Tooltip, type TooltipProps } from "./newComponents/Tooltip/Tooltip";
 
 // Utils
+export { TopLayerContainerContext } from "./utils/TopLayerContainerContext";
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";
 export type { SelectOption } from "./utils/types";
 export {

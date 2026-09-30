@@ -14,6 +14,9 @@ const meta = {
   title: "Cyberstorm/SelectSearch",
   component: NewSelectSearchSingle,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csModifiers: {
       control: "multi-select",

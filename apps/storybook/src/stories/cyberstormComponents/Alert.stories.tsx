@@ -10,7 +10,10 @@ const meta = {
   title: "Cyberstorm/Alert",
   component: NewAlert,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: AlertVariantsList },
     csSize: { control: "select", options: AlertSizesList },

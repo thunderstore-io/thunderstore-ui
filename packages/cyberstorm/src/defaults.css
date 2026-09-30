@@ -1,8 +1,7 @@
 /*
 Barebones placeholder defaults for @thunderstore/cyberstorm.
 
-These live in `@layer cyberstorm` — the LOWEST of the three layers
-(cyberstorm < cyberstorm-theme < nimbus) — so whenever
+These live in `@layer cyberstorm`, below `cyberstorm-theme`, so whenever
 @thunderstore/cyberstorm-theme is loaded it overrides every one of these
 values (layer order beats specificity). That makes this file a no-op for
 themed output: it only takes effect when cyberstorm is used WITHOUT the

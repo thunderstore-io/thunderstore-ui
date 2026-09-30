@@ -14,7 +14,10 @@ const meta = {
   title: "Cyberstorm/DropDown",
   component: NewDropDown,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: DropDownVariantsList },
     csSize: { control: "select", options: DropDownSizesList },

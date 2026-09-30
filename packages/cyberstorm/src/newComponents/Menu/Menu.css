@@ -1,15 +1,16 @@
 @layer cyberstorm {
   .menu {
     z-index: 1;
-    display: flex;
     width: 100%;
     height: 100%;
-    background: transparent;
     transition:
       transform var(--animation-duration-sm),
       display var(--animation-duration-sm) allow-discrete;
 
+    /* display:flex here would beat the UA display:none and paint the closed
+       popover, including its default border. */
     &:popover-open {
+      display: flex;
       transform: none;
     }
   }
@@ -64,6 +65,5 @@
   .menu__fake-backdrop {
     width: 20%;
     height: 100%;
-    background: transparent;
   }
 }

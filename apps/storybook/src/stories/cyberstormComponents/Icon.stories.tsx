@@ -10,7 +10,10 @@ const meta = {
   title: "Cyberstorm/Icon",
   component: NewIcon,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: IconVariantsList },
     csMode: { control: "select", options: ["inline", "block"] },

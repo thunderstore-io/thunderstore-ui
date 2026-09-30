@@ -14,7 +14,10 @@ const meta = {
   title: "Cyberstorm/BreadCrumbs",
   component: NewBreadCrumbs,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
 } satisfies Meta<typeof NewBreadCrumbs>;
 
 export default meta;

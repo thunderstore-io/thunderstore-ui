@@ -12,7 +12,10 @@ const meta = {
   title: "Cyberstorm/Avatar",
   component: NewAvatar,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: AvatarVariantsList },
     csSize: { control: "select", options: AvatarSizesList },

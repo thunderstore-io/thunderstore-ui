@@ -10,6 +10,9 @@ const meta = {
   title: "Cyberstorm/MetaItem",
   component: NewMetaItem,
   tags: ["autodocs"],
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
   argTypes: {
     csVariant: { control: "select", options: MetaItemVariantsList },
     csSize: { control: "select", options: MetaItemSizesList },

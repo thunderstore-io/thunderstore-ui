@@ -1,0 +1,25 @@
+/*
+ * Clears the browser's built-in look on buttons, inputs, textareas, and
+ * popovers. Loaded only with the theme. Nested under component CSS in
+ * `cyberstorm`, so a component's own padding still wins. See the package
+ * README for where this sits in the layer stack.
+ *
+ * Storybook applies it only inside [data-cs-theme="on"], so the barebones
+ * column keeps browser styles.
+ */
+@layer cyberstorm.theme-reset {
+  button,
+  input,
+  textarea,
+  [popover] {
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: inherit;
+    font: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    background: transparent;
+  }
+}
