@@ -62,7 +62,7 @@ export const loader = ssrLoader(async () => {
     ...communities,
     seo: createSeo({
       descriptors: [
-        { title: "Upload package | Thunderstore" },
+        { title: "Upload package · Thunderstore" },
         {
           name: "description",
           content: "Upload a package to Thunderstore.",

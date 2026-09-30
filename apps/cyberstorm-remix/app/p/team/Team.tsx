@@ -2,7 +2,7 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getListingCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import {
   parseIntListParam,
@@ -25,6 +25,8 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Team";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
+const THIN_TEAM_MAX_PACKAGES = 1;
 
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
@@ -60,46 +62,52 @@ export const loader = ssrLoader(
 
       const finalSection = getSectionDefault(section, filters?.sections);
 
+      const listings = await dapper.getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        parsePageParam(page),
+        search,
+        includedCategories,
+        excludedCategories,
+        finalSection,
+        nsfw === "true" ? true : false,
+        deprecated === "true" ? true : false
+      );
+
       return {
         teamId: params.namespaceId,
         filters: filters,
         // Community is required for the breadcrumbs in the root layout
         community: community,
-        listings: await dapper.getPackageListings(
-          {
-            kind: "namespace",
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-          },
-          ordering ?? "",
-          parsePageParam(page),
-          search,
-          includedCategories,
-          excludedCategories,
-          finalSection,
-          nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
-        ),
+        listings: listings,
         seo: createSeo({
           descriptors: [
             {
-              title: `Mods uploaded by ${params.namespaceId} | Thunderstore - The ${community.name} Mod Database`,
+              title: `Mods uploaded by ${params.namespaceId} · ${community.name} · Thunderstore`,
             },
             {
               name: "description",
               content: `Browse mods uploaded by ${params.namespaceId}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: getCanonicalUrl(request) },
+            { property: "og:url", content: getListingCanonicalUrl(request) },
             {
               property: "og:title",
-              content: `Mods by ${params.namespaceId} | Thunderstore`,
+              content: `Mods by ${params.namespaceId} · ${community.name}`,
             },
             {
               property: "og:description",
               content: `Browse mods uploaded by ${params.namespaceId}`,
             },
             { property: "og:site_name", content: "Thunderstore" },
+            // A one-package team page duplicates the package page.
+            ...(listings.count <= THIN_TEAM_MAX_PACKAGES
+              ? [{ name: "robots", content: "noindex, follow" }]
+              : []),
           ],
         }),
       };

@@ -69,7 +69,7 @@ export const loader = ssrLoader(
       ),
       seo: createSeo({
         descriptors: [
-          { title: `${namespaceId}-${packageId} Dependencies | Thunderstore` },
+          { title: `${namespaceId}-${packageId} Dependencies · Thunderstore` },
           {
             name: "description",
             content: `Dependencies for ${namespaceId}-${packageId}`,

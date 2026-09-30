@@ -2,7 +2,7 @@ import { faGhost } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
@@ -31,8 +31,51 @@ import "./Wiki.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+// The wiki editors answer 200 to anyone, so a crawler reaches the "create a
+// wiki page" and "edit this page" forms as readily as a reader does. They are
+// UI, not content. Matched on the path rather than on params, which cannot tell
+// /wiki/<slug> from /wiki/<slug>/edit.
+function isWikiEditor(pathname: string): boolean {
+  const segments = pathname.split("/").filter(Boolean);
+  const wiki = segments.lastIndexOf("wiki");
+  if (wiki === -1) {
+    return false;
+  }
+  const rest = segments.slice(wiki + 1);
+  return (
+    (rest.length === 1 && rest[0] === "new") ||
+    (rest.length === 2 && rest[1] === "edit")
+  );
+}
+
+/**
+ * Shared by both loaders, since clientLoader.hydrate replaces the SSR match
+ * data the <Seo> head reads.
+ *
+ * The canonical is the wiki page's own URL. packageListing, the layout above
+ * this one, points og:url at the package listing so its tabs consolidate
+ * there; a wiki page is the one thing under it with substantial content of its
+ * own, so it keeps its own canonical rather than being folded away.
+ */
+function wikiSeo(
+  params: { namespaceId: string; packageId: string },
+  request: Request
+) {
+  const packageName = `${params.namespaceId}-${params.packageId}`;
+  return createSeo({
+    descriptors: [
+      { title: `${packageName} Wiki · Thunderstore` },
+      { name: "description", content: `Wiki for ${packageName}` },
+      { property: "og:url", content: getCanonicalUrl(request) },
+      ...(isWikiEditor(new URL(request.url).pathname)
+        ? [{ name: "robots", content: "noindex, follow" }]
+        : []),
+    ],
+  });
+}
+
 export const loader = ssrLoader(
-  async ({ params }: Route.LoaderArgs) => {
+  async ({ params, request }: Route.LoaderArgs) => {
     if (params.communityId && params.namespaceId && params.packageId) {
       const dapper = new DapperTs(() => {
         return {
@@ -63,17 +106,10 @@ export const loader = ssrLoader(
         packageId: params.packageId,
         slug: params.slug,
         permissions: undefined,
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} Wiki | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Wiki for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
+        seo: wikiSeo(
+          { namespaceId: params.namespaceId, packageId: params.packageId },
+          request
+        ),
       };
     } else {
       throw new Error("Namespace ID or Package ID is missing");
@@ -84,7 +120,10 @@ export const loader = ssrLoader(
 
 export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -116,6 +155,10 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
       packageId: params.packageId,
       slug: params.slug,
       permissions: permissions,
+      seo: wikiSeo(
+        { namespaceId: params.namespaceId, packageId: params.packageId },
+        request
+      ),
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");

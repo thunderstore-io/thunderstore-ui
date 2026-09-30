@@ -5,6 +5,24 @@ export type SeoReturn = {
   descriptors: MetaDescriptor[];
 };
 
+/**
+ * What a route puts in its loader's `seo` field.
+ *
+ * A route whose tags describe deferred data hands over the promise instead of
+ * awaiting it, so a navigation is never held up for the sake of a title and the
+ * route keeps its pending state: the descriptors join the head when the promise
+ * settles. Resolving to undefined means the data never arrived — the route's
+ * own error handling owns that, and the tags are left as they are.
+ */
+export type SeoValue = SeoReturn | Promise<SeoReturn | undefined>;
+
+/** One matched route's seo, keyed by route id so a settled promise can be
+ *  remembered while the route stays matched. */
+export type MatchSeo = {
+  id: string;
+  value: SeoValue;
+};
+
 export const createSeo = (seo: SeoReturn) => {
   return seo;
 };
@@ -37,18 +55,17 @@ function isMetaDescriptor(descriptor: unknown): descriptor is MetaDescriptor {
   return false;
 }
 
-function isLoaderDataWithSeo(data: unknown): data is { seo: SeoReturn } {
-  if (typeof data !== "object" || data === null) {
+/**
+ * Whether a value is usable seo. Also applied to what a promised seo resolves
+ * to, so a malformed value is ignored rather than rendered. One bad descriptor
+ * rejects the whole object: a half-applied set of tags is worse than none.
+ */
+export function isSeoReturn(value: unknown): value is SeoReturn {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
     return false;
   }
 
-  const d = data as Record<string, unknown>;
-
-  if (!("seo" in d) || typeof d.seo !== "object" || d.seo === null) {
-    return false;
-  }
-
-  const seo = d.seo as Record<string, unknown>;
+  const seo = value as Record<string, unknown>;
 
   if (!("descriptors" in seo) || !Array.isArray(seo.descriptors)) {
     return false;
@@ -71,20 +88,58 @@ function isLoaderDataWithSeo(data: unknown): data is { seo: SeoReturn } {
   return true;
 }
 
-export function findMatchWithSeoInMatches(
+function isSeoPromise(value: unknown): value is Promise<SeoReturn | undefined> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as { then?: unknown }).then === "function"
+  );
+}
+
+/**
+ * The seo of every matched route that has any, in match order so parents come
+ * before the children that override them. Promises are returned unresolved —
+ * the caller decides what to do while they are in flight.
+ */
+export function collectMatchSeo(
   matches: UIMatch<unknown, unknown>[]
+): MatchSeo[] {
+  const collected: MatchSeo[] = [];
+
+  for (const match of matches) {
+    const data = match.data;
+    if (typeof data !== "object" || data === null || !("seo" in data)) {
+      continue;
+    }
+    const value = (data as { seo: unknown }).seo;
+    if (isSeoReturn(value) || isSeoPromise(value)) {
+      collected.push({ id: match.id, value });
+    }
+  }
+
+  return collected;
+}
+
+/**
+ * The merged seo of the matched routes, each overriding the descriptors of the
+ * one above it. `settled` supplies the descriptors of routes that handed over a
+ * promise, keyed by route id; a route whose promise has not settled contributes
+ * nothing yet.
+ */
+export function findMatchWithSeoInMatches(
+  matches: UIMatch<unknown, unknown>[],
+  settled: Readonly<Record<string, SeoReturn>> = {}
 ): SeoReturn | undefined {
   let finalSeo: SeoReturn | undefined = undefined;
 
-  for (const match of matches) {
-    if (isLoaderDataWithSeo(match.data)) {
-      if (!finalSeo) {
-        finalSeo = match.data.seo;
-      } else {
-        finalSeo = mergeSeo(finalSeo, match.data.seo);
-      }
+  for (const { id, value } of collectMatchSeo(matches)) {
+    const seo = isSeoReturn(value) ? value : settled[id];
+    if (!seo) {
+      continue;
     }
+    finalSeo = finalSeo ? mergeSeo(finalSeo, seo) : seo;
   }
+
   return finalSeo;
 }
 

@@ -68,11 +68,11 @@ export const loader = ssrLoader(
       newest,
       seo: createSeo({
         descriptors: [
-          { title: "Thunderstore | The Mod Database" },
+          { title: "Thunderstore · The Mod Database" },
           { name: "description", content: description },
           { property: "og:type", content: "website" },
           { property: "og:url", content: getCanonicalUrl(request, "/") },
-          { property: "og:title", content: "Thunderstore | The Mod Database" },
+          { property: "og:title", content: "Thunderstore · The Mod Database" },
           { property: "og:description", content: description },
           {
             property: "og:image",
@@ -96,14 +96,6 @@ export const loader = ssrLoader(
                   "@type": "WebSite",
                   name: "Thunderstore",
                   url: origin,
-                  potentialAction: {
-                    "@type": "SearchAction",
-                    target: {
-                      "@type": "EntryPoint",
-                      urlTemplate: `${origin}/communities?search={search_term_string}`,
-                    },
-                    "query-input": "required name=search_term_string",
-                  },
                 },
               ],
             },

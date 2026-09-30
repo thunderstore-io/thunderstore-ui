@@ -13,7 +13,11 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getCanonicalUrl,
+  packageCanonicalPath,
+} from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -95,14 +99,25 @@ function packageListingSeo(listing: ResolvedListing, request: Request) {
   return createSeo({
     descriptors: [
       {
-        title: `${displayName} by ${listing.namespace} | ${listing.community_name} | Thunderstore`,
+        title: `${displayName} by ${listing.namespace} · ${listing.community_name} · Thunderstore`,
       },
       { name: "description", content: listing.description },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: getCanonicalUrl(request) },
+      // Layout route: the tabs below inherit these, so use the listing URL.
+      {
+        property: "og:url",
+        content: getCanonicalUrl(
+          request,
+          packageCanonicalPath(
+            listing.community_identifier,
+            listing.namespace,
+            listing.name
+          )
+        ),
+      },
       {
         property: "og:title",
-        content: `${displayName} by ${listing.namespace}`,
+        content: `${displayName} by ${listing.namespace} · ${listing.community_name}`,
       },
       { property: "og:description", content: listing.description },
       ...(listing.icon_url
