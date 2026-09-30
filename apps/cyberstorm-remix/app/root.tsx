@@ -272,8 +272,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // Routes where the ad surface is allowed at all. The NitroPay script (and its
   // consent banner) loads on these; account / login / upload / tools routes get
   // neither. (/auth is backend-proxied, so the app never renders it.)
+  const isReadmeEditPage = matches.some(
+    (m) => m.id === "p/readmeEdit/ReadmeEdit"
+  );
   const adsAllowedOnRoute =
     !adsDisabled &&
+    !isReadmeEditPage &&
     !["/teams", "/settings", "/package/create", "/tools", "/login"].some(
       (prefix) => location.pathname.startsWith(prefix)
     );

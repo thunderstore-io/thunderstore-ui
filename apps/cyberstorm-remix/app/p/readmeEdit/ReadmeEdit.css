@@ -1,0 +1,175 @@
+@layer nimbus-layout {
+  .readme-edit {
+    padding-bottom: var(--space-32);
+  }
+
+  .readme-edit__skeleton {
+    height: 24rem;
+  }
+
+  .readme-edit__toolbar {
+    gap: var(--space-4);
+    min-height: 48px;
+    padding: var(--space-8);
+    border-bottom: var(--border-width--px) solid var(--readme-edit-frame-color);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    background-color: var(--color-surface-3);
+    box-shadow: none;
+  }
+
+  .readme-edit__back {
+    position: relative;
+    flex-shrink: 0;
+    margin-right: var(--space-24);
+
+    --button-text-color: var(--link-cyber-color--default);
+    --button-icon-color: var(--link-cyber-color--default);
+  }
+
+  .readme-edit__back:hover {
+    --button-text-color: var(--link-cyber-color--hover);
+    --button-icon-color: var(--link-cyber-color--hover);
+  }
+
+  .readme-edit__back::after {
+    position: absolute;
+    top: 50%;
+    right: calc(-1 * var(--space-12));
+    height: 28px;
+    border-right: var(--border-width--px) solid var(--color-surface-7);
+    transform: translateY(-50%);
+    content: "";
+  }
+
+  .readme-edit__identity {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: var(--space-16);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-md);
+  }
+
+  .readme-edit__tab {
+    padding: var(--space-8) var(--space-12);
+    border: none;
+    border-radius: var(--radius-md);
+    background: none;
+    cursor: pointer;
+  }
+
+  /* aria-disabled keeps the tab focusable for its tooltip. Restore pointer
+     events so the explanation is also available on hover. */
+  .readme-edit__tab[aria-disabled="true"] {
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+
+  .readme-edit__tab:hover:not([aria-disabled="true"], [aria-current="true"]) {
+    background-color: var(--color-ui-surface-2);
+  }
+
+  .readme-edit__tab[aria-current="true"] {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-6);
+  }
+
+  .readme-edit__tab-edited {
+    --icon-color: currentcolor;
+
+    margin-left: var(--space-8);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+    cursor: help;
+
+    /* The current tab disables pointer events, which would hide the title. */
+    pointer-events: auto;
+  }
+
+  .readme-edit__workspace {
+    --readme-edit-frame-color: var(--color-surface-a8);
+
+    /* Viewport height left over after the navigation header, the tab strip,
+       the status bar and the page paddings. */
+    --readme-edit-pane-height: max(
+      24rem,
+      calc(100vh - var(--header-height) - 13.5rem)
+    );
+
+    display: flex;
+    flex-direction: column;
+    border: var(--border-width--px) solid var(--readme-edit-frame-color);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-3);
+  }
+
+  .readme-edit__workspace:has(.validation-bar--failure) {
+    --readme-edit-frame-color: var(--validation-bar-border-top-color--failure);
+  }
+
+  .readme-edit__panes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .readme-edit__editor {
+    min-width: 0;
+    border: none;
+    border-right: var(--border-width--px) solid var(--readme-edit-frame-color);
+    border-radius: 0;
+    background-color: var(--color-ui-surface-2);
+  }
+
+  .readme-edit__panes .code-input {
+    min-width: 0;
+    min-height: var(--readme-edit-pane-height);
+    padding: var(--space-12) var(--space-16);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .readme-edit__preview {
+    min-width: 0;
+    max-height: var(--readme-edit-pane-height);
+    padding: var(--space-24) var(--space-32);
+    overflow-y: auto;
+    background-color: var(--color-surface-2);
+  }
+
+  .readme-edit__bar {
+    flex-wrap: wrap;
+    gap: var(--space-16);
+    padding: var(--space-8) var(--space-16);
+    border-top-color: var(--readme-edit-frame-color);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    background-color: var(--color-surface-3);
+  }
+
+  .readme-edit__bar-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+    margin-left: auto;
+  }
+
+  @container (width <= 48rem) {
+    .readme-edit__workspace {
+      --readme-edit-pane-height: 18rem;
+    }
+
+    .readme-edit__panes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .readme-edit__editor {
+      border-right: none;
+      border-bottom: var(--border-width--px) solid
+        var(--readme-edit-frame-color);
+    }
+
+    /* Stacked, the preview may be taller than the editor pane. */
+    .readme-edit__preview {
+      max-height: 32rem;
+    }
+  }
+}

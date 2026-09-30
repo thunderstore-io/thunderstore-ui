@@ -23,6 +23,7 @@ import {
 } from "../commonComponents/FormSection/FormSection";
 import { Page } from "../commonComponents/Page/Page";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
+import { type PreviousOverride } from "../p/readmeEdit/overrideMigration";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
 import "./Upload.css";
@@ -35,6 +36,7 @@ import { UploadSubmitSection } from "./components/UploadSubmitSection";
 import { UploadTeamSection } from "./components/UploadTeamSection";
 import {
   usePackageFileUpload,
+  usePreviousOverrideWarning,
   useSubmissionStatusPolling,
   useUploadCategoryOptions,
 } from "./uploadHooks";
@@ -170,6 +172,17 @@ export default function Upload() {
     formInputs.communities
   );
 
+  const previousOverride = usePreviousOverrideWarning(
+    requestConfig,
+    file,
+    formInputs.author_name
+  );
+  const [carryOverride, setCarryOverride] = useState(false);
+  // Fixed at submit, so the result copies the override the form showed and
+  // later switch changes cannot write to the published version.
+  const [overrideToCarry, setOverrideToCarry] =
+    useState<PreviousOverride | null>(null);
+
   type SubmitorOutput = Awaited<
     ReturnType<typeof postPackageSubmissionMetadata>
   >;
@@ -254,12 +267,15 @@ export default function Upload() {
 
   const handleReset = () => {
     clearFile();
+    setCarryOverride(false);
+    setOverrideToCarry(null);
     setSubmitError(null);
     setSubmissionStatus(undefined);
     dispatchForm("reset");
   };
 
   const handleSubmit = () => {
+    setOverrideToCarry(carryOverride ? previousOverride : null);
     setSubmitError(null);
     setPollingError(null);
     setSubmissionStatus(undefined);
@@ -316,9 +332,12 @@ export default function Upload() {
           sectionErrors={submissionErrorsBySection.uploadFile}
           fileWarnings={fileWarnings}
           fileValidationErrors={fileErrors}
+          previousOverride={previousOverride}
+          carryOverride={carryOverride}
           fileInputRef={fileInputRef}
           onFileChange={(nextFile) => {
             selectFile(nextFile);
+            setCarryOverride(false);
             updateFormFieldState({
               field: "upload_uuid",
               value: "",
@@ -326,17 +345,20 @@ export default function Upload() {
           }}
           onRemoveFile={() => {
             clearFile();
+            setCarryOverride(false);
             updateFormFieldState({
               field: "upload_uuid",
               value: "",
             });
           }}
+          onCarryOverrideChange={setCarryOverride}
         />
         <FormSectionSeparator />
         <UploadTeamSection
           availableTeams={availableTeams}
           authorName={formInputs.author_name}
           onAuthorNameChange={(authorName) => {
+            setCarryOverride(false);
             updateFormFieldState({
               field: "author_name",
               value: authorName,
@@ -404,6 +426,7 @@ export default function Upload() {
             submissionStatus={submissionStatus}
             pollingError={pollingError}
             submitSectionErrors={submissionErrorsBySection.submit}
+            overrideToCarry={overrideToCarry}
             onRetryPolling={retryPolling}
           />
         ) : null}

@@ -4,4 +4,18 @@
     flex-wrap: wrap;
     gap: var(--gap-2xs);
   }
+
+  .override-migration-notice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .override-migration-notice__actions {
+    display: flex;
+    gap: var(--space-8);
+  }
 }

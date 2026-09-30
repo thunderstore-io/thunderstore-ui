@@ -1,3 +1,4 @@
+import { MarkdownEditedNote } from "app/p/components/MarkdownEditedNote/MarkdownEditedNote";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -35,7 +36,7 @@ export const loader = ssrLoader(
     return {
       status: "error",
       message: "Failed to load readme",
-      readme: { html: "" },
+      readme: { html: "", is_edited: false, edited_at: null },
       seo: createSeo({
         descriptors: [{ title: "Readme Not Found | Thunderstore" }],
       }),
@@ -66,7 +67,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return {
     status: "error",
     message: "Failed to load readme",
-    readme: { html: "" },
+    readme: { html: "", is_edited: false, edited_at: null },
   };
 }
 
@@ -90,18 +91,19 @@ export default function PackageVersionReadme() {
           />
         }
       >
-        {(resolvedValue) =>
-          resolvedValue && resolvedValue.html ? (
-            <div className="markdown-wrapper">
+        {(resolvedValue) => (
+          <div className="markdown-wrapper">
+            <MarkdownEditedNote doc={resolvedValue} label="README" />
+            {resolvedValue?.html ? (
               <div
                 dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
                 className="markdown"
               />
-            </div>
-          ) : (
-            <TabFetchState variant="info" message="No details available" />
-          )
-        }
+            ) : (
+              <TabFetchState variant="info" message="No details available" />
+            )}
+          </div>
+        )}
       </Await>
     </Suspense>
   );
