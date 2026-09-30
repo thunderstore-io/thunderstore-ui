@@ -6,6 +6,42 @@ export function setParamsBlobValue<
 }
 
 /**
+ * The URL for a page of a paginated listing, keeping the filters already in the
+ * address bar. Root-relative, since a bare `?query` resolves against whatever
+ * URL it is rendered on.
+ */
+export function buildPageHref(
+  pathname: string,
+  searchParams: URLSearchParams,
+  page: number
+): string {
+  const params = new URLSearchParams(searchParams);
+  if (page <= 1) {
+    params.delete("page");
+  } else {
+    params.set("page", String(page));
+  }
+  const query = params.toString();
+  const path = withTrailingSlash(pathname);
+  return query ? `${path}?${query}` : path;
+}
+
+/**
+ * React Router reports `pathname` without the trailing slash on the server and
+ * with it on the client, so the same link renders two ways without this.
+ *
+ * Copied rather than imported from `env.ts`: this module is pure, and `env.ts`
+ * pulls in the session/env chain its tests cannot load.
+ */
+function withTrailingSlash(path: string): string {
+  if (path.endsWith("/")) {
+    return path;
+  }
+  const lastSegment = path.slice(path.lastIndexOf("/") + 1);
+  return lastSegment.includes(".") ? path : `${path}/`;
+}
+
+/**
  * A raw `page` query-param value coerced to a valid 1-based page number, or
  * undefined when it is absent or not a plain run of digits within safe-integer
  * range — so `?page=abc`, `?page=1abc`, `?page=1e3`, `?page=0x10`, `?page=-1`,
