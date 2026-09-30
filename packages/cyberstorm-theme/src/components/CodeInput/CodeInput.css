@@ -54,6 +54,7 @@
       --validation-bar-background-color--default
     );
     --validation-bar-color: var(--validation-bar-color--default);
+    --validation-bar-icon-color: var(--validation-bar-color);
   }
 
   .validation-bar--success {
@@ -71,5 +72,6 @@
       --validation-bar-background-color--failure
     );
     --validation-bar-color: var(--validation-bar-color--failure);
+    --validation-bar-icon-color: var(--validation-bar-icon-color--failure);
   }
 }
