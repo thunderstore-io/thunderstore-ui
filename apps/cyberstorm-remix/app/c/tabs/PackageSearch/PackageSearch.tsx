@@ -2,7 +2,8 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getListingCanonicalUrl } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import {
   parseIntListParam,
   parsePageParam,
@@ -20,6 +21,21 @@ import { type OutletContextShape } from "~/root";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/PackageSearch";
+
+// Only the canonical: the parent community route owns the title, description
+// and og:* tags, and none of them change between pages. It cannot own the
+// canonical, though — it is a layout route whose shouldRevalidate skips a
+// navigation that only changes the query, so its og:url would still name the
+// page the document was served for after a client-side page change. This route
+// revalidates on every navigation, so the canonical it returns always names the
+// page on screen.
+function listingSeo(request: Request) {
+  return createSeo({
+    descriptors: [
+      { property: "og:url", content: getListingCanonicalUrl(request) },
+    ],
+  });
+}
 
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
@@ -70,7 +86,7 @@ export const loader = ssrLoader(
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
         ),
-        // No seo: the parent's tags are the right ones for the landing page.
+        seo: listingSeo(request),
       };
     }
     throw new Response("Community not found", { status: 404 });
@@ -139,6 +155,7 @@ export async function clientLoader({
     return {
       filters: filters,
       listings: listingsPromise,
+      seo: listingSeo(request),
     };
   }
   throw new Response("Community not found", { status: 404 });

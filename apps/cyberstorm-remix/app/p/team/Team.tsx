@@ -2,7 +2,7 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getListingCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import {
   parseIntListParam,
@@ -90,7 +90,7 @@ export const loader = ssrLoader(
               content: `Browse mods uploaded by ${params.namespaceId}`,
             },
             { property: "og:type", content: "website" },
-            { property: "og:url", content: getCanonicalUrl(request) },
+            { property: "og:url", content: getListingCanonicalUrl(request) },
             {
               property: "og:title",
               content: `Mods by ${params.namespaceId} | Thunderstore`,
