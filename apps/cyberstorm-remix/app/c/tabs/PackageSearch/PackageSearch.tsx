@@ -3,7 +3,6 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
-import { createSeo } from "cyberstorm/utils/meta";
 import {
   parseIntListParam,
   parsePageParam,
@@ -52,7 +51,6 @@ export const loader = ssrLoader(
       const filters = await dapper
         .getCommunityFilters(params.communityId)
         .catch(() => null);
-      const community = await dapper.getCommunity(params.communityId);
 
       const finalSection = getSectionDefault(section, filters?.sections);
 
@@ -72,15 +70,7 @@ export const loader = ssrLoader(
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
         ),
-        seo: createSeo({
-          descriptors: [
-            { title: `Packages for ${community.name} | Thunderstore` },
-            {
-              name: "description",
-              content: `Browse packages for ${community.name}`,
-            },
-          ],
-        }),
+        // No seo: the parent's tags are the right ones for the landing page.
       };
     }
     throw new Response("Community not found", { status: 404 });
