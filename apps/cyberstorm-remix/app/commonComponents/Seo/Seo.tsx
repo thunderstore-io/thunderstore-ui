@@ -1,9 +1,10 @@
-import { findMatchWithSeoInMatches } from "cyberstorm/utils/meta";
 import { useMatches } from "react-router";
+
+import { useResolvedSeo } from "./useResolvedSeo";
 
 export function Seo() {
   const matches = useMatches();
-  const match = findMatchWithSeoInMatches(matches);
+  const match = useResolvedSeo(matches);
 
   if (!match) return null;
 

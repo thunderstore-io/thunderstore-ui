@@ -117,50 +117,7 @@ export const loader = ssrLoader(
         listing,
         filters: filters,
         listings,
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `Dependants of ${formatToDisplayName(
-                listing.name
-              )} | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Mods that depend on ${listing.name}`,
-            },
-            { property: "og:type", content: "website" },
-            // Canonical to the listing, not this page.
-            {
-              property: "og:url",
-              content: getCanonicalUrl(
-                request,
-                packageCanonicalPath(
-                  listing.community_identifier,
-                  listing.namespace,
-                  listing.name
-                )
-              ),
-            },
-            {
-              property: "og:title",
-              content: `Dependants of ${formatToDisplayName(
-                listing.name
-              )} | Thunderstore`,
-            },
-            {
-              property: "og:description",
-              content: `Mods that depend on ${listing.name}`,
-            },
-            ...(listing.icon_url
-              ? [
-                  { property: "og:image", content: listing.icon_url },
-                  { property: "og:image:width", content: "256" },
-                  { property: "og:image:height", content: "256" },
-                ]
-              : []),
-            { property: "og:site_name", content: "Thunderstore" },
-          ],
-        }),
+        seo: dependantsSeo(listing, request),
       };
     }
     throw new Response("Community not found", { status: 404 });
@@ -169,6 +126,49 @@ export const loader = ssrLoader(
 );
 
 export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
+
+type ResolvedListing = NonNullable<
+  Awaited<ReturnType<typeof getPublicListing>>
+>;
+
+// Shared by both loaders. clientLoader.hydrate replaces the SSR match data the
+// <Seo> head reads, so a tag only the SSR loader emits, the canonical included,
+// is gone after hydration.
+function dependantsSeo(listing: ResolvedListing, request: Request) {
+  const title = `Dependants of ${formatToDisplayName(
+    listing.name
+  )} | Thunderstore`;
+  const description = `Mods that depend on ${listing.name}`;
+  return createSeo({
+    descriptors: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:type", content: "website" },
+      // Canonical to the listing, not this page.
+      {
+        property: "og:url",
+        content: getCanonicalUrl(
+          request,
+          packageCanonicalPath(
+            listing.community_identifier,
+            listing.namespace,
+            listing.name
+          )
+        ),
+      },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      ...(listing.icon_url
+        ? [
+            { property: "og:image", content: listing.icon_url },
+            { property: "og:image:width", content: "256" },
+            { property: "og:image:height", content: "256" },
+          ]
+        : []),
+      { property: "og:site_name", content: "Thunderstore" },
+    ],
+  });
+}
 
 export async function clientLoader({
   request,
@@ -232,6 +232,7 @@ export async function clientLoader({
       listing: listing,
       filters: filters,
       listings: listingsPromise,
+      seo: dependantsSeo(listing, request),
     };
   }
   throw new Response("Community not found", { status: 404 });
