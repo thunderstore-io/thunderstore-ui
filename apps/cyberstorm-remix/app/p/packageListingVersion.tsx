@@ -73,7 +73,7 @@ function packageVersionSeo(
   return createSeo({
     descriptors: [
       {
-        title: `${displayName} v${packageVersion} by ${listing.namespace} | ${listing.community_name} | Thunderstore`,
+        title: `${displayName} v${packageVersion} by ${listing.namespace} · ${listing.community_name} · Thunderstore`,
       },
       { name: "description", content: listing.description },
       { property: "og:type", content: "website" },
@@ -91,7 +91,7 @@ function packageVersionSeo(
       },
       {
         property: "og:title",
-        content: `${displayName} v${packageVersion} by ${listing.namespace}`,
+        content: `${displayName} v${packageVersion} by ${listing.namespace} · ${listing.community_name}`,
       },
       { property: "og:description", content: listing.description },
       ...(listing.icon_url

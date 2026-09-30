@@ -40,7 +40,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       seo: createSeo({
         descriptors: [
           {
-            title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
+            title: `${params.namespaceId}-${params.packageId} Source · Thunderstore`,
           },
           {
             name: "description",

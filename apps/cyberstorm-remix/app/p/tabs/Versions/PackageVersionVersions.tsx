@@ -43,7 +43,7 @@ export const loader = ssrLoader(
         seo: createSeo({
           descriptors: [
             {
-              title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
+              title: `${params.namespaceId}-${params.packageId} Versions · Thunderstore`,
             },
             {
               name: "description",

@@ -87,7 +87,7 @@ export const loader = ssrLoader(
         seo: createSeo({
           descriptors: [
             {
-              title: `Mods uploaded by ${params.namespaceId} | Thunderstore - The ${community.name} Mod Database`,
+              title: `Mods uploaded by ${params.namespaceId} · ${community.name} · Thunderstore`,
             },
             {
               name: "description",
@@ -97,7 +97,7 @@ export const loader = ssrLoader(
             { property: "og:url", content: getListingCanonicalUrl(request) },
             {
               property: "og:title",
-              content: `Mods by ${params.namespaceId} | Thunderstore`,
+              content: `Mods by ${params.namespaceId} · ${community.name}`,
             },
             {
               property: "og:description",

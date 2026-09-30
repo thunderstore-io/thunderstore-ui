@@ -99,7 +99,7 @@ function packageListingSeo(listing: ResolvedListing, request: Request) {
   return createSeo({
     descriptors: [
       {
-        title: `${displayName} by ${listing.namespace} | ${listing.community_name} | Thunderstore`,
+        title: `${displayName} by ${listing.namespace} · ${listing.community_name} · Thunderstore`,
       },
       { name: "description", content: listing.description },
       { property: "og:type", content: "website" },
@@ -117,7 +117,7 @@ function packageListingSeo(listing: ResolvedListing, request: Request) {
       },
       {
         property: "og:title",
-        content: `${displayName} by ${listing.namespace}`,
+        content: `${displayName} by ${listing.namespace} · ${listing.community_name}`,
       },
       { property: "og:description", content: listing.description },
       ...(listing.icon_url

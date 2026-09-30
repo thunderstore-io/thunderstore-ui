@@ -43,7 +43,7 @@ function wikiFirstPageSeo(result: ResultType) {
   if (result.firstPage) {
     return createSeo({
       descriptors: [
-        { title: `${result.firstPage.title} - ${packageName} | Thunderstore` },
+        { title: `${result.firstPage.title} - ${packageName} · Thunderstore` },
         { name: "description", content: `Wiki page for ${packageName}` },
       ],
     });

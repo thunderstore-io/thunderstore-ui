@@ -135,13 +135,13 @@ type ResolvedListing = NonNullable<
 // <Seo> head reads, so a tag only the SSR loader emits, the canonical included,
 // is gone after hydration.
 function dependantsSeo(listing: ResolvedListing, request: Request) {
-  const title = `Dependants of ${formatToDisplayName(
-    listing.name
-  )} | Thunderstore`;
+  const title = `Dependants of ${formatToDisplayName(listing.name)} · ${
+    listing.community_name
+  }`;
   const description = `Mods that depend on ${listing.name}`;
   return createSeo({
     descriptors: [
-      { title },
+      { title: title + " · Thunderstore" },
       { name: "description", content: description },
       { property: "og:type", content: "website" },
       // Canonical to the listing, not this page.
