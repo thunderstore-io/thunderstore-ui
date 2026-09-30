@@ -26,6 +26,8 @@ import type { Route } from "./+types/Team";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+const THIN_TEAM_MAX_PACKAGES = 1;
+
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
     if (params.communityId && params.namespaceId) {
@@ -60,26 +62,28 @@ export const loader = ssrLoader(
 
       const finalSection = getSectionDefault(section, filters?.sections);
 
+      const listings = await dapper.getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        parsePageParam(page),
+        search,
+        includedCategories,
+        excludedCategories,
+        finalSection,
+        nsfw === "true" ? true : false,
+        deprecated === "true" ? true : false
+      );
+
       return {
         teamId: params.namespaceId,
         filters: filters,
         // Community is required for the breadcrumbs in the root layout
         community: community,
-        listings: await dapper.getPackageListings(
-          {
-            kind: "namespace",
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-          },
-          ordering ?? "",
-          parsePageParam(page),
-          search,
-          includedCategories,
-          excludedCategories,
-          finalSection,
-          nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
-        ),
+        listings: listings,
         seo: createSeo({
           descriptors: [
             {
@@ -100,6 +104,10 @@ export const loader = ssrLoader(
               content: `Browse mods uploaded by ${params.namespaceId}`,
             },
             { property: "og:site_name", content: "Thunderstore" },
+            // A one-package team page duplicates the package page.
+            ...(listings.count <= THIN_TEAM_MAX_PACKAGES
+              ? [{ name: "robots", content: "noindex, follow" }]
+              : []),
           ],
         }),
       };

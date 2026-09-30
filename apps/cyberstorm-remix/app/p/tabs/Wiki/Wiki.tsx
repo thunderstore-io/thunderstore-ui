@@ -31,6 +31,23 @@ import "./Wiki.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+// The wiki editors answer 200 to anyone, so a crawler reaches the "create a
+// wiki page" and "edit this page" forms as readily as a reader does. They are
+// UI, not content. Matched on the path rather than on params, which cannot tell
+// /wiki/<slug> from /wiki/<slug>/edit.
+function isWikiEditor(pathname: string): boolean {
+  const segments = pathname.split("/").filter(Boolean);
+  const wiki = segments.lastIndexOf("wiki");
+  if (wiki === -1) {
+    return false;
+  }
+  const rest = segments.slice(wiki + 1);
+  return (
+    (rest.length === 1 && rest[0] === "new") ||
+    (rest.length === 2 && rest[1] === "edit")
+  );
+}
+
 /**
  * Shared by both loaders, since clientLoader.hydrate replaces the SSR match
  * data the <Seo> head reads.
@@ -50,6 +67,9 @@ function wikiSeo(
       { title: `${packageName} Wiki · Thunderstore` },
       { name: "description", content: `Wiki for ${packageName}` },
       { property: "og:url", content: getCanonicalUrl(request) },
+      ...(isWikiEditor(new URL(request.url).pathname)
+        ? [{ name: "robots", content: "noindex, follow" }]
+        : []),
     ],
   });
 }
