@@ -71,3 +71,8 @@ export const componentClasses = (
 
 export const formatToDisplayName = (name: string) =>
   name.replaceAll("-", " ").replaceAll("_", " ");
+
+/** Alphabetical package category sorting by slug. */
+export const orderCategories = <T extends { slug: string }>(
+  categories: readonly T[]
+): T[] => [...categories].sort((a, b) => a.slug.localeCompare(b.slug));

@@ -8,6 +8,7 @@ import {
   NewTable,
   NewTableSort,
   NewTag,
+  orderCategories,
 } from "@thunderstore/cyberstorm";
 import { type PackageSubmissionResult } from "@thunderstore/dapper/types";
 
@@ -90,38 +91,41 @@ export function SubmissionResult({
             columnClasses: "versions__downloads",
           },
         ]}
-        rows={submissionStatusResult.available_communities.map((v) => [
-          {
-            value: v.community.name,
-            sortValue: v.community.name,
-          },
-          {
-            value: (
-              <NewLink
-                primitiveType="link"
-                href={`/c/${v.community.identifier}/p/${submissionStatusResult.package_version.namespace}/${submissionStatusResult.package_version.name}/`}
-                target="_blank"
-                rel="noopener noreferrer"
-                csVariant="cyber"
-              >
-                View listing
-              </NewLink>
-            ),
-            sortValue: v.url,
-          },
-          {
-            value: (
-              <div className="submission-result__categories">
-                {v.categories.map((c) => (
-                  <NewTag key={c.slug} csSize="small">
-                    {c.name}
-                  </NewTag>
-                ))}
-              </div>
-            ),
-            sortValue: v.categories.map((c) => c.name).join(", "),
-          },
-        ])}
+        rows={submissionStatusResult.available_communities.map((v) => {
+          const categories = orderCategories(v.categories);
+          return [
+            {
+              value: v.community.name,
+              sortValue: v.community.name,
+            },
+            {
+              value: (
+                <NewLink
+                  primitiveType="link"
+                  href={`/c/${v.community.identifier}/p/${submissionStatusResult.package_version.namespace}/${submissionStatusResult.package_version.name}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  csVariant="cyber"
+                >
+                  View listing
+                </NewLink>
+              ),
+              sortValue: v.url,
+            },
+            {
+              value: (
+                <div className="submission-result__categories">
+                  {categories.map((c) => (
+                    <NewTag key={c.slug} csSize="small">
+                      {c.name}
+                    </NewTag>
+                  ))}
+                </div>
+              ),
+              sortValue: categories.map((c) => c.name).join(", "),
+            },
+          ];
+        })}
         sortDirection={NewTableSort.ASC}
         csModifiers={["alignLastColumnRight"]}
       />

@@ -146,6 +146,7 @@ export {
   formatInteger,
   formatAsCount,
   formatToDisplayName,
+  orderCategories,
 } from "./utils/utils";
 
 export {
