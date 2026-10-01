@@ -30,14 +30,14 @@ const COMMUNITY_PROMOS: Record<string, CommunityPromoConfig> = {
   valheim: {
     // Community landing, between the header and the package search (≤90 chars).
     bar: {
-      href: "https://dathost.com/r/thunderstore2026/valheim?c=cf167914",
+      href: "https://dathost.com/r/thunderstore2026/valheim?c=21631a00",
       copy: "DatHost | Best Valheim Server Host for Modding",
       tag: "30% off",
     },
     // Package sidebar. The copy and tag share ~237px and the tag never shrinks,
     // so keep the pair under ~230px or the copy is ellipsised.
     pill: {
-      href: "https://dathost.com/r/thunderstore2026/valheim?c=f218a149",
+      href: "https://dathost.com/r/thunderstore2026/valheim?c=8913193b",
       copy: "DatHost Valheim hosting",
       tag: "30% off",
     },
