@@ -7,21 +7,21 @@
 
   /* SIZES */
   .meta-item:where(.meta-item--size--16) {
-    --meta-item-font-size: var(--meta-item-16-font-size);
-    --meta-item-icon-width: var(--meta-item-16-icon-width);
-    --meta-item-icon-height: var(--meta-item-16-icon-height);
+    --meta-item-font-size: var(--font-size-body-lg, 1rem);
+    --meta-item-icon-width: 1rem;
+    --meta-item-icon-height: 1rem;
   }
 
   .meta-item:where(.meta-item--size--14) {
-    --meta-item-font-size: var(--meta-item-14-font-size);
-    --meta-item-icon-width: var(--meta-item-14-icon-width);
-    --meta-item-icon-height: var(--meta-item-14-icon-height);
+    --meta-item-font-size: var(--font-size-body-md, 0.875rem);
+    --meta-item-icon-width: 1rem;
+    --meta-item-icon-height: 1rem;
   }
 
   .meta-item:where(.meta-item--size--12) {
-    --meta-item-font-size: var(--meta-item-12-font-size);
-    --meta-item-icon-width: var(--meta-item-12-icon-width);
-    --meta-item-icon-height: var(--meta-item-12-icon-height);
+    --meta-item-font-size: var(--font-size-body-sm, 0.75rem);
+    --meta-item-icon-width: 0.875rem;
+    --meta-item-icon-height: 0.875rem;
   }
 
   /* VARIANTS */

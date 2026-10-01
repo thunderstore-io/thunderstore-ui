@@ -20,7 +20,7 @@
   /* SIZES */
 
   /* .table:where(.table--size--medium) {
-    --table-border-radius: var(--dropdown-md-border-radius);
-    --table-padding: var(--dropdown-md-padding);
+    --table-border-radius: var(--radius-md);
+    --table-padding: 0.25rem 0;
   } */
 }

@@ -12,7 +12,7 @@
   }
 
   .category-tag-cloud__clear-button {
-    height: var(--button-xs-height);
+    height: 1.875rem;
     color: var(--color-text-accent);
   }
 }
