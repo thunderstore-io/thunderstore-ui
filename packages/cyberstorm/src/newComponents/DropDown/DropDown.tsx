@@ -63,6 +63,7 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
         <Content
           align={contentAlignment}
           sideOffset={8}
+          collisionPadding={8}
           className={classnames(
             "dropdown",
             ...componentClasses("dropdown", csVariant, undefined, csModifiers),
@@ -204,6 +205,8 @@ export const DropDownSubContent = memo(function DropDownSubContent(
     <Portal container={container ?? undefined}>
       <SubContent
         {...fProps}
+        sideOffset={8}
+        collisionPadding={8}
         className={classnames(
           "dropdown",
           ...componentClasses("dropdown", csVariant, undefined, csModifiers),
