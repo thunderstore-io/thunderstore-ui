@@ -60,7 +60,7 @@ function OpenDropDown() {
             rootClasses="dropdown__item"
             href="https://thunderstore.io/"
           >
-            Righ Icon
+            Right Icon
             <Icon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faHelicopter} />
             </Icon>

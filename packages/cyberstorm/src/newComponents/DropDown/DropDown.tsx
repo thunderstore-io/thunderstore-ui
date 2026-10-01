@@ -205,8 +205,8 @@ export const DropDownSubContent = memo(function DropDownSubContent(
     <Portal container={container ?? undefined}>
       <SubContent
         {...fProps}
-        sideOffset={8}
-        collisionPadding={8}
+        sideOffset={fProps.sideOffset ?? 8}
+        collisionPadding={fProps.collisionPadding ?? 8}
         className={classnames(
           "dropdown",
           ...componentClasses("dropdown", csVariant, undefined, csModifiers),
