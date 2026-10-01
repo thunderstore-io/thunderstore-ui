@@ -5,6 +5,7 @@ import {
   CyberstormLink,
   type CyberstormLinkIds,
 } from "../../components/Links/Links";
+import { classnames } from "../../utils/utils";
 import {
   type PrimitiveComponentDefaultProps,
   TooltipWrapper,
@@ -55,11 +56,15 @@ export const Actionable = memo(function Actionable(
 
   if (primitiveType === "button" || primitiveType === undefined) {
     const fRef = ref as React.ForwardedRef<HTMLButtonElement>;
-    const fProps = forwardedProps as ActionableButtonProps;
+    const { className, ...fProps } = forwardedProps as ActionableButtonProps;
 
     return (
       <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-        <button {...fProps} className={rootClasses} ref={fRef}>
+        <button
+          {...fProps}
+          className={classnames(rootClasses, className)}
+          ref={fRef}
+        >
           {children}
         </button>
       </TooltipWrapper>
@@ -67,12 +72,13 @@ export const Actionable = memo(function Actionable(
   }
   if (primitiveType === "link") {
     const fRef = ref as React.ForwardedRef<HTMLAnchorElement>;
-    const { disabled, ...fProps } = forwardedProps as ActionableLinkProps;
+    const { disabled, className, ...fProps } =
+      forwardedProps as ActionableLinkProps;
     return (
       <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
         <a
           {...fProps}
-          className={rootClasses}
+          className={classnames(rootClasses, className)}
           ref={fRef}
           aria-disabled={disabled}
         >
@@ -83,13 +89,13 @@ export const Actionable = memo(function Actionable(
   }
   if (primitiveType === "cyberstormLink") {
     const fRef = ref as React.ForwardedRef<HTMLAnchorElement>;
-    const { linkId, disabled, ...strippedForwardedProps } =
+    const { linkId, disabled, className, ...strippedForwardedProps } =
       forwardedProps as ActionableCyberstormLinkProps;
     return (
       <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
         <CyberstormLink
           {...strippedForwardedProps}
-          className={rootClasses}
+          className={classnames(rootClasses, className)}
           linkId={linkId}
           ref={fRef}
           aria-disabled={disabled}

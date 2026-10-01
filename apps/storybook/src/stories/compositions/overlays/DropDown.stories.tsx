@@ -7,6 +7,10 @@ import {
   DropDownSubContent,
   DropDownSubTrigger,
 } from "@cs/newComponents/DropDown/DropDown";
+import { Icon } from "@cs/newComponents/Icon/Icon";
+import { Link } from "@cs/newComponents/Link/Link";
+import { faHelicopter } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { SideBySide, compositionParameters } from "../compare";
@@ -38,24 +42,53 @@ function OpenDropDown() {
     <div className="cs-compare__menu-space">
       <DropDown open trigger={<Button csVariant="secondary">More</Button>}>
         <DropDownItem>
-          <span>Settings</span>
+          <span>Default</span>
         </DropDownItem>
+
+        <DropDownItem>
+          <Link primitiveType="cyberstormLink" linkId="Index">
+            <Icon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faHelicopter} />
+            </Icon>
+            Link
+          </Link>
+        </DropDownItem>
+
+        <DropDownItem rootClasses="navigation-header--focus">
+          <Link
+            primitiveType="link"
+            rootClasses="dropdown__item"
+            href="https://thunderstore.io/"
+          >
+            Righ Icon
+            <Icon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faHelicopter} />
+            </Icon>
+          </Link>
+        </DropDownItem>
+
         <DropDownSub open>
-          <DropDownSubTrigger>Teams</DropDownSubTrigger>
+          <DropDownSubTrigger>Open Submenu</DropDownSubTrigger>
           <DropDownSubContent>
             <DropDownItem>
-              <span>Northstar</span>
+              <span>Submenu Default</span>
             </DropDownItem>
-            <DropDownItem>
-              <span>Vanilla</span>
+            <DropDownItem disabled>
+              <span>Submenu Disabled</span>
+            </DropDownItem>
+            <DropDownItem csVariant="danger">
+              <span>Submenu Danger</span>
             </DropDownItem>
           </DropDownSubContent>
         </DropDownSub>
+
         <DropDownItem csVariant="danger">
           <span>Danger</span>
         </DropDownItem>
+
         <DropDownDivider />
-        <DropDownItem csVariant="disabled">
+
+        <DropDownItem disabled>
           <span>Disabled</span>
         </DropDownItem>
       </DropDown>

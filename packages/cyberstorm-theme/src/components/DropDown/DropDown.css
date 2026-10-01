@@ -2,17 +2,18 @@
   /* DROPDOWN ROOT */
   .dropdown {
     --dropdown-box-shadow: var(--shadow-lg);
-    --dropdown-animation: fade-in var(--animation-duration-md) ease;
+    --dropdown-animation: dropdown-fade-in var(--animation-duration-md) ease;
     --dropdown-border-radius: var(--radius-md);
-    --dropdown-padding: 0.25rem 0;
+    --dropdown-padding: 0.5rem;
     --dropdown-gap: 0.25rem;
   }
 
   .dropdown__item {
-    --dropdown-item-gap: var(--gap-md);
+    --dropdown-item-gap: var(--gap-lg);
     --dropdown-item-padding: 0.75rem 1rem;
     --dropdown-item-font-weight: var(--font-weight-regular);
     --dropdown-item-font-size: var(--font-size-body-md);
+    --dropdown-item-border-radius: var(--radius-md);
   }
 
   .dropdown__divider {
@@ -32,8 +33,8 @@
     --dropdown-item-color: var(--dropdown-item-text-color--default);
     --dropdown-item-icon-color: var(--dropdown-item-icon-color--default);
 
-    &[data-highlighted],
-    &[data-state="open"] {
+    &[data-highlighted]:not([data-disabled]),
+    &[data-state="open"]:not([data-disabled]) {
       --dropdown-item-background-color: var(--dropdown-item-bg-color--hover);
       --dropdown-item-color: var(--dropdown-item-text-color--hover);
       --dropdown-item-icon-color: var(--dropdown-item-icon-color--hover);
@@ -47,8 +48,8 @@
     --dropdown-item-color: var(--dropdown-item-danger-text-color--default);
     --dropdown-item-icon-color: var(--dropdown-item-danger-icon-color--default);
 
-    &[data-highlighted],
-    &[data-state="open"] {
+    &[data-highlighted]:not([data-disabled]),
+    &[data-state="open"]:not([data-disabled]) {
       --dropdown-item-background-color: var(
         --dropdown-item-danger-bg-color--hover
       );
@@ -65,15 +66,5 @@
     --dropdown-item-icon-color: var(
       --dropdown-item-disabled-icon-color--default
     );
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
   }
 }

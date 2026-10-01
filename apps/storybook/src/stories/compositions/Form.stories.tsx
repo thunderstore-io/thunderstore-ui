@@ -49,7 +49,7 @@ function FormFields({ scope }: { scope: string }) {
   return (
     <div className="cs-page">
       <TextInput
-        defaultValue="Northstar"
+        defaultValue="Packager Name"
         placeholder="Package name"
         aria-label="Package name"
       />

@@ -153,10 +153,8 @@
   }
 
   /* The cap above turns every child into a shrinkable flex item, so once the
-     teams overflowed it, flexbox squeezed the filter box and "All Teams" too —
-     and .dropdown's overflow:hidden clipped rather than revealed the result,
-     leaving a half-height search field tucked under "All Teams". The list is
-     the only child that should absorb the cap; pin the rest. */
+     teams overflow it, flexbox would squeeze the filter box and "All Teams"
+     too. The list is the only child that should absorb the cap; pin the rest. */
   .navigation-header__teams-dropdown > *:not(.navigation-header__teams-list) {
     flex-shrink: 0;
   }
