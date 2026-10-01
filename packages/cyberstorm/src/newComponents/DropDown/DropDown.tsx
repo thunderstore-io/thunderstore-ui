@@ -30,6 +30,9 @@ import {
 } from "./DropDown.types";
 
 interface DropDownProps extends PrimitiveComponentDefaultProps {
+  /** Controlled open state. Use this only when the menu absolutely needs to stay open. */
+  open?: boolean;
+  /** Uncontrolled initial state. A later focus outside the menu closes it. */
   defaultOpen?: boolean;
   contentAlignment?: "start" | "center" | "end";
   trigger: ReactNode | ReactElement;
@@ -45,6 +48,7 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
     csVariant = "primary",
     csSize = "medium",
     csModifiers,
+    open,
     defaultOpen = false,
     contentAlignment = "start",
     trigger,
@@ -53,7 +57,7 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
   const container = useContext(TopLayerContainerContext);
 
   return (
-    <Root modal={false} defaultOpen={defaultOpen}>
+    <Root modal={false} open={open} defaultOpen={defaultOpen}>
       <Trigger asChild disabled={!children}>
         {trigger}
       </Trigger>

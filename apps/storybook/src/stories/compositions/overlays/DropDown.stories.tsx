@@ -36,14 +36,11 @@ type Story = StoryObj<typeof meta>;
 function OpenDropDown() {
   return (
     <div className="cs-compare__menu-space">
-      <DropDown
-        defaultOpen
-        trigger={<Button csVariant="secondary">More</Button>}
-      >
+      <DropDown open trigger={<Button csVariant="secondary">More</Button>}>
         <DropDownItem>
           <span>Settings</span>
         </DropDownItem>
-        <DropDownSub defaultOpen>
+        <DropDownSub open>
           <DropDownSubTrigger>Teams</DropDownSubTrigger>
           <DropDownSubContent>
             <DropDownItem>
