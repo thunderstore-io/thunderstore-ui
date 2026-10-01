@@ -200,7 +200,7 @@ function Chrome() {
           </DropDown>
           <DropDown disabled trigger={<Button>Disabled</Button>}>
             <DropDownItem>
-              <span>Disabled item, shouldn't be seen</span>
+              <span>Disabled item, shouldn&apos;t be seen</span>
             </DropDownItem>
           </DropDown>
         </States>
