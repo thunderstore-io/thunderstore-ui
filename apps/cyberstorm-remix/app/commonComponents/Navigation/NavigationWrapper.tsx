@@ -82,7 +82,11 @@ export function NavigationWrapper({
         domain={domain}
         communityId={communityId}
       />
-      <MobileNavigationMenu domain={domain} currentUser={currentUser} />
+      <MobileNavigationMenu
+        domain={domain}
+        currentUser={currentUser}
+        communityId={communityId}
+      />
     </>
   );
 }
