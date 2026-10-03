@@ -284,7 +284,14 @@ function getCommunityBreadcrumb(
         <Suspense
           fallback={<NewBreadCrumbsItem>Loading...</NewBreadCrumbsItem>}
         >
-          <Await resolve={communityPage.data.community}>
+          <Await
+            resolve={communityPage.data.community}
+            errorElement={
+              <NewBreadCrumbsItem>
+                {communityPage.params.communityId}
+              </NewBreadCrumbsItem>
+            }
+          >
             {(resolvedValue) => {
               let label = undefined;
               let icon = undefined;
