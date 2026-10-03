@@ -25,6 +25,7 @@ export default [
         route("changelog", "p/tabs/Changelog/Changelog.tsx"),
         route("versions", "p/tabs/Versions/Versions.tsx"),
         route("source", "p/tabs/Source/Source.tsx"),
+        route("analytics", "p/tabs/Analytics/Analytics.tsx"),
         ...prefix("wiki", [
           layout("p/tabs/Wiki/Wiki.tsx", { id: "wikiLayout" }, [
             index("p/tabs/Wiki/WikiFirstPage.tsx"),

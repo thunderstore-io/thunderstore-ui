@@ -12,6 +12,7 @@ import {
   getFakeReadme,
 } from "./fakers/markup";
 import {
+  getFakePackageDownloadHistory,
   getFakePackageListingDetails,
   getFakePackageListingStatus,
   getFakePackageListings,
@@ -47,6 +48,7 @@ export class DapperFake implements DapperInterface {
   public getDynamicHTML = getFakeDynamicHTML;
   public getPackageChangelog = getFakeChangelog;
   public getPackagePermissions = getFakePackagePermissions;
+  public getPackageDownloadHistory = getFakePackageDownloadHistory;
   public getPackageListingDetails = getFakePackageListingDetails;
   public getPackageListingStatus = getFakePackageListingStatus;
   public getPackageListings = getFakePackageListings;
