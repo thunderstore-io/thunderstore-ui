@@ -146,7 +146,8 @@
     --validation-bar-color--success: var(--color-accent-green-7);
     --validation-bar-border-top-color--failure: var(--color-accent-red-7);
     --validation-bar-background-color--failure: var(--color-accent-red-2);
-    --validation-bar-color--failure: var(--color-accent-red-7);
+    --validation-bar-color--failure: var(--color-accent-red-11);
+    --validation-bar-icon-color--failure: var(--color-accent-red-7);
     --divider-bg-color: var(--color-nightsky-a6);
     --code-bg-color--default: var(--color-ui-surface-3);
     --code-border-color--default: var(--color-ui-element-1);

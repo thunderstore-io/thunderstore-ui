@@ -53,7 +53,7 @@
     line-height: var(--validation-bar-line-height);
     background-color: var(--validation-bar-background-color);
 
-    --icon-color: var(--validation-bar-color);
+    --icon-color: var(--validation-bar-icon-color);
   }
 
   .validation-bar__icon {
