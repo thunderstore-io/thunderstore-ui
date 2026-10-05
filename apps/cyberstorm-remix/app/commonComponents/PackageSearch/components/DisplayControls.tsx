@@ -46,7 +46,7 @@ interface DisplayMenuProps<T extends string> {
   // Distinguishes the two menus for the CSS that mirrors the html attribute.
   name: "cards" | "view";
   options: DisplayOption<T>[];
-  //By default, the trigger icon is the selected option's icon.
+  // By default, the trigger icon is the selected option's icon.
   triggerIcon?: IconDefinition;
   onSelect: (value: T) => void;
 }
