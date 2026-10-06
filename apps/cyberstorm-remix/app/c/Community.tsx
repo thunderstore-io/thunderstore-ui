@@ -11,6 +11,7 @@ import { Page } from "app/commonComponents/Page/Page";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { type SeoValue, createSeo } from "cyberstorm/utils/meta";
+import { isSameCommunity } from "cyberstorm/utils/revalidation";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { Suspense } from "react";
@@ -170,13 +171,17 @@ export async function clientLoader({
   throw new Response("Community not found", { status: 404 });
 }
 
-export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
-  if (
-    arg.currentUrl.pathname.split("/")[1] === arg.nextUrl.pathname.split("/")[1]
-  ) {
+// A community does not change while navigating inside it, so skip the refetch.
+// See isSameCommunity for why the id, and not the path, decides that.
+export function shouldRevalidate({
+  currentParams,
+  nextParams,
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) {
+  if (isSameCommunity(currentParams, nextParams)) {
     return false;
   }
-  return arg.defaultShouldRevalidate;
+  return defaultShouldRevalidate;
 }
 
 type CommunityLoaderData = ReturnType<
