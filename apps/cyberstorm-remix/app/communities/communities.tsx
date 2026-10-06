@@ -6,7 +6,11 @@ import {
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getAssetUrl,
+  getCanonicalUrl,
+} from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { parseSearchParam } from "cyberstorm/utils/searchParamsUtils";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -103,7 +107,7 @@ export const loader = ssrLoader(
           },
           {
             property: "og:image",
-            content: getCanonicalUrl(
+            content: getAssetUrl(
               request,
               "/cyberstorm-static/images/icon.webp"
             ),

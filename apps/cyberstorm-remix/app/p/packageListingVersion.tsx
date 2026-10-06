@@ -3,7 +3,11 @@ import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getCanonicalUrl,
+  packageCanonicalPath,
+} from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -69,19 +73,34 @@ function packageVersionSeo(
   return createSeo({
     descriptors: [
       {
-        title: `${displayName} v${packageVersion} by ${listing.namespace} | ${listing.community_name} | Thunderstore`,
+        title: `${displayName} v${packageVersion} by ${listing.namespace} · ${listing.community_name} · Thunderstore`,
       },
       { name: "description", content: listing.description },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: getCanonicalUrl(request) },
+      // Canonical to the listing, not this version.
+      {
+        property: "og:url",
+        content: getCanonicalUrl(
+          request,
+          packageCanonicalPath(
+            listing.community_identifier,
+            listing.namespace,
+            listing.name
+          )
+        ),
+      },
       {
         property: "og:title",
-        content: `${displayName} v${packageVersion} by ${listing.namespace}`,
+        content: `${displayName} v${packageVersion} by ${listing.namespace} · ${listing.community_name}`,
       },
       { property: "og:description", content: listing.description },
       ...(listing.icon_url
         ? [
             { property: "og:image", content: listing.icon_url },
+            // Named here because the community layout above describes its own
+            // icon, and mergeDescriptors replaces each property on its own: the
+            // image would be this package's, the alt text the community's.
+            { property: "og:image:alt", content: `${displayName} icon` },
             { property: "og:image:width", content: "256" },
             { property: "og:image:height", content: "256" },
           ]

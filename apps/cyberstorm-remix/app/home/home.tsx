@@ -10,7 +10,11 @@ import {
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getAssetUrl,
+  getCanonicalUrl,
+} from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense, memo } from "react";
@@ -76,7 +80,7 @@ export const loader = ssrLoader(
           { property: "og:description", content: description },
           {
             property: "og:image",
-            content: getCanonicalUrl(
+            content: getAssetUrl(
               request,
               "/cyberstorm-static/images/icon.webp"
             ),
