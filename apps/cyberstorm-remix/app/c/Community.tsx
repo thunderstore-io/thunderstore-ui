@@ -10,8 +10,9 @@ import {
 import { Page } from "app/commonComponents/Page/Page";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
-import { createSeo } from "cyberstorm/utils/meta";
+import { type SeoValue, createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 import { Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
@@ -44,6 +45,80 @@ import {
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+function communityDescription(name: string): string {
+  return (
+    `Install and share the best ${name} mods on Thunderstore! ` +
+    "Easily manage and update your installed mods with Thunderstore Mod Manager."
+  );
+}
+
+// Just what the descriptors read, so they can be built from a community that
+// is still in flight without depending on this route's own loader types.
+type CommunitySeoSource = {
+  name: string;
+  community_icon_url: string | null;
+};
+
+// No width/height: the API doesn't report the icon's real size.
+function communityOgImage(community: CommunitySeoSource) {
+  if (!community.community_icon_url) {
+    return [];
+  }
+  return [
+    { property: "og:image", content: community.community_icon_url },
+    { property: "og:image:alt", content: `${community.name} icon` },
+  ];
+}
+
+function communityDescriptors(community: CommunitySeoSource, request: Request) {
+  return createSeo({
+    descriptors: [
+      { title: `${community.name} Mods · Thunderstore` },
+      {
+        name: "description",
+        content: communityDescription(community.name),
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: getCanonicalUrl(request) },
+      {
+        property: "og:title",
+        content: `The ${community.name} Mod Database`,
+      },
+      {
+        property: "og:description",
+        content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
+      },
+      ...communityOgImage(community),
+      { property: "og:site_name", content: "Thunderstore" },
+    ],
+  });
+}
+
+/**
+ * Shared by both loaders, and takes the community either resolved or still in
+ * flight. The client loader's data replaces the server's, so tags only the SSR
+ * loader emitted would vanish on a client-side navigation into a community —
+ * the page would fall back to the root title and description. It keeps handing
+ * over the promise rather than awaiting it, so the header keeps its pending
+ * state and the navigation is not held up for a title; <Seo> renders the tags
+ * once the community arrives.
+ */
+function communitySeo(
+  community: CommunitySeoSource | Promise<CommunitySeoSource>,
+  request: Request
+): SeoValue {
+  if (isPromise(community)) {
+    // Handled here rather than at the point of use so a failed fetch cannot
+    // surface as an unhandled rejection. The route renders its error boundary;
+    // the tags just stay as they are.
+    return community.then(
+      (resolved) => communityDescriptors(resolved, request),
+      () => undefined
+    );
+  }
+  return communityDescriptors(community, request);
+}
+
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
     if (params.communityId) {
@@ -63,34 +138,7 @@ export const loader = ssrLoader(
       return {
         community: community,
         alerts: alerts,
-        seo: createSeo({
-          descriptors: [
-            { title: `The ${community.name} Mod Database` },
-            { name: "description", content: `Mods for ${community.name}` },
-            { property: "og:type", content: "website" },
-            { property: "og:url", content: getCanonicalUrl(request) },
-            {
-              property: "og:title",
-              content: `The ${community.name} Mod Database`,
-            },
-            {
-              property: "og:description",
-              content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
-            },
-            // Only emit og:image when a community icon exists (no empty tag).
-            ...(community.community_icon_url
-              ? [
-                  {
-                    property: "og:image",
-                    content: community.community_icon_url,
-                  },
-                  { property: "og:image:width", content: "88" },
-                  { property: "og:image:height", content: "88" },
-                ]
-              : []),
-            { property: "og:site_name", content: "Thunderstore" },
-          ],
-        }),
+        seo: communitySeo(community, request),
       };
     }
     throw new Response("Community not found", { status: 404 });
@@ -100,7 +148,10 @@ export const loader = ssrLoader(
 
 export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
   if (params.communityId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -113,6 +164,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     return {
       community: community,
       alerts: dapper.getCommunityAlerts(params.communityId).catch(() => []),
+      seo: communitySeo(community, request),
     };
   }
   throw new Response("Community not found", { status: 404 });

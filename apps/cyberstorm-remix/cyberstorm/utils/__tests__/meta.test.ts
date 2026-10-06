@@ -1,7 +1,7 @@
 import type { UIMatch } from "react-router";
 import { describe, expect, it } from "vitest";
 
-import { createSeo, findMatchWithSeoInMatches } from "../meta";
+import { collectMatchSeo, createSeo, findMatchWithSeoInMatches } from "../meta";
 import type { SeoReturn } from "../meta";
 
 describe("meta utils", () => {
@@ -295,6 +295,71 @@ describe("meta utils", () => {
       // Should find existing title and replace it
       expect(result?.descriptors).toHaveLength(1);
       expect(result?.descriptors[0]).toEqual(hybrid);
+    });
+  });
+});
+
+describe("promised seo", () => {
+  const rootSeo: SeoReturn = { descriptors: [{ title: "Thunderstore" }] };
+  const communitySeo: SeoReturn = {
+    descriptors: [
+      { title: "How to Fish Mods" },
+      { property: "og:url", content: "https://thunderstore.io/c/how-to-fish/" },
+    ],
+  };
+
+  const matches = (seo: unknown) =>
+    [
+      { id: "root", data: { seo: rootSeo } },
+      { id: "c/Community", data: { seo } },
+    ] as UIMatch[];
+
+  describe("collectMatchSeo", () => {
+    it("collects a promise alongside a resolved value", () => {
+      const promise = Promise.resolve(communitySeo);
+      expect(collectMatchSeo(matches(promise))).toEqual([
+        { id: "root", value: rootSeo },
+        { id: "c/Community", value: promise },
+      ]);
+    });
+
+    it("skips a route with no usable seo", () => {
+      expect(collectMatchSeo(matches({ descriptors: "invalid" }))).toEqual([
+        { id: "root", value: rootSeo },
+      ]);
+    });
+  });
+
+  describe("findMatchWithSeoInMatches", () => {
+    it("leaves an unsettled route out of the merge", () => {
+      expect(
+        findMatchWithSeoInMatches(matches(Promise.resolve(communitySeo)))
+      ).toEqual(rootSeo);
+    });
+
+    it("merges a settled route over its parent", () => {
+      expect(
+        findMatchWithSeoInMatches(matches(Promise.resolve(communitySeo)), {
+          "c/Community": communitySeo,
+        })
+      ).toEqual({
+        prefix: undefined,
+        descriptors: [
+          { title: "How to Fish Mods" },
+          {
+            property: "og:url",
+            content: "https://thunderstore.io/c/how-to-fish/",
+          },
+        ],
+      });
+    });
+
+    it("ignores a settled value for a route that did not promise one", () => {
+      expect(
+        findMatchWithSeoInMatches(matches(undefined), {
+          "c/Community": communitySeo,
+        })
+      ).toEqual(rootSeo);
     });
   });
 });
