@@ -32,11 +32,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     seo: createSeo({
       descriptors: [
-        { title: "Manifest Validator | Thunderstore" },
+        { title: "Manifest Validator · Thunderstore" },
         { name: "description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: getCanonicalUrl(request) },
-        { property: "og:title", content: "Manifest Validator | Thunderstore" },
+        { property: "og:title", content: "Manifest Validator" },
         { property: "og:description", content: description },
         { property: "og:site_name", content: "Thunderstore" },
       ],

@@ -50,7 +50,7 @@ export const loader = ssrLoader(
       changelog,
       seo: createSeo({
         descriptors: [
-          { title: `Changelog for ${params.packageId} | Thunderstore` },
+          { title: `Changelog for ${params.packageId} · Thunderstore` },
           { name: "description", content: `Changelog for ${params.packageId}` },
         ],
       }),

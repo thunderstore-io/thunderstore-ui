@@ -90,7 +90,7 @@ export const loader = ssrLoader(
       ),
       seo: createSeo({
         descriptors: [
-          { title: "Communities | Thunderstore" },
+          { title: "Communities · Thunderstore" },
           {
             name: "description",
             content: "Browse all communities on Thunderstore",
@@ -100,7 +100,7 @@ export const loader = ssrLoader(
             property: "og:url",
             content: getCanonicalUrl(request, "/communities"),
           },
-          { property: "og:title", content: "Communities | Thunderstore" },
+          { property: "og:title", content: "Communities" },
           {
             property: "og:description",
             content: "Browse all communities on Thunderstore",

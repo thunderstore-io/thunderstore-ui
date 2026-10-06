@@ -39,7 +39,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       seo: createSeo({
-        descriptors: [{ title: "Create new wiki page | Thunderstore" }],
+        descriptors: [{ title: "Create new wiki page · Thunderstore" }],
       }),
     };
   } else {

@@ -65,7 +65,7 @@ export const loader = ssrLoader(
             packageId: params.packageId,
             seo: createSeo({
               descriptors: [
-                { title: `${params.slug} | Wiki Not Found | Thunderstore` },
+                { title: `${params.slug} · Wiki Not Found · Thunderstore` },
               ],
             }),
           };
@@ -81,7 +81,7 @@ export const loader = ssrLoader(
           seo: createSeo({
             descriptors: [
               {
-                title: `${page.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
+                title: `${page.title} - ${params.namespaceId}-${params.packageId} · Thunderstore`,
               },
               {
                 name: "description",
@@ -101,7 +101,7 @@ export const loader = ssrLoader(
               namespaceId: params.namespaceId,
               packageId: params.packageId,
               seo: createSeo({
-                descriptors: [{ title: "Wiki Not Found | Thunderstore" }],
+                descriptors: [{ title: "Wiki Not Found · Thunderstore" }],
               }),
             };
           } else {
