@@ -4,7 +4,11 @@ import {
   faList,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGrid, faRectangleWide } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowsLeftRightToLine,
+  faGrid,
+  faRectangleWide,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -42,6 +46,8 @@ interface DisplayMenuProps<T extends string> {
   // Distinguishes the two menus for the CSS that mirrors the html attribute.
   name: "cards" | "view";
   options: DisplayOption<T>[];
+  // By default, the trigger icon is the selected option's icon.
+  triggerIcon?: IconDefinition;
   onSelect: (value: T) => void;
 }
 
@@ -71,7 +77,7 @@ function DisplayMenu<T extends string>(props: DisplayMenuProps<T>) {
               noWrapper
               rootClasses={`display-controls__trigger-icon display-controls__trigger-icon--${option.value}`}
             >
-              <FontAwesomeIcon icon={option.icon} />
+              <FontAwesomeIcon icon={props.triggerIcon ?? option.icon} />
             </NewIcon>
           ))}
           <NewIcon
@@ -136,6 +142,7 @@ export function DisplayControls() {
         header="View"
         name="view"
         options={WIDTH_OPTIONS}
+        triggerIcon={faArrowsLeftRightToLine}
         onSelect={(value) => {
           // Stored as "default"/"wide" to match the pre-hydration script.
           persist(
