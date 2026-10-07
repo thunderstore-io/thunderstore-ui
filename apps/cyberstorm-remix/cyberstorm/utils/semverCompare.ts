@@ -23,7 +23,15 @@ export function compareVersionNumbers(a: string, b: string): number {
 export function sortVersionNumbersDescending(
   versions: readonly string[]
 ): string[] {
-  return [...versions].sort((a, b) => compareVersionNumbers(b, a));
+  return [...versions].sort((a, b) => {
+    const aIsSemver = isSemver(a);
+    const bIsSemver = isSemver(b);
+
+    if (aIsSemver && bIsSemver) return semverCompare(b, a);
+    if (aIsSemver) return -1;
+    if (bIsSemver) return 1;
+    return 0;
+  });
 }
 
 export function rowSemverCompare(
