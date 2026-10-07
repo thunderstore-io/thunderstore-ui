@@ -1,4 +1,5 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { createSeo } from "cyberstorm/utils/meta";
 import { assertTeamAccess } from "cyberstorm/utils/permissions";
 import { type LoaderFunctionArgs } from "react-router";
 
@@ -9,6 +10,10 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 /**
+ * A team settings tab's client loader. Each tab has its own URL, so it names
+ * itself in the title; the layout above supplies the rest. These routes have no
+ * server loader, so this is the only place the tags can come from.
+ *
  * TODO
  * 1) This approach no longer handles different ApiErrors properly
  *    when the data isn't awaited in the clientLoader but returned as
@@ -24,6 +29,7 @@ import {
  *    changes.
  */
 export function makeTeamSettingsTabLoader<T>(
+  tab: string,
   dataFetcher: (dapper: DapperTs, teamName: string) => Promise<T>
 ) {
   return async function clientLoader({ params, request }: LoaderFunctionArgs) {
@@ -35,7 +41,16 @@ export function makeTeamSettingsTabLoader<T>(
       const dapper = setupDapper();
       await assertTeamAccess(teamName, requestPathname);
       const data = await dataFetcher(dapper, teamName);
-      return { teamName, ...data };
+      return {
+        teamName,
+        ...data,
+        seo: createSeo({
+          descriptors: [
+            { title: `${tab} · Team settings for ${teamName} · Thunderstore` },
+            { property: "og:title", content: `${tab} · ${teamName}` },
+          ],
+        }),
+      };
     } catch (error) {
       if (isApiError(error)) {
         const status = error.response.status;

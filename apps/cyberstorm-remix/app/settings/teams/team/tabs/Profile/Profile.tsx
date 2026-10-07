@@ -32,6 +32,7 @@ import {
 import "./Profile.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
+  "Profile",
   async (dapper, teamName) => {
     const team = await dapper.getPrivateTeamDetails(teamName);
     return { team };

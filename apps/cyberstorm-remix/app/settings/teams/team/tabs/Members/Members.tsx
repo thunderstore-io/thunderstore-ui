@@ -18,6 +18,7 @@ import "./Members.css";
 import { MembersTable } from "./MembersTable";
 
 export const clientLoader = makeTeamSettingsTabLoader(
+  "Members",
   async (dapper, teamName) => ({
     members: dapper.getTeamMembers(teamName),
   })
