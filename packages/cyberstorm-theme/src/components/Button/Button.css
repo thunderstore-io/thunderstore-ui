@@ -1,6 +1,10 @@
 @layer cyberstorm-theme {
   /* theme base styles */
   .button {
+    --button-xs-height: 1.875rem;
+    --button-sm-height: 2.25rem;
+    --button-md-height: 2.5rem;
+    --button-lg-height: 2.5rem;
     --button-line-height: var(--line-height-auto);
     --button-gap: 1rem;
     --button-border-radius: 0.5rem;
@@ -11,42 +15,42 @@
   /* SIZES */
   .button:where(.button--size--xsmall) {
     --button-height: var(--button-xs-height);
-    --button-padding-block: var(--button-xs-padding-block);
-    --button-padding-inline: var(--button-xs-padding-inline);
-    --button-border-radius: var(--button-xs-border-radius);
-    --button-font-size: var(--button-xs-font-size);
-    --button-gap: var(--button-xs-gap);
-    --button-icon-inline-size: var(--button-xs-icon-inline-size);
+    --button-padding-block: 0rem;
+    --button-padding-inline: 0.75rem;
+    --button-border-radius: var(--radius-md);
+    --button-font-size: var(--font-size-body-sm);
+    --button-gap: 0.75rem;
+    --button-icon-inline-size: 1em;
   }
 
   .button:where(.button--size--small) {
     --button-height: var(--button-sm-height);
-    --button-padding-block: var(--button-sm-padding-block);
-    --button-padding-inline: var(--button-sm-padding-inline);
-    --button-border-radius: var(--button-sm-border-radius);
-    --button-font-size: var(--button-sm-font-size);
-    --button-gap: var(--button-sm-gap);
-    --button-icon-inline-size: var(--button-sm-icon-inline-size);
+    --button-padding-block: 0rem;
+    --button-padding-inline: 0.75rem;
+    --button-border-radius: var(--radius-md);
+    --button-font-size: var(--font-size-body-md);
+    --button-gap: 0.75rem;
+    --button-icon-inline-size: 1em;
   }
 
   .button:where(.button--size--medium) {
     --button-height: var(--button-md-height);
-    --button-padding-block: var(--button-md-padding-block);
-    --button-padding-inline: var(--button-md-padding-inline);
-    --button-border-radius: var(--button-md-border-radius);
-    --button-font-size: var(--button-md-font-size);
-    --button-gap: var(--button-md-gap);
-    --button-icon-inline-size: var(--button-md-icon-inline-size);
+    --button-padding-block: 0rem;
+    --button-padding-inline: 1rem;
+    --button-border-radius: var(--radius-md);
+    --button-font-size: var(--font-size-body-md);
+    --button-gap: 1rem;
+    --button-icon-inline-size: 1em;
   }
 
   .button:where(.button--size--big) {
     --button-height: var(--button-lg-height);
-    --button-padding-block: var(--button-lg-padding-block);
-    --button-padding-inline: var(--button-lg-padding-inline);
-    --button-border-radius: var(--button-lg-border-radius);
-    --button-font-size: var(--button-lg-font-size);
-    --button-gap: var(--button-lg-gap);
-    --button-icon-inline-size: var(--button-lg-icon-inline-size);
+    --button-padding-block: 0rem;
+    --button-padding-inline: 1rem;
+    --button-border-radius: var(--radius-md);
+    --button-font-size: var(--font-size-body-lg);
+    --button-gap: 1rem;
+    --button-icon-inline-size: 1em;
   }
 
   /* VARIANTS DEFAULT STATE */
@@ -233,25 +237,25 @@
     &:where(.button--size--xsmall) {
       --button-height: var(--button-xs-height);
       --button-width: var(--button-xs-height);
-      --button-icon-inline-size: var(--button-xs-icon-inline-size--only-icon);
+      --button-icon-inline-size: 0.875rem;
     }
 
     &:where(.button--size--small) {
       --button-height: var(--button-sm-height);
       --button-width: var(--button-sm-height);
-      --button-icon-inline-size: var(--button-sm-icon-inline-size--only-icon);
+      --button-icon-inline-size: 1rem;
     }
 
     &:where(.button--size--medium) {
       --button-height: var(--button-md-height);
       --button-width: var(--button-md-height);
-      --button-icon-inline-size: var(--button-md-icon-inline-size--only-icon);
+      --button-icon-inline-size: 1rem;
     }
 
     &:where(.button--size--big) {
       --button-height: var(--button-lg-height);
       --button-width: var(--button-lg-height);
-      --button-icon-inline-size: var(--button-lg-icon-inline-size--only-icon);
+      --button-icon-inline-size: 1rem;
     }
   }
 }

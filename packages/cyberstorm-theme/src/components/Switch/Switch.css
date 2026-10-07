@@ -1,6 +1,7 @@
 @layer cyberstorm-theme {
   /* theme base styles */
   .switch {
+    --switch-transition--default: ease-in-out var(--animation-duration-md);
     --switch-position: relative;
     --switch-display: inline-block;
     --switch-opacity: 1;
@@ -33,37 +34,39 @@
     }
 
     &:where(.switch--disabled) {
-      --switch-opacity: var(--switch-opacity--disabled);
-      --switch-cursor: var(--switch-cursor--disabled);
+      --switch-opacity: 0.5;
+      --switch-cursor: not-allowed;
     }
   }
 
   /* SIZES */
   .switch:where(.switch--size--small) {
-    --switch-width: var(--switch-sm-width);
-    --switch-height: var(--switch-sm-height);
-    --switch-padding: var(--switch-sm-padding);
-    --switch-border-radius: var(--switch-sm-border-radius);
-    --switch-border-width: var(--switch-sm-border-width);
+    --switch-knob-sm-radius: 0.875rem;
+    --switch-width: 1.875rem;
+    --switch-height: 1.25rem;
+    --switch-padding: 0.125rem;
+    --switch-border-radius: var(--radius-full);
+    --switch-border-width: 1px;
 
     .switch__knob {
       --switch-knob-width: var(--switch-knob-sm-radius);
       --switch-knob-height: var(--switch-knob-sm-radius);
-      --switch-knob-border-radius: var(--switch-knob-sm-border-radius);
+      --switch-knob-border-radius: var(--radius-full);
     }
   }
 
   .switch:where(.switch--size--medium) {
-    --switch-width: var(--switch-md-width);
-    --switch-height: var(--switch-md-height);
-    --switch-padding: var(--switch-md-padding);
-    --switch-border-radius: var(--switch-md-border-radius);
-    --switch-border-width: var(--switch-md-border-width);
+    --switch-md-knob-radius: 1.25rem;
+    --switch-width: 2.75rem;
+    --switch-height: 1.75rem;
+    --switch-padding: 0.25rem;
+    --switch-border-radius: var(--radius-full);
+    --switch-border-width: 1px;
 
     .switch__knob {
       --switch-knob-width: var(--switch-md-knob-radius);
       --switch-knob-height: var(--switch-md-knob-radius);
-      --switch-knob-border-radius: var(--switch-md-knob-border-radius);
+      --switch-knob-border-radius: var(--radius-full);
     }
   }
 
@@ -71,13 +74,13 @@
   .switch:where(.switch--variant--default) {
     --switch-border-color: var(--switch-default-border-color--default);
     --switch-background-color: var(--switch-default-bg-color--default);
-    --switch-border-style: var(--switch-default-border-style--default);
+    --switch-border-style: solid;
 
     .switch__knob {
       --switch-knob-background-color: var(
         --switch-default-knob-bg-color--default
       );
-      --switch-knob-box-shadow: var(--switch-default-knob-box-shadow--default);
+      --switch-knob-box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 0.55);
       --switch-knob-border-style: var(
         --switch-default-knob-border-style--default
       );
@@ -86,13 +89,13 @@
     &:where(:hover) {
       --switch-border-color: var(--switch-default-border-color--hover);
       --switch-background-color: var(--switch-default-bg-color--hover);
-      --switch-border-style: var(--switch-default-border-style--hover);
+      --switch-border-style: solid;
 
       .switch__knob {
         --switch-knob-background-color: var(
           --switch-default-knob-bg-color--hover
         );
-        --switch-knob-box-shadow: var(--switch-default-knob-box-shadow--hover);
+        --switch-knob-box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 0.55);
         --switch-knob-border-style: var(
           --switch-default-knob-border-style--hover
         );
@@ -102,15 +105,14 @@
     &[data-state="checked"] {
       --switch-border-color: var(--switch-default-border-color--active);
       --switch-background-color: var(--switch-default-bg-color--active);
-      --switch-border-style: var(--switch-default-border-style--active);
+      --switch-border-style: solid;
 
       .switch__knob {
         --switch-knob-background-color: var(
           --switch-default-knob-bg-color--active
         );
-        --switch-knob-box-shadow: var(
-          --switch-default-knob-box-shadow--checked
-        );
+        --switch-knob-box-shadow: 0px -1px 0px 0px rgb(0 0 0 / 0.05),
+          0px 1px 2px 0px rgb(0 0 0 / 0.65);
         --switch-knob-border-style: var(
           --switch-default-knob-border-style--checked
         );
