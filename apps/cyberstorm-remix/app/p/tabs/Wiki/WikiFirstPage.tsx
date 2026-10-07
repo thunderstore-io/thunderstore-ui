@@ -17,6 +17,7 @@ import { isApiError } from "@thunderstore/thunderstore-api";
 import type { Route } from "./+types/WikiFirstPage";
 import "./Wiki.css";
 import { WikiContent } from "./WikiContent";
+import { wikiPageSeo } from "./wikiPageSeo";
 
 type ResultType = {
   wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
@@ -40,14 +41,10 @@ function wikiFirstPageSeo(result: ResultType) {
   }
   const packageName = `${result.namespaceId}-${result.packageId}`;
   if (result.firstPage) {
-    return createSeo({
-      descriptors: [
-        { title: `${result.firstPage.title} - ${packageName} · Thunderstore` },
-        { name: "description", content: `Wiki page for ${packageName}` },
-      ],
-    });
+    return wikiPageSeo(result.firstPage.title, result.packageId, packageName);
   }
-  return createSeo({ descriptors: [{ title: `${packageName} Wiki` }] });
+  // No pages yet: the wiki tab's own name is all there is to say.
+  return createSeo({ descriptors: [] });
 }
 
 export const loader = ssrLoader(

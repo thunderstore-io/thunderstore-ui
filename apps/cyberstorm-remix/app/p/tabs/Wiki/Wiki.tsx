@@ -27,6 +27,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageWiki } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
+import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Wiki";
 import "./Wiki.css";
 
@@ -45,11 +46,10 @@ function wikiSeo(
   params: { namespaceId: string; packageId: string; slug?: string },
   request: Request
 ) {
-  const packageName = `${params.namespaceId}-${params.packageId}`;
   return createSeo({
     descriptors: [
-      { title: `${packageName} Wiki · Thunderstore` },
-      { name: "description", content: `Wiki for ${packageName}` },
+      // The wiki is a package tab, so it names itself the way the others do.
+      ...packageTabSeo("Wiki", params.packageId).descriptors,
       { property: "og:url", content: getCanonicalUrl(request) },
       // The editors answer 200 to anyone, so a crawler reaches the "create a
       // wiki page" and "edit this page" forms as readily as a reader does.

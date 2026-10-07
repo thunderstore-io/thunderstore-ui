@@ -19,6 +19,7 @@ import {
 import { DapperTs, getPackageSource } from "@thunderstore/dapper-ts";
 
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
+import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Source";
 import "./Source.css";
 
@@ -37,17 +38,11 @@ export async function loader({ params }: Route.LoaderArgs) {
       status: null,
       source: undefined,
       message: undefined,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${params.namespaceId}-${params.packageId} Source · Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Source code for ${params.namespaceId}-${params.packageId}`,
-          },
-        ],
-      }),
+      seo: packageTabSeo(
+        "Source",
+        params.packageId,
+        `Source code for ${params.namespaceId}-${params.packageId}`
+      ),
     };
   }
   return {
@@ -85,6 +80,11 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
         status: null,
         source: source,
         message: undefined,
+        seo: packageTabSeo(
+          "Source",
+          params.packageId,
+          `Source code for ${params.namespaceId}-${params.packageId}`
+        ),
       };
     } catch (error) {
       result = {

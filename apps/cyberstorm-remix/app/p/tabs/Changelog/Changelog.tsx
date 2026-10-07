@@ -2,7 +2,6 @@ import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchError
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
-import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router";
@@ -11,6 +10,7 @@ import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
+import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Changelog";
 import "./Changelog.css";
 
@@ -48,12 +48,7 @@ export const loader = ssrLoader(
 
     return {
       changelog,
-      seo: createSeo({
-        descriptors: [
-          { title: `Changelog for ${params.packageId} · Thunderstore` },
-          { name: "description", content: `Changelog for ${params.packageId}` },
-        ],
-      }),
+      seo: packageTabSeo("Changelog", params.packageId),
     };
   },
   { cache: true }
@@ -74,6 +69,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
   return {
     changelog: fetchChangelogSafe(dapper, params.namespaceId, params.packageId),
+    seo: packageTabSeo("Changelog", params.packageId),
   };
 }
 
