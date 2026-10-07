@@ -52,6 +52,20 @@ import {
   uploadFormFieldReducer,
 } from "./uploadUtils";
 
+// Shared by both loaders: this route sets clientLoader.hydrate, so a title only
+// the server emitted is gone the moment the page hydrates.
+function uploadSeo() {
+  return createSeo({
+    descriptors: [
+      { title: "Upload package · Thunderstore" },
+      {
+        name: "description",
+        content: "Upload a package to Thunderstore.",
+      },
+    ],
+  });
+}
+
 export const loader = ssrLoader(async () => {
   const dapper = new DapperTs(() => {
     return {
@@ -62,15 +76,7 @@ export const loader = ssrLoader(async () => {
   const communities = await dapper.getCommunities();
   return {
     ...communities,
-    seo: createSeo({
-      descriptors: [
-        { title: "Upload package · Thunderstore" },
-        {
-          name: "description",
-          content: "Upload a package to Thunderstore.",
-        },
-      ],
-    }),
+    seo: uploadSeo(),
   };
 });
 
@@ -90,7 +96,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     };
   });
   const communities = await dapper.getCommunities();
-  return communities;
+  return { ...communities, seo: uploadSeo() };
 }
 
 clientLoader.hydrate = true;
