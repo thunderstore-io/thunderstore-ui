@@ -23,6 +23,7 @@ export default defineProject({
   optimizeDeps: {
     include: [
       "lodash/isEqual",
+      "semver/functions/compare",
       "semver/functions/valid",
       "react/jsx-dev-runtime",
       "react",

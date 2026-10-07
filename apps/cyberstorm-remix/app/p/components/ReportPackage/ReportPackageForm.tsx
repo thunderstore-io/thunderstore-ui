@@ -1,4 +1,5 @@
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { sortVersionNumbersDescending } from "cyberstorm/utils/semverCompare";
 
 import {
   Modal,
@@ -37,8 +38,8 @@ export interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
-  // Available version_numbers (newest first) and the one to preselect (the
-  // version the user currently has open).
+  // Version numbers to offer. The dropdown sorts these newest-first by semver.
+  // `defaultVersion` is the one to preselect (the version the user has open).
   versions: string[];
   defaultVersion: string;
 }
@@ -75,7 +76,9 @@ export function ReportPackageForm(
     ...requestParams
   } = props;
 
-  const versionOptions: SelectOption<string>[] = versions.map((v) => ({
+  const versionOptions: SelectOption<string>[] = sortVersionNumbersDescending(
+    versions
+  ).map((v) => ({
     value: v,
     label: v,
   }));

@@ -16,6 +16,7 @@ import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
 import { createSeo } from "cyberstorm/utils/meta";
+import { sortVersionNumbersDescending } from "cyberstorm/utils/semverCompare";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import {
   type ReactElement,
@@ -274,14 +275,17 @@ export default function PackageListing() {
       const versionsData = await dapper
         .getPackageVersions(namespace_id, package_id)
         .catch(() => []);
+      const versionNumbers = sortVersionNumbersDescending(
+        versionsData.map((v) => v.version_number)
+      );
       return {
         community: community_identifier,
         namespace: namespace_id,
         package: package_id,
-        versions: versionsData.map((v) => v.version_number),
-        // On the package page the open version is the latest one.
-        defaultVersion:
-          latestVersionNumber ?? versionsData[0]?.version_number ?? "",
+        versions: versionNumbers,
+        // On the package page the open version is the latest one. If that
+        // isn't known, fall back to the newest version in the sorted list.
+        defaultVersion: latestVersionNumber ?? versionNumbers[0] ?? "",
       };
     },
     // Keyed on the package identity only. `dapper` is intentionally omitted: it
