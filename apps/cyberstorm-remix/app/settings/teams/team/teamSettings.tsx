@@ -17,13 +17,13 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return {
     seo: createSeo({
       descriptors: [
-        { title: `Team ${teamName} settings · Thunderstore` },
+        { title: `Team settings for ${teamName} · Thunderstore` },
         { name: "description", content: `Manage ${teamName} team settings` },
         { property: "og:type", content: "website" },
         { property: "og:url", content: getCanonicalUrl(request) },
         {
           property: "og:title",
-          content: `Team ${teamName} settings`,
+          content: `Team settings for ${teamName}`,
         },
         {
           property: "og:description",
