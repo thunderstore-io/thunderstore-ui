@@ -488,6 +488,7 @@ export default function PackageListing() {
             downloadUrl={listing.download_url}
             team={team}
             installUrl={listing.install_url}
+            community={community}
             reportPackageButton={ReportPackageButton}
             packageDetailsNarrow={
               <PackageDetailsNarrow

@@ -14,6 +14,7 @@ export interface Community {
   community_icon_url: string | null;
   total_download_count: number;
   total_package_count: number;
+  has_mod_manager_support: boolean;
 }
 
 export type Communities = PaginatedList<Community>;

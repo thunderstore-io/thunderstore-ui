@@ -20,6 +20,7 @@ const community = {
   community_icon_url: catHeim,
   total_package_count: 7823466782,
   total_download_count: 23457862358976,
+  has_mod_manager_support: true,
 };
 
 const meta = {
