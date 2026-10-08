@@ -221,14 +221,6 @@ export {
   IconVariantsList,
 } from "./newComponents/Icon/Icon.types";
 export {
-  type BreadCrumbsVariants,
-  BreadCrumbsVariantsList,
-  type BreadCrumbsSizes,
-  BreadCrumbsSizesList,
-  type BreadCrumbsModifiers,
-  BreadCrumbsModifiersList,
-} from "./newComponents/BreadCrumbs/BreadCrumbs.types";
-export {
   type TagVariants,
   TagVariantsList,
   type TagSizes,
