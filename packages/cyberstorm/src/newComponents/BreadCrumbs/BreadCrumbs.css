@@ -13,8 +13,6 @@
         tan(var(--breadcrumb-angle)) + 1px
     );
 
-    display: flex;
-    gap: 0.25rem;
     width: 100%;
     margin-bottom: var(--gap-xl);
     padding-inline: var(--breadcrumb-cap-inset) var(--breadcrumb-end-pad);
@@ -31,6 +29,22 @@
     .breadcrumbs {
       margin-bottom: var(--gap-md);
     }
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    gap: 0.25rem;
+    width: 100%;
+    min-width: min-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .breadcrumbs__crumb {
+    display: flex;
+    margin: 0;
+    padding: 0;
   }
 
   .breadcrumbs__segment {
@@ -64,7 +78,7 @@
     padding-top: 1px;
   }
 
-  .breadcrumbs > :last-child {
+  .breadcrumbs__crumb:last-child > .breadcrumbs__segment {
     padding-inline-end: 0;
     background-color: var(--breadcrumb-item-bg-color--hover);
 
@@ -74,7 +88,7 @@
   }
 
   .breadcrumbs__homelink::before,
-  .breadcrumbs > :last-child::after {
+  .breadcrumbs__crumb:last-child > .breadcrumbs__segment::after {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -87,6 +101,20 @@
     content: "";
   }
 
+  .breadcrumbs__home-name {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+    inset-inline-start: 0;
+  }
+
   .breadcrumbs__homelink {
     padding-inline-start: 0;
 
@@ -97,7 +125,7 @@
     }
   }
 
-  .breadcrumbs > :last-child::after {
+  .breadcrumbs__crumb:last-child > .breadcrumbs__segment::after {
     border-start-end-radius: 0.5rem;
     border-end-end-radius: 0.5rem;
     inset-inline-end: calc(-1 * var(--breadcrumb-cap-inset));
