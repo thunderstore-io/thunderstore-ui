@@ -1,20 +1,28 @@
 @layer cyberstorm {
   .breadcrumbs {
-    --breadcrumb-skew: -30deg;
-    --breadcrumb-unskew: 30deg;
+    --breadcrumb-angle: 30deg;
+    --breadcrumb-lean: -1;
     --breadcrumb-segment-height: 2rem;
     --breadcrumb-cap-width: 2rem;
     --breadcrumb-cap-inset: 1rem;
 
-    display: flex;
-    gap: 0.25rem;
+    /* The skewed segments' scrollable overflow sticks out past the end cap.
+       Reserve that space so a trail that fits does not grow a scrollbar. */
+    --breadcrumb-end-pad: calc(
+      var(--breadcrumb-cap-inset) + var(--breadcrumb-segment-height) *
+        tan(var(--breadcrumb-angle)) + 1px
+    );
+
     width: 100%;
     margin-bottom: var(--gap-xl);
-    padding-left: 1rem;
+    padding-inline: var(--breadcrumb-cap-inset) var(--breadcrumb-end-pad);
     overflow: auto;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
-    line-height: 1;
+
+    &:dir(rtl) {
+      --breadcrumb-lean: 1;
+    }
   }
 
   @container (width <= 48rem) {
@@ -23,15 +31,30 @@
     }
   }
 
+  .breadcrumbs__list {
+    display: flex;
+    gap: 0.25rem;
+    width: 100%;
+    min-width: min-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .breadcrumbs__crumb {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
   .breadcrumbs__segment {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
     height: var(--breadcrumb-segment-height);
     padding-inline: 1rem;
     background-color: var(--breadcrumb-item-bg-color--default);
-    transform: skew(var(--breadcrumb-skew));
+    transform: skew(calc(var(--breadcrumb-lean) * var(--breadcrumb-angle)));
 
     @media (hover: hover) and (pointer: fine) {
       &:hover {
@@ -46,20 +69,16 @@
     align-items: center;
     line-height: 1rem;
     white-space: nowrap;
-    transform: skew(var(--breadcrumb-unskew));
-  }
-
-  .breadcrumbs__homelink .breadcrumbs__item-content {
-    font-size: var(--font-size-body-md);
+    transform: skew(
+      calc(-1 * var(--breadcrumb-lean) * var(--breadcrumb-angle))
+    );
   }
 
   .breadcrumbs__item-label {
-    display: block;
     padding-top: 1px;
-    line-height: 1rem;
   }
 
-  .breadcrumbs > :last-child {
+  .breadcrumbs__crumb:last-child > .breadcrumbs__segment {
     padding-inline-end: 0;
     background-color: var(--breadcrumb-item-bg-color--hover);
 
@@ -69,56 +88,53 @@
   }
 
   .breadcrumbs__homelink::before,
-  .breadcrumbs > :last-child::after {
+  .breadcrumbs__crumb:last-child > .breadcrumbs__segment::after {
     position: absolute;
     top: 0;
     bottom: 0;
     z-index: -1;
     width: var(--breadcrumb-cap-width);
-    transform: skew(var(--breadcrumb-unskew));
+    background-color: inherit;
+    transform: skew(
+      calc(-1 * var(--breadcrumb-lean) * var(--breadcrumb-angle))
+    );
     content: "";
+  }
+
+  .breadcrumbs__home-name {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+    inset-inline-start: 0;
   }
 
   .breadcrumbs__homelink {
     padding-inline-start: 0;
 
     &::before {
-      left: calc(-1 * var(--breadcrumb-cap-inset));
-      border-radius: 0.5rem 0 0 0.5rem;
-      background-color: var(--breadcrumb-item-bg-color--default);
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover::before {
-        background-color: var(--breadcrumb-item-bg-color--hover);
-      }
+      border-start-start-radius: 0.5rem;
+      border-end-start-radius: 0.5rem;
+      inset-inline-start: calc(-1 * var(--breadcrumb-cap-inset));
     }
   }
 
-  .breadcrumbs > :last-child::after {
-    right: calc(-1 * var(--breadcrumb-cap-inset));
-    border-radius: 0 0.5rem 0.5rem 0;
-    background-color: var(--breadcrumb-item-bg-color--hover);
-  }
-
-  .breadcrumbs__home {
-    display: block;
-    flex-shrink: 0;
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-
-  .breadcrumbs__item-content .icon {
-    display: block;
-    min-inline-size: 0;
-    block-size: auto;
+  .breadcrumbs__crumb:last-child > .breadcrumbs__segment::after {
+    border-start-end-radius: 0.5rem;
+    border-end-end-radius: 0.5rem;
+    inset-inline-end: calc(-1 * var(--breadcrumb-cap-inset));
   }
 
   .breadcrumbs__community-icon {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    line-height: 0;
 
     .image__content {
       display: block;
@@ -127,7 +143,7 @@
       aspect-ratio: unset;
     }
 
-    :is(.image__src, .image__icon, .image__icon svg) {
+    :is(.image__src, .image__icon) {
       display: block;
       width: 1rem;
       height: 1rem;

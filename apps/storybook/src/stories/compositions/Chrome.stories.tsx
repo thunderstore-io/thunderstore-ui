@@ -64,12 +64,48 @@ function Chrome() {
   return (
     <div className="cs-page">
       <States title="Breadcrumbs">
-        <div style={{ width: 300 }}>
+        <div>
+          <BreadCrumbs />
+        </div>
+        <div>
           <BreadCrumbs>
-            <BreadCrumbsItem>Just Text</BreadCrumbsItem>
+            <BreadCrumbsItem>Single item</BreadCrumbsItem>
+          </BreadCrumbs>
+        </div>
+        <div>
+          <BreadCrumbs>
+            <BreadCrumbsItem>
+              <Image
+                src={communityImage}
+                square
+                alt=""
+                rootClasses="breadcrumbs__community-icon"
+              />
+              Item with icon
+            </BreadCrumbsItem>
             <BreadCrumbsLink primitiveType="link" href="#category">
-              Category
+              Link item
             </BreadCrumbsLink>
+            <BreadCrumbsItem>Last Item</BreadCrumbsItem>
+          </BreadCrumbs>
+        </div>
+        <div>
+          <BreadCrumbs>
+            <BreadCrumbsItem>Crumb with a long name</BreadCrumbsItem>
+            <BreadCrumbsItem>
+              Crumb with an even longer name that is really long
+            </BreadCrumbsItem>
+            <BreadCrumbsItem>
+              Crumb with a long name that is really extremely long and seems to
+              be never ending
+            </BreadCrumbsItem>
+          </BreadCrumbs>
+        </div>
+        <div dir="rtl">
+          <BreadCrumbs>
+            <BreadCrumbsItem>Reversed</BreadCrumbsItem>
+            <BreadCrumbsItem>Reading</BreadCrumbsItem>
+            <BreadCrumbsItem>Direction</BreadCrumbsItem>
           </BreadCrumbs>
         </div>
       </States>
