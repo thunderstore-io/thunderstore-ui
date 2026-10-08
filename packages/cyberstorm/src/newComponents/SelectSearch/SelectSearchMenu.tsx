@@ -10,13 +10,12 @@ const MENU_MIN_HEIGHT = 90;
 const MENU_ANCHOR_GAP = 8;
 
 function useViewportConstrainedMenuStyle(
-  anchorRef: React.RefObject<HTMLElement | null>,
+  anchor: HTMLElement | null,
   deps: unknown[]
 ) {
   const [style, setStyle] = React.useState<React.CSSProperties>();
 
   React.useLayoutEffect(() => {
-    const anchor = anchorRef.current;
     if (!anchor) return;
 
     const updateStyle = () => {
@@ -49,7 +48,7 @@ function useViewportConstrainedMenuStyle(
       window.visualViewport?.removeEventListener("resize", updateStyle);
       window.visualViewport?.removeEventListener("scroll", updateStyle);
     };
-  }, deps);
+  }, [anchor, ...deps]);
 
   return style;
 }
@@ -72,7 +71,7 @@ function useShowMenuInTopLayer(ref: React.RefObject<HTMLElement | null>) {
 type SelectSearchMenuProps = {
   filteredOptions: SelectOption<string>[];
   menuId: string;
-  anchorRef: React.RefObject<HTMLElement | null>;
+  anchor: HTMLElement | null;
   highlightedIndex: number;
   onOptionSelect: (option: SelectOption<string>) => void;
   onOptionHighlight: (index: number) => void;
@@ -82,14 +81,14 @@ type SelectSearchMenuProps = {
 export function SelectSearchMenu({
   filteredOptions,
   menuId,
-  anchorRef,
+  anchor,
   highlightedIndex,
   onOptionSelect,
   onOptionHighlight,
   isOptionSelected,
 }: SelectSearchMenuProps) {
   const menuRef = React.useRef<HTMLDivElement>(null);
-  const menuStyle = useViewportConstrainedMenuStyle(anchorRef, [
+  const menuStyle = useViewportConstrainedMenuStyle(anchor, [
     filteredOptions.length,
   ]);
   useShowMenuInTopLayer(menuRef);

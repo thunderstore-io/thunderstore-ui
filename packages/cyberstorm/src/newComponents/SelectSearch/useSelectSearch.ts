@@ -195,6 +195,12 @@ export function useSelectSearch({
   onOptionSelect,
 }: UseSelectSearchOptions) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const [containerElement, setContainerElement] =
+    React.useState<HTMLDivElement | null>(null);
+  const setContainer = React.useCallback((node: HTMLDivElement | null) => {
+    containerRef.current = node;
+    setContainerElement(node);
+  }, []);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [isVisible, setIsVisible] = React.useState(defaultOpen);
   const [search, setSearch] = React.useState("");
@@ -378,6 +384,8 @@ export function useSelectSearch({
 
   return {
     containerRef,
+    setContainer,
+    containerElement,
     inputRef,
     menuId,
     isVisible,

@@ -60,7 +60,8 @@ export const SelectSearchMultiple = React.forwardRef<
   );
 
   const {
-    containerRef,
+    setContainer,
+    containerElement,
     inputRef,
     menuId,
     isVisible,
@@ -121,7 +122,7 @@ export const SelectSearchMultiple = React.forwardRef<
         ...componentClasses("select-search", undefined, undefined, csModifiers),
         disabled ? "select-search--variant--disabled" : null
       )}
-      ref={containerRef}
+      ref={setContainer}
       onPointerDown={handleFieldPointerDown}
     >
       <div className="select-search__search">
@@ -201,7 +202,7 @@ export const SelectSearchMultiple = React.forwardRef<
           <SelectSearchMenu
             filteredOptions={filteredOptions}
             menuId={menuId}
-            anchorRef={containerRef}
+            anchor={containerElement}
             highlightedIndex={highlightedIndex}
             onOptionSelect={handleMultipleOptionSelect}
             onOptionHighlight={highlightOption}
