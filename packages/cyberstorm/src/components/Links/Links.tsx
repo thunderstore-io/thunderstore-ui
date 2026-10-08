@@ -63,6 +63,7 @@ interface CyberstormLinkProps
   linkId: CyberstormLinkIds;
   className?: string;
   forwardedProps?: object;
+  preventScrollReset?: boolean;
 }
 
 // TODO: Move to primitives
