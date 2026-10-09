@@ -50,9 +50,7 @@ export class MD5WorkerManager {
     try {
       return await new Promise<string>((resolve, reject) => {
         worker.onmessage = (event: MessageEvent) => {
-          const typeCastedEvent = event.data as
-            | MD5CompleteEvent
-            | MD5ErrorEvent;
+          const typeCastedEvent = event.data as MD5CompleteEvent | MD5ErrorEvent;
           if (typeCastedEvent.uniqueId === uniqueId) {
             if (typeCastedEvent.type === "complete") {
               resolve(typeCastedEvent.md5);
