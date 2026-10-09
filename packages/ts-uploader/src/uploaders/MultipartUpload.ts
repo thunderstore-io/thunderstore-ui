@@ -7,7 +7,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
-import { MD5WorkerManager, getMD5WorkerManager } from "../workers";
+import { getMD5WorkerManager } from "../workers";
 import { BaseUpload } from "./BaseUpload";
 import type {
   CompleteUpload,
@@ -134,7 +134,6 @@ export class MultipartUpload extends BaseUpload {
         file: File;
         uploadUrls: UploadPartUrl[];
         usermedia: UserMedia;
-        md5WorkerManager: MD5WorkerManager;
         requestConfig: () => RequestConfig;
         MPU: MultipartUpload;
       }
@@ -146,7 +145,6 @@ export class MultipartUpload extends BaseUpload {
         file: File;
         uploadUrls: UploadPartUrl[];
         usermedia: UserMedia;
-        md5WorkerManager: MD5WorkerManager;
         requestConfig: () => RequestConfig;
         MPU: MultipartUpload;
       },
@@ -285,7 +283,6 @@ async function createUpload(props: {
   file: File;
   uploadUrls: UploadPartUrl[];
   usermedia: UserMedia;
-  md5WorkerManager: MD5WorkerManager;
   requestConfig: () => RequestConfig;
   MPU: MultipartUpload;
 }> {
@@ -303,13 +300,10 @@ async function createUpload(props: {
 
   props.MPU.handle = user_media;
 
-  const md5WorkerManager = getMD5WorkerManager();
-
   return {
     file: props.file,
     uploadUrls: upload_urls,
     usermedia: user_media,
-    md5WorkerManager: md5WorkerManager,
     requestConfig: props.requestConfig,
     MPU: props.MPU,
   };
@@ -320,7 +314,6 @@ async function createParts(props: {
   requestConfig: () => RequestConfig;
   uploadUrls: UploadPartUrl[];
   usermedia: UserMedia;
-  md5WorkerManager: MD5WorkerManager;
   MPU: MultipartUpload;
 }): Promise<{
   upload: PreparedUpload;
@@ -335,7 +328,6 @@ async function createParts(props: {
   }));
 
   const partStates: PartStates = {};
-  const checksumPromises: Promise<string>[] = [];
 
   for (let i = 0; i < uploadParts.length; i++) {
     const uniqueId = `${props.usermedia.uuid}-${uploadParts[i].meta.part_number}`;
@@ -352,33 +344,20 @@ async function createParts(props: {
       status: "prepared",
     });
 
-    const checksum = props.md5WorkerManager.calculateMD5(
-      uniqueId,
-      uploadParts[i].payload
-    );
-    checksumPromises.push(checksum);
-
     partStates[uniqueId] = {
       part: uploadParts[i],
       uniqueId,
       state: "prepared",
       etag: undefined,
       error: undefined,
-      checksum: "",
+      checksum: undefined,
     };
   }
-
-  // Wait for all checksums to be calculated
-  const checksums = await Promise.all(checksumPromises);
-  // Update the part states with the checksums
-  Object.keys(partStates).forEach((key, index) => {
-    partStates[key].checksum = checksums[index];
-  });
 
   const upload: PreparedUpload = {
     requestConfig: props.requestConfig,
     usermedia: props.usermedia,
-    partStates: Object.values(partStates) as PreparedPartState[],
+    partStates: Object.values(partStates),
   };
 
   return {
@@ -420,6 +399,26 @@ async function uploadPart(input: {
       MPU.currentStatus === "failed"
     ) {
       reject();
+    }
+
+    let checksum: string;
+    try {
+      checksum = await getMD5WorkerManager().calculateMD5(
+        partState.uniqueId,
+        partState.part.payload
+      );
+      partState.checksum = checksum;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      partState.error = message;
+      partState.state = "failed";
+      reject({
+        code: "CHECKSUM_FAILED",
+        message,
+        retryable: true,
+        details: undefined,
+      });
+      return promise;
     }
 
     const xhr = new XMLHttpRequest();
@@ -487,7 +486,7 @@ async function uploadPart(input: {
     };
 
     xhr.open("PUT", partState.part.meta.url);
-    xhr.setRequestHeader("Content-MD5", partState.checksum);
+    xhr.setRequestHeader("Content-MD5", checksum);
     xhr.send(partState.part.payload);
   }
   return promise;
