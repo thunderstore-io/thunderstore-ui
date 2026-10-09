@@ -1,6 +1,7 @@
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer } from "react";
 import { useNavigate, useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
@@ -21,6 +22,19 @@ import {
 import { userDelete } from "@thunderstore/thunderstore-api";
 
 import "./Account.css";
+
+// This tab has no data of its own, but it has its own URL, so it names itself
+// in the title. The layout above supplies the rest.
+export async function clientLoader() {
+  return {
+    seo: createSeo({
+      descriptors: [
+        { title: "Account · Account settings · Thunderstore" },
+        { property: "og:title", content: "Account · Account settings" },
+      ],
+    }),
+  };
+}
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;

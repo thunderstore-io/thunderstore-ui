@@ -20,6 +20,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
+import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Versions";
 import "./Versions.css";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
@@ -41,17 +42,11 @@ export const loader = ssrLoader(
           params.namespaceId,
           params.packageId
         ),
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
-            },
-            {
-              name: "description",
-              content: `Versions for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
+        seo: packageTabSeo(
+          "Versions",
+          params.packageId,
+          `Versions for ${params.namespaceId}-${params.packageId}`
+        ),
       };
     }
     return {
@@ -80,6 +75,11 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      seo: packageTabSeo(
+        "Versions",
+        params.packageId,
+        `Versions for ${params.namespaceId}-${params.packageId}`
+      ),
     };
   }
   return {

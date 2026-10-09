@@ -2,6 +2,7 @@ import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
+import { createSeo } from "cyberstorm/utils/meta";
 import { type ReactElement, useRef } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
@@ -45,6 +46,19 @@ export const PROVIDERS: ProvidersType[] = [
   },
   { name: "Overwolf", identifier: "overwolf", icon: OverwolfLogo() },
 ];
+
+// This tab has no data of its own, but it has its own URL, so it names itself
+// in the title. The layout above supplies the rest.
+export async function clientLoader() {
+  return {
+    seo: createSeo({
+      descriptors: [
+        { title: "Connections · Account settings · Thunderstore" },
+        { property: "og:title", content: "Connections · Account settings" },
+      ],
+    }),
+  };
+}
 
 export default function Connections() {
   const outletContext = useOutletContext() as OutletContextShape;

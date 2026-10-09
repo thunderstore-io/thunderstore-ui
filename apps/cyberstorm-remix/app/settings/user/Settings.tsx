@@ -26,14 +26,14 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   return {
     seo: createSeo({
       descriptors: [
-        { title: "Settings | Thunderstore" },
+        { title: "Account settings · Thunderstore" },
         {
           name: "description",
           content: "Manage your Thunderstore account settings",
         },
         { property: "og:type", content: "website" },
         { property: "og:url", content: getCanonicalUrl(request) },
-        { property: "og:title", content: "Settings | Thunderstore" },
+        { property: "og:title", content: "Account settings" },
         {
           property: "og:description",
           content: "Manage your Thunderstore account settings",

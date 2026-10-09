@@ -17,6 +17,7 @@ import { isApiError } from "../../../../../../packages/thunderstore-api/src";
 import type { Route } from "./+types/WikiPage";
 import "./Wiki.css";
 import { WikiContent } from "./WikiContent";
+import { wikiPageSeo } from "./wikiPageSeo";
 
 type ResultType = {
   wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
@@ -24,8 +25,22 @@ type ResultType = {
   communityId: string;
   namespaceId: string;
   packageId: string;
-  seo?: ReturnType<typeof createSeo>;
 };
+
+// Shared by both loaders: this route sets clientLoader.hydrate, so a title only
+// the server emitted is gone as soon as the page hydrates.
+function wikiPageResultSeo(result: ResultType) {
+  if (result.page) {
+    return wikiPageSeo(
+      result.page.title,
+      result.packageId,
+      `${result.namespaceId}-${result.packageId}`
+    );
+  }
+  return createSeo({
+    descriptors: [{ title: "Wiki page not found · Thunderstore" }],
+  });
+}
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -63,13 +78,8 @@ export const loader = ssrLoader(
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            seo: createSeo({
-              descriptors: [
-                { title: `${params.slug} | Wiki Not Found | Thunderstore` },
-              ],
-            }),
           };
-          return result;
+          return { ...result, seo: wikiPageResultSeo(result) };
         }
         const page = await dapper.getPackageWikiPage(pageId);
         result = {
@@ -78,17 +88,6 @@ export const loader = ssrLoader(
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          seo: createSeo({
-            descriptors: [
-              {
-                title: `${page.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
-              },
-              {
-                name: "description",
-                content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
-              },
-            ],
-          }),
         };
       } catch (error) {
         if (isApiError(error)) {
@@ -100,9 +99,6 @@ export const loader = ssrLoader(
               communityId: params.communityId,
               namespaceId: params.namespaceId,
               packageId: params.packageId,
-              seo: createSeo({
-                descriptors: [{ title: "Wiki Not Found | Thunderstore" }],
-              }),
             };
           } else {
             throw error;
@@ -111,7 +107,7 @@ export const loader = ssrLoader(
           throw error;
         }
       }
-      return result;
+      return { ...result, seo: wikiPageResultSeo(result) };
     } else {
       throw new Error("Namespace ID or Package ID is missing");
     }
@@ -158,7 +154,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
           namespaceId: params.namespaceId,
           packageId: params.packageId,
         };
-        return result;
+        return { ...result, seo: wikiPageResultSeo(result) };
       }
       const page = await dapper.getPackageWikiPage(pageId);
       result = {
@@ -186,7 +182,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
         throw error;
       }
     }
-    return result;
+    return { ...result, seo: wikiPageResultSeo(result) };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }

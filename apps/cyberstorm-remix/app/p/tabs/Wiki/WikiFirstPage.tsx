@@ -17,6 +17,7 @@ import { isApiError } from "@thunderstore/thunderstore-api";
 import type { Route } from "./+types/WikiFirstPage";
 import "./Wiki.css";
 import { WikiContent } from "./WikiContent";
+import { wikiPageSeo } from "./wikiPageSeo";
 
 type ResultType = {
   wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
@@ -24,8 +25,27 @@ type ResultType = {
   communityId: string;
   namespaceId: string;
   packageId: string;
-  seo?: ReturnType<typeof createSeo>;
 };
+
+// Shared by both loaders. clientLoader.hydrate replaces the SSR match data the
+// <Seo> head reads, so a tag only the SSR loader emits is gone after hydration.
+function wikiFirstPageSeo(result: ResultType) {
+  if (!result.wiki) {
+    // 200 so team members can reach the create-wiki state.
+    return createSeo({
+      descriptors: [
+        { title: "Wiki not found · Thunderstore" },
+        { name: "robots", content: "noindex, follow" },
+      ],
+    });
+  }
+  const packageName = `${result.namespaceId}-${result.packageId}`;
+  if (result.firstPage) {
+    return wikiPageSeo(result.firstPage.title, result.packageId, packageName);
+  }
+  // No pages yet: the wiki tab's own name is all there is to say.
+  return createSeo({ descriptors: [] });
+}
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -57,17 +77,6 @@ export const loader = ssrLoader(
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            seo: createSeo({
-              descriptors: [
-                {
-                  title: `${firstPage.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
-                },
-                {
-                  name: "description",
-                  content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
-                },
-              ],
-            }),
           };
         } else {
           result = {
@@ -76,11 +85,6 @@ export const loader = ssrLoader(
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            seo: createSeo({
-              descriptors: [
-                { title: `${params.namespaceId}-${params.packageId} Wiki` },
-              ],
-            }),
           };
         }
       } catch (error) {
@@ -93,7 +97,6 @@ export const loader = ssrLoader(
               communityId: params.communityId,
               namespaceId: params.namespaceId,
               packageId: params.packageId,
-              seo: createSeo({ descriptors: [{ title: "Wiki Not Found" }] }),
             };
           } else {
             throw error;
@@ -102,7 +105,7 @@ export const loader = ssrLoader(
           throw error;
         }
       }
-      return result;
+      return { ...result, seo: wikiFirstPageSeo(result) };
     }
     throw new Error("Namespace ID or Package ID is missing");
   },
@@ -170,7 +173,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
         throw error;
       }
     }
-    return result;
+    return { ...result, seo: wikiFirstPageSeo(result) };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }

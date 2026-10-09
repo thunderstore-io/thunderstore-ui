@@ -13,6 +13,7 @@ import { Await, useLoaderData } from "react-router";
 import { EmptyState, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
+import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Required";
 
 const Dependency404 = new Response("Package dependencies not found", {
@@ -67,15 +68,11 @@ export const loader = ssrLoader(
         version,
         getPageFromUrl(request.url)
       ),
-      seo: createSeo({
-        descriptors: [
-          { title: `${namespaceId}-${packageId} Dependencies | Thunderstore` },
-          {
-            name: "description",
-            content: `Dependencies for ${namespaceId}-${packageId}`,
-          },
-        ],
-      }),
+      seo: packageTabSeo(
+        "Dependencies",
+        packageId,
+        `Dependencies for ${namespaceId}-${packageId}`
+      ),
     };
   },
   { cache: true }
@@ -114,6 +111,11 @@ export async function clientLoader({
       packageId,
       version,
       getPageFromUrl(request.url)
+    ),
+    seo: packageTabSeo(
+      "Dependencies",
+      packageId,
+      `Dependencies for ${namespaceId}-${packageId}`
     ),
   };
 }

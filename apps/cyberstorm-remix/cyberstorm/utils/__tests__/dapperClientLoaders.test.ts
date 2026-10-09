@@ -36,9 +36,28 @@ describe("dapperClientLoaders", () => {
     vi.clearAllMocks();
   });
 
+  // Each tab has its own URL, so its title says which tab it is; these routes
+  // have no server loader, so this is the only place that can come from.
+  it("names the tab in the title", async () => {
+    const loader = makeTeamSettingsTabLoader(
+      "Service accounts",
+      vi.fn().mockResolvedValue({})
+    );
+
+    const result = (await loader({
+      params: { namespaceId: "MyTeam" },
+      request: new Request("http://example.invalid"),
+      context: {},
+    } as never)) as { seo: { descriptors: { title?: string }[] } };
+
+    expect(result.seo.descriptors).toContainEqual({
+      title: "Service accounts · Team settings for MyTeam · Thunderstore",
+    });
+  });
+
   it("calls dataFetcher with dapper and teamName and merges return value", async () => {
     const dataFetcher = vi.fn().mockResolvedValue({ foo: 123 });
-    const loader = makeTeamSettingsTabLoader(dataFetcher);
+    const loader = makeTeamSettingsTabLoader("Members", dataFetcher);
 
     const result = await loader({
       params: { namespaceId: "MyTeam" },
@@ -46,7 +65,7 @@ describe("dapperClientLoaders", () => {
       context: {},
     } as never);
 
-    expect(result).toEqual({ teamName: "MyTeam", foo: 123 });
+    expect(result).toMatchObject({ teamName: "MyTeam", foo: 123 });
     expect(dataFetcher).toHaveBeenCalledTimes(1);
     expect(dataFetcher.mock.calls[0][1]).toBe("MyTeam");
     expect(DapperTs).toHaveBeenCalledTimes(1);
@@ -80,7 +99,7 @@ describe("dapperClientLoaders", () => {
       });
     });
 
-    const loader = makeTeamSettingsTabLoader(dataFetcher);
+    const loader = makeTeamSettingsTabLoader("Members", dataFetcher);
 
     let thrown: unknown;
     try {
@@ -112,7 +131,7 @@ describe("dapperClientLoaders", () => {
       });
     });
 
-    const loader = makeTeamSettingsTabLoader(dataFetcher);
+    const loader = makeTeamSettingsTabLoader("Members", dataFetcher);
 
     try {
       await loader({

@@ -27,11 +27,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     seo: createSeo({
       descriptors: [
-        { title: "Markdown Preview | Thunderstore" },
+        { title: "Markdown Preview · Thunderstore" },
         { name: "description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: getCanonicalUrl(request) },
-        { property: "og:title", content: "Markdown Preview | Thunderstore" },
+        { property: "og:title", content: "Markdown Preview" },
         { property: "og:description", content: description },
         { property: "og:site_name", content: "Thunderstore" },
       ],

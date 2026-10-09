@@ -10,7 +10,7 @@ export async function loader() {
   return {
     seo: createSeo({
       descriptors: [
-        { title: "Log in | Thunderstore" },
+        { title: "Log in · Thunderstore" },
         { name: "description", content: "Log in to your Thunderstore account" },
       ],
     }),
