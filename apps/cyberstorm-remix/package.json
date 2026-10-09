@@ -42,6 +42,7 @@
     "@thunderstore/ts-uploader-react": "workspace:*",
     "@types/hast": "3.0.4",
     "@types/semver": "7.7.1",
+    "@zip.js/zip.js": "2.11.1",
     "buffer": "6.0.3",
     "hast-util-sanitize": "5.0.2",
     "isbot": "5.1.32",

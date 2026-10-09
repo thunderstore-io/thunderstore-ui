@@ -2,6 +2,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { gatedSsr404 } from "cyberstorm/utils/gatedSsr";
@@ -39,12 +40,14 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import type { PackageListingDetails } from "@thunderstore/dapper/types";
 
 import type { Route } from "./+types/packageListingVersion";
+import { EditMarkdownButton } from "./components/EditMarkdownButton/EditMarkdownButton";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageDependencyString } from "./components/PackageListing/PackageDependencyString";
 import { PackageMeta } from "./components/PackageListing/PackageListingSidebar";
 import {
   getPrivateListing,
   getPublicListing,
+  getUserPermissions,
   isGithubUrl,
 } from "./listingUtils";
 import "./packageListing.css";
@@ -126,6 +129,7 @@ export const loader = ssrLoader(
       return gatedSsr404({
         community,
         listing: undefined,
+        permissions: undefined,
         packageVersion,
         team,
         seo: createSeo({ descriptors: [] }),
@@ -140,6 +144,7 @@ export const loader = ssrLoader(
     return {
       community,
       listing,
+      permissions: undefined,
       packageVersion,
       team,
       seo: packageVersionSeo(listing, packageVersion, request),
@@ -172,6 +177,13 @@ export async function clientLoader({
   return {
     community: dapper.getCommunity(communityId),
     listing,
+    permissions: getUserPermissions(
+      getSessionTools(),
+      dapper,
+      communityId,
+      namespaceId,
+      packageId
+    ),
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
     // Match the SSR title so hydration doesn't drop it (see packageVersionSeo).
@@ -197,9 +209,8 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 export default function PackageListingVersion() {
-  const { community, listing, packageVersion, team } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { community, listing, permissions, packageVersion, team } =
+    useLoaderData<typeof loader | typeof clientLoader>();
 
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
@@ -210,6 +221,18 @@ export default function PackageListingVersion() {
   if (!listing) {
     return <div>Loading listing...</div>;
   }
+
+  const editButton =
+    currentTab === "details" ? (
+      <EditMarkdownButton
+        permissions={permissions}
+        community={listing.community_identifier}
+        namespace={listing.namespace}
+        package={listing.name}
+        version={packageVersion}
+        queryParams="from=version"
+      />
+    ) : null;
 
   return (
     <>
@@ -371,7 +394,13 @@ export default function PackageListingVersion() {
           >
             Versions
           </NewLink>
+          {editButton ? (
+            <div className="package-listing__tabs-slot">{editButton}</div>
+          ) : null}
         </Tabs>
+        {editButton ? (
+          <div className="package-listing__edit-button-row">{editButton}</div>
+        ) : null}
 
         <div className="package-listing__content">
           <Outlet context={outletContext} />

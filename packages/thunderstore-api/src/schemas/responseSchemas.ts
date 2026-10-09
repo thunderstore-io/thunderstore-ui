@@ -116,6 +116,8 @@ export type DynamicHTMLResponseData = z.infer<
 // PackageChangelogResponse
 export const packageChangelogResponseDataSchema = z.object({
   html: z.string(),
+  is_edited: z.boolean().optional().default(false),
+  edited_at: z.string().datetime().nullable().optional().default(null),
 });
 
 export type PackageChangelogResponseData = z.infer<
@@ -177,10 +179,33 @@ export type PackageSourceResponseData = z.infer<
 // PackageReadmeResponse
 export const packageReadmeResponseDataSchema = z.object({
   html: z.string(),
+  is_edited: z.boolean().optional().default(false),
+  edited_at: z.string().datetime().nullable().optional().default(null),
 });
 
 export type PackageReadmeResponseData = z.infer<
   typeof packageReadmeResponseDataSchema
+>;
+
+// PackageVersionMarkdownResponse
+export const packageVersionMarkdownResponseDataSchema = z.object({
+  is_edited: z.boolean(),
+  edited_at: z.string().datetime().nullable(),
+});
+
+export type PackageVersionMarkdownResponseData = z.infer<
+  typeof packageVersionMarkdownResponseDataSchema
+>;
+
+// PackageVersionRawMarkdownResponse
+export const packageVersionRawMarkdownResponseDataSchema = z.object({
+  markdown: z.string().nullable(),
+  is_edited: z.boolean().optional().default(false),
+  edited_at: z.string().datetime().nullable().optional().default(null),
+});
+
+export type PackageVersionRawMarkdownResponseData = z.infer<
+  typeof packageVersionRawMarkdownResponseDataSchema
 >;
 
 // PackageVersionsResponse

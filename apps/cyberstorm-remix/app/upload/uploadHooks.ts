@@ -8,7 +8,12 @@ import {
   type UserMedia,
 } from "@thunderstore/ts-uploader";
 
+import {
+  type PreviousOverride,
+  findPreviousReadmeOverride,
+} from "../p/readmeEdit/overrideMigration";
 import type { OutletContextShape } from "../root";
+import { readZipEntryText } from "./readZipFilenames";
 import {
   type CategoryOption,
   PACKAGE_ZIP_FILE_ERROR_MESSAGE,
@@ -298,4 +303,49 @@ export function useUploadCategoryOptions(
   }, [dapper, selectedCommunities]);
 
   return categoryOptions;
+}
+
+async function readPackageManifestName(file: File): Promise<string | null> {
+  const manifest = await readZipEntryText(file, "manifest.json");
+  if (manifest === null) return null;
+  try {
+    const name: unknown = JSON.parse(manifest)?.name;
+    return typeof name === "string" && name !== "" ? name : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Site-edited README on the package this zip will add a version to. */
+export function usePreviousOverrideWarning(
+  requestConfig: OutletContextShape["requestConfig"],
+  file: File | null,
+  authorName: string
+): PreviousOverride | null {
+  const [previousOverride, setPreviousOverride] =
+    useState<PreviousOverride | null>(null);
+
+  useEffect(() => {
+    setPreviousOverride(null);
+    if (!file || !authorName) return;
+
+    let cancelled = false;
+    readPackageManifestName(file)
+      .then((name) =>
+        name
+          ? findPreviousReadmeOverride(requestConfig, authorName, name)
+          : null
+      )
+      .then((result) => {
+        if (!cancelled) setPreviousOverride(result);
+      })
+      .catch(() => {
+        // Best effort
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [file, authorName]);
+
+  return previousOverride;
 }

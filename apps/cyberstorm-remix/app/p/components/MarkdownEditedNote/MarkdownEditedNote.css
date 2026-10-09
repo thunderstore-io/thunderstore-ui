@@ -1,0 +1,12 @@
+@layer nimbus {
+  .markdown-edited-note {
+    width: fit-content;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .markdown-edited-note__label {
+    cursor: help;
+  }
+}

@@ -1,4 +1,6 @@
 export const getFakeChangelog = async () => ({
+  is_edited: false,
+  edited_at: null,
   html: `
 <h2>v1.2.3</h2>
 <ul>
@@ -33,6 +35,8 @@ export const getFakeChangelog = async () => ({
 });
 
 export const getFakeReadme = async () => ({
+  is_edited: false,
+  edited_at: null,
   html: `
 <h1>Markdown syntax guide</h1>
 <h2>This is a Heading h2</h2>
