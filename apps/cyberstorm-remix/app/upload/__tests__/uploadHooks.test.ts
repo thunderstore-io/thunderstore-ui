@@ -5,8 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PackageSubmissionStatus } from "@thunderstore/dapper/types";
 
+import type { PreviousOverride } from "../../p/readmeEdit/overrideMigration";
 import {
   usePackageFileUpload,
+  usePreviousOverrideWarning,
   useSubmissionStatusPolling,
   useUploadCategoryOptions,
 } from "../uploadHooks";
@@ -14,6 +16,20 @@ import {
 const { mockAbort, mockStart } = vi.hoisted(() => ({
   mockStart: vi.fn(),
   mockAbort: vi.fn(),
+}));
+
+const overrideMocks = vi.hoisted(() => ({
+  readEntry: vi.fn(),
+  find: vi.fn(),
+}));
+
+vi.mock("../readZipFilenames", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../readZipFilenames")>()),
+  readZipEntryText: overrideMocks.readEntry,
+}));
+
+vi.mock("../../p/readmeEdit/overrideMigration", () => ({
+  findPreviousReadmeOverride: overrideMocks.find,
 }));
 
 vi.mock("@thunderstore/ts-uploader", () => {
@@ -401,5 +417,81 @@ describe("useUploadCategoryOptions", () => {
 
     consoleErrorSpy.mockRestore();
     unmount();
+  });
+});
+
+describe("usePreviousOverrideWarning", () => {
+  const requestConfig = () => ({ apiHost: "https://api.example.com" });
+  const firstOverride: PreviousOverride = {
+    versionNumber: "1.0.1",
+    markdown: "First README",
+  };
+  const secondOverride: PreviousOverride = {
+    versionNumber: "1.0.2",
+    markdown: "Second README",
+  };
+  let latest: PreviousOverride | null | undefined;
+  let finishFirst: (value: PreviousOverride) => void;
+
+  function Harness({ file }: { file: File }) {
+    latest = usePreviousOverrideWarning(requestConfig, file, "TeamA");
+    return null;
+  }
+
+  const settle = () =>
+    act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+  beforeEach(() => {
+    latest = undefined;
+    window.NIMBUS_PUBLIC_ENV = { VITE_ENABLE_MARKDOWN_EDITING: "true" };
+    overrideMocks.readEntry.mockClear();
+    overrideMocks.readEntry.mockImplementation((file: File) =>
+      Promise.resolve(
+        JSON.stringify({ name: file.name === "first.zip" ? "First" : "Second" })
+      )
+    );
+    overrideMocks.find.mockImplementation(
+      (_config: unknown, _team: string, name: string) =>
+        name === "First"
+          ? new Promise<PreviousOverride>((resolve) => {
+              finishFirst = resolve;
+            })
+          : Promise.resolve(secondOverride)
+    );
+  });
+
+  it("ignores a lookup that finishes after the file changed", async () => {
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    await act(async () => {
+      root.render(React.createElement(Harness, { file: zipFile("first.zip") }));
+    });
+    await settle();
+    await act(async () => {
+      root.render(
+        React.createElement(Harness, { file: zipFile("second.zip") })
+      );
+    });
+    await settle();
+    await act(async () => {
+      finishFirst(firstOverride);
+    });
+    expect(latest).toEqual(secondOverride);
+    act(() => root.unmount());
+  });
+
+  it("skips the lookup while markdown editing is off", async () => {
+    window.NIMBUS_PUBLIC_ENV = {};
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    await act(async () => {
+      root.render(React.createElement(Harness, { file: zipFile("first.zip") }));
+    });
+    await settle();
+    expect(overrideMocks.readEntry).not.toHaveBeenCalled();
+    expect(latest).toBeNull();
+    act(() => root.unmount());
   });
 });
