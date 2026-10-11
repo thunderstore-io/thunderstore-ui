@@ -1,15 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { findPreviousReadmeOverride } from "../overrideMigration";
+import {
+  findHiddenChangelogOverride,
+  findPreviousReadmeOverride,
+} from "../overrideMigration";
 
 const mocks = vi.hoisted(() => ({
   versions: vi.fn(),
   readme: vi.fn(),
+  changelog: vi.fn(),
 }));
 
 vi.mock("@thunderstore/thunderstore-api", () => ({
   fetchPackageVersions: mocks.versions,
   fetchPackageVersionReadmeOverrideRaw: mocks.readme,
+  fetchPackageVersionChangelogOverrideRaw: mocks.changelog,
 }));
 
 const config = () => ({ apiHost: "https://api.example.invalid" });
@@ -71,5 +76,36 @@ describe("findPreviousReadmeOverride", () => {
     ]);
     expect(await findPreviousReadmeOverride(config, "Team", "Mod")).toBeNull();
     expect(mocks.readme).not.toHaveBeenCalled();
+  });
+});
+
+describe("findHiddenChangelogOverride", () => {
+  beforeEach(() => {
+    mocks.versions.mockResolvedValue([
+      version("1.0.0", "2026-01-01T00:00:00Z"),
+      version("2.0.0", "2026-02-01T00:00:00Z"),
+      version("1.5.0", "2026-03-01T00:00:00Z"),
+    ]);
+    mocks.changelog.mockImplementation(overridesOn("2.0.0"));
+  });
+
+  it("finds the CHANGELOG edit on the version the upload replaced", async () => {
+    expect(
+      await findHiddenChangelogOverride(config, "Team", "Mod", "2.1.0")
+    ).toEqual({ versionNumber: "2.0.0", markdown: "Edit 2.0.0" });
+  });
+
+  it("returns null when the upload is not the new latest version", async () => {
+    expect(
+      await findHiddenChangelogOverride(config, "Team", "Mod", "1.5.0")
+    ).toBeNull();
+    expect(mocks.changelog).not.toHaveBeenCalled();
+  });
+
+  it("returns null when the replaced version has no CHANGELOG edit", async () => {
+    mocks.changelog.mockResolvedValue(null);
+    expect(
+      await findHiddenChangelogOverride(config, "Team", "Mod", "2.1.0")
+    ).toBeNull();
   });
 });
