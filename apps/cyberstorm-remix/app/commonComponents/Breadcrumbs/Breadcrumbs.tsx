@@ -58,6 +58,9 @@ export function Breadcrumbs() {
     (m) => m.id === "tools/markdown-preview/markdownPreview"
   );
   const loginPage = matches.find((m) => m.id === "login/login");
+  const readmeEditPage = matches.find(
+    (m) => m.id === "p/readmeEdit/ReadmeEdit"
+  );
 
   const communityBreadcrumb = useMemo(
     () =>
@@ -249,9 +252,9 @@ export function Breadcrumbs() {
     return <NewBreadCrumbsItem>Log in</NewBreadCrumbsItem>;
   }, [loginPage]);
 
-  // No breadcrumb bar on the home page. After the hooks, as the component
-  // stays mounted across navigations.
-  if (rootIndexPage) {
+  // No breadcrumb bar on the home page or the editor, which has its own "Go
+  // back". After the hooks, as the component stays mounted across navigations.
+  if (rootIndexPage || readmeEditPage) {
     return null;
   }
 

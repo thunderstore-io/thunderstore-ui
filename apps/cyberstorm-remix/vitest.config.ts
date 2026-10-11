@@ -29,6 +29,7 @@ export default defineProject({
       "react-markdown",
       "rehype-raw",
       "remark-gfm",
+      "use-debounce",
     ],
   },
 });
