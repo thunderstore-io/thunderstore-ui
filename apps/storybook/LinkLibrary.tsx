@@ -43,6 +43,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     delete forwardedProps.team;
     delete forwardedProps.user;
     delete forwardedProps.version;
+    delete (forwardedProps as { preventScrollReset?: boolean })
+      .preventScrollReset;
     const fProps =
       forwardedProps as React.AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
