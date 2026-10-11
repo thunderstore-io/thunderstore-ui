@@ -392,6 +392,25 @@ export type PackageListingUpdateRequestData = z.infer<
   typeof packageListingUpdateRequestDataSchema
 >;
 
+// PackageVersionMarkdownRequest
+export const packageVersionMarkdownRequestParamsSchema = z.object({
+  namespace: z.string(),
+  package: z.string(),
+  version: z.string(),
+});
+
+export type PackageVersionMarkdownRequestParams = z.infer<
+  typeof packageVersionMarkdownRequestParamsSchema
+>;
+
+export const packageVersionMarkdownOverrideRequestDataSchema = z.object({
+  content: z.string(),
+});
+
+export type PackageVersionMarkdownOverrideRequestData = z.infer<
+  typeof packageVersionMarkdownOverrideRequestDataSchema
+>;
+
 // PackageRateRequest
 export const packageRateRequestParamsSchema = z.object({
   namespace: z.string(),
