@@ -1,6 +1,6 @@
 import { act, createElement } from "react";
 import { createRoot } from "react-dom/client";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter, type NavigateFunction, useNavigate } from "react-router";
 import {
   afterAll,
   afterEach,
@@ -27,6 +27,12 @@ const createAd = vi.fn();
 let container: HTMLDivElement | undefined;
 let root: ReturnType<typeof createRoot> | undefined;
 let idle: typeof window.requestIdleCallback;
+let navigate: NavigateFunction | undefined;
+
+function NavigationProbe() {
+  navigate = useNavigate();
+  return null;
+}
 
 beforeAll(() => {
   markNitroAdsReady({ createAd } as unknown as NitroAds);
@@ -48,6 +54,7 @@ afterEach(() => {
   container?.remove();
   container = undefined;
   root = undefined;
+  navigate = undefined;
   createAd.mockClear();
 });
 
@@ -60,12 +67,22 @@ async function renderAt(pathname: string, slot = COMMUNITY_SIDEBAR_AD) {
       createElement(
         MemoryRouter,
         { initialEntries: [pathname] },
-        createElement(SidebarAd, { slot })
+        createElement(SidebarAd, { slot }),
+        createElement(NavigationProbe)
       )
     );
   });
   return container.querySelector<HTMLElement>(".ad-container")!;
 }
+
+async function go(to: string, options?: { replace?: boolean }) {
+  await act(async () => {
+    await navigate?.(to, options);
+  });
+}
+
+const mountOf = (slot = COMMUNITY_SIDEBAR_AD) =>
+  document.getElementById(slot.containerId);
 
 describe("commonComponents.Ads.SidebarAd", () => {
   it("auctions the slot on a path no campaign claims", async () => {
@@ -89,6 +106,40 @@ describe("commonComponents.Ads.SidebarAd", () => {
     const slot = await renderAt("/c/test", bare);
     expect(createAd).not.toHaveBeenCalled();
     expect(slot.querySelector(".ad-container__static")).toBeNull();
+  });
+
+  it("creates a new ad in a fresh mount on a page change, keeping the placement", async () => {
+    const placement = await renderAt("/c/riskofrain2");
+    const firstMount = mountOf();
+
+    await go("/c/riskofrain2?page=2");
+
+    expect(createAd).toHaveBeenCalledTimes(2);
+    expect(mountOf()).not.toBe(firstMount);
+    expect(firstMount?.isConnected).toBe(false);
+    expect(container?.querySelector(".ad-container")).toBe(placement);
+  });
+
+  it("keeps the ad when the search or filters change", async () => {
+    await renderAt("/c/riskofrain2");
+    const mount = mountOf();
+
+    await go("/c/riskofrain2?search=valheim", { replace: true });
+    await go("/c/riskofrain2?search=valheim&includedCategories=1");
+
+    expect(createAd).toHaveBeenCalledTimes(1);
+    expect(mountOf()).toBe(mount);
+  });
+
+  it("frees the network ad when a campaign takes the slot over", async () => {
+    await renderAt("/c/riskofrain2");
+    const networkMount = mountOf();
+
+    await go("/c/test");
+
+    expect(networkMount?.isConnected).toBe(false);
+    expect(createAd).toHaveBeenCalledTimes(1);
+    expect(mountOf()?.querySelector(".ad-container__static")).not.toBeNull();
   });
 
   it("keeps the house fallback off a directly-sold slot with no artwork", async () => {

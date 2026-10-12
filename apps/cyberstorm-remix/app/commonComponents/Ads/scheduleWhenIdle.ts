@@ -17,6 +17,8 @@
  */
 export const IDLE_FALLBACK_DELAY_MS = 200;
 
+export const AD_IDLE_TIMEOUT_MS = 2000;
+
 export function scheduleWhenIdle(
   callback: () => void,
   timeout: number

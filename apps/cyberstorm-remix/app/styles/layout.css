@@ -492,8 +492,7 @@
      in root.tsx); hide the OTHER route's rail set. Higher specificity than the
      height cascade above, so it wins over whatever tier the cascade revealed,
      leaving only the active route's fitting tier visible. Both sets stay in the
-     DOM (and are created up front), so navigating between routes only toggles
-     visibility — NitroPay fills the newly revealed tier via renderVisibleOnly. */
+     DOM, so navigating between routes only toggles visibility. */
   .layout__ads-stack[data-rail-active-page="community"]
     .ad-container[data-rail-page="package"],
   .layout__ads-stack[data-rail-active-page="package"]

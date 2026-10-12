@@ -23,8 +23,8 @@ interface AdErrorBoundaryState {
  * so ad failures are observable per placement without one broken ad taking down
  * browsing.
  *
- * Scope: catches React RENDER errors only. The async slot-creation / refresh
- * path (nitroAds.ts) runs off the render tree in idle callbacks and is guarded
+ * Scope: catches React RENDER errors only. The async slot-creation path
+ * (nitroAds.ts) runs off the render tree in idle callbacks and is guarded
  * there; NitroPay mounts creatives via direct DOM outside React, so ad-SERVING
  * failures never reach this boundary (and ad-network script errors are already
  * dropped in sentry.ts beforeSend).

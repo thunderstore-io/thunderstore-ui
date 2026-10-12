@@ -60,16 +60,19 @@ import {
   FLOATING_VIDEO_ID,
   type NitroAds,
   PACKAGE_RAIL_SLOTS,
-  createAllNimbusAds,
+  createNimbusFloatingVideo,
+  createNimbusLayoutAds,
   markNitroAdsReady,
-  onNavigateNimbusAds,
-  teardownNimbusAds,
 } from "./commonComponents/Ads/nitroAds";
-import { scheduleWhenIdle } from "./commonComponents/Ads/scheduleWhenIdle";
+import {
+  AD_IDLE_TIMEOUT_MS,
+  scheduleWhenIdle,
+} from "./commonComponents/Ads/scheduleWhenIdle";
 import {
   isStaticAdPath,
   staticAdForSlot,
 } from "./commonComponents/Ads/staticAds";
+import { useAdPageview } from "./commonComponents/Ads/useAdPageview";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { Island, IslandContainer } from "./commonComponents/Island/Island";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
@@ -79,12 +82,6 @@ config.autoAddCss = false;
 
 // Single full-width bottom banner between content and footer.
 const BOTTOM_ADS_ENABLED = true;
-
-// Changing the key replaces the container div, which is how NitroPay learns to
-// free a creative when a route becomes directly sold, and back again.
-function adSlotKey(containerId: string, isStatic: boolean): string {
-  return isStatic ? `${containerId}--static` : containerId;
-}
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -310,25 +307,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     ].includes(m.id)
   );
 
-  // Tell NitroPay a new pageview happened on client-side navigation. Without
-  // this an entire SPA session is one long-lived pageview on a refresh timer,
-  // which depresses CPM and drives the ad CPU churn. We key on pathname AND
-  // search so package-search pagination/filtering (which only change the query
-  // string) also count as pageviews. The initial pageview is handled by
-  // createAd, so the first run only records the key; comparing against the last
-  // key also makes this resilient to React StrictMode's mount double-invoke.
-  // Refreshes are throttled inside onNavigateNimbusAds (MIN_AD_LIFETIME_MS),
-  // with NitroPay's per-slot `onNavigateMin` as belt-and-braces.
-  const lastAdNavKey = useRef<string | null>(null);
-  useEffect(() => {
-    const navKey = `${location.pathname}${location.search}`;
-    if (lastAdNavKey.current === null || lastAdNavKey.current === navKey) {
-      lastAdNavKey.current = navKey;
-      return;
-    }
-    lastAdNavKey.current = navKey;
-    onNavigateNimbusAds();
-  }, [location.pathname, location.search]);
+  const adPageview = useAdPageview();
 
   return (
     // suppressHydrationWarning: the inline script below stamps the saved
@@ -487,10 +466,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         <AdErrorBoundary placement="rail">
                           {COMMUNITY_RAIL_SLOTS.map((slot) => (
                             <AdContainer
-                              key={adSlotKey(slot.containerId, isStaticAdRoute)}
+                              key={slot.containerId}
                               containerId={slot.containerId}
                               sizeVariant={slot.sizeVariant}
                               railPage="community"
+                              mountKey={adPageview}
                               directlySold={isStaticAdRoute}
                               staticAd={staticAdForSlot(
                                 slot,
@@ -500,10 +480,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                           ))}
                           {PACKAGE_RAIL_SLOTS.map((slot) => (
                             <AdContainer
-                              key={adSlotKey(slot.containerId, isStaticAdRoute)}
+                              key={slot.containerId}
                               containerId={slot.containerId}
                               sizeVariant={slot.sizeVariant}
                               railPage="package"
+                              mountKey={adPageview}
                               directlySold={isStaticAdRoute}
                               staticAd={staticAdForSlot(
                                 slot,
@@ -521,9 +502,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <AdErrorBoundary placement="content-bottom">
                       {BOTTOM_AD_SLOTS.map((slot) => (
                         <AdContainer
-                          key={adSlotKey(slot.containerId, isStaticAdRoute)}
+                          key={slot.containerId}
                           containerId={slot.containerId}
                           sizeVariant={slot.sizeVariant}
+                          mountKey={adPageview}
                           directlySold={isStaticAdRoute}
                           staticAd={staticAdForSlot(slot, location.pathname)}
                         />
@@ -542,7 +524,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   />
                 ) : null}
                 {shouldLoadConsent ? (
-                  <AdsInit createAds={shouldCreateAds} />
+                  <AdsInit createAds={shouldCreateAds} pageview={adPageview} />
                 ) : null}
               </IslandContainer>
             </TooltipProvider>
@@ -637,11 +619,6 @@ function App() {
 export default App;
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
-// Upper bound on how long idle-waiting may delay ad work, used for both the
-// script injection and the slot creation below, so a page that never goes idle
-// still loads ads within a bounded, predictable window.
-const AD_IDLE_TIMEOUT_MS = 2000;
-
 // Flat hold from `load` before the idle wait below begins.
 const AD_START_DELAY_MS = 7000;
 
@@ -650,7 +627,13 @@ const AD_START_DELAY_MS = 7000;
 // Loads the NitroPay script (which shows the consent banner) whenever mounted.
 // Ad slots are only created when `createAds` is true — so consent-only routes
 // (the landing pages) render this with createAds=false.
-function AdsInit({ createAds }: { createAds: boolean }) {
+function AdsInit({
+  createAds,
+  pageview,
+}: {
+  createAds: boolean;
+  pageview: number;
+}) {
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
   const [adsScriptLoaded, setAdsScriptLoaded] = useState(
@@ -748,55 +731,23 @@ function AdsInit({ createAds }: { createAds: boolean }) {
     }
   }, [adsScriptLoaded]);
 
-  // Create the slots once per mount. The ref is set when the deferred creation
-  // actually fires (not when scheduled), so React StrictMode's dev
-  // double-invoke — whose first-pass cleanup cancels the pending callback —
-  // still creates the ads exactly once. A real remount is a fresh component
-  // with a fresh ref, so returning from an ad-suppressed route re-creates the
-  // slots on the new containers.
-  const hasCreatedAds = useRef(false);
+  // The floating video is kept across page changes.
   useEffect(() => {
-    // Consent-only routes (the landing pages) load the script above but create
-    // no ad slots.
-    if (!createAds) {
+    const nitroAds = window.nitroAds;
+    if (!createAds || !adsScriptLoaded || !nitroAds?.createAd) {
       return;
     }
-
-    let cancelIdle: (() => void) | undefined;
-
-    // Read window.nitroAds inside the effect rather than depending on it:
-    // re-running on its identity change would tear the registry down (cleanup)
-    // without re-creating it (the hasCreatedAds latch), killing onNavigate
-    // refreshes for the rest of the session.
-    const nitroAds =
-      typeof window !== "undefined" ? window.nitroAds : undefined;
-
-    if (
-      !hasCreatedAds.current &&
-      adsScriptLoaded &&
-      nitroAds !== undefined &&
-      nitroAds.createAd !== undefined
-    ) {
-      const create = () => {
-        hasCreatedAds.current = true;
-        createAllNimbusAds(nitroAds);
-      };
-
-      // Defer slot creation to main-thread idle time so the ad auctions never
-      // contend with hydration/interaction work.
-      cancelIdle = scheduleWhenIdle(create, AD_IDLE_TIMEOUT_MS);
-    }
-
-    // Cancel a still-pending creation and forget the slot refs when this
-    // unmounts OR when createAds toggles off (navigating to a landing /
-    // consent-only route), so returning re-creates them on fresh containers.
-    // Resetting the latch lets the toggled-back-on case re-create.
-    return () => {
-      cancelIdle?.();
-      hasCreatedAds.current = false;
-      teardownNimbusAds();
-    };
+    return createNimbusFloatingVideo(nitroAds);
   }, [adsScriptLoaded, createAds]);
+
+  // Re-runs on every page change, after the commit replaced the mounts.
+  useEffect(() => {
+    const nitroAds = window.nitroAds;
+    if (!createAds || !adsScriptLoaded || !nitroAds?.createAd) {
+      return;
+    }
+    return createNimbusLayoutAds(nitroAds);
+  }, [adsScriptLoaded, createAds, pageview]);
 
   return <></>;
 }
