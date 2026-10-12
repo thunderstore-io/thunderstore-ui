@@ -69,7 +69,7 @@ export const loader = ssrLoader(
         getPageFromUrl(request.url)
       ),
       seo: packageTabSeo(
-        "Dependencies",
+        "Required",
         packageId,
         `Dependencies for ${namespaceId}-${packageId}`
       ),
@@ -113,7 +113,7 @@ export async function clientLoader({
       getPageFromUrl(request.url)
     ),
     seo: packageTabSeo(
-      "Dependencies",
+      "Required",
       packageId,
       `Dependencies for ${namespaceId}-${packageId}`
     ),

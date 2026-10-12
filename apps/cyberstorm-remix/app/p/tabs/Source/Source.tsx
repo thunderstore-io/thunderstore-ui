@@ -39,7 +39,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       source: undefined,
       message: undefined,
       seo: packageTabSeo(
-        "Source",
+        "Analysis",
         params.packageId,
         `Source code for ${params.namespaceId}-${params.packageId}`
       ),
@@ -81,7 +81,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
         source: source,
         message: undefined,
         seo: packageTabSeo(
-          "Source",
+          "Analysis",
           params.packageId,
           `Source code for ${params.namespaceId}-${params.packageId}`
         ),

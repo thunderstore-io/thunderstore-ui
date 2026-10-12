@@ -3,7 +3,9 @@ import { createSeo } from "cyberstorm/utils/meta";
 import { formatToDisplayName } from "@thunderstore/cyberstorm";
 
 /**
- * Title, description and og:title for one of a package's tabs.
+ * Title, description and og:title for one of a package's tabs. `tab` is the
+ * label the tab bar shows, not the route's name: the /source tab reads
+ * "Analysis".
  *
  * Each tab has a URL people link to, so it names itself rather than borrowing
  * the package's title. og:description, og:image and the canonical stay with the
