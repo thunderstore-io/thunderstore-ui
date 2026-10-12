@@ -34,7 +34,7 @@ import "./ServiceAccounts.css";
 import { ServiceAccountsTable } from "./ServiceAccountsTable";
 
 export const clientLoader = makeTeamSettingsTabLoader(
-  "Service accounts",
+  "Service Accounts",
   async (dapper, teamName) => ({
     serviceAccounts: dapper.getTeamServiceAccounts(teamName),
   })

@@ -11,8 +11,9 @@ import {
 
 /**
  * A team settings tab's client loader. Each tab has its own URL, so it names
- * itself in the title; the layout above supplies the rest. These routes have no
- * server loader, so this is the only place the tags can come from.
+ * itself in the title, by the label the tab bar shows; the layout above
+ * supplies the rest. These routes have no server loader, so this is the only
+ * place the tags can come from.
  *
  * TODO
  * 1) This approach no longer handles different ApiErrors properly

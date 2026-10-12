@@ -40,7 +40,7 @@ describe("dapperClientLoaders", () => {
   // have no server loader, so this is the only place that can come from.
   it("names the tab in the title", async () => {
     const loader = makeTeamSettingsTabLoader(
-      "Service accounts",
+      "Service Accounts",
       vi.fn().mockResolvedValue({})
     );
 
@@ -51,7 +51,7 @@ describe("dapperClientLoaders", () => {
     } as never)) as { seo: { descriptors: { title?: string }[] } };
 
     expect(result.seo.descriptors).toContainEqual({
-      title: "Service accounts · Team settings for MyTeam · Thunderstore",
+      title: "Service Accounts · Team settings for MyTeam · Thunderstore",
     });
   });
 
