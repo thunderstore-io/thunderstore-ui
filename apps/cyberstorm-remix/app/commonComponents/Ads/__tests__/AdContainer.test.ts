@@ -50,6 +50,12 @@ async function render(props: Parameters<typeof AdContainer>[0]) {
   return slot;
 }
 
+async function rerender(props: Parameters<typeof AdContainer>[0]) {
+  await act(async () => {
+    root?.render(createElement(AdContainer, props));
+  });
+}
+
 const markup = (props: Parameters<typeof AdContainer>[0]) =>
   renderToStaticMarkup(createElement(AdContainer, props));
 
@@ -94,6 +100,51 @@ describe("newComponents.AdContainer static creatives", () => {
       staticAd: { ...ONE_SHAPE, creatives: [] },
     });
     expect(slot.querySelector(".ad-container__static")).toBeNull();
+  });
+});
+
+describe("newComponents.AdContainer mount element", () => {
+  const network = {
+    containerId: "test-mount",
+    sizeVariant: "bottom-banner",
+  } as const;
+
+  it("replaces only the mount when mountKey changes", async () => {
+    const slot = await render({ ...network, mountKey: 0 });
+    const mount = slot.querySelector("#test-mount");
+    const fallback = slot.querySelector(".ad-container__fallback");
+
+    await rerender({ ...network, mountKey: 1 });
+
+    expect(container?.querySelector(".ad-container")).toBe(slot);
+    expect(slot.querySelector(".ad-container__fallback")).toBe(fallback);
+    expect(slot.querySelector("#test-mount")).not.toBe(mount);
+    expect(mount?.isConnected).toBe(false);
+  });
+
+  it("keeps a directly-sold slot's mount across mountKey changes", async () => {
+    const sold = { ...network, directlySold: true, staticAd: TWO_SHAPES };
+    const slot = await render({ ...sold, mountKey: 0 });
+    const mount = slot.querySelector("#test-mount");
+
+    await rerender({ ...sold, mountKey: 1 });
+
+    expect(slot.querySelector("#test-mount")).toBe(mount);
+  });
+
+  it("replaces the mount when the slot becomes directly sold", async () => {
+    const slot = await render({ ...network, mountKey: 0 });
+    const mount = slot.querySelector("#test-mount");
+
+    await rerender({
+      ...network,
+      mountKey: 0,
+      directlySold: true,
+      staticAd: TWO_SHAPES,
+    });
+
+    expect(mount?.isConnected).toBe(false);
+    expect(container?.querySelector(".ad-container")).toBe(slot);
   });
 });
 

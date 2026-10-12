@@ -51,6 +51,8 @@ interface AdContainerProps {
   // Callers passing this must not also create a network ad for the same
   // container id; the two would stack in the same box.
   staticAd?: StaticAd;
+  // A new value replaces the `#containerId` element; the box stays mounted.
+  mountKey?: string | number;
 }
 
 // Static markup, so the ad is in the server response and the browser does the
@@ -101,7 +103,14 @@ function StaticAdCreative({ staticAd }: { staticAd: StaticAd }) {
 // overlays and hides the fallback once an ad fills (see the :has() rule in
 // AdContainer.css) — as does a static creative rendered into the same box.
 export function AdContainer(props: AdContainerProps) {
-  const { containerId, sizeVariant, railPage, directlySold, staticAd } = props;
+  const {
+    containerId,
+    sizeVariant,
+    railPage,
+    directlySold,
+    staticAd,
+    mountKey,
+  } = props;
 
   // The no-fill message is for network slots only: a directly-sold slot never
   // fills, and behind artwork that doesn't cover the box it would show through.
@@ -134,7 +143,11 @@ export function AdContainer(props: AdContainerProps) {
           </NewIcon>
         </div>
       ) : null}
-      <div className="ad-container__content" id={containerId}>
+      <div
+        key={directlySold ? "static" : mountKey}
+        className="ad-container__content"
+        id={containerId}
+      >
         {staticAd ? <StaticAdCreative staticAd={staticAd} /> : null}
       </div>
     </div>
