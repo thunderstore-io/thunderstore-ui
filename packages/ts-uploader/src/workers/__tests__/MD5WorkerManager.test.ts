@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { MD5WorkerManager } from "../MD5WorkerManager";
+import {
+  MAX_CONCURRENT_MD5_WORKERS,
+  MD5WorkerManager,
+} from "../MD5WorkerManager";
 
 describe("MD5WorkerManager", () => {
   let manager: MD5WorkerManager;
@@ -11,6 +14,7 @@ describe("MD5WorkerManager", () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
   });
 
   describe("initialize", () => {
@@ -40,6 +44,51 @@ describe("MD5WorkerManager", () => {
       expect(await manager.calculateMD5(uniqueId, blob)).toBe(
         "lHP90NiApDwht3eNNIchVw=="
       );
+    });
+
+    it("should terminate the worker once the hash is done", async () => {
+      const terminateSpy = vi.spyOn(Worker.prototype, "terminate");
+
+      await manager.calculateMD5("done-id", new Blob(["test content"]));
+
+      expect(terminateSpy).toHaveBeenCalledTimes(1);
+      expect(manager["workers"]).toHaveLength(0);
+    });
+
+    it("should queue calls beyond the concurrency cap", async () => {
+      class FakeWorker {
+        static all: FakeWorker[] = [];
+        onmessage?: (event: MessageEvent) => void;
+        id = "";
+        constructor() {
+          FakeWorker.all.push(this);
+        }
+        postMessage(message: { uniqueId: string }) {
+          this.id = message.uniqueId;
+        }
+        complete() {
+          const data = { type: "complete", uniqueId: this.id, md5: this.id };
+          this.onmessage?.({ data } as MessageEvent);
+        }
+        terminate() {}
+      }
+      vi.stubGlobal("Worker", FakeWorker);
+
+      const cap = MAX_CONCURRENT_MD5_WORKERS;
+      const jobs = Array.from({ length: cap + 1 }, (_, i) =>
+        manager.calculateMD5(`${i}`, new Blob())
+      );
+      expect(FakeWorker.all).toHaveLength(cap);
+      expect(manager["waiting"]).toHaveLength(1);
+
+      FakeWorker.all[0].complete();
+      await jobs[0];
+      expect(FakeWorker.all).toHaveLength(cap + 1);
+      expect(manager["waiting"]).toHaveLength(0);
+
+      FakeWorker.all.slice(1).forEach((w) => w.complete());
+      await Promise.all(jobs);
+      expect(manager["workers"]).toHaveLength(0);
     });
   });
 
