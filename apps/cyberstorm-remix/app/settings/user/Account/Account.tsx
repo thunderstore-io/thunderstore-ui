@@ -29,8 +29,8 @@ export async function clientLoader() {
   return {
     seo: createSeo({
       descriptors: [
-        { title: "Account · Account settings · Thunderstore" },
-        { property: "og:title", content: "Account · Account settings" },
+        { title: "Account · Settings · Thunderstore" },
+        { property: "og:title", content: "Account · Settings" },
       ],
     }),
   };
