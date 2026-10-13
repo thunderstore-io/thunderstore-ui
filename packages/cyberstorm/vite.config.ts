@@ -41,7 +41,6 @@ export default defineConfig({
           "@radix-ui/react-tooltip": "reactTooltip",
           "@radix-ui/react-dropdown-menu": "reactDropdownMenu",
           "@radix-ui/react-dialog": "Dialog",
-          "@radix-ui/react-select": "reactSelect",
           "@radix-ui/react-switch": "RadixSwitch",
           "@radix-ui/react-toast": "RadixToast",
           uuid: "uuid",
