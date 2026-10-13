@@ -160,11 +160,11 @@ export function ReportPackageForm(
       <Modal.Body>
         {versionOptions.length > 0 && (
           <div className="report-package__block">
-            {/* NewSelect doesn't forward id/name to a focusable element, so a
-                <label htmlFor> wouldn't associate — name it via aria-label. */}
-            <span className="report-package__label">Version</span>
+            <label htmlFor="version" className="report-package__label">
+              Version
+            </label>
             <NewSelect
-              aria-label="Version"
+              id="version"
               options={versionOptions}
               value={selectedVersionNumber}
               onChange={(value) => {
