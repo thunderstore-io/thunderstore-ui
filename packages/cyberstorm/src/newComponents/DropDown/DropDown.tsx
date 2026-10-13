@@ -17,7 +17,14 @@ import {
   SubTrigger,
   Trigger,
 } from "@radix-ui/react-dropdown-menu";
-import { type ReactElement, type ReactNode, memo, useContext } from "react";
+import {
+  type ReactElement,
+  type ReactNode,
+  cloneElement,
+  isValidElement,
+  memo,
+  useContext,
+} from "react";
 
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
@@ -209,10 +216,45 @@ interface DropDownSubTriggerProps
   csModifiers?: DropDownItemModifiers[];
 }
 
+function submenuChevron() {
+  return (
+    <Icon csMode="inline" noWrapper rootClasses="dropdown__submenu-chevron">
+      <FontAwesomeIcon icon={faChevronRight} />
+    </Icon>
+  );
+}
+
+// asChild renders through Radix Slot, which accepts one element. The chevron
+// has to live inside that element instead of beside it.
+function composeSubmenuChevron(children: ReactNode, asChild?: boolean) {
+  if (!asChild) {
+    return (
+      <>
+        {children}
+        {submenuChevron()}
+      </>
+    );
+  }
+
+  if (!isValidElement<{ children?: ReactNode }>(children)) {
+    return children;
+  }
+
+  return cloneElement(children, {
+    children: (
+      <>
+        {children.props.children}
+        {submenuChevron()}
+      </>
+    ),
+  });
+}
+
 export const DropDownSubTrigger = memo(function DropDownSubTrigger(
   props: DropDownSubTriggerProps
 ) {
   const {
+    asChild,
     children,
     rootClasses,
     csVariant = "primary",
@@ -223,6 +265,7 @@ export const DropDownSubTrigger = memo(function DropDownSubTrigger(
   return (
     <SubTrigger
       {...fProps}
+      asChild={asChild}
       disabled={csVariant === "disabled" || fProps.disabled}
       className={classnames(
         "dropdown__item",
@@ -235,10 +278,7 @@ export const DropDownSubTrigger = memo(function DropDownSubTrigger(
         rootClasses
       )}
     >
-      {children}
-      <Icon csMode="inline" noWrapper rootClasses="dropdown__submenu-chevron">
-        <FontAwesomeIcon icon={faChevronRight} />
-      </Icon>
+      {composeSubmenuChevron(children, asChild)}
     </SubTrigger>
   );
 });

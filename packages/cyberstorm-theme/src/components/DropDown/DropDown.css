@@ -4,7 +4,7 @@
     --dropdown-box-shadow: var(--shadow-lg);
     --dropdown-animation: dropdown-fade-in var(--animation-duration-md) ease;
     --dropdown-border-radius: var(--radius-md);
-    --dropdown-padding: 0.5rem;
+    --dropdown-padding: var(--gap-xs);
   }
 
   .dropdown__item {
@@ -16,7 +16,7 @@
   }
 
   .dropdown__divider {
-    --dropdown-divider-margin: 0.25rem 0rem;
+    --dropdown-divider-margin: var(--gap-xs) 0;
     --dropdown-divider-height: var(--divider-height);
     --dropdown-divider-background-color: var(--divider-bg-color);
   }
