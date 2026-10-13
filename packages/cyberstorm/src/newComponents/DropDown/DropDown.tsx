@@ -1,10 +1,16 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Content,
   type DropdownMenuItemProps,
+  type DropdownMenuRadioGroupProps,
+  type DropdownMenuRadioItemProps,
   type DropdownMenuSubContentProps,
   type DropdownMenuSubTriggerProps,
   Item,
   Portal,
+  RadioGroup,
+  RadioItem,
   Root,
   Sub,
   SubContent,
@@ -16,6 +22,7 @@ import { type ReactElement, type ReactNode, memo, useContext } from "react";
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon } from "../Icon/Icon";
 import "./DropDown.css";
 import {
   type DropDownDividerModifiers,
@@ -141,6 +148,58 @@ export const DropDownDivider = memo(function DropDownDivider(
   );
 });
 
+export const DropDownRadioGroup = memo(function DropDownRadioGroup(
+  props: DropdownMenuRadioGroupProps
+) {
+  const { className, ...groupProps } = props;
+
+  return (
+    <RadioGroup
+      {...groupProps}
+      className={classnames("dropdown__radio-group", className)}
+    />
+  );
+});
+
+interface DropDownRadioItemProps
+  extends PrimitiveComponentDefaultProps,
+    DropdownMenuRadioItemProps {
+  csVariant?: DropDownItemVariants;
+  csModifiers?: DropDownItemModifiers[];
+}
+
+export const DropDownRadioItem = memo(function DropDownRadioItem(
+  props: DropDownRadioItemProps
+) {
+  const {
+    children,
+    rootClasses,
+    csVariant = "primary",
+    csModifiers,
+    ...fProps
+  } = props;
+
+  return (
+    <RadioItem
+      {...fProps}
+      disabled={csVariant === "disabled" || fProps.disabled}
+      className={classnames(
+        "dropdown__item",
+        ...componentClasses(
+          "dropdown__item",
+          csVariant,
+          undefined,
+          csModifiers
+        ),
+        rootClasses
+      )}
+      asChild
+    >
+      {children}
+    </RadioItem>
+  );
+});
+
 export const DropDownSub = Sub;
 
 interface DropDownSubTriggerProps
@@ -177,6 +236,9 @@ export const DropDownSubTrigger = memo(function DropDownSubTrigger(
       )}
     >
       {children}
+      <Icon csMode="inline" noWrapper rootClasses="dropdown__submenu-chevron">
+        <FontAwesomeIcon icon={faChevronRight} />
+      </Icon>
     </SubTrigger>
   );
 });
@@ -224,4 +286,6 @@ DropDownSub.displayName = "DropDownSub";
 DropDownSubTrigger.displayName = "DropDownSubTrigger";
 DropDownSubContent.displayName = "DropDownSubContent";
 DropDownItem.displayName = "DropDownItem";
+DropDownRadioGroup.displayName = "DropDownRadioGroup";
+DropDownRadioItem.displayName = "DropDownRadioItem";
 DropDownDivider.displayName = "DropDownDivider";

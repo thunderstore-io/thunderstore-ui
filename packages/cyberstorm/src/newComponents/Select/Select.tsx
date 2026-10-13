@@ -5,7 +5,11 @@ import React, { type ReactElement, memo } from "react";
 import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
-import { DropDown, DropDownItem } from "../DropDown/DropDown";
+import {
+  DropDown,
+  DropDownRadioGroup,
+  DropDownRadioItem,
+} from "../DropDown/DropDown";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Select.css";
 import {
@@ -94,26 +98,28 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
         </NewButton>
       }
     >
-      {options.map((option, index) => (
-        <DropDownItem
-          key={`${option.value}-${index}`}
-          onSelect={() => onChange?.(option.value)}
-          rootClasses={classnames(
-            "select__option",
-            option.value === value ? "select__option--selected" : undefined
-          )}
-        >
-          <button type="button">
-            {option.leftIcon ? (
-              <NewIcon csMode="inline" noWrapper>
-                {option.leftIcon}
-              </NewIcon>
-            ) : null}
-            {option.label}
-            {!option.label && !option.leftIcon ? option.value : null}
-          </button>
-        </DropDownItem>
-      ))}
+      <DropDownRadioGroup
+        value={value}
+        onValueChange={(next) => onChange?.(next as T)}
+      >
+        {options.map((option, index) => (
+          <DropDownRadioItem
+            key={`${option.value}-${index}`}
+            value={option.value}
+            rootClasses="select__option"
+          >
+            <button type="button">
+              {option.leftIcon ? (
+                <NewIcon csMode="inline" noWrapper>
+                  {option.leftIcon}
+                </NewIcon>
+              ) : null}
+              {option.label}
+              {!option.label && !option.leftIcon ? option.value : null}
+            </button>
+          </DropDownRadioItem>
+        ))}
+      </DropDownRadioGroup>
     </DropDown>
   );
 }
