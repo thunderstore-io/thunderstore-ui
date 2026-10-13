@@ -6,7 +6,6 @@ import {
   faCog,
   faGamepad,
   faLongArrowLeft,
-  faMagnifyingGlass,
   faUpload,
   faUserShield,
   faUsers,
@@ -26,7 +25,7 @@ import {
   buildAuthLoginUrl,
   buildLogoutUrl,
 } from "cyberstorm/utils/ThunderstoreAuth";
-import { type CSSProperties, useEffect, useMemo, useState } from "react";
+import { type CSSProperties, useEffect } from "react";
 import { useLocation } from "react-router";
 import { Island } from "~/commonComponents/Island/Island";
 
@@ -37,21 +36,17 @@ import {
   NewAvatar,
   NewButton,
   NewDropDown,
-  NewDropDownDivider,
   NewDropDownItem,
-  NewDropDownSub,
-  NewDropDownSubContent,
-  NewDropDownSubTrigger,
   NewIcon,
   NewLink,
-  NewTextInput,
   OverwolfLogo,
   ThunderstoreLogo,
   classnames,
 } from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
-import { TEAMS_FILTER_THRESHOLD, filterTeams, sortTeams } from "./teams";
+import { UserDropdown } from "./UserDropdown";
+import { sortTeams } from "./teams";
 
 const NAVIGATION_POPOVER_ID = "mobileNavMenu";
 const DEVELOPERS_POPOVER_ID = "mobileNavMenuDevelopers";
@@ -372,7 +367,7 @@ export function Navigation(props: {
           {currentUser ? (
             <>
               <div className="navigation-header__user-desktop">
-                <DesktopUserDropdown
+                <UserDropdown
                   user={currentUser}
                   domain={domain}
                   communityId={communityId}
@@ -520,178 +515,6 @@ export function DesktopLoginPopover() {
   );
 }
 
-// The Teams submenu of the desktop user dropdown: alphabetised, height-capped
-// with its own scrollbar, and — past TEAMS_FILTER_THRESHOLD — a lightweight
-// client-side filter. Its own component so the filter state lives here.
-function TeamsSubmenu(props: { teams: string[]; communityId: string }) {
-  const { teams, communityId } = props;
-  const [query, setQuery] = useState("");
-
-  const sortedTeams = useMemo(() => sortTeams(teams), [teams]);
-  const showFilter = sortedTeams.length > TEAMS_FILTER_THRESHOLD;
-  const filteredTeams = useMemo(
-    () => filterTeams(sortedTeams, query),
-    [sortedTeams, query]
-  );
-
-  return (
-    <NewDropDownSub>
-      <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
-        <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-          <FontAwesomeIcon icon={faUsers} />
-        </NewIcon>
-        Teams
-      </NewDropDownSubTrigger>
-      <NewDropDownSubContent rootClasses="navigation-header__teams-dropdown">
-        {showFilter ? (
-          // stopPropagation keeps Radix's menu typeahead + arrow navigation
-          // from stealing keystrokes while the user types in the filter. The
-          // wrapper is a passive event boundary, not a control — role
-          // "presentation" says so, and keeps the static-interaction rule (and
-          // the code scanner behind it) from reading it as a custom widget.
-          <div
-            role="presentation"
-            className="navigation-header__teams-filter"
-            onKeyDown={(event) => event.stopPropagation()}
-          >
-            <NewTextInput
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              clearValue={query ? () => setQuery("") : undefined}
-              placeholder="Filter teams..."
-              aria-label="Filter teams"
-              type="search"
-              csSize="small"
-              leftIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-            />
-          </div>
-        ) : null}
-        <NewDropDownItem asChild>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Teams"
-            rootClasses="dropdown__item navigation-header__dropdown-item"
-          >
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-              <FontAwesomeIcon icon={faUsers} />
-            </NewIcon>
-            All Teams
-          </NewLink>
-        </NewDropDownItem>
-        {filteredTeams.length > 0 ? <NewDropDownDivider /> : null}
-        <div className="navigation-header__teams-list">
-          {filteredTeams.map((teamName) => (
-            <NewDropDownItem key={teamName} asChild>
-              <NewLink
-                primitiveType="link"
-                href={`/c/${communityId}/p/${teamName}/`}
-                rootClasses="dropdown__item navigation-header__dropdown-item"
-              >
-                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-                  <FontAwesomeIcon icon={faUsers} />
-                </NewIcon>
-                {teamName}
-              </NewLink>
-            </NewDropDownItem>
-          ))}
-        </div>
-      </NewDropDownSubContent>
-    </NewDropDownSub>
-  );
-}
-
-export function DesktopUserDropdown(props: {
-  user: CurrentUser;
-  domain: string;
-  communityId?: string;
-}) {
-  const { user, communityId } = props;
-
-  const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
-
-  // REMIX TODO: Turn this into a popover
-  return (
-    <NewDropDown
-      contentAlignment="end"
-      trigger={
-        <button className="navigation-header__user-button">
-          <NewAvatar src={avatar} username={user.username} csSize="verySmoll" />
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faCaretDown} />
-          </NewIcon>
-        </button>
-      }
-    >
-      <NewDropDownItem
-        rootClasses="navigation-header__avatar"
-        onSelect={(event) => event.preventDefault()}
-      >
-        <div>
-          <NewAvatar src={avatar} username={user.username} csSize="small" />
-          <p className="navigation-header__dropdown-details">{user.username}</p>
-        </div>
-      </NewDropDownItem>
-      <NewDropDownDivider />
-      <NewDropDownItem asChild>
-        <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Settings"
-          rootClasses="dropdown__item navigation-header__dropdown-item"
-        >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-            <FontAwesomeIcon icon={faCog} />
-          </NewIcon>
-          Settings
-        </NewLink>
-      </NewDropDownItem>
-      {communityId ? (
-        <TeamsSubmenu teams={user.teams} communityId={communityId} />
-      ) : (
-        <NewDropDownItem asChild>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Teams"
-            rootClasses="dropdown__item navigation-header__dropdown-item"
-          >
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-              <FontAwesomeIcon icon={faUsers} />
-            </NewIcon>
-            Teams
-          </NewLink>
-        </NewDropDownItem>
-      )}
-      {/* Django admin, only for staff users — mirrors the legacy nav's
-          {% if request.user.is_staff %} Admin link (TS-3952). */}
-      {user.is_staff ? (
-        <NewDropDownItem asChild>
-          <NewLink
-            primitiveType="link"
-            href="/djangoadmin/"
-            rootClasses="dropdown__item navigation-header__dropdown-item"
-          >
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-              <FontAwesomeIcon icon={faUserShield} />
-            </NewIcon>
-            Admin
-          </NewLink>
-        </NewDropDownItem>
-      ) : null}
-      <NewDropDownItem asChild>
-        <NewLink
-          primitiveType="link"
-          href={buildLogoutUrl()}
-          rootClasses="dropdown__item navigation-header__dropdown-item"
-        >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-            <FontAwesomeIcon icon={faSignOut} />
-          </NewIcon>
-          Log Out
-        </NewLink>
-      </NewDropDownItem>
-    </NewDropDown>
-  );
-}
-
 export function MobileUserMenu(props: {
   user: CurrentUser;
   domain: string;
@@ -735,22 +558,38 @@ export function MobileUserMenu(props: {
       }
     >
       <nav className="mobile-navigation__popover" aria-label="Mobile user menu">
-        <div className="mobile-navigation__avatar">
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="User"
+          user={user.username ?? undefined}
+          rootClasses="mobile-navigation__avatar"
+        >
           <NewAvatar src={avatar} username={user.username} csSize="medium" />
-          <div className="mobile-navigation__user-details">{user.username}</div>
-        </div>
+          <span className="mobile-navigation__user-details">
+            <span className="mobile-navigation__user-name">
+              {user.username}
+            </span>
+            <span className="mobile-navigation__user-profile">My profile</span>
+          </span>
+        </NewLink>
         <div className="mobile-navigation__divider" />
+        {/* Django admin, staff only — mirrors the legacy nav (TS-3952). */}
+        {user.is_staff ? (
+          <>
+            <NewLink
+              primitiveType="link"
+              href="/djangoadmin/"
+              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faUserShield} />
+              </NewIcon>
+              Admin
+            </NewLink>
+            <div className="mobile-navigation__divider" />
+          </>
+        ) : null}
         <section>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Settings"
-            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faCog} />
-            </NewIcon>
-            Settings
-          </NewLink>
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Teams"
@@ -778,33 +617,28 @@ export function MobileUserMenu(props: {
                 </span>
               </NewLink>
             ))}
-        </section>
-        <div className="mobile-navigation__divider" />
-        <section>
-          {/* Django admin, staff only — mirrors the legacy nav (TS-3952). */}
-          {user.is_staff ? (
-            <NewLink
-              primitiveType="link"
-              href="/djangoadmin/"
-              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faUserShield} />
-              </NewIcon>
-              Admin
-            </NewLink>
-          ) : null}
           <NewLink
-            primitiveType="link"
-            href={buildLogoutUrl()}
+            primitiveType="cyberstormLink"
+            linkId="Settings"
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
           >
             <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faSignOut} />
+              <FontAwesomeIcon icon={faCog} />
             </NewIcon>
-            Log Out
+            Settings
           </NewLink>
         </section>
+        <div className="mobile-navigation__divider" />
+        <NewLink
+          primitiveType="link"
+          href={buildLogoutUrl()}
+          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faSignOut} />
+          </NewIcon>
+          Log Out
+        </NewLink>
       </nav>
     </Menu>
   );

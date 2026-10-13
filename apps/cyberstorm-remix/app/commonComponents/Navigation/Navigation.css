@@ -102,21 +102,33 @@
   .navigation-header__avatar {
     display: flex;
     gap: var(--gap-md);
-    padding: 0.375rem 1rem;
-    cursor: unset;
-  }
-
-  .navigation-header__avatar[data-highlighted] {
-    --dropdown-item-background-color: var(--dropdown-item-bg-color--default);
+    align-items: center;
+    padding: 6px var(--gap-sm);
   }
 
   .navigation-header__dropdown-details {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    gap: var(--gap-3xs);
+    min-width: 0;
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+
+  .navigation-header__dropdown-name {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-lg);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+
+  .navigation-header__dropdown-profile {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
   }
 
   .navigation-header__dropdown-item {
@@ -131,6 +143,16 @@
   .navigation-header__dropdown-item[data-highlighted],
   .navigation-header__dropdown-item {
     color: var(--color-text-primary);
+  }
+
+  .navigation-header__user-dropdown {
+    width: 15rem;
+  }
+
+  /* Item icons stay muted. The rule above would otherwise paint every svg
+     in the user menu the same color as the label. */
+  .navigation-header__user-dropdown .navigation-header__dropdown-item svg {
+    color: var(--color-text-tertiary);
   }
 
   .navigation-header__mobile-menu {
@@ -162,7 +184,6 @@
   .navigation-header__teams-list {
     display: flex;
     flex-direction: column;
-    gap: var(--dropdown-gap);
 
     /* min-height:0 lets this flex child shrink below its content height, so the
        overflow (and its scrollbar) actually engages inside the capped parent. */
