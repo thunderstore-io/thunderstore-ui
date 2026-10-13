@@ -1,19 +1,11 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Content,
-  Item,
-  Portal,
-  Root,
-  Trigger,
-  Viewport,
-} from "@radix-ui/react-select";
-import React, { type ReactElement, memo, useContext } from "react";
+import React, { type ReactElement, memo } from "react";
 
-import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
+import { DropDown, DropDownItem } from "../DropDown/DropDown";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Select.css";
 import {
@@ -40,8 +32,6 @@ type _SelectProps<T> = {
 export type SelectProps<T> = _SelectProps<T> &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps<T>>;
 
-// TODO: Rework to use regular select preferrably
-// or atleast ensure a11y stuff works
 function SelectComponent<T extends string>(props: SelectProps<T>) {
   const {
     defaultOpen = false,
@@ -58,29 +48,28 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
     csVariant = "default",
     csSize = "medium",
     csModifiers,
-    ...forwardedProps
+    rootClasses,
+    id,
+    "aria-label": ariaLabel,
   } = props;
 
-  const container = useContext(TopLayerContainerContext);
-
-  const selectItemElements = options
-    ? mapSelectData(options, csVariant, csSize, csModifiers)
-    : null;
-  const selectedOption = options?.find((o) => o.value === value);
+  const selectedOption = options.find((option) => option.value === value);
+  const isDisabled =
+    disabled || csModifiers?.includes("disabled") || options.length === 0;
 
   return (
-    <Root
+    <DropDown
       defaultOpen={defaultOpen}
-      value={value}
-      onValueChange={onChange}
-      disabled={disabled || options.length === 0}
-    >
-      <Trigger asChild>
+      disabled={isDisabled}
+      rootClasses="select"
+      trigger={
         <NewButton
           type="button"
+          id={id}
           csVariant="secondary"
           csSize={csSize}
-          aria-label={forwardedProps["aria-label"]}
+          aria-label={ariaLabel}
+          disabled={isDisabled}
           rootClasses={classnames(
             "select__trigger",
             ...componentClasses(
@@ -89,12 +78,12 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
               csSize,
               csModifiers
             ),
-            forwardedProps.rootClasses
+            rootClasses
           )}
         >
           {selectedOption?.leftIcon ? (
             <NewIcon csMode="inline" noWrapper csVariant="accent">
-              {selectedOption?.leftIcon}
+              {selectedOption.leftIcon}
             </NewIcon>
           ) : null}
           {selectedOption?.label ?? placeholder}
@@ -103,48 +92,32 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
             : null}
           {icon}
         </NewButton>
-      </Trigger>
-
-      <Portal container={container ?? undefined}>
-        <Content
-          position="popper"
-          sideOffset={4}
-          className={classnames(
-            "select",
-            ...componentClasses("select", csVariant, csSize, csModifiers)
+      }
+    >
+      {options.map((option, index) => (
+        <DropDownItem
+          key={`${option.value}-${index}`}
+          onSelect={() => onChange?.(option.value)}
+          rootClasses={classnames(
+            "select__option",
+            option.value === value ? "select__option--selected" : undefined
           )}
         >
-          <Viewport>{selectItemElements}</Viewport>
-        </Content>
-      </Portal>
-    </Root>
+          <button type="button">
+            {option.leftIcon ? (
+              <NewIcon csMode="inline" noWrapper>
+                {option.leftIcon}
+              </NewIcon>
+            ) : null}
+            {option.label}
+            {!option.label && !option.leftIcon ? option.value : null}
+          </button>
+        </DropDownItem>
+      ))}
+    </DropDown>
   );
 }
 
 SelectComponent.displayName = "Select";
 
 export const Select = memo(SelectComponent) as typeof SelectComponent;
-
-function mapSelectData<T extends string>(
-  options: SelectOption<T>[],
-  csVariant: SelectVariants,
-  csSize: SelectSizes,
-  csModifiers?: SelectModifiers[]
-) {
-  return options.map((option, index) => (
-    <Item value={option.value} key={index} asChild>
-      <div
-        className={classnames(
-          "select__item",
-          ...componentClasses("select__item", csVariant, csSize, csModifiers)
-        )}
-      >
-        <NewIcon csMode="inline" noWrapper>
-          {option.leftIcon}
-        </NewIcon>
-        {option.label}
-        {!option.label && !option.leftIcon ? option.value : null}
-      </div>
-    </Item>
-  ));
-}
