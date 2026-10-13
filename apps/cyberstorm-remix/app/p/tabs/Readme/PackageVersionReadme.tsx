@@ -37,7 +37,7 @@ export const loader = ssrLoader(
       message: "Failed to load readme",
       readme: { html: "" },
       seo: createSeo({
-        descriptors: [{ title: "Readme Not Found | Thunderstore" }],
+        descriptors: [{ title: "Readme Not Found · Thunderstore" }],
       }),
     };
   },

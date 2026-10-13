@@ -73,7 +73,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   return {
     seo: createSeo({
       descriptors: [
-        { title: `Teams of ${currentUser.username} | Thunderstore` },
+        { title: `Teams of ${currentUser.username} · Thunderstore` },
         {
           name: "description",
           content: `Teams of ${currentUser.username}`,
@@ -82,7 +82,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
         { property: "og:url", content: getCanonicalUrl(request) },
         {
           property: "og:title",
-          content: `Teams of ${currentUser.username} | Thunderstore`,
+          content: `Teams of ${currentUser.username}`,
         },
         {
           property: "og:description",

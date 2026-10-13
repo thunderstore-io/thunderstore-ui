@@ -2,8 +2,8 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
-import { createSeo } from "cyberstorm/utils/meta";
+import { getApiHostForSsr, getListingCanonicalUrl } from "cyberstorm/utils/env";
+import { type SeoValue, createSeo } from "cyberstorm/utils/meta";
 import {
   parseIntListParam,
   parsePageParam,
@@ -11,6 +11,7 @@ import {
 } from "cyberstorm/utils/searchParamsUtils";
 import { getSectionDefault } from "cyberstorm/utils/section";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 import { useLoaderData, useOutletContext } from "react-router";
 import { SidebarAd } from "~/commonComponents/Ads/SidebarAd";
 import { TEAM_SIDEBAR_AD } from "~/commonComponents/Ads/nitroAds";
@@ -25,6 +26,71 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Team";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
+const THIN_TEAM_MAX_PACKAGES = 1;
+
+function teamDescriptors(
+  teamId: string,
+  community: { name: string },
+  listings: { count: number },
+  request: Request
+) {
+  return createSeo({
+    descriptors: [
+      {
+        title: `Mods uploaded by ${teamId} · ${community.name} · Thunderstore`,
+      },
+      {
+        name: "description",
+        content: `Browse mods uploaded by ${teamId}`,
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: getListingCanonicalUrl(request) },
+      {
+        property: "og:title",
+        content: `Mods by ${teamId} · ${community.name}`,
+      },
+      {
+        property: "og:description",
+        content: `Browse mods uploaded by ${teamId}`,
+      },
+      { property: "og:site_name", content: "Thunderstore" },
+      // A one-package team page duplicates the package page.
+      ...(listings.count <= THIN_TEAM_MAX_PACKAGES
+        ? [{ name: "robots", content: "noindex, follow" }]
+        : []),
+    ],
+  });
+}
+
+/**
+ * Shared by both loaders, and takes the community and the listings either
+ * resolved or still in flight. The client loader's data replaces the server's,
+ * so tags only the server emitted would vanish on a client-side navigation into
+ * a team and, worse, when paging through one that was server-rendered — the
+ * page would be left with the root title and no canonical at all.
+ *
+ * The client loader keeps streaming both, so the listing is not held up for the
+ * sake of a title; <Seo> renders the tags once they arrive. The thin-team
+ * noindex needs the package count, so it lands with them, which is soon enough:
+ * a crawler is served the server's render, where both are already resolved.
+ */
+function teamSeo(
+  teamId: string,
+  community: { name: string } | Promise<{ name: string }>,
+  listings: { count: number } | Promise<{ count: number }>,
+  request: Request
+): SeoValue {
+  if (isPromise(community) || isPromise(listings)) {
+    return Promise.all([community, listings]).then(
+      ([resolvedCommunity, resolvedListings]) =>
+        teamDescriptors(teamId, resolvedCommunity, resolvedListings, request),
+      // A failed fetch is the route's own business; the tags stay as they are.
+      () => undefined
+    );
+  }
+  return teamDescriptors(teamId, community, listings, request);
+}
 
 export const loader = ssrLoader(
   async ({ params, request }: Route.LoaderArgs) => {
@@ -60,48 +126,29 @@ export const loader = ssrLoader(
 
       const finalSection = getSectionDefault(section, filters?.sections);
 
+      const listings = await dapper.getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        parsePageParam(page),
+        search,
+        includedCategories,
+        excludedCategories,
+        finalSection,
+        nsfw === "true" ? true : false,
+        deprecated === "true" ? true : false
+      );
+
       return {
         teamId: params.namespaceId,
         filters: filters,
         // Community is required for the breadcrumbs in the root layout
         community: community,
-        listings: await dapper.getPackageListings(
-          {
-            kind: "namespace",
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-          },
-          ordering ?? "",
-          parsePageParam(page),
-          search,
-          includedCategories,
-          excludedCategories,
-          finalSection,
-          nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
-        ),
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `Mods uploaded by ${params.namespaceId} | Thunderstore - The ${community.name} Mod Database`,
-            },
-            {
-              name: "description",
-              content: `Browse mods uploaded by ${params.namespaceId}`,
-            },
-            { property: "og:type", content: "website" },
-            { property: "og:url", content: getCanonicalUrl(request) },
-            {
-              property: "og:title",
-              content: `Mods by ${params.namespaceId} | Thunderstore`,
-            },
-            {
-              property: "og:description",
-              content: `Browse mods uploaded by ${params.namespaceId}`,
-            },
-            { property: "og:site_name", content: "Thunderstore" },
-          ],
-        }),
+        listings: listings,
+        seo: teamSeo(params.namespaceId, community, listings, request),
       };
     }
     throw new Response("Community not found", { status: 404 });
@@ -173,6 +220,7 @@ export async function clientLoader({
       filters: filters,
       community: community,
       listings: listingsPromise,
+      seo: teamSeo(params.namespaceId, community, listingsPromise, request),
     };
   }
   throw new Response("Community not found", { status: 404 });

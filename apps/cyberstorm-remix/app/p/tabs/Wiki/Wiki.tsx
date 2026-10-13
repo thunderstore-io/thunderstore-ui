@@ -2,9 +2,10 @@ import { faGhost } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
+import { isWikiEditorPath } from "cyberstorm/utils/wikiPaths";
 import { Suspense } from "react";
 import {
   Await,
@@ -26,13 +27,42 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageWiki } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
+import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Wiki";
 import "./Wiki.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
+/**
+ * Shared by both loaders, since clientLoader.hydrate replaces the SSR match
+ * data the <Seo> head reads.
+ *
+ * The canonical is the wiki page's own URL. packageListing, the layout above
+ * this one, points og:url at the package listing so its tabs consolidate
+ * there; a wiki page is the one thing under it with substantial content of its
+ * own, so it keeps its own canonical rather than being folded away.
+ */
+function wikiSeo(
+  params: { namespaceId: string; packageId: string; slug?: string },
+  request: Request
+) {
+  return createSeo({
+    descriptors: [
+      // The wiki is a package tab, so it names itself the way the others do.
+      ...packageTabSeo("Wiki", params.packageId).descriptors,
+      { property: "og:url", content: getCanonicalUrl(request) },
+      // The editors answer 200 to anyone, so a crawler reaches the "create a
+      // wiki page" and "edit this page" forms as readily as a reader does.
+      // They are UI, not content.
+      ...(isWikiEditorPath(new URL(request.url).pathname, params.slug)
+        ? [{ name: "robots", content: "noindex, follow" }]
+        : []),
+    ],
+  });
+}
+
 export const loader = ssrLoader(
-  async ({ params }: Route.LoaderArgs) => {
+  async ({ params, request }: Route.LoaderArgs) => {
     if (params.communityId && params.namespaceId && params.packageId) {
       const dapper = new DapperTs(() => {
         return {
@@ -63,17 +93,14 @@ export const loader = ssrLoader(
         packageId: params.packageId,
         slug: params.slug,
         permissions: undefined,
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} Wiki | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Wiki for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
+        seo: wikiSeo(
+          {
+            namespaceId: params.namespaceId,
+            packageId: params.packageId,
+            slug: params.slug,
+          },
+          request
+        ),
       };
     } else {
       throw new Error("Namespace ID or Package ID is missing");
@@ -84,7 +111,10 @@ export const loader = ssrLoader(
 
 export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -116,6 +146,14 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
       packageId: params.packageId,
       slug: params.slug,
       permissions: permissions,
+      seo: wikiSeo(
+        {
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          slug: params.slug,
+        },
+        request
+      ),
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
@@ -124,9 +162,21 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
 clientLoader.hydrate = true as const;
 
+/**
+ * Reload whenever the path changes.
+ *
+ * This route's data decides what the page says it is — its canonical is the
+ * requested URL, and the editors are told apart from the pages by that URL too
+ * — so data loaded for one path cannot describe another. Moving between a page
+ * and its editor keeps every param, which is not a revalidation by default, and
+ * left the editor claiming the page's canonical and missing its noindex.
+ *
+ * A path comparison also covers what the two rules it replaces were for: every
+ * param is a path segment, so a param change is a path change, and leaving an
+ * editor for the page it edited is one too, which is what refreshed the sidebar
+ * after a wiki page was created or renamed.
+ */
 export const shouldRevalidate: ShouldRevalidateFunction = ({
-  currentParams,
-  nextParams,
   defaultShouldRevalidate,
   currentUrl,
   nextUrl,
@@ -135,20 +185,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
     return true;
   }
 
-  // Reload when navigating away from edit/new pages to reflect changes in the sidebar
-  if (
-    (currentUrl.pathname.endsWith("/edit") &&
-      !nextUrl.pathname.endsWith("/edit")) ||
-    (currentUrl.pathname.endsWith("/new") && !nextUrl.pathname.endsWith("/new"))
-  ) {
-    return true;
-  }
-
-  return (
-    currentParams.communityId !== nextParams.communityId ||
-    currentParams.namespaceId !== nextParams.namespaceId ||
-    currentParams.packageId !== nextParams.packageId
-  );
+  return currentUrl.pathname !== nextUrl.pathname;
 };
 
 function WikiEmptyState() {

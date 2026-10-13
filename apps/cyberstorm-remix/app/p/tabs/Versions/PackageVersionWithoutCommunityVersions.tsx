@@ -39,7 +39,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       seo: createSeo({
         descriptors: [
           {
-            title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore`,
+            title: `${params.namespaceId}-${params.packageId} Versions · Thunderstore`,
           },
           {
             name: "description",

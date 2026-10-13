@@ -74,7 +74,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       seo: createSeo({
         descriptors: [
           {
-            title: `${formatToDisplayName(version.full_version_name)} | ${
+            title: `${formatToDisplayName(version.full_version_name)} · ${
               team.name
             }`,
           },
@@ -83,7 +83,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
           { property: "og:url", content: url.href },
           {
             property: "og:title",
-            content: `${formatToDisplayName(version.full_version_name)} | ${
+            content: `${formatToDisplayName(version.full_version_name)} · ${
               team.name
             }`,
           },

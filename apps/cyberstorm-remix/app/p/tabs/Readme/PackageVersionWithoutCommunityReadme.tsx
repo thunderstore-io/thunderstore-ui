@@ -29,7 +29,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       seo: createSeo({
         descriptors: [
           {
-            title: `${params.namespaceId}-${params.packageId} ${params.packageVersion} Readme | Thunderstore`,
+            title: `${params.namespaceId}-${params.packageId} ${params.packageVersion} Readme · Thunderstore`,
           },
           {
             name: "description",
@@ -44,7 +44,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     message: "Failed to load readme",
     readme: { html: "" },
     seo: createSeo({
-      descriptors: [{ title: "Readme Not Found | Thunderstore" }],
+      descriptors: [{ title: "Readme Not Found · Thunderstore" }],
     }),
   };
 }

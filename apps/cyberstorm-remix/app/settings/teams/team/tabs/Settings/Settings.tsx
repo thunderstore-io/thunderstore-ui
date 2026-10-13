@@ -35,6 +35,7 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import "./Settings.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
+  "Settings",
   async (dapper, teamName) => ({
     permissions: dapper.getCurrentUserTeamPermissions(teamName),
   })

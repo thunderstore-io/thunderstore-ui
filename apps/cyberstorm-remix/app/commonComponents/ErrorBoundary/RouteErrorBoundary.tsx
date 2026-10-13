@@ -149,7 +149,7 @@ export function RouteErrorBoundary() {
     <>
       {/* React 19 hoists these into <head>. Error pages must never be indexed,
           and a real title beats the browser falling back to the raw URL. */}
-      <title>{`${errorTitle} | Thunderstore`}</title>
+      <title>{`${errorTitle} · Thunderstore`}</title>
       <meta name="robots" content="noindex, nofollow" />
       <div className="error-boundary">
         <h1

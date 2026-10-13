@@ -6,7 +6,11 @@ import {
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getAssetUrl,
+  getCanonicalUrl,
+} from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { parseSearchParam } from "cyberstorm/utils/searchParamsUtils";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
@@ -64,6 +68,53 @@ const selectOptions = [
 
 export { forwardLoaderHeaders as headers } from "cyberstorm/utils/ssrLoader";
 
+/**
+ * Shared by both loaders. Nothing here depends on the page's data, but the
+ * client loader's result replaces the server's on a client-side navigation, so
+ * tags only the server emitted leave the page with the root title and no
+ * og:/twitter: card as soon as someone arrives by clicking a link.
+ */
+function communitiesSeo(request: Request) {
+  const origin = new URL(getCanonicalUrl(request, "/")).origin;
+  const description = "Browse all communities on Thunderstore";
+  return createSeo({
+    descriptors: [
+      { title: "Communities · Thunderstore" },
+      { name: "description", content: description },
+      { property: "og:type", content: "website" },
+      {
+        property: "og:url",
+        content: getCanonicalUrl(request, "/communities"),
+      },
+      { property: "og:title", content: "Communities" },
+      { property: "og:description", content: description },
+      {
+        property: "og:image",
+        content: getAssetUrl(request, "/cyberstorm-static/images/icon.webp"),
+      },
+      { property: "og:site_name", content: "Thunderstore" },
+      {
+        "script:ld+json": {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "Thunderstore",
+              url: origin,
+              logo: `${origin}/android-chrome-512x512.png`,
+            },
+            {
+              "@type": "WebSite",
+              name: "Thunderstore",
+              url: origin,
+            },
+          ],
+        },
+      },
+    ],
+  });
+}
+
 export const loader = ssrLoader(
   async ({ request }: Route.LoaderArgs) => {
     const url = new URL(request.url);
@@ -77,66 +128,13 @@ export const loader = ssrLoader(
         sessionId: undefined,
       };
     });
-    const origin = new URL(getCanonicalUrl(request, "/")).origin;
     return {
       communities: await dapper.getCommunities(
         page,
         order === null ? undefined : order,
         search
       ),
-      seo: createSeo({
-        descriptors: [
-          { title: "Communities | Thunderstore" },
-          {
-            name: "description",
-            content: "Browse all communities on Thunderstore",
-          },
-          { property: "og:type", content: "website" },
-          {
-            property: "og:url",
-            content: getCanonicalUrl(request, "/communities"),
-          },
-          { property: "og:title", content: "Communities | Thunderstore" },
-          {
-            property: "og:description",
-            content: "Browse all communities on Thunderstore",
-          },
-          {
-            property: "og:image",
-            content: getCanonicalUrl(
-              request,
-              "/cyberstorm-static/images/icon.webp"
-            ),
-          },
-          { property: "og:site_name", content: "Thunderstore" },
-          {
-            "script:ld+json": {
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  name: "Thunderstore",
-                  url: origin,
-                  logo: `${origin}/android-chrome-512x512.png`,
-                },
-                {
-                  "@type": "WebSite",
-                  name: "Thunderstore",
-                  url: origin,
-                  potentialAction: {
-                    "@type": "SearchAction",
-                    target: {
-                      "@type": "EntryPoint",
-                      urlTemplate: `${origin}/communities?search={search_term_string}`,
-                    },
-                    "query-input": "required name=search_term_string",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      }),
+      seo: communitiesSeo(request),
     };
   },
   { cache: true }
@@ -154,6 +152,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
       order ?? SortOptions.Popular,
       search
     ),
+    seo: communitiesSeo(request),
   };
 }
 

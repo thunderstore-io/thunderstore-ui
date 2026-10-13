@@ -71,7 +71,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
       seo: createSeo({
         descriptors: [
           {
-            title: `Edit ${page.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
+            title: `Edit ${page.title} · ${params.namespaceId}-${params.packageId} · Thunderstore`,
           },
           {
             name: "description",

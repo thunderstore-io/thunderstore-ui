@@ -10,7 +10,11 @@ import {
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getApiHostForSsr, getCanonicalUrl } from "cyberstorm/utils/env";
+import {
+  getApiHostForSsr,
+  getAssetUrl,
+  getCanonicalUrl,
+} from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense, memo } from "react";
@@ -49,6 +53,50 @@ const GAME_COUNT_TEXT = "300+";
 // from 7 on narrower viewports.
 const ROW_SIZE = 7;
 
+/**
+ * Shared by both loaders. Nothing here depends on the page's data, but the
+ * client loader's result replaces the server's on a client-side navigation, so
+ * tags only the server emitted leave the page with the root title and no
+ * og:/twitter: card as soon as someone arrives by clicking a link.
+ */
+function homeSeo(request: Request) {
+  const origin = new URL(getCanonicalUrl(request, "/")).origin;
+  const description = `Download mods for your favorite games. Choose from over ${PACKAGE_COUNT_TEXT} mods across ${GAME_COUNT_TEXT} games.`;
+  return createSeo({
+    descriptors: [
+      { title: "Thunderstore · The Mod Database" },
+      { name: "description", content: description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: getCanonicalUrl(request, "/") },
+      { property: "og:title", content: "Thunderstore · The Mod Database" },
+      { property: "og:description", content: description },
+      {
+        property: "og:image",
+        content: getAssetUrl(request, "/cyberstorm-static/images/icon.webp"),
+      },
+      { property: "og:site_name", content: "Thunderstore" },
+      {
+        "script:ld+json": {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "Thunderstore",
+              url: origin,
+              logo: `${origin}/android-chrome-512x512.png`,
+            },
+            {
+              "@type": "WebSite",
+              name: "Thunderstore",
+              url: origin,
+            },
+          ],
+        },
+      },
+    ],
+  });
+}
+
 export const loader = ssrLoader(
   async ({ request }: Route.LoaderArgs) => {
     const dapper = new DapperTs(() => {
@@ -57,8 +105,6 @@ export const loader = ssrLoader(
         sessionId: undefined,
       };
     });
-    const origin = new URL(getCanonicalUrl(request, "/")).origin;
-    const description = `Download mods for your favorite games. Choose from over ${PACKAGE_COUNT_TEXT} mods across ${GAME_COUNT_TEXT} games.`;
     const [popular, newest] = await Promise.all([
       dapper.getCommunities(undefined, CommunityListOrderingEnum.Popular),
       dapper.getCommunities(1, CommunityListOrderingEnum.Latest),
@@ -66,50 +112,7 @@ export const loader = ssrLoader(
     return {
       popular,
       newest,
-      seo: createSeo({
-        descriptors: [
-          { title: "Thunderstore | The Mod Database" },
-          { name: "description", content: description },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: getCanonicalUrl(request, "/") },
-          { property: "og:title", content: "Thunderstore | The Mod Database" },
-          { property: "og:description", content: description },
-          {
-            property: "og:image",
-            content: getCanonicalUrl(
-              request,
-              "/cyberstorm-static/images/icon.webp"
-            ),
-          },
-          { property: "og:site_name", content: "Thunderstore" },
-          {
-            "script:ld+json": {
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  name: "Thunderstore",
-                  url: origin,
-                  logo: `${origin}/android-chrome-512x512.png`,
-                },
-                {
-                  "@type": "WebSite",
-                  name: "Thunderstore",
-                  url: origin,
-                  potentialAction: {
-                    "@type": "SearchAction",
-                    target: {
-                      "@type": "EntryPoint",
-                      urlTemplate: `${origin}/communities?search={search_term_string}`,
-                    },
-                    "query-input": "required name=search_term_string",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      }),
+      seo: homeSeo(request),
     };
   },
   { cache: true }
@@ -123,6 +126,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
       CommunityListOrderingEnum.Popular
     ),
     newest: dapper.getCommunities(1, CommunityListOrderingEnum.Latest),
+    seo: homeSeo(request),
   };
 }
 

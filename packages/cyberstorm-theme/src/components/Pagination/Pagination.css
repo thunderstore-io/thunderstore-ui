@@ -14,8 +14,17 @@
     --pagination-item-background: var(--pagination-item-bg-color--default);
   }
 
-  /* Only apply triggers to buttons */
-  button.pagination__item {
+  /* The current page. Not scoped to the interactive elements below: the item
+     is highlighted whether it renders as a button or, on a listing with
+     crawlable pagination, as a link. */
+  .pagination__item--selected {
+    --pagination-item-text-color: var(--pagination-item-text-color--current);
+    --pagination-item-background: var(--pagination-item-bg-color--current);
+  }
+
+  /* Triggers only on the items that are actually actionable — the ellipsis
+     carries the same class but is an inert span. */
+  :is(a, button).pagination__item {
     &:hover {
       --pagination-item-text-color: var(--pagination-item-text-color--hover);
       --pagination-item-background: var(--pagination-item-bg-color--hover);
@@ -27,9 +36,6 @@
     }
 
     &.pagination__item--selected {
-      --pagination-item-text-color: var(--pagination-item-text-color--current);
-      --pagination-item-background: var(--pagination-item-bg-color--current);
-
       &:hover {
         --pagination-item-text-color: var(--pagination-item-text-color--hover);
         --pagination-item-background: var(--pagination-item-bg-color--hover);
