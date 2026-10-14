@@ -3,9 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Children,
   type PropsWithChildren,
-  type ReactNode,
   createContext,
-  isValidElement,
   memo,
   useContext,
 } from "react";
@@ -15,30 +13,42 @@ import { Icon } from "../Icon/Icon";
 import { type CyberstormLinkProps, Link, type LinkProps } from "../Link/Link";
 import "./BreadCrumbs.css";
 
-type BreadCrumbsProps = PropsWithChildren<{
-  rootClasses?: string;
-}>;
-
-type BreadCrumbState = {
+const BreadCrumbContext = createContext<{
   isCurrent: boolean;
   position: number;
-};
-
-const BreadCrumbContext = createContext<BreadCrumbState>({
+}>({
   isCurrent: false,
   position: 1,
 });
 
 // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#microdata
-export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
+export const BreadCrumbs = memo(function BreadCrumbs(
+  props: PropsWithChildren<{ rootClasses?: string }>
+) {
   const { children, rootClasses } = props;
-  const crumbs = Children.toArray(children);
+  // Callers pass arrays of crumbs and null for routes that do not apply.
+  const crumbs = [
+    <BreadCrumbsItem
+      key="home"
+      primitiveType="cyberstormLink"
+      linkId="Index"
+      tooltipText="Home"
+      aria-label="Home"
+      rootClasses="breadcrumbs__homelink"
+    >
+      <span className="breadcrumbs__home-name" itemProp="name">
+        Home
+      </span>
+      <Icon noWrapper csVariant="cyber" csWidth="0.875rem" csHeight="0.875rem">
+        <FontAwesomeIcon icon={faHouse} />
+      </Icon>
+    </BreadCrumbsItem>,
+    ...Children.toArray(children),
+  ];
 
   return (
     <nav
-      className={
-        rootClasses ? classnames("breadcrumbs", rootClasses) : "breadcrumbs"
-      }
+      className={classnames("breadcrumbs", rootClasses)}
       aria-label="Breadcrumb"
     >
       <ol
@@ -46,35 +56,12 @@ export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
         itemScope
         itemType="https://schema.org/BreadcrumbList"
       >
-        <BreadCrumbContext.Provider
-          value={{ isCurrent: crumbs.length === 0, position: 1 }}
-        >
-          <BreadCrumbsLink
-            primitiveType="cyberstormLink"
-            linkId="Index"
-            tooltipText="Home"
-            aria-label="Home"
-            rootClasses="breadcrumbs__homelink"
-          >
-            <span className="breadcrumbs__home-name" itemProp="name">
-              Home
-            </span>
-            <Icon
-              noWrapper
-              csVariant="cyber"
-              csWidth="0.875rem"
-              csHeight="0.875rem"
-            >
-              <FontAwesomeIcon icon={faHouse} />
-            </Icon>
-          </BreadCrumbsLink>
-        </BreadCrumbContext.Provider>
         {crumbs.map((crumb, index) => (
           <BreadCrumbContext.Provider
-            key={isValidElement(crumb) ? crumb.key : index}
+            key={index}
             value={{
               isCurrent: index === crumbs.length - 1,
-              position: index + 2,
+              position: index + 1,
             }}
           >
             {crumb}
@@ -85,32 +72,36 @@ export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
   );
 });
 
-function BreadCrumbsItemContent({ children }: PropsWithChildren) {
-  return (
+/**
+ * One crumb. Link props (`primitiveType` plus an href or `linkId`) render a
+ * link; without them the crumb is text, which is how the current page is shown.
+ */
+export function BreadCrumbsItem(
+  props:
+    | PropsWithChildren<{ rootClasses?: string }>
+    | LinkProps
+    | CyberstormLinkProps
+) {
+  const { isCurrent, position } = useContext(BreadCrumbContext);
+  const current = isCurrent ? "page" : undefined;
+  const content = (
     <span className="breadcrumbs__item-content">
-      {normalizeBreadCrumbsContent(children)}
+      {Children.map(props.children, (child) => {
+        if (typeof child !== "string") {
+          return child;
+        }
+        if (child.trim() === "") {
+          return null;
+        }
+        return (
+          <span className="breadcrumbs__item-label" itemProp="name">
+            {child}
+          </span>
+        );
+      })}
     </span>
   );
-}
-
-function normalizeBreadCrumbsContent(children: ReactNode) {
-  return Children.map(children, (child) => {
-    if (typeof child === "string") {
-      if (child.trim() === "") {
-        return null;
-      }
-      return (
-        <span className="breadcrumbs__item-label" itemProp="name">
-          {child}
-        </span>
-      );
-    }
-    return child;
-  });
-}
-
-function BreadCrumbListItem({ children }: PropsWithChildren) {
-  const { position } = useContext(BreadCrumbContext);
+  const segmentClass = classnames("breadcrumbs__segment", props.rootClasses);
 
   return (
     <li
@@ -119,41 +110,21 @@ function BreadCrumbListItem({ children }: PropsWithChildren) {
       itemScope
       itemType="https://schema.org/ListItem"
     >
-      {children}
+      {"primitiveType" in props ? (
+        <Link
+          {...props}
+          itemProp="item"
+          aria-current={current}
+          rootClasses={segmentClass}
+        >
+          {content}
+        </Link>
+      ) : (
+        <span className={segmentClass} aria-current={current}>
+          {content}
+        </span>
+      )}
       <meta itemProp="position" content={String(position)} />
     </li>
-  );
-}
-
-export function BreadCrumbsLink(props: LinkProps | CyberstormLinkProps) {
-  const { children, rootClasses, ...forwardedProps } = props;
-  const { isCurrent } = useContext(BreadCrumbContext);
-
-  return (
-    <BreadCrumbListItem>
-      <Link
-        {...forwardedProps}
-        itemProp="item"
-        aria-current={isCurrent ? "page" : undefined}
-        rootClasses={classnames("breadcrumbs__segment", rootClasses)}
-      >
-        <BreadCrumbsItemContent>{children}</BreadCrumbsItemContent>
-      </Link>
-    </BreadCrumbListItem>
-  );
-}
-
-export function BreadCrumbsItem({ children }: PropsWithChildren) {
-  const { isCurrent } = useContext(BreadCrumbContext);
-
-  return (
-    <BreadCrumbListItem>
-      <span
-        className="breadcrumbs__segment"
-        aria-current={isCurrent ? "page" : undefined}
-      >
-        <BreadCrumbsItemContent>{children}</BreadCrumbsItemContent>
-      </span>
-    </BreadCrumbListItem>
   );
 }
