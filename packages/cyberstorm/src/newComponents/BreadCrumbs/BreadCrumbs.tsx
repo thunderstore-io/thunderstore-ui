@@ -60,7 +60,7 @@ export const BreadCrumbs = memo(function BreadCrumbs(
           <BreadCrumbContext.Provider
             key={index}
             value={{
-              isCurrent: index === crumbs.length - 1,
+              isCurrent: index > 0 && index === crumbs.length - 1,
               position: index + 1,
             }}
           >
