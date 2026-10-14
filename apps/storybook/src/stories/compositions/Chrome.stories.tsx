@@ -2,7 +2,6 @@ import { Avatar } from "@cs/newComponents/Avatar/Avatar";
 import {
   BreadCrumbs,
   BreadCrumbsItem,
-  BreadCrumbsLink,
 } from "@cs/newComponents/BreadCrumbs/BreadCrumbs";
 import { Button } from "@cs/newComponents/Button/Button";
 import {
@@ -83,9 +82,9 @@ function Chrome() {
               />
               Item with icon
             </BreadCrumbsItem>
-            <BreadCrumbsLink primitiveType="link" href="#category">
+            <BreadCrumbsItem primitiveType="link" href="#category">
               Link item
-            </BreadCrumbsLink>
+            </BreadCrumbsItem>
             <BreadCrumbsItem>Last Item</BreadCrumbsItem>
           </BreadCrumbs>
         </div>
