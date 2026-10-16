@@ -88,7 +88,7 @@ export async function apiFetch(props: {
   }
 }
 
-function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
+export function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
   return config.sessionId
     ? {
         Authorization: `Session ${config.sessionId}`,

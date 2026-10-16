@@ -89,46 +89,62 @@ export const CodeInput = React.forwardRef<HTMLTextAreaElement, CodeInputProps>(
 
 CodeInput.displayName = "CodeInput";
 
-function ValidationBar(props: {
+export function ValidationBar(props: {
   status: "waiting" | "processing" | "success" | "failure";
   message?: string;
+  rootClasses?: string;
+  children?: ReactNode;
 }): ReactNode {
   if (props.status === "waiting") {
     return (
-      <div className="validation-bar">
+      <div className={classnames("validation-bar", props.rootClasses)}>
         <NewIcon csMode="inline" noWrapper>
           <FontAwesomeIcon icon={faPenToSquare} />
         </NewIcon>
         {props.message ? props.message : "Waiting for input"}
+        {props.children}
       </div>
     );
   } else if (props.status === "processing") {
     return (
-      <div className="validation-bar">
-        <NewIcon csMode="inline" rootClasses="validation-bar--spin">
+      <div className={classnames("validation-bar", props.rootClasses)}>
+        <NewIcon csMode="inline" noWrapper rootClasses="validation-bar--spin">
           <FontAwesomeIcon icon={faArrowsRotate} />
         </NewIcon>
         {props.message ? props.message : "Processing..."}
+        {props.children}
       </div>
     );
   } else if (props.status === "success") {
     return (
-      <div className="validation-bar validation-bar--success">
+      <div
+        className={classnames(
+          "validation-bar validation-bar--success",
+          props.rootClasses
+        )}
+      >
         <NewIcon csMode="inline" noWrapper>
           <FontAwesomeIcon icon={faCircleCheck} />
         </NewIcon>
         {props.message ? props.message : "All systems go!"}
+        {props.children}
       </div>
     );
   } else {
     return (
-      <div className="validation-bar validation-bar--failure">
+      <div
+        className={classnames(
+          "validation-bar validation-bar--failure",
+          props.rootClasses
+        )}
+      >
         <NewIcon csMode="inline" noWrapper>
           <FontAwesomeIcon icon={faTriangleExclamation} />
         </NewIcon>
         {props.message
           ? props.message
           : "Problem, alarm, danger. Everything is going to explode."}
+        {props.children}
       </div>
     );
   }
