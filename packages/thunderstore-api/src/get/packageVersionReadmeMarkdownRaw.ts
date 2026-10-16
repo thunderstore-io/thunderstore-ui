@@ -1,4 +1,4 @@
-import { apiFetch } from "../apiFetch";
+import { apiFetch, getAuthHeaders } from "../apiFetch";
 import { ApiError } from "../index";
 import type { ApiEndpointProps } from "../index";
 import type { PackageVersionMarkdownRequestParams } from "../schemas/requestSchemas";
@@ -16,6 +16,7 @@ export function fetchPackageVersionReadmeMarkdownRaw(
       config,
       path,
       request: { cache: "no-store" },
+      useSession: true,
     },
     requestSchema: undefined,
     queryParamsSchema: undefined,
@@ -31,6 +32,7 @@ export async function fetchPackageVersionReadmeOverrideRaw(
   const path = `/api/cyberstorm/package/${params.namespace}/${params.package}/v/${params.version}/markdown/readme/download/`;
 
   const response = await fetch(new URL(path, config().apiHost), {
+    headers: getAuthHeaders(config()),
     cache: "no-store",
   });
   if (response.status === 404) return null;
