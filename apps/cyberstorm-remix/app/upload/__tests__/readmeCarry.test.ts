@@ -115,12 +115,13 @@ vi.mock("../components/UploadSubmitSection", () => ({
 }));
 
 let cleanup: (() => void) | undefined;
+let router: ReturnType<typeof createMemoryRouter>;
 
 async function renderUpload() {
   const container = document.createElement("div");
   document.body.appendChild(container);
   const root = createRoot(container);
-  const router = createMemoryRouter([
+  router = createMemoryRouter([
     {
       path: "/",
       element: React.createElement(Outlet, {
@@ -134,6 +135,7 @@ async function renderUpload() {
         },
       ],
     },
+    { path: "/elsewhere", element: null },
   ]);
   await act(async () => {
     root.render(React.createElement(RouterProvider, { router }));
@@ -189,4 +191,24 @@ describe("README carry-forward opt-in", () => {
     await act(async () => getByRole(container, "switch").click());
     expect(container.querySelector("output")?.textContent).toBe("null");
   });
+
+  it.each([
+    [true, "/"],
+    [false, "/elsewhere"],
+  ])(
+    "prompts before leaving mid-processing when opted in: %s",
+    async (optedIn, pathname) => {
+      const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
+      const container = await renderUpload();
+      if (optedIn)
+        await act(async () => getByRole(container, "switch").click());
+      await act(async () =>
+        getByRole(container, "button", { name: "Submit" }).click()
+      );
+      await act(async () => router.navigate("/elsewhere"));
+      expect(confirm).toHaveBeenCalledTimes(optedIn ? 1 : 0);
+      expect(router.state.location.pathname).toBe(pathname);
+      confirm.mockRestore();
+    }
+  );
 });

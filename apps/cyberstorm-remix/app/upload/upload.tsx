@@ -5,6 +5,7 @@ import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
+import { useLeavePrompt } from "cyberstorm/utils/useLeavePrompt";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { useLoaderData, useLocation, useOutletContext } from "react-router";
 
@@ -281,6 +282,12 @@ export default function Upload() {
   useEffect(() => {
     setSubmissionStatus(strongForm.submitOutput);
   }, [strongForm.submitOutput]);
+
+  useLeavePrompt(
+    !!overrideToCarry &&
+      (strongForm.submitting || submissionStatus?.status === "PENDING"),
+    "Leave before processing finishes? Your edited README won't be copied to the new version."
+  );
 
   const hasSubmissionFormErrors =
     !!submissionStatus?.form_errors &&

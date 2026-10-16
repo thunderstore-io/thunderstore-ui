@@ -4,14 +4,9 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { isMarkdownEditingEnabled } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  useBeforeUnload,
-  useBlocker,
-  useLoaderData,
-  useOutletContext,
-  useSearchParams,
-} from "react-router";
+import { useLeavePrompt } from "cyberstorm/utils/useLeavePrompt";
+import { useEffect, useRef, useState } from "react";
+import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { Page } from "~/commonComponents/Page/Page";
@@ -326,30 +321,6 @@ function usePreviousReadmeOverride(
   return [previousOverride, setPreviousOverride] as const;
 }
 
-function useUnsavedChangesPrompt(hasUnsavedChanges: boolean) {
-  const blocker = useBlocker(hasUnsavedChanges);
-  useEffect(() => {
-    if (blocker.state !== "blocked") return;
-    if (
-      window.confirm("Leave without saving your README or CHANGELOG changes?")
-    ) {
-      blocker.proceed();
-    } else {
-      blocker.reset();
-    }
-  }, [blocker]);
-  useBeforeUnload(
-    useCallback(
-      (event) => {
-        if (!hasUnsavedChanges) return;
-        event.preventDefault();
-        event.returnValue = "";
-      },
-      [hasUnsavedChanges]
-    )
-  );
-}
-
 function useMarkdownPreview(
   requestConfig: OutletContextShape["requestConfig"],
   text: string,
@@ -472,7 +443,10 @@ function ReadmeEditor({ data }: { data: EditorData }) {
   const hasUnsavedChanges = Object.values(documents).some(
     (doc) => doc !== null && !doc.needsReload && doc.markdown !== doc.baseline
   );
-  useUnsavedChangesPrompt(hasUnsavedChanges);
+  useLeavePrompt(
+    hasUnsavedChanges,
+    "Leave without saving your README or CHANGELOG changes?"
+  );
 
   const { previewHtml, preview } = useMarkdownPreview(
     outletContext.requestConfig,
