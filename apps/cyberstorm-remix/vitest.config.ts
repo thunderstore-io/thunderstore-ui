@@ -30,6 +30,9 @@ export default defineProject({
       "rehype-raw",
       "remark-gfm",
       "use-debounce",
+      "@fortawesome/free-brands-svg-icons",
+      "@rybbit/js",
+      "remix-utils/use-hydrated",
     ],
   },
 });
