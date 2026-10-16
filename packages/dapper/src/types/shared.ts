@@ -5,10 +5,14 @@ export type DynamicLink = {
 
 export type MarkdownResponse = {
   html: string;
+  is_edited?: boolean;
+  edited_at?: string | null;
 };
 
 export type HTMLContentResponse = {
   html: string;
+  is_edited?: boolean;
+  edited_at?: string | null;
 };
 
 export interface PackageCategory {
