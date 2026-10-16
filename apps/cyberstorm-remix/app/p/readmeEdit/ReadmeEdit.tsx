@@ -4,14 +4,9 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { isMarkdownEditingEnabled } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  useBeforeUnload,
-  useBlocker,
-  useLoaderData,
-  useOutletContext,
-  useSearchParams,
-} from "react-router";
+import { useLeavePrompt } from "cyberstorm/utils/useLeavePrompt";
+import { useEffect, useRef, useState } from "react";
+import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { Page } from "~/commonComponents/Page/Page";
@@ -51,6 +46,10 @@ import {
 import { getPrivateListing } from "../listingUtils";
 import type { Route } from "./+types/ReadmeEdit";
 import "./ReadmeEdit.css";
+import {
+  type PreviousOverride,
+  findPreviousReadmeOverride,
+} from "./overrideMigration";
 
 // Same limit as MAX_MARKDOWN_SIZE on the backend.
 const MAX_MARKDOWN_SIZE = 100000;
@@ -288,28 +287,38 @@ export default function ReadmeEdit() {
   return <ReadmeEditor key={key} data={data} />;
 }
 
-function useUnsavedChangesPrompt(hasUnsavedChanges: boolean) {
-  const blocker = useBlocker(hasUnsavedChanges);
+function usePreviousReadmeOverride(
+  requestConfig: OutletContextShape["requestConfig"],
+  namespaceId: string,
+  packageId: string,
+  packageVersion: string,
+  readmeIsEdited: boolean
+) {
+  const [previousOverride, setPreviousOverride] =
+    useState<PreviousOverride | null>(null);
+
+  // Uses the live edit state, so discarding an edit brings the offer back.
   useEffect(() => {
-    if (blocker.state !== "blocked") return;
-    if (
-      window.confirm("Leave without saving your README or CHANGELOG changes?")
-    ) {
-      blocker.proceed();
-    } else {
-      blocker.reset();
-    }
-  }, [blocker]);
-  useBeforeUnload(
-    useCallback(
-      (event) => {
-        if (!hasUnsavedChanges) return;
-        event.preventDefault();
-        event.returnValue = "";
-      },
-      [hasUnsavedChanges]
+    if (readmeIsEdited) return;
+    let cancelled = false;
+    findPreviousReadmeOverride(
+      requestConfig,
+      namespaceId,
+      packageId,
+      packageVersion
     )
-  );
+      .then((result) => {
+        if (!cancelled) setPreviousOverride(result);
+      })
+      .catch(() => {
+        // Best effort
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [namespaceId, packageId, packageVersion, readmeIsEdited]);
+
+  return [previousOverride, setPreviousOverride] as const;
 }
 
 function useMarkdownPreview(
@@ -418,6 +427,14 @@ function ReadmeEditor({ data }: { data: EditorData }) {
     };
   }, []);
 
+  const [previousOverride, setPreviousOverride] = usePreviousReadmeOverride(
+    outletContext.requestConfig,
+    namespaceId,
+    packageId,
+    packageVersion,
+    documents.readme?.is_edited ?? false
+  );
+
   const currentDoc = documents[selectedDoc];
   const documentLabel = DOCUMENT_LABELS[selectedDoc];
   const currentText = currentDoc?.markdown ?? "";
@@ -426,7 +443,10 @@ function ReadmeEditor({ data }: { data: EditorData }) {
   const hasUnsavedChanges = Object.values(documents).some(
     (doc) => doc !== null && !doc.needsReload && doc.markdown !== doc.baseline
   );
-  useUnsavedChangesPrompt(hasUnsavedChanges);
+  useLeavePrompt(
+    hasUnsavedChanges,
+    "Leave without saving your README or CHANGELOG changes?"
+  );
 
   const { previewHtml, preview } = useMarkdownPreview(
     outletContext.requestConfig,
@@ -444,6 +464,10 @@ function ReadmeEditor({ data }: { data: EditorData }) {
     : preview;
 
   const canSave = isDirty && !overLimit && !saving && !needsReload;
+  const offeredOverride =
+    selectedDoc === "readme" && !currentDoc?.is_edited && !needsReload
+      ? previousOverride
+      : null;
 
   function updateDocument(doc: DocumentKey, state: Partial<DocumentState>) {
     fileReadIds.current[doc]++;
@@ -537,6 +561,20 @@ function ReadmeEditor({ data }: { data: EditorData }) {
     } finally {
       setSaving(false);
     }
+  }
+
+  function loadPreviousOverride() {
+    if (!previousOverride) return;
+    if (
+      isDirty &&
+      !window.confirm(
+        `Replace your unsaved README changes with the site edit from ${previousOverride.versionNumber}?`
+      )
+    ) {
+      return;
+    }
+    setDocumentText("readme", previousOverride.markdown);
+    setPreviousOverride(null);
   }
 
   function loadFromFile(file: File | undefined) {
@@ -643,6 +681,16 @@ function ReadmeEditor({ data }: { data: EditorData }) {
           rootClasses="readme-edit__bar"
         >
           <span className="readme-edit__bar-actions">
+            {offeredOverride ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                onClick={loadPreviousOverride}
+                disabled={saving}
+              >
+                Load site edit from {offeredOverride.versionNumber}
+              </NewButton>
+            ) : null}
             <input
               ref={fileInputRef}
               type="file"

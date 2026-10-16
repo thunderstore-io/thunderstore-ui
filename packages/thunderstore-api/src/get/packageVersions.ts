@@ -5,7 +5,8 @@ import { packageVersionsResponseDataSchema } from "../schemas/responseSchemas";
 import type { PackageVersionsResponseData } from "../schemas/responseSchemas";
 
 export async function fetchPackageVersions(
-  props: ApiEndpointProps<PackageVersionsRequestParams, object, object>
+  props: ApiEndpointProps<PackageVersionsRequestParams, object, object>,
+  cache?: RequestCache
 ): Promise<PackageVersionsResponseData> {
   const { config, params } = props;
   const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/versions/`;
@@ -14,6 +15,7 @@ export async function fetchPackageVersions(
     args: {
       config: config,
       path: path,
+      request: { cache },
     },
     requestSchema: undefined,
     queryParamsSchema: undefined,
