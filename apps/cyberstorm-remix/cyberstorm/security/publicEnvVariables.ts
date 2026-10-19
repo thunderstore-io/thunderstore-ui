@@ -12,7 +12,8 @@ export type publicEnvVariablesKeys =
   | "CLIENT_SENTRY_DSN"
   | "RYBBIT_SITE_ID"
   | "RYBBIT_ANALYTICS_HOST"
-  | "DISABLE_ADS";
+  | "DISABLE_ADS"
+  | "ENABLE_MARKDOWN_EDITING";
 
 export type PublicPrefix<envVariable extends string> = `VITE_${envVariable}`;
 
@@ -36,6 +37,7 @@ export const ROOT_PUBLIC_ENV_VARIABLES: PublicPrefix<publicEnvVariablesKeys>[] =
     "VITE_RYBBIT_SITE_ID",
     "VITE_RYBBIT_ANALYTICS_HOST",
     "VITE_DISABLE_ADS",
+    "VITE_ENABLE_MARKDOWN_EDITING",
   ];
 
 export function getPublicEnvVariables(

@@ -128,3 +128,11 @@ export function getListingCanonicalUrl(
 ): string {
   return canonicalUrl(request, pathname, true);
 }
+
+/** Site-edited README and CHANGELOG support. */
+export function isMarkdownEditingEnabled(): boolean {
+  return (
+    getPublicEnvVariables(["VITE_ENABLE_MARKDOWN_EDITING"])
+      .VITE_ENABLE_MARKDOWN_EDITING === "true"
+  );
+}

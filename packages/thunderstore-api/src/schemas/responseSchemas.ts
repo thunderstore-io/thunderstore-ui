@@ -116,6 +116,8 @@ export type DynamicHTMLResponseData = z.infer<
 // PackageChangelogResponse
 export const packageChangelogResponseDataSchema = z.object({
   html: z.string(),
+  is_edited: z.boolean().catch(false),
+  edited_at: z.string().datetime().nullable().catch(null),
 });
 
 export type PackageChangelogResponseData = z.infer<
@@ -177,6 +179,8 @@ export type PackageSourceResponseData = z.infer<
 // PackageReadmeResponse
 export const packageReadmeResponseDataSchema = z.object({
   html: z.string(),
+  is_edited: z.boolean().catch(false),
+  edited_at: z.string().datetime().nullable().catch(null),
 });
 
 export type PackageReadmeResponseData = z.infer<

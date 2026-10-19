@@ -1,16 +1,8 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import tsconfigPaths from "vite-tsconfig-paths";
 import { defineProject } from "vitest/config";
 
-const projectDir = path.dirname(fileURLToPath(import.meta.url));
-const cyberstormRoot = path.join(projectDir, "cyberstorm");
-
 export default defineProject({
-  resolve: {
-    alias: {
-      cyberstorm: cyberstormRoot,
-    },
-  },
+  plugins: [tsconfigPaths()],
   test: {
     include: ["**/__tests__/**/*.test.ts"],
     exclude: ["**/node_modules/**", "dist/**/*"],
