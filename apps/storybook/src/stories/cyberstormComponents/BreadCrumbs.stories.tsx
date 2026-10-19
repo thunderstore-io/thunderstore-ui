@@ -5,7 +5,6 @@ import {
   Image,
   NewBreadCrumbs,
   NewBreadCrumbsItem,
-  NewBreadCrumbsLink,
 } from "@thunderstore/cyberstorm";
 
 import catHeim from "../assets/catheim.png";
@@ -28,12 +27,12 @@ export const Default: Story = {
     <div style={{ width: "300px" }}>
       <NewBreadCrumbs>
         <NewBreadCrumbsItem>Just Text</NewBreadCrumbsItem>
-        <NewBreadCrumbsLink primitiveType="link" href="#">
+        <NewBreadCrumbsItem primitiveType="link" href="#">
           Category
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink primitiveType="link" href="#">
+        </NewBreadCrumbsItem>
+        <NewBreadCrumbsItem primitiveType="link" href="#">
           Item
-        </NewBreadCrumbsLink>
+        </NewBreadCrumbsItem>
       </NewBreadCrumbs>
     </div>
   ),
@@ -43,10 +42,10 @@ export const WithCommunityIcon: Story = {
   render: () => (
     <div style={{ width: "400px" }}>
       <NewBreadCrumbs>
-        <NewBreadCrumbsLink primitiveType="link" href="#">
+        <NewBreadCrumbsItem primitiveType="link" href="#">
           Communities
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink primitiveType="link" href="#">
+        </NewBreadCrumbsItem>
+        <NewBreadCrumbsItem primitiveType="link" href="#">
           <Image
             src={catHeim}
             fallbackIcon={faGamepad}
@@ -55,7 +54,7 @@ export const WithCommunityIcon: Story = {
             rootClasses="breadcrumbs__community-icon"
           />
           Catheim
-        </NewBreadCrumbsLink>
+        </NewBreadCrumbsItem>
         <NewBreadCrumbsItem>Some Package</NewBreadCrumbsItem>
       </NewBreadCrumbs>
     </div>
@@ -67,12 +66,12 @@ export const Short: Story = {
     <div style={{ width: "100px" }}>
       <NewBreadCrumbs>
         <NewBreadCrumbsItem>Just Text</NewBreadCrumbsItem>
-        <NewBreadCrumbsLink primitiveType="link" href="#">
+        <NewBreadCrumbsItem primitiveType="link" href="#">
           Category
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink primitiveType="link" href="#">
+        </NewBreadCrumbsItem>
+        <NewBreadCrumbsItem primitiveType="link" href="#">
           Item
-        </NewBreadCrumbsLink>
+        </NewBreadCrumbsItem>
       </NewBreadCrumbs>
     </div>
   ),

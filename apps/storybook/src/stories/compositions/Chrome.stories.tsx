@@ -2,7 +2,6 @@ import { Avatar } from "@cs/newComponents/Avatar/Avatar";
 import {
   BreadCrumbs,
   BreadCrumbsItem,
-  BreadCrumbsLink,
 } from "@cs/newComponents/BreadCrumbs/BreadCrumbs";
 import { Button } from "@cs/newComponents/Button/Button";
 import {
@@ -64,12 +63,48 @@ function Chrome() {
   return (
     <div className="cs-page">
       <States title="Breadcrumbs">
-        <div style={{ width: 300 }}>
+        <div>
+          <BreadCrumbs />
+        </div>
+        <div>
           <BreadCrumbs>
-            <BreadCrumbsItem>Just Text</BreadCrumbsItem>
-            <BreadCrumbsLink primitiveType="link" href="#category">
-              Category
-            </BreadCrumbsLink>
+            <BreadCrumbsItem>Single item</BreadCrumbsItem>
+          </BreadCrumbs>
+        </div>
+        <div>
+          <BreadCrumbs>
+            <BreadCrumbsItem>
+              <Image
+                src={communityImage}
+                square
+                alt=""
+                rootClasses="breadcrumbs__community-icon"
+              />
+              Item with icon
+            </BreadCrumbsItem>
+            <BreadCrumbsItem primitiveType="link" href="#category">
+              Link item
+            </BreadCrumbsItem>
+            <BreadCrumbsItem>Last Item</BreadCrumbsItem>
+          </BreadCrumbs>
+        </div>
+        <div>
+          <BreadCrumbs>
+            <BreadCrumbsItem>Crumb with a long name</BreadCrumbsItem>
+            <BreadCrumbsItem>
+              Crumb with an even longer name that is really long
+            </BreadCrumbsItem>
+            <BreadCrumbsItem>
+              Crumb with a long name that is really extremely long and seems to
+              be never ending
+            </BreadCrumbsItem>
+          </BreadCrumbs>
+        </div>
+        <div dir="rtl">
+          <BreadCrumbs>
+            <BreadCrumbsItem>Reversed</BreadCrumbsItem>
+            <BreadCrumbsItem>Reading</BreadCrumbsItem>
+            <BreadCrumbsItem>Direction</BreadCrumbsItem>
           </BreadCrumbs>
         </div>
       </States>

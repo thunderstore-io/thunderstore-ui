@@ -63,7 +63,6 @@ export {
 export { Avatar as NewAvatar } from "./newComponents/Avatar/Avatar";
 export {
   BreadCrumbs as NewBreadCrumbs,
-  BreadCrumbsLink as NewBreadCrumbsLink,
   BreadCrumbsItem as NewBreadCrumbsItem,
 } from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { Button as NewButton } from "./newComponents/Button/Button";
@@ -223,14 +222,6 @@ export {
   type IconVariants,
   IconVariantsList,
 } from "./newComponents/Icon/Icon.types";
-export {
-  type BreadCrumbsVariants,
-  BreadCrumbsVariantsList,
-  type BreadCrumbsSizes,
-  BreadCrumbsSizesList,
-  type BreadCrumbsModifiers,
-  BreadCrumbsModifiersList,
-} from "./newComponents/BreadCrumbs/BreadCrumbs.types";
 export {
   type TagVariants,
   TagVariantsList,
