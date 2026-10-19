@@ -111,6 +111,10 @@ export interface LinkLibrary {
   PackageVersionRequired: (props: AnyProps & PackageVersionProps) => RE | null;
   /** PackageVersion's versions view */
   PackageVersionVersions: (props: AnyProps & PackageVersionProps) => RE | null;
+  /** PackageVersion's readme/changelog editor */
+  PackageVersionReadmeEdit: (
+    props: AnyProps & PackageVersionProps
+  ) => RE | null;
   /** PackageVersionWithoutCommunity's detail view */
   PackageVersionWithoutCommunity: (
     props: AnyProps & Omit<PackageVersionProps, "community">
@@ -175,6 +179,7 @@ const library: LinkLibrary = {
   PackageVersion: noop,
   PackageVersionRequired: noop,
   PackageVersionVersions: noop,
+  PackageVersionReadmeEdit: noop,
   PackageVersionWithoutCommunity: noop,
   PackageVersionWithoutCommunityRequired: noop,
   PackageVersionWithoutCommunityVersions: noop,
