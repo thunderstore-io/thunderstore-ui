@@ -89,10 +89,20 @@
   .mobile-navigation__user-details {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: var(--gap-3xs);
+    min-width: 0;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+
+  .mobile-navigation__user-name {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-lg);
+  }
+
+  .mobile-navigation__user-profile {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
   }
 
   /* Mobile breakpoint */

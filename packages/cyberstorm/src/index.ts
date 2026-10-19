@@ -82,6 +82,8 @@ export { Drawer, DrawerDivider } from "./newComponents/Drawer/Drawer";
 export {
   DropDown as NewDropDown,
   DropDownItem as NewDropDownItem,
+  DropDownRadioGroup as NewDropDownRadioGroup,
+  DropDownRadioItem as NewDropDownRadioItem,
   DropDownDivider as NewDropDownDivider,
   DropDownSub as NewDropDownSub,
   DropDownSubTrigger as NewDropDownSubTrigger,

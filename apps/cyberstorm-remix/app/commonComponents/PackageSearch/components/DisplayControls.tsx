@@ -1,6 +1,6 @@
 import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
-  faCaretDown,
+  faChevronDown,
   faList,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
@@ -10,11 +10,13 @@ import {
   faRectangleWide,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 
 import {
   NewButton,
   NewDropDown,
-  NewDropDownItem,
+  NewDropDownRadioGroup,
+  NewDropDownRadioItem,
   NewIcon,
   classnames,
 } from "@thunderstore/cyberstorm";
@@ -48,6 +50,7 @@ interface DisplayMenuProps<T extends string> {
   options: DisplayOption<T>[];
   // By default, the trigger icon is the selected option's icon.
   triggerIcon?: IconDefinition;
+  value: T;
   onSelect: (value: T) => void;
 }
 
@@ -55,10 +58,6 @@ function DisplayMenu<T extends string>(props: DisplayMenuProps<T>) {
   return (
     <NewDropDown
       contentAlignment="end"
-      rootClasses={classnames(
-        "display-controls__menu",
-        `display-controls__menu--${props.name}`
-      )}
       trigger={
         <NewButton
           csVariant="secondary"
@@ -85,29 +84,27 @@ function DisplayMenu<T extends string>(props: DisplayMenuProps<T>) {
             noWrapper
             rootClasses="display-controls__chevron"
           >
-            <FontAwesomeIcon icon={faCaretDown} />
+            <FontAwesomeIcon icon={faChevronDown} />
           </NewIcon>
         </NewButton>
       }
     >
       <div className="display-controls__header">{props.header}</div>
-      {props.options.map((option) => (
-        <NewDropDownItem
-          key={option.value}
-          onSelect={() => props.onSelect(option.value)}
-          rootClasses={classnames(
-            "display-controls__option",
-            `display-controls__option--${option.value}`
-          )}
-        >
-          <button type="button">
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={option.icon} />
-            </NewIcon>
-            {option.label}
-          </button>
-        </NewDropDownItem>
-      ))}
+      <NewDropDownRadioGroup
+        value={props.value}
+        onValueChange={(next) => props.onSelect(next as T)}
+      >
+        {props.options.map((option) => (
+          <NewDropDownRadioItem key={option.value} value={option.value}>
+            <button type="button">
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={option.icon} />
+              </NewIcon>
+              {option.label}
+            </button>
+          </NewDropDownRadioItem>
+        ))}
+      </NewDropDownRadioGroup>
     </NewDropDown>
   );
 }
@@ -118,13 +115,22 @@ function DisplayMenu<T extends string>(props: DisplayMenuProps<T>) {
  * Both preferences live on <html> data attributes (set pre-hydration from
  * localStorage in root.tsx) and drive the layout purely through CSS:
  * data-card-layout reflows the cards (CardPackage.css + PackageSearch.css) and
- * data-content-width drives --content-max (layout.css). The controls themselves
- * are CSS-driven too — the trigger icon and the highlighted row both mirror the
- * html attribute — so there is no React state to sync, and nothing flashes or
- * mismatches between SSR and the client. Selecting an option just writes the
- * attribute and localStorage.
+ * data-content-width drives --content-max (layout.css). The trigger icon
+ * mirrors the html attribute too, so there is no flash or mismatch between SSR
+ * and the client. The menu's checked row is React state, synced from that
+ * attribute after mount, because the menu is closed until the user opens it.
+ * Selecting an option writes the attribute and localStorage.
  */
 export function DisplayControls() {
+  const [cardLayout, setCardLayout] = useState<CardLayout>("grid");
+  const [contentWidth, setContentWidth] = useState<ContentWidth>("compact");
+
+  useEffect(() => {
+    const root = document.documentElement;
+    setCardLayout(root.dataset.cardLayout === "list" ? "list" : "grid");
+    setContentWidth(root.dataset.contentWidth === "wide" ? "wide" : "compact");
+  }, []);
+
   return (
     <div className="display-controls">
       <DisplayMenu
@@ -132,7 +138,9 @@ export function DisplayControls() {
         header="Cards"
         name="cards"
         options={CARD_OPTIONS}
+        value={cardLayout}
         onSelect={(value) => {
+          setCardLayout(value);
           persist("nimbus-card-layout", value);
           setHtmlAttr("cardLayout", value === "list" ? "list" : undefined);
         }}
@@ -142,8 +150,10 @@ export function DisplayControls() {
         header="View"
         name="view"
         options={WIDTH_OPTIONS}
+        value={contentWidth}
         triggerIcon={faArrowsLeftRightToLine}
         onSelect={(value) => {
+          setContentWidth(value);
           // Stored as "default"/"wide" to match the pre-hydration script.
           persist(
             "nimbus-content-width",
