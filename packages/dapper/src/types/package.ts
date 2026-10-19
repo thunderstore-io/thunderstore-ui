@@ -83,6 +83,7 @@ export interface PackageVersion {
   download_count: number;
   download_url: string;
   install_url: string;
+  is_readme_edited?: boolean;
 }
 
 export interface PackageVersionDependency {

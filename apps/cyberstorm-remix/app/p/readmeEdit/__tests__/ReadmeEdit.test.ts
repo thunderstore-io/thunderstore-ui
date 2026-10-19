@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => ({
   permissions: vi.fn(),
   listing: vi.fn(),
   markdownEditingEnabled: vi.fn(),
+  previousOverride: vi.fn(),
 }));
 
 vi.mock("cyberstorm/security/publicEnvVariables", () => ({
@@ -60,6 +61,9 @@ vi.mock("@thunderstore/thunderstore-api", () => ({
   toolsMarkdownPreview: mocks.preview,
   isApiError: (error: unknown) =>
     !!error && typeof error === "object" && "response" in error,
+}));
+vi.mock("../overrideMigration", () => ({
+  findPreviousReadmeOverride: mocks.previousOverride,
 }));
 vi.mock("~/commonComponents/Markdown/Markdown", () => ({
   Markdown: () => null,
@@ -262,6 +266,7 @@ beforeEach(() => {
   });
   mocks.listing.mockResolvedValue({ latest_version_number: "1.0.0" });
   mocks.markdownEditingEnabled.mockReturnValue(true);
+  mocks.previousOverride.mockReset().mockResolvedValue(null);
 });
 
 afterEach(() => {
@@ -564,6 +569,32 @@ describe("README editor", () => {
     expect(mocks.readme.discard).not.toHaveBeenCalled();
     expect(container.querySelector("textarea")?.value).toBe("");
     expect(container.querySelector("textarea")?.disabled).toBe(false);
+  });
+
+  it("offers an earlier version's site edit", async () => {
+    mocks.previousOverride.mockResolvedValue({
+      versionNumber: "0.9.0",
+      markdown: "Earlier edit",
+    });
+    const { container } = await renderEditor();
+    await click(container, "Load site edit from 0.9.0");
+    expect(container.querySelector("textarea")?.value).toBe("Earlier edit");
+  });
+
+  it("asks before replacing an unsaved draft with an earlier site edit", async () => {
+    mocks.previousOverride.mockResolvedValue({
+      versionNumber: "0.9.0",
+      markdown: "Earlier edit",
+    });
+    const { container } = await renderEditor();
+    await edit(container, "Draft");
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
+    await click(container, "Load site edit from 0.9.0");
+    expect(confirm).toHaveBeenCalledTimes(1);
+    expect(container.querySelector("textarea")?.value).toBe("Draft");
+    confirm.mockReturnValue(true);
+    await click(container, "Load site edit from 0.9.0");
+    expect(container.querySelector("textarea")?.value).toBe("Earlier edit");
   });
 
   it("treats a CRLF document as clean after reverting an edit", async () => {

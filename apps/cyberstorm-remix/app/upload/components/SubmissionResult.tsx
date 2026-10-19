@@ -1,5 +1,6 @@
 import { faArrowUpRight, faUsers } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isMarkdownEditingEnabled } from "cyberstorm/utils/env";
 
 import {
   Heading,
@@ -14,14 +15,19 @@ import { type PackageSubmissionResult } from "@thunderstore/dapper/types";
 
 import { Island } from "../../commonComponents/Island/Island";
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
+import { type PreviousOverride } from "../../p/readmeEdit/overrideMigration";
+import { ChangelogOverrideNotice } from "./ChangelogOverrideNotice";
+import { OverrideMigrationNotice } from "./OverrideMigrationNotice";
 import "./SubmissionResult.css";
 
 export interface SubmissionResultProps {
   submissionStatusResult: PackageSubmissionResult;
+  overrideToCarry: PreviousOverride | null;
 }
 
 export function SubmissionResult({
   submissionStatusResult,
+  overrideToCarry,
 }: SubmissionResultProps) {
   return (
     <Island rootClasses="upload__submission-result">
@@ -57,6 +63,22 @@ export function SubmissionResult({
       >
         {submissionStatusResult.package_version.name}
       </PageHeader>
+
+      {isMarkdownEditingEnabled() ? (
+        <>
+          <OverrideMigrationNotice
+            namespace={submissionStatusResult.package_version.namespace}
+            packageName={submissionStatusResult.package_version.name}
+            newVersion={submissionStatusResult.package_version.version_number}
+            overrideToCarry={overrideToCarry}
+          />
+          <ChangelogOverrideNotice
+            namespace={submissionStatusResult.package_version.namespace}
+            packageName={submissionStatusResult.package_version.name}
+            newVersion={submissionStatusResult.package_version.version_number}
+          />
+        </>
+      ) : null}
 
       <NewTable
         titleRowContent={

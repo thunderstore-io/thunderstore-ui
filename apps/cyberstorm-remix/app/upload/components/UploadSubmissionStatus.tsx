@@ -2,6 +2,7 @@ import { NewAlert, NewButton } from "@thunderstore/cyberstorm";
 import type { PackageSubmissionStatus } from "@thunderstore/dapper/types";
 
 import { FormSectionSeparator } from "../../commonComponents/FormSection/FormSection";
+import { type PreviousOverride } from "../../p/readmeEdit/overrideMigration";
 import { SectionErrors } from "./SectionErrors";
 import { SubmissionProcessingSkeleton } from "./SubmissionProcessingSkeleton";
 import { SubmissionResult } from "./SubmissionResult";
@@ -11,6 +12,7 @@ export interface UploadSubmissionStatusProps {
   submissionStatus?: PackageSubmissionStatus;
   pollingError: string | null;
   submitSectionErrors: string[];
+  overrideToCarry: PreviousOverride | null;
   onRetryPolling: () => void;
 }
 
@@ -19,6 +21,7 @@ export function UploadSubmissionStatus({
   submissionStatus,
   pollingError,
   submitSectionErrors,
+  overrideToCarry,
   onRetryPolling,
 }: UploadSubmissionStatusProps) {
   const showProcessing =
@@ -31,7 +34,10 @@ export function UploadSubmissionStatus({
       <div className="submission__status">
         <SectionErrors errors={submitSectionErrors} />
         {submissionStatus?.result ? (
-          <SubmissionResult submissionStatusResult={submissionStatus.result} />
+          <SubmissionResult
+            submissionStatusResult={submissionStatus.result}
+            overrideToCarry={overrideToCarry}
+          />
         ) : null}
         {showProcessing ? <SubmissionProcessingSkeleton /> : null}
         {!showProcessing && pollingError != null ? (
