@@ -37,6 +37,7 @@ export const loader = ssrLoader(
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
+        community: await dapper.getCommunity(params.communityId),
         versions: await dapper.getPackageVersions(
           params.namespaceId,
           params.packageId
@@ -76,6 +77,7 @@ export async function clientLoader({
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      community: dapper.getCommunity(params.communityId),
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
       seo: (await serverLoader()).seo,
     };
@@ -89,8 +91,15 @@ export async function clientLoader({
 }
 
 export default function Versions() {
-  const { communityId, namespaceId, packageId, status, message, versions } =
-    useLoaderData<typeof loader | typeof clientLoader>();
+  const {
+    communityId,
+    namespaceId,
+    packageId,
+    status,
+    message,
+    versions,
+    community,
+  } = useLoaderData<typeof loader | typeof clientLoader>();
 
   if (status === "error") {
     return <TabFetchState variant="danger" message={message} />;
@@ -109,7 +118,15 @@ export default function Versions() {
       >
         {(resolvedValue) => (
           <div className="package-versions">
-            <ModManagerBanner />
+            <Suspense fallback={null}>
+              <Await resolve={community}>
+                {(resolvedCommunity) =>
+                  resolvedCommunity?.has_mod_manager_support !== false && (
+                    <ModManagerBanner />
+                  )
+                }
+              </Await>
+            </Suspense>
             <div className="package-versions__table-wrapper">
               <NewTable
                 titleRowContent={
@@ -147,7 +164,14 @@ export default function Versions() {
                     value: (
                       <div className="package-versions__actions">
                         <DownloadLink {...v} />
-                        <InstallLink {...v} />
+                        <Suspense fallback={null}>
+                          <Await resolve={community}>
+                            {(resolvedCommunity) =>
+                              resolvedCommunity?.has_mod_manager_support !==
+                                false && <InstallLink {...v} />
+                            }
+                          </Await>
+                        </Suspense>
                       </div>
                     ),
                     sortValue: 0,
