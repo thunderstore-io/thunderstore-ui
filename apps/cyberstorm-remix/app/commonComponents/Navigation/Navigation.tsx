@@ -560,7 +560,7 @@ export function MobileUserMenu(props: {
       <nav className="mobile-navigation__popover" aria-label="Mobile user menu">
         <NewLink
           primitiveType="cyberstormLink"
-          linkId="User"
+          linkId="Settings"
           user={user.username ?? undefined}
           rootClasses="mobile-navigation__avatar"
         >

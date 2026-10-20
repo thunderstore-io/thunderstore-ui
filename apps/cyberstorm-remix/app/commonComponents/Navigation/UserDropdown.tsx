@@ -132,7 +132,7 @@ export function UserDropdown(props: {
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="cyberstormLink"
-          linkId="User"
+          linkId="Settings"
           user={user.username ?? undefined}
           rootClasses="dropdown__item navigation-header__avatar"
         >
