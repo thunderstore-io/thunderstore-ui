@@ -35,6 +35,7 @@
 
     --link-color: var(--color-text-primary);
     --link-color-hover: var(--color-text-primary);
+    --link-decoration-hover: none;
   }
 
   .card-community__title:focus-visible {

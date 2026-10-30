@@ -1,8 +1,10 @@
 @layer cyberstorm {
-  /* On the document, so a parent can pass a different pair down. */
+  /* On the document, so a parent can pass a different pair down.
+     Chrome that should not underline sets --link-decoration-hover: none. */
   :root {
     --link-color: var(--color-text-a--default);
     --link-color-hover: var(--color-text-a--hover);
+    --link-decoration-hover: underline;
   }
 
   .link {
@@ -11,10 +13,20 @@
     color: var(--link-color, var(--color-text-a--default));
     text-decoration: none;
 
+    &:visited {
+      color: var(--link-color, var(--color-text-a--default));
+    }
+
     @media (hover: hover) and (pointer: fine) {
       &:hover {
         color: var(--link-color-hover, var(--color-text-a--hover));
+        text-decoration: var(--link-decoration-hover, underline);
       }
+    }
+
+    &:active {
+      color: var(--link-color-hover, var(--color-text-a--hover));
+      text-decoration: var(--link-decoration-hover, underline);
     }
   }
 

@@ -229,7 +229,6 @@ export function Navigation(props: {
               community={communityId}
               rootClasses="navigation-header__logo"
               aria-label="Home"
-              csVariant="cyber"
             >
               <NewIcon noWrapper>
                 <ThunderstoreLogo />

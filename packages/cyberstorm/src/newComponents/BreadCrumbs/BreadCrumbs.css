@@ -47,12 +47,12 @@
     padding: 0;
   }
 
-  .link.breadcrumbs__segment:not(
-      .link--variant--primary,
-      .link--variant--cyber
-    ) {
+  .link.breadcrumbs__segment:not(.link--variant--primary) {
+    --link-decoration-hover: none;
+
     &,
-    &:hover {
+    &:hover,
+    &:active {
       color: inherit;
     }
   }

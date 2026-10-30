@@ -287,6 +287,10 @@
   }
 
   .home__resource-card {
+    /* The whole card is the link. Hover is the surface, not a text underline. */
+    --link-color-hover: var(--link-color);
+    --link-decoration-hover: none;
+
     position: relative;
     display: flex;
     flex-direction: column;

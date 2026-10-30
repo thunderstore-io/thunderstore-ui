@@ -16,8 +16,6 @@
     @media (hover: hover) and (pointer: fine) {
       &:where(:hover) {
         --link-color-hover: var(--link-cyber-color--hover);
-
-        text-decoration: underline;
       }
     }
   }

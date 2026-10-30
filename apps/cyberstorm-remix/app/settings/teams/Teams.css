@@ -16,6 +16,7 @@
   .teams-table__name {
     --link-color: var(--color-text-primary);
     --link-color-hover: var(--color-text-primary);
+    --link-decoration-hover: none;
 
     color: var(--link-color);
     font-weight: var(--font-weight-bold);

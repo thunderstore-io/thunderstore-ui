@@ -207,17 +207,23 @@
   }
 
   a {
-    color: var(--color-text-a--default);
+    color: var(--link-color, var(--color-text-a--default));
     text-decoration: none;
 
     &:where(:visited) {
-      color: var(--color-text-a--default);
+      color: var(--link-color, var(--color-text-a--default));
     }
 
-    &:where(:hover),
+    @media (hover: hover) and (pointer: fine) {
+      &:where(:hover) {
+        color: var(--link-color-hover, var(--color-text-a--hover));
+        text-decoration: var(--link-decoration-hover, underline);
+      }
+    }
+
     &:where(:active) {
-      color: var(--color-text-a--hover);
-      text-decoration: underline;
+      color: var(--link-color-hover, var(--color-text-a--hover));
+      text-decoration: var(--link-decoration-hover, underline);
     }
 
     /* More readable underline style for anchor tags

@@ -33,6 +33,7 @@
     --icon-color: var(--dropdown-item-icon-color);
     --link-color: var(--dropdown-item-color);
     --link-color-hover: var(--dropdown-item-color);
+    --link-decoration-hover: none;
   }
 
   .dropdown__item:where([data-disabled]) {

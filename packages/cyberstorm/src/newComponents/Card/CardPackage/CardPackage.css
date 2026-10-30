@@ -116,6 +116,7 @@
 
     --link-color: var(--card-package--title-link-color);
     --link-color-hover: var(--card-package--title-link-color);
+    --link-decoration-hover: none;
   }
 
   .card-package__title:focus-visible {

@@ -49,7 +49,6 @@ export function SubmissionResult({
               <NewLink
                 primitiveType="link"
                 href={submissionStatusResult.package_version.website_url}
-                csVariant="cyber"
                 rootClasses="page-header__meta-item"
               >
                 {submissionStatusResult.package_version.website_url}
@@ -127,7 +126,6 @@ export function SubmissionResult({
                   href={`/c/${v.community.identifier}/p/${submissionStatusResult.package_version.namespace}/${submissionStatusResult.package_version.name}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  csVariant="cyber"
                 >
                   View listing
                 </NewLink>

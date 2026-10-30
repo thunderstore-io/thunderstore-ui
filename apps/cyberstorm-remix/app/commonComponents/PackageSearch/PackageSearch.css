@@ -176,10 +176,8 @@
     flex-direction: column;
   }
 
-  /* List-variant author link: neutral by default (matching the "by" prefix),
-     cyber-green only on hover. Defined here (nimbus layer) so it wins over the
-     Link's cyber variant in theme-components; the hover green still comes from
-     that variant's --link-color-hover. */
+  /* List-variant author link: neutral by default (matching the "by" prefix).
+     Hover still uses the shared link hover color. */
   :root[data-card-layout="list"] .card-package__link {
     --link-color: var(--card-package--prefix-color);
   }

@@ -215,7 +215,6 @@ export default function PackageVersion() {
                           <NewLink
                             primitiveType="link"
                             href={resolvedValue.website_url}
-                            csVariant="cyber"
                             rootClasses="page-header__meta-item"
                           >
                             <NewIcon csMode="inline" noWrapper>
