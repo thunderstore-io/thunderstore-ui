@@ -2,11 +2,6 @@
   /* VARIANTS DEFAULT STATE */
   .link:where(.link--variant--primary) {
     --link-color: var(--link-primary-color--default);
-
-    @media (hover: hover) and (pointer: fine) {
-      &:where(:hover) {
-        --link-color-hover: var(--link-primary-color--hover);
-      }
-    }
+    --link-color-hover: var(--link-primary-color--hover);
   }
 }
