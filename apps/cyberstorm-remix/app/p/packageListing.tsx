@@ -485,7 +485,6 @@ export default function PackageListing() {
                 linkId="Team"
                 community={listing.community_identifier}
                 team={listing.namespace}
-                csVariant="cyber"
                 rootClasses="page-header__meta-item"
               >
                 <NewIcon csMode="inline" noWrapper>
@@ -498,7 +497,6 @@ export default function PackageListing() {
                 <NewLink
                   primitiveType="link"
                   href={listing.website_url}
-                  csVariant="cyber"
                   rootClasses="page-header__meta-item"
                 >
                   <NewIcon csMode="inline" noWrapper>

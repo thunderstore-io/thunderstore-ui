@@ -2,12 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import {
-  NewIcon,
-  Tabs,
-  TabsSizesList,
-  TabsVariantsList,
-} from "@thunderstore/cyberstorm";
+import { NewIcon, Tabs, TabsVariantsList } from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Tabs",
@@ -18,7 +13,6 @@ const meta = {
   },
   argTypes: {
     csVariant: { control: "select", options: TabsVariantsList },
-    csSize: { control: "select", options: TabsSizesList },
   },
 } satisfies Meta<typeof Tabs>;
 

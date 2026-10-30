@@ -76,7 +76,6 @@ export function ListingDependency(props: ListingDependencyProps) {
               title={`${formatToDisplayName(dependency.name)} - ${
                 dependency.version_number
               }`}
-              csVariant="cyber"
             >
               {dependency.version_number}
             </NewLink>
@@ -90,7 +89,6 @@ export function ListingDependency(props: ListingDependencyProps) {
               title={`${formatToDisplayName(dependency.name)} - ${
                 dependency.version_number
               }`}
-              csVariant="cyber"
             >
               {dependency.version_number}
             </NewLink>

@@ -339,22 +339,14 @@ export default function Upload() {
           </p>
           <p className="upload__helper-text">
             Review your readme before upload using the{" "}
-            <NewLink
-              primitiveType="cyberstormLink"
-              csVariant="cyber"
-              linkId="MarkdownPreview"
-            >
+            <NewLink primitiveType="cyberstormLink" linkId="MarkdownPreview">
               markdown preview tool
             </NewLink>
             .
           </p>
           <p className="upload__helper-text">
             Uploading a large file? Check your package manifest first with the{" "}
-            <NewLink
-              primitiveType="cyberstormLink"
-              csVariant="cyber"
-              linkId="ManifestValidator"
-            >
+            <NewLink primitiveType="cyberstormLink" linkId="ManifestValidator">
               package manifest validator
             </NewLink>
             .

@@ -251,8 +251,6 @@ export {
 export {
   type TabsVariants,
   TabsVariantsList,
-  type TabsSizes,
-  TabsSizesList,
 } from "./newComponents/Tabs/Tabs.types";
 export {
   type LinkVariants,

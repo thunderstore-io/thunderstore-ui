@@ -153,7 +153,7 @@
     --color-surface-a8: hsl(240deg 36% 43% / 0.66);
     --color-surface-a9: hsl(240deg 39% 47% / 0.77);
     --color-text-a--default: var(--color-cyber-green-7);
-    --color-text-a--hover: var(--color-cyber-green-7);
+    --color-text-a--hover: var(--color-cyber-green-9);
     --color-text-accent: hsl(243deg 100% 88%);
     --color-text-primary: hsl(240deg 5% 96%);
     --color-text-secondary: hsl(230deg 47% 86%);

@@ -134,7 +134,6 @@ export function MembersTable(props: {
               linkId="TeamSettingsSettings"
               team={teamName}
               primitiveType="cyberstormLink"
-              csVariant="cyber"
             >
               Settings tab
             </NewLink>{" "}

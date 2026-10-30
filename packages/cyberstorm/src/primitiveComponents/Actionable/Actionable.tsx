@@ -80,7 +80,15 @@ export const Actionable = memo(function Actionable(
           {...fProps}
           className={classnames(rootClasses, className)}
           ref={fRef}
-          aria-disabled={disabled}
+          aria-disabled={disabled || undefined}
+          tabIndex={disabled ? -1 : fProps.tabIndex}
+          onClick={
+            disabled
+              ? (event) => {
+                  event.preventDefault();
+                }
+              : fProps.onClick
+          }
         >
           {children}
         </a>
@@ -98,7 +106,15 @@ export const Actionable = memo(function Actionable(
           className={classnames(rootClasses, className)}
           linkId={linkId}
           ref={fRef}
-          aria-disabled={disabled}
+          aria-disabled={disabled || undefined}
+          tabIndex={disabled ? -1 : strippedForwardedProps.tabIndex}
+          onClick={
+            disabled
+              ? (event) => {
+                  event.preventDefault();
+                }
+              : strippedForwardedProps.onClick
+          }
         >
           {children}
         </CyberstormLink>

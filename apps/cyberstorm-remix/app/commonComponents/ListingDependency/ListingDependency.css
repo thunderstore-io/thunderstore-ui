@@ -22,7 +22,10 @@
   }
 
   .listing-dependency__name {
-    color: var(--color-text-primary);
+    --link-color: var(--color-text-primary);
+    --link-color-hover: var(--color-text-primary);
+    --link-decoration-hover: none;
+
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-md);
   }

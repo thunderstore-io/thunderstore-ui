@@ -35,6 +35,8 @@
   }
 
   .navigation-header__logo {
+    --link-decoration-hover: none;
+
     display: flex;
     align-items: center;
     align-self: stretch;
@@ -268,16 +270,16 @@
   }
 
   .navigation-login__legal {
+    --link-color: var(--color-text-tertiary);
+    --link-color-hover: var(--color-text-tertiary);
+    --link-decoration-hover: none;
+
     align-self: stretch;
     color: #8683be;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
     line-height: var(--line-height-lg);
     text-align: center;
-
-    > a {
-      color: var(--color-text-tertiary);
-    }
   }
 
   .navigation-header__user-mobile {

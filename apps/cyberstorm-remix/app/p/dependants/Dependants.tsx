@@ -281,7 +281,6 @@ export default function Dependants() {
                 community={resolvedValue.community_identifier}
                 namespace={resolvedValue.namespace}
                 package={resolvedValue.name}
-                csVariant="cyber"
               >
                 {formatToDisplayName(resolvedValue.name)}
               </NewLink>
@@ -291,7 +290,6 @@ export default function Dependants() {
                 linkId="Team"
                 community={resolvedValue.community_identifier}
                 team={resolvedValue.namespace}
-                csVariant="cyber"
               >
                 {resolvedValue.namespace}
               </NewLink>

@@ -176,7 +176,6 @@ export function CardPackage(props: Props) {
               team={packageData.namespace}
               title={packageData.namespace}
               rootClasses="card-package__link"
-              csVariant="cyber"
             >
               {packageData.namespace}
             </NewLink>

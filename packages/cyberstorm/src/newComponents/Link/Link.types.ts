@@ -1,3 +1,3 @@
 // Variants
-export const LinkVariantsList = ["primary", "cyber"] as const;
-export type LinkVariants = "primary" | "cyber";
+export const LinkVariantsList = ["primary"] as const;
+export type LinkVariants = "primary";

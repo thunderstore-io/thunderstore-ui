@@ -1,18 +1,40 @@
 @layer cyberstorm {
+  /* On the document, so a parent can pass a different pair down.
+     Chrome that should not underline sets --link-decoration-hover: none. */
+  :root {
+    --link-color: var(--color-text-a--default);
+    --link-color-hover: var(--color-text-a--hover);
+    --link-decoration-hover: underline;
+  }
+
   .link {
-    color: var(--link-color);
+    /* Fallbacks resolve here. The :root aliases reference theme tokens that
+       Storybook does not put on :root, so the inherited value stays invalid. */
+    color: var(--link-color, var(--color-text-a--default));
     text-decoration: none;
 
+    &:visited {
+      color: var(--link-color, var(--color-text-a--default));
+    }
+
     @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        color: var(--link-color-hover);
+      &:hover:not([aria-disabled="true"]) {
+        color: var(--link-color-hover, var(--color-text-a--hover));
+        text-decoration: var(--link-decoration-hover, underline);
       }
+    }
+
+    &:active:not([aria-disabled="true"]) {
+      color: var(--link-color-hover, var(--color-text-a--hover));
+      text-decoration: var(--link-decoration-hover, underline);
     }
   }
 
+  /* Clicks are cancelled in Actionable. pointer-events stays enabled
+     so cursor: not-allowed can show. */
   .link[aria-disabled="true"],
   .link-disabled {
     cursor: not-allowed;
-    pointer-events: none;
+    opacity: 0.5;
   }
 }

@@ -47,6 +47,16 @@
     padding: 0;
   }
 
+  .link.breadcrumbs__segment:not(.link--variant--primary) {
+    --link-decoration-hover: none;
+
+    &,
+    &:hover,
+    &:active {
+      color: inherit;
+    }
+  }
+
   .breadcrumbs__segment {
     position: relative;
     display: flex;
