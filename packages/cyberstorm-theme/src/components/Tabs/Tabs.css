@@ -4,25 +4,20 @@
     --tabs-box-shadow-height: 3px;
     --tabs-box-shadow-color: var(--color-surface-5);
 
-    /* Tabs Item */
+    .tabs-item {
+      --tabs-item-height: 3.25rem;
+      --tabs-item-padding: 0.75rem 1rem;
+      --tabs-item-gap: 0.75rem;
+      --tabs-item-font-size: var(--font-size-body-lg);
+      --tabs-item-font-weight: 700;
+      --tabs-item-border-bottom-width: 3px;
+    }
 
-    /* SIZES */
-    &:where(.tabs--size--medium) {
-      .tabs-item {
-        --tabs-item-height: 3.25rem;
-        --tabs-item-padding: 0.75rem 1rem;
-        --tabs-item-gap: 0.75rem;
-        --tabs-item-font-size: var(--font-size-body-lg);
-        --tabs-item-font-weight: 700;
-        --tabs-item-border-bottom-width: 3px;
-      }
-
-      .tabs-number-slate {
-        --tabs-item-number-slate-padding: 0.125rem 0.25rem;
-        --tabs-item-number-slate-gap: 0.5rem;
-        --tabs-item-number-slate-border-radius: var(--radius-sm);
-        --tabs-item-number-slate-background-color: var(--color-surface-a4);
-      }
+    .tabs-number-slate {
+      --tabs-item-number-slate-padding: 0.125rem 0.25rem;
+      --tabs-item-number-slate-gap: 0.5rem;
+      --tabs-item-number-slate-border-radius: var(--radius-sm);
+      --tabs-item-number-slate-background-color: var(--color-surface-a4);
     }
 
     /* VARIANTS */
