@@ -9,14 +9,4 @@
       }
     }
   }
-
-  .link:where(.link--variant--cyber) {
-    --link-color: var(--link-cyber-color--default);
-
-    @media (hover: hover) and (pointer: fine) {
-      &:where(:hover) {
-        --link-color-hover: var(--link-cyber-color--hover);
-      }
-    }
-  }
 }
