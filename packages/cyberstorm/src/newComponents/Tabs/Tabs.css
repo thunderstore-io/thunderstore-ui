@@ -26,6 +26,8 @@
     line-height: normal;
 
     --icon-color: var(--tabs-item-icon-color);
+    --link-color: var(--tabs-item-color);
+    --link-color-hover: var(--tabs-item-color);
 
     &.tabs-item--current {
       pointer-events: none;

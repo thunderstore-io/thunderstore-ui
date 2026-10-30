@@ -62,10 +62,6 @@
     align-self: stretch;
   }
 
-  .upload__helper-text a:hover {
-    text-decoration-thickness: 2px;
-  }
-
   .upload__buttons .new-button:hover:not(:disabled) {
     filter: brightness(1.05);
   }

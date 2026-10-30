@@ -14,7 +14,10 @@
   }
 
   .teams-table__name {
-    color: var(--color-text-primary);
+    --link-color: var(--color-text-primary);
+    --link-color-hover: var(--color-text-primary);
+
+    color: var(--link-color);
     font-weight: var(--font-weight-bold);
   }
 

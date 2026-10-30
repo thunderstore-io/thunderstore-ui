@@ -85,10 +85,38 @@ function Feedback() {
           </Link>
         </Tabs>
         <Tabs>
-          <div>Loooooooooooooooooooong content</div>
-          <div>Long content with shorter words</div>
-          <div>Long content</div>
-          <div>Looooooooooooooooooooooooooooooooonoooooooooooooog</div>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current
+            rootClasses="tabs-item tabs-item--current"
+          >
+            Loooooooooooooooooooong content
+          </Link>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current
+            rootClasses="tabs-item"
+          >
+            Long content with shorter words
+          </Link>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current
+            rootClasses="tabs-item"
+          >
+            Long content
+          </Link>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current
+            rootClasses="tabs-item"
+          >
+            Looooooooooooooooooooooooooooooooonoooooooooooooog
+          </Link>
         </Tabs>
         <Button csVariant="secondary">Show toast</Button>
 

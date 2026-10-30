@@ -25,7 +25,6 @@ export function FooterSocials() {
           tooltipText="Join our Discord"
           href={DISCORD_URL}
           rootClasses="footer-link"
-          csVariant="primary"
           aria-label="Invite link to Thunderstores Discord server"
         >
           <NewIcon noWrapper csWidth="2rem" csHeight="2rem">
@@ -38,7 +37,6 @@ export function FooterSocials() {
           href={GITHUB_URL}
           rootClasses="footer-link"
           aria-label="Link to Thunderstores Github"
-          csVariant="primary"
         >
           <NewIcon noWrapper csWidth="2rem" csHeight="2rem">
             <FontAwesomeIcon icon={faGithub} />

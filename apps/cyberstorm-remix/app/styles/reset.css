@@ -210,6 +210,10 @@
     color: var(--color-text-a--default);
     text-decoration: none;
 
+    &:where(:visited) {
+      color: var(--color-text-a--default);
+    }
+
     &:where(:hover),
     &:where(:active) {
       color: var(--color-text-a--hover);

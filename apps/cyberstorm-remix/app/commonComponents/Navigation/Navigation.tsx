@@ -494,18 +494,13 @@ export function DesktopLoginPopover() {
         </div>
         <p className="navigation-login__legal">
           By logging in and accessing the site you agree to{" "}
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="TermsOfService"
-            csVariant="primary"
-          >
+          <NewLink primitiveType="cyberstormLink" linkId="TermsOfService">
             Terms and Conditions
           </NewLink>{" "}
           and{" "}
           <NewLink
             primitiveType="link"
             href="https://pages.thunderstore.io/p/privacy-policy"
-            csVariant="primary"
           >
             Privacy Policy
           </NewLink>

@@ -1,11 +1,19 @@
 @layer cyberstorm {
+  /* On the document, so a parent can pass a different pair down. */
+  :root {
+    --link-color: var(--color-text-a--default);
+    --link-color-hover: var(--color-text-a--hover);
+  }
+
   .link {
-    color: var(--link-color);
+    /* Fallbacks resolve here. The :root aliases reference theme tokens that
+       Storybook does not put on :root, so the inherited value stays invalid. */
+    color: var(--link-color, var(--color-text-a--default));
     text-decoration: none;
 
     @media (hover: hover) and (pointer: fine) {
       &:hover {
-        color: var(--link-color-hover);
+        color: var(--link-color-hover, var(--color-text-a--hover));
       }
     }
   }

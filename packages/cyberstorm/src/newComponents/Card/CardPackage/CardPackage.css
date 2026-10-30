@@ -115,6 +115,7 @@
     text-overflow: ellipsis;
 
     --link-color: var(--card-package--title-link-color);
+    --link-color-hover: var(--card-package--title-link-color);
   }
 
   .card-package__title:focus-visible {

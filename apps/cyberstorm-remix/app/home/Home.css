@@ -115,13 +115,11 @@
   }
 
   .home-search__all-link {
-    color: var(--color-text-primary);
+    --link-color: var(--color-text-primary);
+    --link-color-hover: var(--color-text-a--hover);
+
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-lg);
-
-    &:hover {
-      color: var(--color-cyber-green-7);
-    }
   }
 
   .home-search__pane-skeleton {
@@ -147,14 +145,12 @@
   }
 
   .home__see-all {
+    --link-color: var(--color-text-tertiary);
+    --link-color-hover: var(--color-text-primary);
+
     margin-inline-start: auto;
-    color: var(--color-text-tertiary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
-
-    &:hover {
-      color: var(--color-text-primary);
-    }
   }
 
   .home__card-row {
