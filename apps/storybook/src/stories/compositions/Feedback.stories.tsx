@@ -96,7 +96,7 @@ function Feedback() {
           <Link
             primitiveType="cyberstormLink"
             linkId="Index"
-            aria-current
+            aria-current={false}
             rootClasses="tabs-item"
           >
             Long content with shorter words
@@ -104,7 +104,7 @@ function Feedback() {
           <Link
             primitiveType="cyberstormLink"
             linkId="Index"
-            aria-current
+            aria-current={false}
             rootClasses="tabs-item"
           >
             Long content
@@ -112,7 +112,7 @@ function Feedback() {
           <Link
             primitiveType="cyberstormLink"
             linkId="Index"
-            aria-current
+            aria-current={false}
             rootClasses="tabs-item"
           >
             Looooooooooooooooooooooooooooooooonoooooooooooooog
