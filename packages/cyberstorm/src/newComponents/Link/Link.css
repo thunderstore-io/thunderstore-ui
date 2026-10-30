@@ -18,21 +18,23 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-      &:hover {
+      &:hover:not([aria-disabled="true"]) {
         color: var(--link-color-hover, var(--color-text-a--hover));
         text-decoration: var(--link-decoration-hover, underline);
       }
     }
 
-    &:active {
+    &:active:not([aria-disabled="true"]) {
       color: var(--link-color-hover, var(--color-text-a--hover));
       text-decoration: var(--link-decoration-hover, underline);
     }
   }
 
+  /* Clicks are cancelled in Actionable. pointer-events stays enabled
+     so cursor: not-allowed can show. */
   .link[aria-disabled="true"],
   .link-disabled {
     cursor: not-allowed;
-    pointer-events: none;
+    opacity: 0.5;
   }
 }
