@@ -20,7 +20,12 @@ import {
 } from "./package";
 import { type PackageListingType } from "./props";
 import { type HTMLContentResponse, type MarkdownResponse } from "./shared";
-import { type ServiceAccount, type TeamDetails, type TeamMember } from "./team";
+import {
+  type ServiceAccount,
+  type TeamCommunity,
+  type TeamDetails,
+  type TeamMember,
+} from "./team";
 import { type CurrentUser, type CurrentUserTeamPermissions } from "./user";
 
 export type GetCommunities = (
@@ -112,6 +117,8 @@ export type PostPackageSubmissionMetadata = (
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 
 export type GetPrivateTeamDetails = (teamName: string) => Promise<TeamDetails>;
+
+export type GetTeamCommunities = (teamName: string) => Promise<TeamCommunity[]>;
 
 export type GetTeamMembers = (teamId: string) => Promise<TeamMember[]>;
 

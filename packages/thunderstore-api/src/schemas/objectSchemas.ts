@@ -128,6 +128,17 @@ export const teamDetailsSchema = z.object({
 
 export type TeamDetails = z.infer<typeof teamDetailsSchema>;
 
+export const teamCommunitySchema = z.object({
+  identifier: z.string().min(1),
+  name: z.string().min(1),
+  community_icon_url: z.string().nullable(),
+  package_count: z.number().int(),
+  download_count: z.number().int(),
+  rating_count: z.number().int(),
+});
+
+export type TeamCommunity = z.infer<typeof teamCommunitySchema>;
+
 export const teamMemberSchema = z.object({
   identifier: z.number().int(),
   username: z.string().min(1),
