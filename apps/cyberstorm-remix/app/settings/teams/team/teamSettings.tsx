@@ -1,13 +1,11 @@
 import { getCanonicalUrl } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { useEffect, useState } from "react";
 import { Outlet, useLocation, useOutletContext, useParams } from "react-router";
 import { Page } from "~/commonComponents/Page/Page";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
-import { NewButton, NewLink, Tabs } from "@thunderstore/cyberstorm";
-import { type TeamCommunity } from "@thunderstore/thunderstore-api";
+import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import type { Route } from "./+types/teamSettings";
 
@@ -45,33 +43,9 @@ export default function TeamSettings() {
   const parts = location.pathname.split("/");
   const currentTab = parts.length === 4 ? parts[3] : "profile";
 
-  const [communities, setCommunities] = useState<TeamCommunity[] | null>(null);
-
-  useEffect(() => {
-    let isCurrent = true;
-    setCommunities(null);
-    outletContext.dapper
-      .getTeamCommunities(teamName)
-      .then((result) => {
-        if (isCurrent) {
-          setCommunities(result);
-        }
-      })
-      // The header link is optional, so a failed fetch just leaves it out
-      .catch(() => {});
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [outletContext.dapper, teamName]);
-
   return (
     <Page>
-      <PageHeader
-        headingLevel="1"
-        headingSize="2"
-        meta={<PublicPageLink teamName={teamName} communities={communities} />}
-      >
+      <PageHeader headingLevel="1" headingSize="2">
         {teamName}
       </PageHeader>
       <div className="settings-page">
@@ -142,50 +116,5 @@ export default function TeamSettings() {
         </section>
       </div>
     </Page>
-  );
-}
-
-/**
- * Header link to the team's public page. Links straight to the page when the
- * team is in a single community, and to the Communities tab when it is in
- * several
- *
- * @param props.teamName The name of the team
- * @param props.communities The team's communities, or null while loading
- * @returns The link, or null when there is no public page to link to
- */
-function PublicPageLink(props: {
-  teamName: string;
-  communities: TeamCommunity[] | null;
-}) {
-  const { teamName, communities } = props;
-
-  if (!communities || communities.length === 0) {
-    return null;
-  }
-
-  if (communities.length === 1) {
-    return (
-      <NewButton
-        primitiveType="cyberstormLink"
-        linkId="Team"
-        community={communities[0].identifier}
-        team={teamName}
-        csVariant="secondary"
-      >
-        View public page
-      </NewButton>
-    );
-  }
-
-  return (
-    <NewButton
-      primitiveType="cyberstormLink"
-      linkId="TeamSettingsCommunities"
-      team={teamName}
-      csVariant="secondary"
-    >
-      View public pages
-    </NewButton>
   );
 }
