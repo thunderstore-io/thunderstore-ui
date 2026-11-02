@@ -176,12 +176,6 @@
     flex-direction: column;
   }
 
-  /* List-variant author link: neutral by default (matching the "by" prefix).
-     Hover still uses the shared link hover color. */
-  :root[data-card-layout="list"] .card-package__link {
-    --link-color: var(--card-package--prefix-color);
-  }
-
   /* Below ~1020px viewport (this container ≈ 58rem wide) the search input gets
      too narrow beside the Sort/Cards/View dropdowns; stack the input above them. */
   @container container (width <= 58rem) {

@@ -141,6 +141,8 @@
     font-weight: var(--font-weight-regular);
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    --link-color: var(--color-text-tertiary);
   }
 
   .card-package__prefix {
