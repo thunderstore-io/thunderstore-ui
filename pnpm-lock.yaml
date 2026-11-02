@@ -293,13 +293,13 @@ importers:
         version: 19.1.9(@types/react@19.2.8)
       '@vitest/browser':
         specifier: 3.2.6
-        version: 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+        version: 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
       '@vitest/coverage-v8':
         specifier: 3.2.6
         version: 3.2.6(@vitest/browser@3.2.6)(vitest@3.2.6)
       playwright:
-        specifier: 1.60.0
-        version: 1.60.0
+        specifier: 1.61.0
+        version: 1.61.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -635,10 +635,10 @@ importers:
         version: 24.12.0
       '@vitest/browser':
         specifier: 3.2.6
-        version: 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+        version: 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
       playwright:
-        specifier: 1.60.0
-        version: 1.60.0
+        specifier: 1.61.0
+        version: 1.61.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -669,13 +669,13 @@ importers:
         version: 24.12.0
       '@vitest/browser':
         specifier: 3.2.6
-        version: 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+        version: 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
       '@vitest/coverage-v8':
         specifier: 3.2.6
         version: 3.2.6(@vitest/browser@3.2.6)(vitest@3.2.6)
       playwright:
-        specifier: 1.60.0
-        version: 1.60.0
+        specifier: 1.61.0
+        version: 1.61.0
       vitest:
         specifier: 3.2.6
         version: 3.2.6(@types/debug@4.1.12)(@types/node@24.12.0)(@vitest/browser@3.2.6)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0)
@@ -713,10 +713,10 @@ importers:
         version: 24.12.0
       '@vitest/browser':
         specifier: 3.2.6
-        version: 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+        version: 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
       playwright:
-        specifier: 1.60.0
-        version: 1.60.0
+        specifier: 1.61.0
+        version: 1.61.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -852,13 +852,13 @@ importers:
         version: 24.12.0
       '@vitest/browser':
         specifier: 3.2.6
-        version: 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+        version: 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
       '@vitest/coverage-v8':
         specifier: 3.2.6
         version: 3.2.6(@vitest/browser@3.2.6)(vitest@3.2.6)
       playwright:
-        specifier: 1.60.0
-        version: 1.60.0
+        specifier: 1.61.0
+        version: 1.61.0
       vite:
         specifier: ^7.3.2
         version: 7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0)
@@ -905,10 +905,10 @@ importers:
         version: 24.12.0
       '@vitest/browser':
         specifier: 3.2.6
-        version: 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+        version: 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
       playwright:
-        specifier: 1.60.0
-        version: 1.60.0
+        specifier: 1.61.0
+        version: 1.61.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -5388,8 +5388,8 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jschardet@4.0.0:
-    resolution: {integrity: sha512-EsNiLV+xzeMBtkGL/HeWoUivNkGIr8JmaC5A5j7DBlKnhp4CcBTWKEOtNg6vlmf+mkn9yQ9Wals47u7+LoTr7w==}
+  jschardet@4.1.0:
+    resolution: {integrity: sha512-ighRZ11mb6l4m+xSKoivuqNj44qkObODXsAnnkkfYcY4JfYRnEgAe/w1c3mbnJtTQmLtfebAUfXGsUGUJImexg==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -6128,13 +6128,13 @@ packages:
   pkg-types@2.3.0:
     resolution: {integrity: sha512-SIqCzDRg0s9npO5XQ3tNZioRY1uK06lA41ynBC1YmFTmnY6FjUjVt6s4LoADmwoig1qqD0oK8h1p/8mlMx8Oig==}
 
-  playwright-core@1.60.0:
-    resolution: {integrity: sha512-9bW6zvX/m0lEbgTKJ6YppOKx8H3VOPBMOCFh2irXFOT4BbHgrx5hPjwJYLT40Lu+4qtD36qKc/Hn56StUW57IA==}
+  playwright-core@1.61.0:
+    resolution: {integrity: sha512-caX7TrY3Ml6egyDX0WUcTHDxodl/b51y5wJOdCEA36QviK/s2g081hvmGs8eaE3DWb6NYZQ6BjO/QkNRPenoPA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.60.0:
-    resolution: {integrity: sha512-hheHdokM8cdqCb0lcE3s+zT4t4W+vvjpGxsZlDnikarzx8tSzMebh3UiFtgqwFwnTnjYQcsyMF8ei2mCO/tpeA==}
+  playwright@1.61.0:
+    resolution: {integrity: sha512-Z+7BeeqQPRRzklHsVFP4KTGIyMxKUmfeRA4WisM6G3/XW6nwGeX6fX9qYaDa+CiUqpOkb2f6X3nar05R3kSuJQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -8693,7 +8693,7 @@ snapshots:
   '@microsoft/eslint-formatter-sarif@3.1.0':
     dependencies:
       eslint: 8.57.1
-      jschardet: 4.0.0
+      jschardet: 4.1.0
       lodash: 4.18.1
       utf8: 3.0.0
     transitivePeerDependencies:
@@ -10364,7 +10364,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/browser@3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)':
+  '@vitest/browser@3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)':
     dependencies:
       '@testing-library/dom': 10.4.1
       '@testing-library/user-event': 14.6.7(@testing-library/dom@10.4.1)
@@ -10376,7 +10376,7 @@ snapshots:
       vitest: 3.2.6(@types/debug@4.1.12)(@types/node@24.12.0)(@vitest/browser@3.2.6)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0)
       ws: 8.20.1
     optionalDependencies:
-      playwright: 1.60.0
+      playwright: 1.61.0
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -10400,7 +10400,7 @@ snapshots:
       tinyrainbow: 2.0.0
       vitest: 3.2.6(@types/debug@4.1.12)(@types/node@24.12.0)(@vitest/browser@3.2.6)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0)
     optionalDependencies:
-      '@vitest/browser': 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+      '@vitest/browser': 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -12443,7 +12443,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jschardet@4.0.0: {}
+  jschardet@4.1.0: {}
 
   jsesc@3.0.2: {}
 
@@ -13410,11 +13410,11 @@ snapshots:
       exsolve: 1.0.8
       pathe: 2.0.3
 
-  playwright-core@1.60.0: {}
+  playwright-core@1.61.0: {}
 
-  playwright@1.60.0:
+  playwright@1.61.0:
     dependencies:
-      playwright-core: 1.60.0
+      playwright-core: 1.61.0
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -14767,7 +14767,7 @@ snapshots:
     optionalDependencies:
       '@types/debug': 4.1.12
       '@types/node': 24.12.0
-      '@vitest/browser': 3.2.6(playwright@1.60.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
+      '@vitest/browser': 3.2.6(playwright@1.61.0)(vite@7.3.5(@types/node@24.12.0)(less@4.5.1)(sass@1.97.2)(stylus@0.62.0)(terser@5.46.0))(vitest@3.2.6)
     transitivePeerDependencies:
       - jiti
       - less
