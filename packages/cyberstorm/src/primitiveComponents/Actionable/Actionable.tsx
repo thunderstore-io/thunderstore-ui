@@ -41,11 +41,15 @@ export interface ActionableCyberstormLinkProps
   ref?: React.Ref<HTMLAnchorElement>;
 }
 
-/** An anchor with no href cannot be opened, including via middle-click. */
+/** An anchor with no href cannot be opened, including via middle-click.
+ * TooltipWrapper wraps that anchor so Radix Trigger asChild can attach its
+ * handlers, accessibility attributes, and ref to the element itself. */
 function DisabledAnchor(props: {
   anchorProps: React.AnchorHTMLAttributes<HTMLAnchorElement>;
   className: string | undefined;
   anchorRef: React.ForwardedRef<HTMLAnchorElement>;
+  tooltipText?: string;
+  tooltipSide?: "bottom" | "left" | "right" | "top";
   children: React.ReactNode;
 }) {
   const anchorProps: Record<string, unknown> = { ...props.anchorProps };
@@ -58,16 +62,21 @@ function DisabledAnchor(props: {
   }
 
   return (
-    <a
-      {...(anchorProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-      className={props.className}
-      ref={props.anchorRef}
-      role="link"
-      aria-disabled="true"
-      tabIndex={-1}
+    <TooltipWrapper
+      tooltipText={props.tooltipText}
+      tooltipSide={props.tooltipSide}
     >
-      {props.children}
-    </a>
+      <a
+        {...(anchorProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        className={props.className}
+        ref={props.anchorRef}
+        role="link"
+        aria-disabled="true"
+        tabIndex={-1}
+      >
+        {props.children}
+      </a>
+    </TooltipWrapper>
   );
 }
 
@@ -110,15 +119,15 @@ export const Actionable = memo(function Actionable(
     const anchorClassName = classnames(rootClasses, className);
     if (disabled) {
       return (
-        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <DisabledAnchor
-            anchorProps={fProps}
-            className={anchorClassName}
-            anchorRef={fRef}
-          >
-            {children}
-          </DisabledAnchor>
-        </TooltipWrapper>
+        <DisabledAnchor
+          anchorProps={fProps}
+          className={anchorClassName}
+          anchorRef={fRef}
+          tooltipText={tooltipText}
+          tooltipSide={tooltipSide}
+        >
+          {children}
+        </DisabledAnchor>
       );
     }
     return (
@@ -136,15 +145,15 @@ export const Actionable = memo(function Actionable(
     const anchorClassName = classnames(rootClasses, className);
     if (disabled) {
       return (
-        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <DisabledAnchor
-            anchorProps={strippedForwardedProps}
-            className={anchorClassName}
-            anchorRef={fRef}
-          >
-            {children}
-          </DisabledAnchor>
-        </TooltipWrapper>
+        <DisabledAnchor
+          anchorProps={strippedForwardedProps}
+          className={anchorClassName}
+          anchorRef={fRef}
+          tooltipText={tooltipText}
+          tooltipSide={tooltipSide}
+        >
+          {children}
+        </DisabledAnchor>
       );
     }
     return (
