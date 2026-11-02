@@ -77,6 +77,7 @@ export {
   Container,
   type ContainerProps,
 } from "./newComponents/Container/Container";
+export { Divider } from "./newComponents/Divider/Divider";
 export { Drawer, DrawerDivider } from "./newComponents/Drawer/Drawer";
 export {
   DropDown as NewDropDown,

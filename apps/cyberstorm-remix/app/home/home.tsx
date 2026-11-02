@@ -198,13 +198,16 @@ export default function HomePage() {
           <Heading csLevel="2" csSize="2" rootClasses="home__section-heading">
             Top Communities
           </Heading>
-          <NewLink
+          <NewButton
             primitiveType="cyberstormLink"
             linkId="Communities"
+            csVariant="secondary"
+            csSize="small"
+            csModifiers={["ghost"]}
             rootClasses="home__see-all"
           >
             See all
-          </NewLink>
+          </NewButton>
         </div>
         <Suspense fallback={<CommunityRowSkeleton />}>
           <Await
@@ -227,14 +230,17 @@ export default function HomePage() {
           <Heading csLevel="2" csSize="2" rootClasses="home__section-heading">
             New Communities
           </Heading>
-          <NewLink
+          <NewButton
             primitiveType="cyberstormLink"
             linkId="Communities"
             queryParams={`order=${CommunityListOrderingEnum.Latest}`}
+            csVariant="secondary"
+            csSize="small"
+            csModifiers={["ghost"]}
             rootClasses="home__see-all"
           >
             See all
-          </NewLink>
+          </NewButton>
         </div>
         <Suspense fallback={<CommunityRowSkeleton />}>
           <Await

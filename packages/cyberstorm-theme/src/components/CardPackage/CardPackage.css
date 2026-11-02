@@ -18,7 +18,7 @@
     --card-package--title-link-color: var(--color-text-primary);
     --card-package--title-color: var(--color-text-primary);
     --card-package--prefix-color: var(--color-text-tertiary);
-    --card-package--description-color: var(--color-text-secondary);
+    --card-package--description-color: var(--color-text-tertiary);
     --card-package--updated-color: var(--color-text-tertiary);
   }
 }

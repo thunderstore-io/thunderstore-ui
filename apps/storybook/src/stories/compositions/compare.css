@@ -123,6 +123,10 @@
     transform: translateZ(0);
   }
 
+  .cs-divider-frame {
+    width: 16rem;
+  }
+
   .cs-compare__split {
     display: grid;
     grid-template-columns: 1fr 1fr;
