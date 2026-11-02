@@ -82,6 +82,8 @@ function teamsCrumbs(match: MatchLookup): ReactNode {
   let tab: ReactNode = null;
   if (match("settings/teams/team/tabs/Profile/Profile")) {
     tab = crumb("profile", "Profile");
+  } else if (match("settings/teams/team/tabs/Communities/Communities")) {
+    tab = crumb("communities", "Communities");
   } else if (match("settings/teams/team/tabs/Members/Members")) {
     tab = crumb("members", "Members");
   } else if (

@@ -18,6 +18,7 @@ import {
   packageVersionSchema,
   packageWikiPageSchema,
   ratedPackagesSchema,
+  teamCommunitySchema,
   teamDetailsSchema,
   teamMembersSchema,
   teamServiceAccountSchema,
@@ -285,6 +286,13 @@ export const teamDetailsResponseDataSchema = teamDetailsSchema;
 
 export type TeamDetailsResponseData = z.infer<
   typeof teamDetailsResponseDataSchema
+>;
+
+// TeamCommunitiesResponse
+export const teamCommunitiesResponseDataSchema = teamCommunitySchema.array();
+
+export type TeamCommunitiesResponseData = z.infer<
+  typeof teamCommunitiesResponseDataSchema
 >;
 
 // TeamMembersResponse

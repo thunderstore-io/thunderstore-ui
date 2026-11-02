@@ -1,0 +1,26 @@
+@layer nimbus {
+  .team-communities__community {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-md);
+    align-items: center;
+    align-self: stretch;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+
+  .team-communities__icon {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .team-communities__count {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
+}

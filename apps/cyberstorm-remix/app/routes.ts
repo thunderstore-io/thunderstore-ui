@@ -110,6 +110,10 @@ export default [
     route("", "settings/teams/team/tabs/Profile/Profile.tsx", {
       index: true,
     }),
+    route(
+      "communities",
+      "settings/teams/team/tabs/Communities/Communities.tsx"
+    ),
     route("members", "settings/teams/team/tabs/Members/Members.tsx"),
     route(
       "service-accounts",

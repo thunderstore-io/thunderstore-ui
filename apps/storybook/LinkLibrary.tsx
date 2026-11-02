@@ -221,6 +221,9 @@ const library: LinkLibrary = {
   TeamSettings: (p) => (
     <Link {...p} url={`/teams/${p.team}`} ref={p.customRef} />
   ),
+  TeamSettingsCommunities: (p) => (
+    <Link {...p} url={`/teams/${p.team}/communities`} ref={p.customRef} />
+  ),
   TeamSettingsMembers: (p) => (
     <Link {...p} url={`/teams/${p.team}/members`} ref={p.customRef} />
   ),

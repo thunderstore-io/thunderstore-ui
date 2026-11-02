@@ -63,6 +63,18 @@ export default function TeamSettings() {
             Profile
           </NewLink>
           <NewLink
+            key="communities"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettingsCommunities"
+            team={teamName}
+            aria-current={currentTab === "communities"}
+            rootClasses={`tabs-item${
+              currentTab === "communities" ? " tabs-item--current" : ""
+            }`}
+          >
+            Communities
+          </NewLink>
+          <NewLink
             key="members"
             primitiveType="cyberstormLink"
             linkId="TeamSettingsMembers"

@@ -14,6 +14,31 @@ export const getFakeTeamDetails = async (teamName: string) => {
   };
 };
 
+/**
+ * Build a fake community entry for a team's community list
+ *
+ * @returns A fake team community
+ */
+const getFakeTeamCommunity = () => ({
+  identifier: faker.word.sample(),
+  name: faker.word.words(2),
+  community_icon_url: faker.helpers.maybe(getFakeImg) ?? null,
+  package_count: faker.number.int({ min: 1, max: 50 }),
+  download_count: faker.number.int({ min: 0, max: 5000000 }),
+  rating_count: faker.number.int({ min: 0, max: 20000 }),
+});
+
+/**
+ * Get a seeded list of fake communities for a team
+ *
+ * @param teamName The name of the team, used as the seed
+ * @returns Fake team communities
+ */
+export const getFakeTeamCommunities = async (teamName: string) => {
+  setSeed(teamName);
+  return getIds(3).map(getFakeTeamCommunity);
+};
+
 const getFakeTeamMember = () => ({
   identifier: faker.number.int(),
   username: faker.internet.userName(),

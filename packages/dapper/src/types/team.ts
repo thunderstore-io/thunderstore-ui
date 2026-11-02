@@ -10,6 +10,15 @@ export interface TeamDetails {
   donation_link: string | null;
 }
 
+export interface TeamCommunity {
+  identifier: string;
+  name: string;
+  community_icon_url: string | null;
+  package_count: number;
+  download_count: number;
+  rating_count: number;
+}
+
 export interface TeamMember {
   identifier: number;
   username: string;
