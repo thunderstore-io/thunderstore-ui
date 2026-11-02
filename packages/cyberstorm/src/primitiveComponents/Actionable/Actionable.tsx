@@ -1,6 +1,9 @@
 import React, { memo } from "react";
 
-import { type ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
+import {
+  type ThunderstoreLinkProps,
+  thunderstoreLinkProps,
+} from "../../components/Links/LinkingProvider";
 import {
   CyberstormLink,
   type CyberstormLinkIds,
@@ -36,6 +39,36 @@ export interface ActionableCyberstormLinkProps
   queryParams?: string;
   disabled?: boolean;
   ref?: React.Ref<HTMLAnchorElement>;
+}
+
+/** An anchor with no href cannot be opened, including via middle-click. */
+function DisabledAnchor(props: {
+  anchorProps: React.AnchorHTMLAttributes<HTMLAnchorElement>;
+  className: string | undefined;
+  anchorRef: React.ForwardedRef<HTMLAnchorElement>;
+  children: React.ReactNode;
+}) {
+  const anchorProps: Record<string, unknown> = { ...props.anchorProps };
+  delete anchorProps.href;
+  delete anchorProps.onClick;
+  delete anchorProps.queryParams;
+  delete anchorProps.url;
+  for (const key of Object.keys(thunderstoreLinkProps)) {
+    delete anchorProps[key];
+  }
+
+  return (
+    <a
+      {...(anchorProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      className={props.className}
+      ref={props.anchorRef}
+      role="link"
+      aria-disabled="true"
+      tabIndex={-1}
+    >
+      {props.children}
+    </a>
+  );
 }
 
 export const Actionable = memo(function Actionable(
@@ -74,22 +107,23 @@ export const Actionable = memo(function Actionable(
     const fRef = ref as React.ForwardedRef<HTMLAnchorElement>;
     const { disabled, className, ...fProps } =
       forwardedProps as ActionableLinkProps;
+    const anchorClassName = classnames(rootClasses, className);
+    if (disabled) {
+      return (
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
+          <DisabledAnchor
+            anchorProps={fProps}
+            className={anchorClassName}
+            anchorRef={fRef}
+          >
+            {children}
+          </DisabledAnchor>
+        </TooltipWrapper>
+      );
+    }
     return (
       <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-        <a
-          {...fProps}
-          className={classnames(rootClasses, className)}
-          ref={fRef}
-          aria-disabled={disabled || undefined}
-          tabIndex={disabled ? -1 : fProps.tabIndex}
-          onClick={
-            disabled
-              ? (event) => {
-                  event.preventDefault();
-                }
-              : fProps.onClick
-          }
-        >
+        <a {...fProps} className={anchorClassName} ref={fRef}>
           {children}
         </a>
       </TooltipWrapper>
@@ -99,22 +133,27 @@ export const Actionable = memo(function Actionable(
     const fRef = ref as React.ForwardedRef<HTMLAnchorElement>;
     const { linkId, disabled, className, ...strippedForwardedProps } =
       forwardedProps as ActionableCyberstormLinkProps;
+    const anchorClassName = classnames(rootClasses, className);
+    if (disabled) {
+      return (
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
+          <DisabledAnchor
+            anchorProps={strippedForwardedProps}
+            className={anchorClassName}
+            anchorRef={fRef}
+          >
+            {children}
+          </DisabledAnchor>
+        </TooltipWrapper>
+      );
+    }
     return (
       <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
         <CyberstormLink
           {...strippedForwardedProps}
-          className={classnames(rootClasses, className)}
+          className={anchorClassName}
           linkId={linkId}
           ref={fRef}
-          aria-disabled={disabled || undefined}
-          tabIndex={disabled ? -1 : strippedForwardedProps.tabIndex}
-          onClick={
-            disabled
-              ? (event) => {
-                  event.preventDefault();
-                }
-              : strippedForwardedProps.onClick
-          }
         >
           {children}
         </CyberstormLink>

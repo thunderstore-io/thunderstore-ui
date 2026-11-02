@@ -30,7 +30,7 @@
     }
   }
 
-  /* Clicks are cancelled in Actionable. pointer-events stays enabled
+  /* No href, so the link cannot be opened. pointer-events stays enabled
      so cursor: not-allowed can show. */
   .link[aria-disabled="true"],
   .link-disabled {
