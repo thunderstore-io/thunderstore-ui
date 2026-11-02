@@ -266,13 +266,7 @@ function DisbandTeamForm(props: {
         <p className="team-settings__instructions">
           Be aware you can currently only disband teams with no packages. If you
           need to archive a team with existing packages, contact #support in the{" "}
-          <a
-            href="https://discord.thunderstore.io/"
-            className="team-settings__link"
-          >
-            Thunderstore Discord
-          </a>
-          .
+          <a href="https://discord.thunderstore.io/">Thunderstore Discord</a>.
         </p>
         <p className="team-settings__instructions">
           As a precaution, to disband your team, please input{" "}

@@ -25,12 +25,7 @@ function crumb(key: string, label: ReactNode, link?: CrumbLink) {
   }
 
   return (
-    <NewBreadCrumbsItem
-      key={key}
-      {...link}
-      primitiveType="cyberstormLink"
-      csVariant="cyber"
-    >
+    <NewBreadCrumbsItem key={key} {...link} primitiveType="cyberstormLink">
       {label}
     </NewBreadCrumbsItem>
   );

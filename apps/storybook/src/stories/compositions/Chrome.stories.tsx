@@ -23,7 +23,6 @@ import { Icon } from "@cs/newComponents/Icon/Icon";
 import { IconVariantsList } from "@cs/newComponents/Icon/Icon.types";
 import { Image } from "@cs/newComponents/Image/Image";
 import { Link } from "@cs/newComponents/Link/Link";
-import { LinkVariantsList } from "@cs/newComponents/Link/Link.types";
 import {
   OverwolfLogo,
   ThunderstoreLogo,
@@ -203,19 +202,33 @@ function Chrome() {
         </States>
       </div>
       <div className="cs-page__row">
-        <States title="Link">
-          {LinkVariantsList.map((variant) => (
-            <Link
-              key={variant}
-              primitiveType="link"
-              href="#link"
-              csVariant={variant}
-            >
-              {variant}
+        <States title="Link, text">
+          <Link primitiveType="link" href="#text">
+            Documentation
+          </Link>
+        </States>
+        <States title="Link, primary">
+          <Link primitiveType="link" href="#primary" csVariant="primary">
+            1.2.0
+          </Link>
+        </States>
+        <States title="Link, title">
+          <span className="cs-link-context cs-link-context--title">
+            <Link primitiveType="link" href="#title">
+              Package name
             </Link>
-          ))}
+          </span>
+        </States>
+        <States title="Link, meta">
+          <span className="cs-link-context cs-link-context--meta">
+            <Link primitiveType="link" href="#meta">
+              See all
+            </Link>
+          </span>
+        </States>
+        <States title="Link, disabled">
           <Link primitiveType="link" href="#disabled" disabled>
-            Disabled
+            Unavailable
           </Link>
         </States>
       </div>

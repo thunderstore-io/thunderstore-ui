@@ -129,4 +129,16 @@
     gap: 12px;
     align-items: start;
   }
+
+  /* Parents pass a color pair down. Title stays flat; meta lightens on hover. */
+  .cs-link-context--title {
+    --link-color: var(--color-text-primary);
+    --link-color-hover: var(--color-text-primary);
+    --link-decoration-hover: none;
+  }
+
+  .cs-link-context--meta {
+    --link-color: var(--color-text-tertiary);
+    --link-color-hover: var(--color-text-primary);
+  }
 }

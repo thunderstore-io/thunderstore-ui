@@ -163,7 +163,6 @@ function PaneContent(props: {
           primitiveType="cyberstormLink"
           linkId="Communities"
           queryParams={searchQueryParams}
-          csVariant="cyber"
           rootClasses="home__see-all"
         >
           See all

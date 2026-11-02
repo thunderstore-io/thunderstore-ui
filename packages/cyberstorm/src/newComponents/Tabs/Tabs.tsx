@@ -6,17 +6,15 @@ import {
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import "./Tabs.css";
-import { type TabsSizes, type TabsVariants } from "./Tabs.types";
+import { type TabsVariants } from "./Tabs.types";
 
 interface TabsProps extends Omit<FrameWindowProps, "primitiveType"> {
   csVariant?: TabsVariants;
-  csSize?: TabsSizes;
 }
 
 export const Tabs = memo(function Tabs(props: TabsProps) {
   const {
     csVariant = "default",
-    csSize = "medium",
     rootClasses,
     children,
     ...forwardedProps
@@ -28,7 +26,7 @@ export const Tabs = memo(function Tabs(props: TabsProps) {
       primitiveType={"window"}
       rootClasses={classnames(
         "tabs",
-        ...componentClasses("tabs", csVariant, csSize),
+        ...componentClasses("tabs", csVariant),
         rootClasses
       )}
     >

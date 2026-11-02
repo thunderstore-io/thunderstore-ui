@@ -23,11 +23,8 @@ export const Link = memo(function Link(props: LinkProps | CyberstormLinkProps) {
     <Actionable
       {...forwardedProps}
       rootClasses={classnames(
-        csVariant === "primary"
-          ? "link link--variant--primary"
-          : csVariant === "cyber"
-            ? "link link--variant--cyber"
-            : "link",
+        "link",
+        csVariant === "primary" ? "link--variant--primary" : undefined,
         forwardedProps.disabled ? "link-disabled" : undefined,
         rootClasses
       )}

@@ -14,8 +14,10 @@
   }
 
   .alert__icon {
-    width: var(--alert-icon-width);
-    height: var(--alert-icon-height);
+    /* Same sizes as the theme's small alert. Without a fallback, a missing
+       token invalidates width/height and the SVG fills its column. */
+    width: var(--alert-icon-width, 1.125rem);
+    height: var(--alert-icon-height, 1.375rem);
 
     --icon-color: var(--alert-icon-color);
   }

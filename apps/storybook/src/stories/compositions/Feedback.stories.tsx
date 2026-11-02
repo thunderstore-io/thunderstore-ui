@@ -5,9 +5,9 @@ import { AlertVariantsList } from "@cs/newComponents/Alert/Alert.types";
 import { Button } from "@cs/newComponents/Button/Button";
 import { Container } from "@cs/newComponents/Container/Container";
 import * as EmptyState from "@cs/newComponents/EmptyState";
+import { Link } from "@cs/newComponents/Link/Link";
 import { SkeletonBox } from "@cs/newComponents/SkeletonBox/SkeletonBox";
 import { Tabs } from "@cs/newComponents/Tabs/Tabs";
-import { TabsSizesList } from "@cs/newComponents/Tabs/Tabs.types";
 import { Provider as ToastProvider } from "@cs/newComponents/Toast/Provider";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,12 +63,60 @@ function Feedback() {
           </div>
         </Container>
         <Tabs>
-          <div className="tabs-item tabs-item--current" style={{ padding: 16 }}>
-            Readme
-          </div>
-          <div className="tabs-item" style={{ padding: 16 }}>
-            Versions
-          </div>
+          <Link
+            key="settings"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettingsSettings"
+            aria-current
+            rootClasses="tabs-item tabs-item--current"
+            team="test-team"
+          >
+            Settings
+          </Link>
+          <Link
+            key="service-accounts"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettingsServiceAccounts"
+            aria-current={false}
+            rootClasses="tabs-item"
+            team="test-team"
+          >
+            Service Accounts
+          </Link>
+        </Tabs>
+        <Tabs>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current
+            rootClasses="tabs-item tabs-item--current"
+          >
+            Loooooooooooooooooooong content
+          </Link>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current={false}
+            rootClasses="tabs-item"
+          >
+            Long content with shorter words
+          </Link>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current={false}
+            rootClasses="tabs-item"
+          >
+            Long content
+          </Link>
+          <Link
+            primitiveType="cyberstormLink"
+            linkId="Index"
+            aria-current={false}
+            rootClasses="tabs-item"
+          >
+            Looooooooooooooooooooooooooooooooonoooooooooooooog
+          </Link>
         </Tabs>
         <Button csVariant="secondary">Show toast</Button>
 
@@ -77,18 +125,6 @@ function Feedback() {
             <Alert key={variant} csVariant={variant}>
               This is an alert with variant: {variant}
             </Alert>
-          ))}
-        </States>
-        <States title="Tabs sizes">
-          {TabsSizesList.map((size) => (
-            <Tabs key={size} csSize={size}>
-              <div
-                className="tabs-item tabs-item--current"
-                style={{ padding: 8 }}
-              >
-                {size}
-              </div>
-            </Tabs>
           ))}
         </States>
         <States title="Container">
