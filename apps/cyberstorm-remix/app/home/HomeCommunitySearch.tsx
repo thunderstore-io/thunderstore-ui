@@ -15,8 +15,9 @@ import { FetchErrorState } from "~/commonComponents/FetchErrorState/FetchErrorSt
 
 import {
   CardCommunity,
+  Divider,
   Heading,
-  NewLink,
+  NewButton,
   NewTextInput,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
@@ -159,14 +160,17 @@ function PaneContent(props: {
         <Heading csLevel="2" csSize="3" rootClasses="home-search__pane-heading">
           Search results for &ldquo;{query}&rdquo;
         </Heading>
-        <NewLink
+        <NewButton
           primitiveType="cyberstormLink"
           linkId="Communities"
           queryParams={searchQueryParams}
+          csVariant="secondary"
+          csSize="small"
+          csModifiers={["ghost"]}
           rootClasses="home__see-all"
         >
           See all
-        </NewLink>
+        </NewButton>
       </div>
       {results.length > 0 ? (
         <div className="home__card-row">
@@ -179,14 +183,17 @@ function PaneContent(props: {
           No communities matched your search.
         </p>
       )}
+      <Divider rootClasses="home-search__divider" />
       <div className="home-search__pane-footer">
-        <NewLink
+        <NewButton
           primitiveType="cyberstormLink"
           linkId="Communities"
-          rootClasses="home-search__all-link"
+          csVariant="secondary"
+          csSize="big"
+          csModifiers={["ghost"]}
         >
           See all communities ({communitiesData.count})
-        </NewLink>
+        </NewButton>
       </div>
     </>
   );
