@@ -381,6 +381,7 @@ export default function PackageListingVersion() {
             package={listing.name}
             version={packageVersion}
             aria-current={currentTab === "details"}
+            preventScrollReset={true}
             rootClasses={`tabs-item${
               currentTab === "details" ? " tabs-item--current" : ""
             }`}
@@ -396,6 +397,7 @@ export default function PackageListingVersion() {
             package={listing.name}
             version={packageVersion}
             aria-current={currentTab === "required"}
+            preventScrollReset={true}
             rootClasses={`tabs-item${
               currentTab === "required" ? " tabs-item--current" : ""
             }`}
@@ -411,6 +413,7 @@ export default function PackageListingVersion() {
             package={listing.name}
             version={packageVersion}
             aria-current={currentTab === "versions"}
+            preventScrollReset={true}
             rootClasses={`tabs-item${
               currentTab === "versions" ? " tabs-item--current" : ""
             }`}

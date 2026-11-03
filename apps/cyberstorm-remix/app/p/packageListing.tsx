@@ -557,6 +557,7 @@ export default function PackageListing() {
               namespace={listing.namespace}
               package={listing.name}
               aria-current={currentTab === "details"}
+              preventScrollReset={true}
               rootClasses={`tabs-item${
                 currentTab === "details" ? " tabs-item--current" : ""
               }`}
@@ -572,6 +573,7 @@ export default function PackageListing() {
               namespace={listing.namespace}
               package={listing.name}
               aria-current={currentTab === "required"}
+              preventScrollReset={true}
               rootClasses={`tabs-item${
                 currentTab === "required" ? " tabs-item--current" : ""
               }`}
@@ -587,6 +589,7 @@ export default function PackageListing() {
               namespace={listing.namespace}
               package={listing.name}
               aria-current={currentTab === "wiki"}
+              preventScrollReset={true}
               rootClasses={`tabs-item${
                 currentTab === "wiki" ? " tabs-item--current" : ""
               }`}
@@ -602,6 +605,7 @@ export default function PackageListing() {
               namespace={listing.namespace}
               package={listing.name}
               aria-current={currentTab === "changelog"}
+              preventScrollReset={true}
               disabled={!listing.has_changelog}
               rootClasses={`tabs-item${
                 currentTab === "changelog" ? " tabs-item--current" : ""
@@ -618,6 +622,7 @@ export default function PackageListing() {
               namespace={listing.namespace}
               package={listing.name}
               aria-current={currentTab === "versions"}
+              preventScrollReset={true}
               rootClasses={`tabs-item${
                 currentTab === "versions" ? " tabs-item--current" : ""
               }`}
@@ -633,6 +638,7 @@ export default function PackageListing() {
               namespace={listing.namespace}
               package={listing.name}
               aria-current={currentTab === "source"}
+              preventScrollReset={true}
               rootClasses={`tabs-item${
                 currentTab === "source" ? " tabs-item--current" : ""
               }`}
