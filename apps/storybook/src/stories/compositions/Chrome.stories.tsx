@@ -9,6 +9,7 @@ import {
   ButtonSizesList,
   ButtonVariantsList,
 } from "@cs/newComponents/Button/Button.types";
+import { Divider } from "@cs/newComponents/Divider/Divider";
 import {
   DropDown,
   DropDownDivider,
@@ -37,7 +38,8 @@ import { communityImage } from "./fixtures";
 
 /**
  * Featuring: Heading, BreadCrumbs, Avatar, Image, Link, Button, Icon,
- * ThunderstoreLogo, ThunderstoreLogoHorizontal, OverwolfLogo, DropDown.
+ * Divider, ThunderstoreLogo, ThunderstoreLogoHorizontal, OverwolfLogo,
+ * DropDown.
  * The open dropdown panel is a separate overlay story. See the featuring rule
  * in compare.tsx.
  */
@@ -49,7 +51,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Page chrome grouped by component: heading, breadcrumbs, avatar, image, link, button, icon, and the Thunderstore and Overwolf marks, plus a closed dropdown. The open dropdown panel is Compositions/Overlays/DropDown.",
+          "Page chrome grouped by component: heading, breadcrumbs, avatar, image, link, button, icon, divider, and the Thunderstore and Overwolf marks, plus a closed dropdown. The open dropdown panel is Compositions/Overlays/DropDown.",
       },
     },
   },
@@ -158,32 +160,38 @@ function Chrome() {
         </States>
       </div>
       <div className="cs-page__row">
-        <States title="Button variants">
-          {ButtonVariantsList.map((variant) => (
-            <Button key={variant} csVariant={variant}>
-              {variant}
-            </Button>
-          ))}
-        </States>
+        {ButtonVariantsList.map((variant) => (
+          <States key={variant} title={`Button, ${variant}`}>
+            <Button csVariant={variant}>Download</Button>
+          </States>
+        ))}
       </div>
       <div className="cs-page__row">
-        <States title="Button sizes and modifiers">
-          {ButtonSizesList.map((size) => (
-            <Button key={size} csSize={size}>
-              {size}
-            </Button>
-          ))}
-          {ButtonModifiersList.map((modifier) => (
-            <Button key={modifier} csModifiers={[modifier]}>
+        {ButtonSizesList.map((size) => (
+          <States key={size} title={`Button, ${size}`}>
+            <Button csSize={size}>Download</Button>
+          </States>
+        ))}
+      </div>
+      <div className="cs-page__row">
+        {ButtonModifiersList.map((modifier) => (
+          <States key={modifier} title={`Button, ${modifier}`}>
+            <Button
+              csModifiers={[modifier]}
+              disabled={modifier === "disabled"}
+              aria-label={modifier === "only-icon" ? "Favorite" : undefined}
+            >
               {modifier === "only-icon" ? (
                 <Icon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faStar} />
                 </Icon>
               ) : (
-                modifier
+                "Download"
               )}
             </Button>
-          ))}
+          </States>
+        ))}
+        <States title="Button, link">
           <Button primitiveType="cyberstormLink" linkId="Communities">
             Communities
           </Button>
@@ -199,6 +207,13 @@ function Chrome() {
           <Icon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faStar} />
           </Icon>
+        </States>
+      </div>
+      <div className="cs-page__row">
+        <States title="Divider">
+          <div className="cs-divider-frame">
+            <Divider />
+          </div>
         </States>
       </div>
       <div className="cs-page__row">
