@@ -139,6 +139,8 @@ export interface LinkLibrary {
   Teams: NoRequiredProps;
   /** Team's settings profile page */
   TeamSettings: (props: AnyProps & { team: string }) => RE | null;
+  /** Team's settings communities page */
+  TeamSettingsCommunities: (props: AnyProps & { team: string }) => RE | null;
   /** Team's settings members page */
   TeamSettingsMembers: (props: AnyProps & { team: string }) => RE | null;
   /** Team's settings service accounts page */
@@ -190,6 +192,7 @@ const library: LinkLibrary = {
   Team: noop,
   Teams: noop,
   TeamSettings: noop,
+  TeamSettingsCommunities: noop,
   TeamSettingsMembers: noop,
   TeamSettingsServiceAccounts: noop,
   TeamSettingsSettings: noop,

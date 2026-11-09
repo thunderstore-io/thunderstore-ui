@@ -28,6 +28,7 @@ import { getFakeServiceAccounts } from "./fakers/serviceAccount";
 import { postFakePackageSubmissionMetadata } from "./fakers/submission";
 import { getFakePackageSubmissionStatus } from "./fakers/submission";
 import {
+  getFakeTeamCommunities,
   getFakeTeamDetails,
   getFakeTeamMembers,
   postFakeTeamCreate,
@@ -59,6 +60,7 @@ export class DapperFake implements DapperInterface {
   public getPackageWikiPage = getFakePackageWikiPage;
   public getPrivateTeamDetails = getFakeTeamDetails;
   public getRatedPackages = getFakeRatedPackages;
+  public getTeamCommunities = getFakeTeamCommunities;
   public getTeamDetails = getFakeTeamDetails;
   public getTeamMembers = getFakeTeamMembers;
   public getTeamServiceAccounts = getFakeServiceAccounts;

@@ -23,6 +23,7 @@ export interface DapperInterface {
   getPackageWikiPage: methods.GetPackageWikiPage;
   getPrivateTeamDetails: methods.GetPrivateTeamDetails;
   getRatedPackages: methods.GetRatedPackages;
+  getTeamCommunities: methods.GetTeamCommunities;
   getTeamDetails: methods.GetTeamDetails;
   getTeamMembers: methods.GetTeamMembers;
   getTeamServiceAccounts: methods.GetTeamServiceAccounts;

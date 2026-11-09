@@ -1,5 +1,6 @@
 import {
   fetchPrivateTeamDetails,
+  fetchTeamCommunities,
   fetchTeamDetails,
   fetchTeamMembers,
   fetchTeamServiceAccounts,
@@ -29,6 +30,28 @@ export async function getPrivateTeamDetails(
   teamName: string
 ) {
   const data = await fetchPrivateTeamDetails({
+    config: this.config,
+    params: {
+      team_name: teamName,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+/**
+ * Get the communities a team has publicly visible packages in
+ *
+ * @param teamName The name of the team
+ * @returns The team's communities with their package counts
+ */
+export async function getTeamCommunities(
+  this: DapperTsInterface,
+  teamName: string
+) {
+  const data = await fetchTeamCommunities({
     config: this.config,
     params: {
       team_name: teamName,

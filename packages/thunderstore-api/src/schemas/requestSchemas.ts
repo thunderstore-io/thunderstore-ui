@@ -558,6 +558,15 @@ export type TeamDetailsRequestParams = z.infer<
   typeof teamDetailsRequestParamsSchema
 >;
 
+// TeamCommunitiesRequest
+export const teamCommunitiesRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamCommunitiesRequestParams = z.infer<
+  typeof teamCommunitiesRequestParamsSchema
+>;
+
 // TeamMembersRequest
 export const teamMembersRequestParamsSchema = z.object({
   team_name: z.string(),
