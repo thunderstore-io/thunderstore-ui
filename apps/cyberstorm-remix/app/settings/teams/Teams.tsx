@@ -128,7 +128,6 @@ export default function Teams() {
                       linkId="TeamSettings"
                       key={team.name}
                       team={team.name}
-                      csVariant="primary"
                       rootClasses="teams-table__cell teams-table__name"
                     >
                       {team.name}

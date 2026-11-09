@@ -165,7 +165,6 @@ export function getPackageListingMetaItems(
           community={listing.community_identifier}
           namespace={listing.namespace}
           package={listing.name}
-          csVariant="cyber"
         >
           {listing.dependant_count} other mods
         </NewLink>

@@ -42,7 +42,6 @@ export function UploadTeamSection({
           key="create-team-link"
           primitiveType="cyberstormLink"
           linkId="Teams"
-          csVariant="cyber"
           rootClasses="community__item"
         >
           <span>Create team</span>

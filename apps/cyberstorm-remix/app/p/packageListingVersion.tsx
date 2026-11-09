@@ -279,7 +279,6 @@ export default function PackageListingVersion() {
             community={listing.community_identifier}
             namespace={listing.namespace}
             package={listing.name}
-            csVariant="cyber"
           >
             View Latest Version
           </NewLink>
@@ -298,7 +297,6 @@ export default function PackageListingVersion() {
                 linkId="Team"
                 community={listing.community_identifier}
                 team={listing.namespace}
-                csVariant="cyber"
                 rootClasses="page-header__meta-item"
               >
                 <NewIcon csMode="inline" noWrapper>
@@ -310,7 +308,6 @@ export default function PackageListingVersion() {
                 <NewLink
                   primitiveType="link"
                   href={listing.website_url}
-                  csVariant="cyber"
                   rootClasses="page-header__meta-item"
                 >
                   <NewIcon csMode="inline" noWrapper>

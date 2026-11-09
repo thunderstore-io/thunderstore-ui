@@ -446,7 +446,6 @@ function DeletePackageWikiPageForm(props: {
             namespace={namespaceId}
             package={packageId}
             wikipageslug={page.slug}
-            csVariant="cyber"
           >
             {page.title}
           </NewLink>

@@ -22,17 +22,6 @@
     font-weight: var(--font-weight-regular);
     line-height: 160%;
 
-    a {
-      color: var(--color-text-a--default);
-      text-decoration: none;
-    }
-
-    a:where(:hover),
-    a:where(:active) {
-      color: var(--color-text-a--hover);
-      text-decoration: underline;
-    }
-
     > :first-child {
       margin-top: 0;
     }

@@ -250,7 +250,6 @@ function CommunityMainHeader({
                 <NewLink
                   primitiveType="link"
                   href={resolvedCommunity.wiki_url}
-                  csVariant="cyber"
                   rootClasses="community__item"
                 >
                   <NewIcon csMode="inline" noWrapper>
@@ -266,7 +265,6 @@ function CommunityMainHeader({
                 <NewLink
                   primitiveType="link"
                   href={resolvedCommunity.discord_url}
-                  csVariant="cyber"
                   rootClasses="community__item"
                 >
                   <NewIcon csMode="inline" noWrapper>

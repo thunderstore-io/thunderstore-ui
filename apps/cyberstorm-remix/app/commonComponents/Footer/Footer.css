@@ -1,5 +1,7 @@
 @layer nimbus {
   .footer {
+    --link-color: var(--color-text-tertiary);
+    --link-color-hover: var(--color-text-primary);
     --footer-width: min(var(--container-width), 90rem);
     --footer-inner-padding-inline: var(--container-padding);
     --footer-inner-padding-block: 2.5rem;
@@ -113,15 +115,12 @@
   }
 
   .footer-link {
-    color: var(--color-text-tertiary);
-
     &:where(.footer-link--secondary) {
       text-decoration: underline dotted;
     }
 
-    &:hover,
     &:focus-visible {
-      color: var(--color-text-primary);
+      color: var(--link-color-hover);
     }
   }
 }

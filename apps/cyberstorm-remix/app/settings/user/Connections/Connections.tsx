@@ -130,7 +130,6 @@ export default function Connections() {
             <NewLink
               primitiveType="link"
               href="https://pages.thunderstore.io/p/privacy-policy"
-              csVariant="cyber"
             >
               Privacy Policy
             </NewLink>
