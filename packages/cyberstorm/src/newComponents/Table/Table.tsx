@@ -4,76 +4,50 @@ import {
   faSortUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type CSSProperties, type ReactNode, useState } from "react";
-import React from "react";
+import {
+  type CSSProperties,
+  type Dispatch,
+  type SetStateAction,
+  useState,
+} from "react";
 
 import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Table.css";
 import {
-  type TableModifiers,
-  type TableSizes,
-  type TableVariants,
+  type TableCompareColumnMeta,
+  type TableHeader,
+  type TableLabels,
+  type TableProps,
+  type TableRow,
+  TableSort,
+  type TableSortCompare,
 } from "./Table.types";
+
+export type {
+  TableCompareColumnMeta,
+  TableHeader,
+  TableLabels,
+  TableProps,
+  TableRow,
+  TableRows,
+} from "./Table.types";
+export { TableSort } from "./Table.types";
 
 interface SortButtonProps {
   identifier: number;
   current: number;
   direction: TableSort;
-  hook: React.Dispatch<
-    React.SetStateAction<{ identifier: number; direction: TableSort }>
-  >;
+  hook: Dispatch<SetStateAction<TableCompareColumnMeta>>;
   label: string;
 }
 
-export enum TableSort {
-  DESC = -1,
-  OFF,
-  ASC,
+function columnTrack(header: TableHeader): string {
+  return header.maxWidth ? `fit-content(${header.maxWidth})` : "1fr";
 }
 
-interface TableItem {
-  value: ReactNode;
-  sortValue: string | number;
-  alignLastRight?: boolean;
-}
-
-export type TableLabels = {
-  value: string;
-  disableSort: boolean;
-  columnClasses?: string;
-}[];
-
-export type TableRow = TableItem[];
-
-export type TableRows = TableRow[];
-
-export type TableCompareColumnMeta = {
-  identifier: number;
-  direction: TableSort;
-};
-
-export interface TableProps {
-  titleRowContent?: ReactNode;
-  headers: TableLabels;
-  rows: TableRows;
-  disableSort?: boolean;
-  sortByHeader?: number;
-  sortDirection?: TableSort;
-  gridTemplateColumns?: string;
-  rootClasses?: string;
-  csVariant?: TableVariants;
-  csSize?: TableSizes;
-  csModifiers?: TableModifiers[];
-  horizontalScroll?: boolean;
-  customSortCompare?: {
-    [key: number]: (
-      a: TableRow,
-      b: TableRow,
-      columnMeta: TableCompareColumnMeta
-    ) => number;
-  };
-  ref?: React.Ref<HTMLTableElement>;
+function gridTemplateColumns(headers: TableLabels): string {
+  return headers.map(columnTrack).join(" ");
 }
 
 export function tableDefaultCompare(
@@ -98,6 +72,16 @@ export function tableDefaultCompare(
   return 0;
 }
 
+function sortRows(
+  rows: TableRow[],
+  sort: TableCompareColumnMeta,
+  customSortCompare?: TableProps["customSortCompare"]
+): TableRow[] {
+  const compare: TableSortCompare =
+    customSortCompare?.[sort.identifier] ?? tableDefaultCompare;
+  return [...rows].sort((a, b) => compare(a, b, sort));
+}
+
 function SortButton(props: SortButtonProps) {
   const { identifier, current, direction = TableSort.OFF, hook, label } = props;
 
@@ -111,7 +95,11 @@ function SortButton(props: SortButtonProps) {
   }
 
   return (
-    <button className="table__sortbutton" onClick={() => hook(hookParams)}>
+    <button
+      type="button"
+      className="table__sortbutton"
+      onClick={() => hook(hookParams)}
+    >
       {label}
       <NewIcon noWrapper csMode="inline">
         <FontAwesomeIcon icon={icon} />
@@ -128,7 +116,6 @@ export function Table(props: TableProps) {
     sortByHeader = 0,
     sortDirection = TableSort.DESC,
     disableSort = false,
-    gridTemplateColumns,
     rootClasses,
     csVariant = "default",
     csSize = "medium",
@@ -143,19 +130,12 @@ export function Table(props: TableProps) {
     direction: sortDirection,
   });
 
-  if (!disableSort) {
-    if (customSortCompare && customSortCompare[sortVariables.identifier]) {
-      rows.sort((a, b) =>
-        customSortCompare[sortVariables.identifier](a, b, sortVariables)
-      );
-    } else {
-      rows.sort((a, b) => tableDefaultCompare(a, b, sortVariables));
-    }
-  }
+  const sortedRows = disableSort
+    ? rows
+    : sortRows(rows, sortVariables, customSortCompare);
 
   const gridStyle = {
-    "--grid-template-columns":
-      gridTemplateColumns || `repeat(${headers.length}, 1fr)`,
+    "--grid-template-columns": gridTemplateColumns(headers),
   } as CSSProperties;
 
   const tableElement = (
@@ -174,9 +154,16 @@ export function Table(props: TableProps) {
       <thead>
         <tr className="table__row">
           {headers.map((header, headerI) => (
-            <th key={headerI} className="table__header" scope="col">
+            <th
+              key={headerI}
+              className={classnames(
+                "table__header",
+                header.maxWidth ? "table__header--capped" : undefined
+              )}
+              scope="col"
+            >
               {header.disableSort ? (
-                <p className="table__header-text">{header.value}</p>
+                <span className="table__header-text">{header.value}</span>
               ) : (
                 <SortButton
                   identifier={headerI}
@@ -191,16 +178,15 @@ export function Table(props: TableProps) {
         </tr>
       </thead>
       <tbody>
-        {rows.map((row, rowI) => (
+        {sortedRows.map((row, rowI) => (
           <tr key={`row${rowI}`} className="table__row">
             {row.map((col, colI) => (
               <td
                 key={`row${rowI}_col${colI}`}
                 className={classnames(
                   "table__item",
-                  headers[colI] && headers[colI].columnClasses
-                    ? `${headers[colI].columnClasses}`
-                    : undefined
+                  headers[colI]?.maxWidth ? "table__item--capped" : undefined,
+                  headers[colI]?.columnClasses
                 )}
               >
                 {col.value}

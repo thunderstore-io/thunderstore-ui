@@ -68,17 +68,24 @@ export const searchOptions = [
 ];
 
 export const tableHeaders = [
-  { value: "Name", disableSort: false },
-  { value: "Downloads", disableSort: true },
+  { value: "Name", disableSort: false, maxWidth: "10rem" },
+  { value: "Description", disableSort: true, maxWidth: "16rem" },
+  { value: "Downloads", disableSort: true, maxWidth: "8rem" },
 ];
 
 export const tableRows = [
   [
     { value: "Cool mod", sortValue: "Cool mod" },
+    {
+      value:
+        "A survival sandbox mod for Viking purgatory. Adds building pieces, creatures, and a longer description so this column wraps while the capped columns stay as wide as their content.",
+      sortValue: "Survival",
+    },
     { value: "12 345", sortValue: 12345 },
   ],
   [
     { value: "Plain mod", sortValue: "Plain mod" },
+    { value: "No description", sortValue: "No description" },
     { value: "80", sortValue: 80 },
   ],
 ];

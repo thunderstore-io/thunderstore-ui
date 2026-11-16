@@ -75,7 +75,6 @@ function Listings({ scope }: { scope: string }) {
           <CardCommunity community={community} />
         </div>
       </div>
-      <Table headers={tableHeaders} rows={tableRows} sortByHeader={0} />
       <Pagination
         currentPage={1}
         onPageChange={pageChange}
