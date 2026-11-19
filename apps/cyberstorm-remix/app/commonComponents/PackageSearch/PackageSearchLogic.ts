@@ -5,8 +5,8 @@ import { type CommunityFilters } from "@thunderstore/thunderstore-api";
 
 import { type CategorySelection } from "../types";
 import {
-  PackageOrderOptions,
   type PackageOrderOptionsType,
+  getDefaultPackageOrder,
   isPackageOrderOptions,
 } from "./components/packageOrderOptions";
 
@@ -187,7 +187,7 @@ export function synchronizeSearchParams(
   if (oldOrdering !== debouncedSearchParamsBlob.order) {
     if (
       debouncedSearchParamsBlob.order === undefined ||
-      debouncedSearchParamsBlob.order === PackageOrderOptions.Updated
+      debouncedSearchParamsBlob.order === getDefaultPackageOrder()
     ) {
       searchParams.delete("ordering");
     } else {
