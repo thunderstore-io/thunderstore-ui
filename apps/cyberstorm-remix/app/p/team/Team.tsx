@@ -21,7 +21,7 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
 
-import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/packageOrderOptions";
+import { getPackageOrder } from "../../commonComponents/PackageSearch/components/packageOrderOptions";
 import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Team";
 
@@ -102,8 +102,7 @@ export const loader = ssrLoader(
         };
       });
       const searchParams = new URL(request.url).searchParams;
-      const ordering =
-        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+      const ordering = getPackageOrder(searchParams);
       const page = searchParams.get("page");
       const search = parseSearchParam(searchParams.get("search"));
       const includedCategories = parseIntListParam(
@@ -173,8 +172,7 @@ export async function clientLoader({
       };
     });
     const searchParams = new URL(request.url).searchParams;
-    const ordering =
-      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+    const ordering = getPackageOrder(searchParams);
     const page = searchParams.get("page");
     const search = parseSearchParam(searchParams.get("search"));
     const includedCategories = parseIntListParam(

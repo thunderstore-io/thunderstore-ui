@@ -15,7 +15,7 @@ import { useLoaderData, useOutletContext } from "react-router";
 import { SidebarAd } from "~/commonComponents/Ads/SidebarAd";
 import { COMMUNITY_SIDEBAR_AD } from "~/commonComponents/Ads/nitroAds";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
-import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/packageOrderOptions";
+import { getPackageOrder } from "~/commonComponents/PackageSearch/components/packageOrderOptions";
 import { type OutletContextShape } from "~/root";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -47,8 +47,7 @@ export const loader = ssrLoader(
         };
       });
       const searchParams = new URL(request.url).searchParams;
-      const ordering =
-        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+      const ordering = getPackageOrder(searchParams);
       const page = searchParams.get("page");
       const search = parseSearchParam(searchParams.get("search"));
       const includedCategories = parseIntListParam(
@@ -112,8 +111,7 @@ export async function clientLoader({
       };
     });
     const searchParams = new URL(request.url).searchParams;
-    const ordering =
-      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+    const ordering = getPackageOrder(searchParams);
     const page = searchParams.get("page");
     const search = parseSearchParam(searchParams.get("search"));
     const includedCategories = parseIntListParam(

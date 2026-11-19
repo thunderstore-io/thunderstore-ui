@@ -136,3 +136,11 @@ export function isMarkdownEditingEnabled(): boolean {
       .VITE_ENABLE_MARKDOWN_EDITING === "true"
   );
 }
+
+/** Trending and New & trending package orderings. */
+export function isTrendingSortEnabled(): boolean {
+  return (
+    getPublicEnvVariables(["VITE_ENABLE_TRENDING_SORT"])
+      .VITE_ENABLE_TRENDING_SORT === "true"
+  );
+}

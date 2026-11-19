@@ -1,10 +1,13 @@
 import {
+  faArrowTrendUp,
   faClockRotateLeft,
   faDownload,
+  faFire,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isTrendingSortEnabled } from "cyberstorm/utils/env";
 
 import { NewSelect } from "@thunderstore/cyberstorm";
 
@@ -20,7 +23,7 @@ interface Props {
 
 export const PackageOrder = (props: Props) => (
   <NewSelect
-    options={selectOptions}
+    options={isTrendingSortEnabled() ? trendingSelectOptions : selectOptions}
     value={props.order}
     onChange={props.setOrder}
     id="packageOrder"
@@ -48,6 +51,20 @@ const selectOptions = [
     label: "Top rated",
     leftIcon: <FontAwesomeIcon icon={faThumbsUp} />,
   },
+];
+
+const trendingSelectOptions = [
+  {
+    value: PackageOrderOptions.Trending,
+    label: "Trending",
+    leftIcon: <FontAwesomeIcon icon={faFire} />,
+  },
+  {
+    value: PackageOrderOptions.NewAndTrending,
+    label: "New & trending",
+    leftIcon: <FontAwesomeIcon icon={faArrowTrendUp} />,
+  },
+  ...selectOptions,
 ];
 
 PackageOrder.displayName = "PackageOrder";
