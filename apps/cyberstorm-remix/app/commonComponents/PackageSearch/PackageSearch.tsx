@@ -68,7 +68,7 @@ import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud
 import { DisplayControls } from "./components/DisplayControls";
 import { PackageCount } from "./components/PackageCount/PackageCount";
 import { PackageOrder } from "./components/PackageOrder";
-import { PackageOrderOptions } from "./components/packageOrderOptions";
+import { getDefaultPackageOrder } from "./components/packageOrderOptions";
 
 const PER_PAGE = 20;
 
@@ -443,7 +443,7 @@ export function PackageSearch(props: Props) {
           <div className="package-search__listing-actions">
             <div className="package-search__sorting">
               <PackageOrder
-                order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
+                order={searchParamsBlob.order ?? getDefaultPackageOrder()}
                 setOrder={setParamsBlobValue(
                   setSearchParamsBlob,
                   searchParamsBlob,
@@ -477,7 +477,7 @@ export function PackageSearch(props: Props) {
             <div className="package-search__filters package-search__filters--drawer">
               <div className="package-search__drawer-sorting">
                 <PackageOrder
-                  order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
+                  order={searchParamsBlob.order ?? getDefaultPackageOrder()}
                   setOrder={setParamsBlobValue(
                     setSearchParamsBlob,
                     searchParamsBlob,
