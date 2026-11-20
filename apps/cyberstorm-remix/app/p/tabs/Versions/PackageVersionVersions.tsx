@@ -90,6 +90,8 @@ export async function clientLoader({
   };
 }
 
+clientLoader.hydrate = true;
+
 export default function Versions() {
   const {
     communityId,

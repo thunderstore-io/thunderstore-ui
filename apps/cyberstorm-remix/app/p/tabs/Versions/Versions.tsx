@@ -91,6 +91,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   };
 }
 
+clientLoader.hydrate = true;
+
 export default function Versions() {
   const {
     communityId,

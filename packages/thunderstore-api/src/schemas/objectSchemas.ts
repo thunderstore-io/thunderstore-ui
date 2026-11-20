@@ -212,6 +212,7 @@ export const packageListingDetailsSchema = packageListingSchema
     package_admin_url: z.string().nullable().optional(),
     team: packageTeamSchema,
     website_url: z.string().nullable(),
+    version_is_rejected: z.boolean().optional().default(false),
     // Backend rollout compat: the frontend deploys before the backend, so for a
     // window the API still returns the legacy date fields (datetime_created +
     // last_updated) before switching to the new ones (package_created +
@@ -263,6 +264,7 @@ export const packageVersionSchema = z.object({
   download_url: z.string(),
   install_url: z.string(),
   is_readme_edited: z.boolean().optional().default(false),
+  is_rejected: z.boolean().optional().default(false),
 });
 
 export const decompilationSchema = z.object({
