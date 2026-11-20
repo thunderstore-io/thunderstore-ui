@@ -207,7 +207,7 @@ export const packageListingDetailsSchema = packageListingSchema
     full_version_name: z.string().min(1),
     has_changelog: z.boolean(),
     install_url: z.string(),
-    latest_version_number: z.string().min(1),
+    latest_version_number: z.string().min(1).nullable(),
     listing_admin_url: z.string().nullable().optional(),
     package_admin_url: z.string().nullable().optional(),
     team: packageTeamSchema,

@@ -38,7 +38,7 @@ export interface PackageListingStatus {
 }
 
 export interface PackageListingDetails
-  extends Omit<PackageListing, "last_updated"> {
+  extends Omit<PackageListing, "last_updated" | "latest_version_number"> {
   community_name: string;
   dependant_count: number;
   dependencies: PackageListingDependency[];
@@ -47,7 +47,7 @@ export interface PackageListingDetails
   full_version_name: string;
   has_changelog: boolean;
   install_url: string;
-  latest_version_number: string;
+  latest_version_number: string | null;
   listing_admin_url?: string | null;
   package_admin_url?: string | null;
   team: PackageTeam;

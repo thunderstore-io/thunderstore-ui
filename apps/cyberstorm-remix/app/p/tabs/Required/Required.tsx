@@ -12,6 +12,7 @@ import { Await, useLoaderData } from "react-router";
 
 import { EmptyState, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { type PackageVersionDependenciesResponseData } from "@thunderstore/thunderstore-api";
 
 import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Required";
@@ -19,6 +20,13 @@ import type { Route } from "./+types/Required";
 const Dependency404 = new Response("Package dependencies not found", {
   status: 404,
 });
+
+const noDependencies: PackageVersionDependenciesResponseData = {
+  count: 0,
+  next: null,
+  previous: null,
+  results: [],
+};
 
 const getPageFromUrl = (url: string): number | undefined => {
   const searchParams = new URL(url).searchParams;
@@ -51,7 +59,7 @@ export const loader = ssrLoader(
       // Listing that's not available on unauthenticated SSR request
       // might be available for authenticated user on client. Return
       // undefined rather than throw error to allow refetch on client.
-      if (!listing) {
+      if (!listing?.latest_version_number) {
         return { dependencies: undefined, seo: createSeo({ descriptors: [] }) };
       }
 
@@ -92,7 +100,7 @@ export async function clientLoader({
   }
 
   const dapper = getDapperForRequest(request);
-  let version: string;
+  let version: string | null;
 
   if (packageVersion) {
     version = packageVersion;
@@ -106,12 +114,15 @@ export async function clientLoader({
 
   return {
     communityId: communityId,
-    dependencies: dapper.getPackageVersionDependencies(
-      namespaceId,
-      packageId,
-      version,
-      getPageFromUrl(request.url)
-    ),
+    dependencies:
+      version === null
+        ? Promise.resolve(noDependencies)
+        : dapper.getPackageVersionDependencies(
+            namespaceId,
+            packageId,
+            version,
+            getPageFromUrl(request.url)
+          ),
     seo: packageTabSeo(
       "Required",
       packageId,

@@ -408,7 +408,8 @@ export default function PackageListing() {
   // Duplicated below the tab strip for narrow screens, where the strip scrolls
   // the slot out of view.
   const editButton =
-    currentTab === "details" || currentTab === "changelog" ? (
+    listing.latest_version_number &&
+    (currentTab === "details" || currentTab === "changelog") ? (
       <EditMarkdownButton
         permissions={permissions}
         community={community_identifier}
