@@ -17,12 +17,18 @@ import {
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
 import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/PackageVersionVersions";
 import { columns } from "./Versions";
 import "./Versions.css";
-import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import {
+  DownloadLink,
+  InstallLink,
+  ModManagerBanner,
+  RejectedTag,
+} from "./common";
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -33,15 +39,23 @@ export const loader = ssrLoader(
           sessionId: undefined,
         };
       });
+      let versions;
+      try {
+        versions = await dapper.getPackageVersions(
+          params.namespaceId,
+          params.packageId
+        );
+      } catch (error) {
+        // Packages with only rejected versions are hidden from anonymous
+        // requests, retry on client.
+        if (!isApiError(error) || error.response.status !== 404) throw error;
+      }
       return {
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
         community: await dapper.getCommunity(params.communityId),
-        versions: await dapper.getPackageVersions(
-          params.namespaceId,
-          params.packageId
-        ),
+        versions,
         seo: packageTabSeo(
           "Versions",
           params.packageId,
@@ -106,6 +120,9 @@ export default function Versions() {
   if (status === "error") {
     return <TabFetchState variant="danger" message={message} />;
   }
+  if (versions === undefined) {
+    return <SkeletonBox className="package-versions__skeleton" />;
+  }
 
   return (
     <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
@@ -140,17 +157,20 @@ export default function Versions() {
                 rows={resolvedValue.map((v) => [
                   {
                     value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
-                        package={packageId}
-                        community={communityId}
-                        namespace={namespaceId}
-                        version={v.version_number}
-                        csVariant="primary"
-                      >
-                        {v.version_number}
-                      </NewLink>
+                      <>
+                        <NewLink
+                          primitiveType="cyberstormLink"
+                          linkId="PackageVersion"
+                          package={packageId}
+                          community={communityId}
+                          namespace={namespaceId}
+                          version={v.version_number}
+                          csVariant="primary"
+                        >
+                          {v.version_number}
+                        </NewLink>{" "}
+                        {v.is_rejected ? <RejectedTag /> : null}
+                      </>
                     ),
                     sortValue: v.version_number,
                   },

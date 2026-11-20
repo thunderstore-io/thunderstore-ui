@@ -54,6 +54,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
+import { type PackagePermissions } from "@thunderstore/dapper/types";
 
 import type { Route } from "./+types/packageListing";
 import { EditMarkdownButton } from "./components/EditMarkdownButton/EditMarkdownButton";
@@ -68,9 +69,11 @@ import {
 } from "./components/PackageListing/PackageListingSidebar";
 import {
   InternalNotes,
+  RejectedVersion,
   RejectionReason,
 } from "./components/PackageListing/ReviewInformation";
 import {
+  getNewerRejectedVersion,
   getPackageListingStatusWhenNeeded,
   getPrivateListing,
   getPublicListing,
@@ -81,8 +84,9 @@ import "./packageListing.css";
 
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
-type PackageListingOutletContext = OutletContextShape & {
+export type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
+  permissions?: Promise<PackagePermissions | undefined>;
 };
 
 type ResolvedListing = NonNullable<
@@ -173,6 +177,7 @@ export const loader = ssrLoader(
         community,
         listing: undefined,
         listingStatus: undefined,
+        rejectedVersion: undefined,
         team,
         permissions: undefined,
         community_identifier: communityId,
@@ -191,6 +196,7 @@ export const loader = ssrLoader(
       community,
       listing: listing,
       listingStatus: undefined,
+      rejectedVersion: undefined,
       team,
       permissions: undefined,
       community_identifier: communityId,
@@ -243,6 +249,16 @@ export async function clientLoader({
         resolvedPermissions
       )
     ),
+    rejectedVersion: permissions
+      .then((resolvedPermissions) =>
+        getNewerRejectedVersion(
+          dapper,
+          listingIds,
+          listing.latest_version_number,
+          resolvedPermissions
+        )
+      )
+      .catch(() => undefined),
     team: dapper.getTeamDetails(namespaceId),
     permissions,
     community_identifier: communityId,
@@ -262,6 +278,7 @@ export default function PackageListing() {
     community,
     listing,
     listingStatus,
+    rejectedVersion,
     team,
     permissions,
     community_identifier,
@@ -467,6 +484,16 @@ export default function PackageListing() {
             {(resolvedListingStatus) => (
               <div className="package-listing__banner-notes">
                 <RejectionReason status={resolvedListingStatus} />
+                <Suspense fallback={null}>
+                  <Await resolve={rejectedVersion}>
+                    {(resolvedRejectedVersion) => (
+                      <RejectedVersion
+                        version={resolvedRejectedVersion}
+                        latestVersion={listing.latest_version_number}
+                      />
+                    )}
+                  </Await>
+                </Suspense>
                 <InternalNotes status={resolvedListingStatus} />
               </div>
             )}
@@ -652,6 +679,7 @@ export default function PackageListing() {
                 {
                   ...outletContext,
                   packageDownloadUrl: listing.download_url,
+                  permissions,
                 } as PackageListingOutletContext
               }
             />

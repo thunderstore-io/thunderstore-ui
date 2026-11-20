@@ -1,13 +1,14 @@
 import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
+import { ReviewVersionForm } from "app/p/components/PackageListing/ReviewVersionForm";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
+import { type PackageListingOutletContext } from "app/p/packageListing";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
-import { Await } from "react-router";
-import { useLoaderData } from "react-router";
+import { Await, useLoaderData, useOutletContext } from "react-router";
 
 import {
   Heading,
@@ -19,11 +20,17 @@ import {
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
 import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Versions";
 import "./Versions.css";
-import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import {
+  DownloadLink,
+  InstallLink,
+  ModManagerBanner,
+  RejectedTag,
+} from "./common";
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -34,15 +41,23 @@ export const loader = ssrLoader(
           sessionId: undefined,
         };
       });
+      let versions;
+      try {
+        versions = await dapper.getPackageVersions(
+          params.namespaceId,
+          params.packageId
+        );
+      } catch (error) {
+        // Packages with only rejected versions are hidden from anonymous
+        // requests, retry on client.
+        if (!isApiError(error) || error.response.status !== 404) throw error;
+      }
       return {
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
         community: await dapper.getCommunity(params.communityId),
-        versions: await dapper.getPackageVersions(
-          params.namespaceId,
-          params.packageId
-        ),
+        versions,
         seo: packageTabSeo(
           "Versions",
           params.packageId,
@@ -103,9 +118,15 @@ export default function Versions() {
     versions,
     community,
   } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { permissions, requestConfig } =
+    useOutletContext<PackageListingOutletContext>();
 
   if (status === "error") {
     return <TabFetchState variant="danger" message={message} />;
+  }
+
+  if (versions === undefined) {
+    return <SkeletonBox className="package-versions__skeleton" />;
   }
 
   return (
@@ -138,17 +159,20 @@ export default function Versions() {
                 rows={resolvedValue.map((v) => [
                   {
                     value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
-                        package={packageId}
-                        community={communityId}
-                        namespace={namespaceId}
-                        version={v.version_number}
-                        csVariant="primary"
-                      >
-                        {v.version_number}
-                      </NewLink>
+                      <>
+                        <NewLink
+                          primitiveType="cyberstormLink"
+                          linkId="PackageVersion"
+                          package={packageId}
+                          community={communityId}
+                          namespace={namespaceId}
+                          version={v.version_number}
+                          csVariant="primary"
+                        >
+                          {v.version_number}
+                        </NewLink>{" "}
+                        {v.is_rejected ? <RejectedTag /> : null}
+                      </>
                     ),
                     sortValue: v.version_number,
                   },
@@ -172,6 +196,28 @@ export default function Versions() {
                             }
                           </Await>
                         </Suspense>
+                        {permissions &&
+                        communityId &&
+                        namespaceId &&
+                        packageId ? (
+                          <Suspense fallback={null}>
+                            <Await resolve={permissions} errorElement={<></>}>
+                              {(resolvedPermissions) =>
+                                resolvedPermissions?.permissions
+                                  .can_moderate ? (
+                                  <ReviewVersionForm
+                                    communityId={communityId}
+                                    namespaceId={namespaceId}
+                                    packageId={packageId}
+                                    versionNumber={v.version_number}
+                                    isRejected={v.is_rejected}
+                                    config={requestConfig}
+                                  />
+                                ) : null
+                              }
+                            </Await>
+                          </Suspense>
+                        ) : null}
                       </div>
                     ),
                     sortValue: 0,

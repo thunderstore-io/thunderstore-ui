@@ -284,6 +284,13 @@ export default function PackageListingVersion() {
           </NewLink>
         </NewAlert>
 
+        {listing.version_is_rejected ? (
+          <NewAlert csVariant="danger">
+            This version has been rejected. It is only visible to moderators and
+            the package&apos;s team.
+          </NewAlert>
+        ) : null}
+
         <PageHeader
           headingLevel="1"
           headingSize="3"
