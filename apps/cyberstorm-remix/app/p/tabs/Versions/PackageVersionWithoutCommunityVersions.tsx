@@ -79,6 +79,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   };
 }
 
+clientLoader.hydrate = true;
+
 export default function Versions() {
   const { namespaceId, packageId, status, message, versions } = useLoaderData<
     typeof loader | typeof clientLoader

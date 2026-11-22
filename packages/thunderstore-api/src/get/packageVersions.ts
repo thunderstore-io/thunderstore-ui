@@ -16,6 +16,7 @@ export async function fetchPackageVersions(
       config: config,
       path: path,
       request: { cache },
+      useSession: true,
     },
     requestSchema: undefined,
     queryParamsSchema: undefined,

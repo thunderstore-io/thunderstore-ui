@@ -1,5 +1,9 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { hasSessionCookie } from "cyberstorm/utils/gatedSsr";
+import {
+  compareVersionNumbers,
+  sortVersionNumbersDescending,
+} from "cyberstorm/utils/semverCompare";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { PackagePermissions } from "@thunderstore/dapper/types";
@@ -194,6 +198,41 @@ export async function getUserPermissions(
       namespaceId,
       packageId
     );
+  }
+  return undefined;
+}
+
+/**
+ * The highest rejected version, if it's newer than the latest public version.
+ * Only users who can manage or moderate the listing see rejected versions, so
+ * the version list is fetched for them only.
+ */
+export async function getNewerRejectedVersion(
+  dapper: DapperTs,
+  ids: ListingIdentifiers,
+  latestVersionNumber: string | null,
+  permissions: PackagePermissions | undefined
+): Promise<string | undefined> {
+  if (
+    !permissions?.permissions.can_manage &&
+    !permissions?.permissions.can_moderate
+  ) {
+    return undefined;
+  }
+
+  const versions = await dapper.getPackageVersions(
+    ids.namespaceId,
+    ids.packageId
+  );
+  const [highestRejected] = sortVersionNumbersDescending(
+    versions.filter((v) => v.is_rejected).map((v) => v.version_number)
+  );
+  if (
+    highestRejected &&
+    (latestVersionNumber === null ||
+      compareVersionNumbers(highestRejected, latestVersionNumber) > 0)
+  ) {
+    return highestRejected;
   }
   return undefined;
 }

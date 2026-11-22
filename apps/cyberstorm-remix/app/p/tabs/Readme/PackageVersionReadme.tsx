@@ -10,9 +10,32 @@ import { useLoaderData } from "react-router";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
 import type { Route } from "./+types/PackageVersionReadme";
 import "./Readme.css";
+
+// Rejected versions have no public readme, but are still shown to moderators
+// and the package's team.
+async function fetchReadmeSafe(
+  dapper: DapperTs,
+  namespaceId: string,
+  packageId: string,
+  packageVersion: string
+) {
+  try {
+    return await dapper.getPackageReadme(
+      namespaceId,
+      packageId,
+      packageVersion
+    );
+  } catch (error) {
+    if (isApiError(error) && error.response.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+}
 
 export const loader = ssrLoader(
   async ({ params }: Route.LoaderArgs) => {
@@ -26,7 +49,8 @@ export const loader = ssrLoader(
       // No SEO here: inherit the canonical title + description from the parent
       // packageListingVersion route instead of templating them (TS-3390).
       return {
-        readme: await dapper.getPackageReadme(
+        readme: await fetchReadmeSafe(
+          dapper,
           params.namespaceId,
           params.packageId,
           params.packageVersion
@@ -57,7 +81,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
       };
     });
     return {
-      readme: dapper.getPackageReadme(
+      readme: fetchReadmeSafe(
+        dapper,
         params.namespaceId,
         params.packageId,
         params.packageVersion

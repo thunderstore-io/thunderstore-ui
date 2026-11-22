@@ -6,10 +6,19 @@ import {
   NewAlert,
   NewButton,
   NewIcon,
+  NewTag,
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm";
 
 import "./common.css";
+
+export const RejectedTag = memo(function RejectedTag() {
+  return (
+    <NewTag csSize="small" csModifiers={["dark"]} csVariant="red">
+      Rejected
+    </NewTag>
+  );
+});
 
 export const ModManagerBanner = memo(function ModManagerBanner() {
   return (

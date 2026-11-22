@@ -70,6 +70,13 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
   return <BannerNote label="Internal notes" text={notes} collapsible />;
 };
 
+const contactModeratorsFooter = (
+  <p className="package-listing__banner-note-text">
+    If you think this is a mistake, please reach out to the moderators in{" "}
+    <a href="https://discord.thunderstore.io/">our Discord server</a>.
+  </p>
+);
+
 export const RejectionReason = ({ status }: ReviewInformationProps) => {
   const isRejected = status?.review_status === "rejected";
   const reason = status?.rejection_reason || "";
@@ -83,12 +90,31 @@ export const RejectionReason = ({ status }: ReviewInformationProps) => {
       label="Package rejected"
       text={reason}
       danger
-      footer={
-        <p className="package-listing__banner-note-text">
-          If you think this is a mistake, please reach out to the moderators in{" "}
-          <a href="https://discord.thunderstore.io/">our Discord server</a>.
-        </p>
-      }
+      footer={contactModeratorsFooter}
+    />
+  );
+};
+
+export const RejectedVersion = (props: {
+  version: string | undefined;
+  latestVersion: string | null;
+}) => {
+  if (!props.version) {
+    return null;
+  }
+
+  return (
+    <BannerNote
+      label="Version rejected"
+      text={`Version ${
+        props.version
+      } has been rejected and is hidden from the public.${
+        props.latestVersion
+          ? ` The latest public version is ${props.latestVersion}.`
+          : ""
+      }`}
+      danger
+      footer={contactModeratorsFooter}
     />
   );
 };

@@ -136,7 +136,9 @@ export function getPackageListingMetaItems(
   firstUploaded: ReactElement | undefined
 ): PackageMetaItem[] {
   return [
-    { label: "Latest version", content: listing.latest_version_number },
+    ...(listing.latest_version_number
+      ? [{ label: "Latest version", content: listing.latest_version_number }]
+      : []),
     { label: "Last Updated", content: lastUpdated },
     { label: "First Uploaded", content: firstUploaded },
     {

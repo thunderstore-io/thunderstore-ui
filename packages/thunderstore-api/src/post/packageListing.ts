@@ -15,6 +15,7 @@ import type {
   PackageListingReportRequestParams,
   PackageListingUpdateRequestData,
   PackageListingUpdateRequestParams,
+  PackageVersionReviewRequestParams,
 } from "../schemas/requestSchemas";
 import { packageListingUpdateResponseDataSchema } from "../schemas/responseSchemas";
 import type { PackageListingUpdateResponseData } from "../schemas/responseSchemas";
@@ -124,4 +125,39 @@ export function packageListingReport(
     queryParamsSchema: undefined,
     responseSchema: undefined,
   });
+}
+
+function postPackageVersionReview(
+  props: ApiEndpointProps<PackageVersionReviewRequestParams, object, object>,
+  action: "approve" | "reject"
+) {
+  const { config, params } = props;
+  const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/v/${params.version}/${action}/`;
+
+  return apiFetch({
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        cache: "no-store",
+      },
+      useSession: true,
+    },
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
+    responseSchema: undefined,
+  });
+}
+
+export function packageVersionApprove(
+  props: ApiEndpointProps<PackageVersionReviewRequestParams, object, object>
+) {
+  return postPackageVersionReview(props, "approve");
+}
+
+export function packageVersionReject(
+  props: ApiEndpointProps<PackageVersionReviewRequestParams, object, object>
+) {
+  return postPackageVersionReview(props, "reject");
 }

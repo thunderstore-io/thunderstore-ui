@@ -487,6 +487,18 @@ export type PackageListingRejectRequestData = z.infer<
   typeof packageListingRejectRequestDataSchema
 >;
 
+// PackageVersionReviewRequest
+export const packageVersionReviewRequestParamsSchema = z.object({
+  community: z.string(),
+  namespace: z.string(),
+  package: z.string(),
+  version: z.string(),
+});
+
+export type PackageVersionReviewRequestParams = z.infer<
+  typeof packageVersionReviewRequestParamsSchema
+>;
+
 // PackageListingReportRequest
 export const packageListingReportRequestParamsSchema = z.object({
   community: z.string(),

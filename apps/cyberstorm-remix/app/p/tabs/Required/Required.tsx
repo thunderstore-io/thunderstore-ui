@@ -2,6 +2,7 @@ import { faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -12,6 +13,7 @@ import { Await, useLoaderData } from "react-router";
 
 import { EmptyState, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
 import { packageTabSeo } from "../tabSeo";
 import type { Route } from "./+types/Required";
@@ -51,7 +53,7 @@ export const loader = ssrLoader(
       // Listing that's not available on unauthenticated SSR request
       // might be available for authenticated user on client. Return
       // undefined rather than throw error to allow refetch on client.
-      if (!listing) {
+      if (!listing?.latest_version_number) {
         return { dependencies: undefined, seo: createSeo({ descriptors: [] }) };
       }
 
@@ -60,14 +62,25 @@ export const loader = ssrLoader(
       throw Dependency404; // Can't happen, satisfies TypeScript
     }
 
-    return {
-      communityId: communityId,
-      dependencies: await dapper.getPackageVersionDependencies(
+    let dependencies;
+    try {
+      dependencies = await dapper.getPackageVersionDependencies(
         namespaceId,
         packageId,
         version,
         getPageFromUrl(request.url)
-      ),
+      );
+    } catch (error) {
+      // Rejected versions are hidden from anonymous requests, retry on client.
+      if (isApiError(error) && error.response.status === 404) {
+        return { dependencies: undefined, seo: createSeo({ descriptors: [] }) };
+      }
+      throw error;
+    }
+
+    return {
+      communityId: communityId,
+      dependencies,
       seo: packageTabSeo(
         "Required",
         packageId,
@@ -92,7 +105,7 @@ export async function clientLoader({
   }
 
   const dapper = getDapperForRequest(request);
-  let version: string;
+  let version: string | null;
 
   if (packageVersion) {
     version = packageVersion;
@@ -106,12 +119,22 @@ export async function clientLoader({
 
   return {
     communityId: communityId,
-    dependencies: dapper.getPackageVersionDependencies(
-      namespaceId,
-      packageId,
-      version,
-      getPageFromUrl(request.url)
-    ),
+    dependencies:
+      version === null
+        ? Promise.resolve(null)
+        : dapper
+            .getPackageVersionDependencies(
+              namespaceId,
+              packageId,
+              version,
+              getPageFromUrl(request.url)
+            )
+            .catch((error) => {
+              if (isApiError(error) && error.response.status === 404) {
+                return null;
+              }
+              throw error;
+            }),
     seo: packageTabSeo(
       "Required",
       packageId,
@@ -143,7 +166,12 @@ export default function PackageVersionRequired() {
         }
       >
         {(resolvedDependencies) =>
-          resolvedDependencies.results.length === 0 ? (
+          resolvedDependencies === null ? (
+            <TabFetchState
+              variant="info"
+              message="Dependencies of rejected versions are not available."
+            />
+          ) : resolvedDependencies.results.length === 0 ? (
             <EmptyState.Root>
               <EmptyState.Icon>
                 <FontAwesomeIcon icon={faGhost} />
