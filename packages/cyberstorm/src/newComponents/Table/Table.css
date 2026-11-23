@@ -60,7 +60,8 @@
     }
 
     .table__item {
-      padding: 0.75rem 1rem;
+      min-height: 60px;
+      padding: 8px 16px;
       overflow-wrap: break-word;
     }
 
