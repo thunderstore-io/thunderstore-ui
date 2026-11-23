@@ -70,7 +70,7 @@ export const searchOptions = [
 export const tableHeaders = [
   { value: "Name", disableSort: false, maxWidth: "10rem" },
   { value: "Description", disableSort: true, maxWidth: "16rem" },
-  { value: "Downloads", disableSort: true, maxWidth: "8rem" },
+  { value: "Downloads", disableSort: false, maxWidth: "8rem" },
 ];
 
 export const tableRows = [

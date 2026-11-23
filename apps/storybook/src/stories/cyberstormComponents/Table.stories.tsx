@@ -16,6 +16,7 @@ function requiredMark(required: boolean) {
   return (
     <FontAwesomeIcon
       icon={required ? faCheck : faXmark}
+      title={required ? "Required" : "Optional"}
       style={{
         color: required
           ? "var(--color-cyber-green-7)"

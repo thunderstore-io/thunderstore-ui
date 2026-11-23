@@ -62,7 +62,7 @@
     .table__item {
       min-height: 60px;
       padding: 8px 16px;
-      overflow-wrap: break-word;
+      overflow-wrap: anywhere;
     }
 
     tr > th,

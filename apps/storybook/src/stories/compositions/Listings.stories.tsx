@@ -9,7 +9,10 @@ import { Modal } from "@cs/newComponents/Modal/Modal";
 import { ModalSizesList } from "@cs/newComponents/Modal/Modal.types";
 import { Pagination } from "@cs/newComponents/Pagination/Pagination";
 import { Table } from "@cs/newComponents/Table/Table";
-import { TableModifiersList } from "@cs/newComponents/Table/Table.types";
+import {
+  TableModifiersList,
+  TableSort,
+} from "@cs/newComponents/Table/Table.types";
 import { Tag } from "@cs/newComponents/Tag/Tag";
 import {
   TagModifiersList,
@@ -139,6 +142,7 @@ function Listings({ scope }: { scope: string }) {
             key={modifier}
             headers={tableHeaders}
             rows={tableRows}
+            sortDirection={TableSort.ASC}
             csModifiers={[modifier]}
           />
         ))}

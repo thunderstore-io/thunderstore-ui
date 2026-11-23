@@ -92,7 +92,7 @@ function SortButton(props: SortButtonProps) {
 
   const currentColumn = identifier === current;
   const ordered = currentColumn && direction !== TableSort.OFF;
-  const hookParams = { identifier, direction: TableSort.DESC };
+  const hookParams = { identifier, direction: TableSort.ASC };
 
   if (currentColumn) {
     hookParams.direction =
