@@ -1,8 +1,8 @@
 import {
-  faSort,
-  faSortDown,
-  faSortUp,
-} from "@fortawesome/free-solid-svg-icons";
+  faAnglesDown,
+  faAnglesUp,
+  faAnglesUpDown,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   type CSSProperties,
@@ -60,14 +60,14 @@ export function tableDefaultCompare(
     b[columnMeta.identifier] &&
     a[columnMeta.identifier].sortValue < b[columnMeta.identifier].sortValue
   ) {
-    return columnMeta.direction;
+    return -columnMeta.direction;
   }
   if (
     a[columnMeta.identifier] &&
     b[columnMeta.identifier] &&
     a[columnMeta.identifier].sortValue > b[columnMeta.identifier].sortValue
   ) {
-    return -columnMeta.direction;
+    return columnMeta.direction;
   }
   return 0;
 }
@@ -82,27 +82,35 @@ function sortRows(
   return [...rows].sort((a, b) => compare(a, b, sort));
 }
 
+function sortIcon(currentColumn: boolean, direction: TableSort) {
+  if (!currentColumn || direction === TableSort.OFF) return faAnglesUpDown;
+  return direction === TableSort.ASC ? faAnglesUp : faAnglesDown;
+}
+
 function SortButton(props: SortButtonProps) {
   const { identifier, current, direction = TableSort.OFF, hook, label } = props;
 
+  const currentColumn = identifier === current;
+  const ordered = currentColumn && direction !== TableSort.OFF;
   const hookParams = { identifier, direction: TableSort.DESC };
-  let icon = faSort;
 
-  if (identifier === current) {
+  if (currentColumn) {
     hookParams.direction =
       direction === TableSort.ASC ? TableSort.DESC : TableSort.ASC;
-    icon = direction === TableSort.ASC ? faSortDown : faSortUp;
   }
 
   return (
     <button
       type="button"
-      className="table__sortbutton"
+      className={classnames(
+        "table__sortbutton",
+        ordered ? "table__sortbutton--active" : undefined
+      )}
       onClick={() => hook(hookParams)}
     >
       {label}
       <NewIcon noWrapper csMode="inline">
-        <FontAwesomeIcon icon={icon} />
+        <FontAwesomeIcon icon={sortIcon(currentColumn, direction)} />
       </NewIcon>
     </button>
   );
