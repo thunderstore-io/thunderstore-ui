@@ -77,5 +77,14 @@ sensible; they are still overridden by the theme in the themed build.
     /* Generic families so globally loaded @font-face cannot leak into barebones. */
     --font-family--inter: sans-serif;
     --font-family--hubot: sans-serif;
+
+    /* Shared by the Table component and markdown tables. */
+    --table-cell-min-height: 60px;
+    --table-cell-padding-block: 8px;
+    --table-cell-padding-inline: 16px;
+    --table-header-padding-block: 0.5rem;
+    --table-header-padding-inline: 0.25rem;
+    --table-header-label-height: 2.25rem;
+    --table-header-label-padding-inline: 0.75rem;
   }
 }

@@ -9,20 +9,11 @@
   .table {
     --table-border: 1px solid var(--color-surface-a8);
 
-    display: grid;
-    grid-auto-rows: minmax(45px, auto);
-    grid-template-columns: var(--grid-template-columns);
     width: 100%;
     max-width: 100%;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
-
-    thead,
-    tbody,
-    .table__row {
-      display: contents;
-    }
 
     .table__caption {
       grid-column: 1 / -1;
@@ -35,34 +26,66 @@
       text-align: left;
     }
 
-    .table__header,
-    .table__item {
-      display: flex;
-      align-items: center;
-    }
-
     .table__header--capped,
     .table__item--capped {
       min-width: 0;
     }
 
     .table__header {
-      padding-block: 0.5rem;
-      padding-inline: 0.25rem;
+      padding-block: var(--table-header-padding-block);
+      padding-inline: var(--table-header-padding-inline);
+      color: inherit;
       font-weight: var(--font-weight-bold);
       white-space: nowrap;
+      text-align: start;
       background-color: var(--color-surface-a4);
+
+      &[align="center"] {
+        text-align: center;
+      }
+
+      &[align="right"] {
+        text-align: right;
+      }
+
+      * {
+        white-space: inherit;
+      }
     }
 
-    .table__header-text {
+    /* Sort buttons and plain header text share one label box. */
+    .table__header-text,
+    .table__sortbutton {
+      display: inline-flex;
+      align-items: center;
+      height: var(--table-header-label-height);
       margin: 0;
-      padding-inline: 0.75rem;
+      padding-block: 0;
+      padding-inline: var(--table-header-label-padding-inline);
     }
 
     .table__item {
-      min-height: 60px;
-      padding: 8px 16px;
+      min-height: var(--table-cell-min-height);
+      padding-block: var(--table-cell-padding-block);
+      padding-inline: var(--table-cell-padding-inline);
       overflow-wrap: anywhere;
+    }
+
+    .table__sortbutton {
+      gap: 0.75rem;
+      border: 0;
+      border-radius: var(--radius-sm);
+      color: inherit;
+      font: inherit;
+      line-height: inherit;
+      text-align: inherit;
+      background: transparent;
+      cursor: pointer;
+
+      &:hover,
+      &.table__sortbutton--active {
+        background-color: var(--color-surface-8);
+      }
     }
 
     tr > th,
@@ -107,32 +130,40 @@
       border-bottom-right-radius: var(--radius-md);
     }
 
-    .table__sortbutton {
-      display: inline-flex;
-      gap: 0.75rem;
-      align-items: center;
-      height: 2.25rem;
-      margin: 0;
-      padding-block: 0;
-      padding-inline: 0.75rem;
-      border: 0;
-      border-radius: var(--radius-sm);
-      color: inherit;
-      font: inherit;
-      line-height: inherit;
-      text-align: inherit;
-      background: transparent;
-      cursor: pointer;
-
-      &:hover,
-      &.table__sortbutton--active {
-        background-color: var(--color-surface-8);
-      }
-    }
-
     &.table--alignLastColumnRight .table__row > :last-child {
       justify-content: flex-end;
       text-align: right;
+    }
+
+    /* Markdown tables opt into the same skin and stay real tables. */
+    &.table--flow {
+      .table__header {
+        vertical-align: middle;
+      }
+
+      .table__item {
+        /* Table cells treat height as a minimum and ignore min-height. */
+        height: var(--table-cell-min-height);
+      }
+    }
+
+    /* Grid layout is only the interactive Table component. */
+    &:not(.table--flow) {
+      display: grid;
+      grid-auto-rows: minmax(45px, auto);
+      grid-template-columns: var(--grid-template-columns);
+
+      thead,
+      tbody,
+      .table__row {
+        display: contents;
+      }
+
+      .table__header,
+      .table__item {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }
