@@ -1,9 +1,32 @@
-import { MarkdownHooks } from "react-markdown";
+import { type Components, MarkdownHooks } from "react-markdown";
 import raw from "rehype-raw";
 import gfm from "remark-gfm";
 
 import { MarkdownErrorBoundary } from "./MarkdownErrorBoundary";
 import { nimbusSanitize } from "./Sanitize";
+import { withMarkdownTableHeaderLabels } from "./withMarkdownTableHeaderLabels";
+
+function flowClass(className: string | undefined, ...names: string[]) {
+  return [className, ...names].filter(Boolean).join(" ");
+}
+
+const markdownComponents: Components = {
+  table: ({ children, className, node: _node, ...props }) => (
+    <table {...props} className={flowClass(className, "table", "table--flow")}>
+      {children}
+    </table>
+  ),
+  th: ({ children, className, node: _node, ...props }) => (
+    <th {...props} className={flowClass(className, "table__header")}>
+      <span className="table__header-text">{children}</span>
+    </th>
+  ),
+  td: ({ children, className, node: _node, ...props }) => (
+    <td {...props} className={flowClass(className, "table__item")}>
+      {children}
+    </td>
+  ),
+};
 
 interface MarkdownProps {
   input?: string;
@@ -20,7 +43,9 @@ export function Markdown(props: MarkdownProps) {
       <div className="markdown-wrapper">
         <div
           className="markdown"
-          dangerouslySetInnerHTML={{ __html: source }}
+          dangerouslySetInnerHTML={{
+            __html: withMarkdownTableHeaderLabels(source),
+          }}
         />
       </div>
     );
@@ -42,6 +67,7 @@ export function Markdown(props: MarkdownProps) {
             // are permitted, <script> etc. stripped) — so raw HTML is parsed then
             // sanitized, never trusted.
             rehypePlugins={[raw, nimbusSanitize]}
+            components={markdownComponents}
             fallback={"Loading markdown..."}
           >
             {source}
