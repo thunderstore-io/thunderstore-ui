@@ -152,6 +152,14 @@
     justify-content: space-between;
   }
 
+  .package-listing__banner-note-aside {
+    margin-left: auto;
+  }
+
+  .package-listing__banner-note-label-note {
+    font-weight: var(--font-weight-regular);
+  }
+
   /* Clickable header bar for the collapsible internal-notes card: a full-width
      button strip using the secondary-button color, its negative margins
      cancelling the card padding so it reaches the edges. */

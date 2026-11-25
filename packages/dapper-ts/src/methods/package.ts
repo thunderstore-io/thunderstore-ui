@@ -4,6 +4,7 @@ import {
   fetchPackageChangelog,
   fetchPackagePermissions,
   fetchPackageReadme,
+  fetchPackageScanResult,
   fetchPackageSource,
   fetchPackageSubmissionStatus,
   fetchPackageVersionDependencies,
@@ -64,6 +65,26 @@ export async function getPackageSource(
   versionNumber?: string
 ) {
   const data = await fetchPackageSource({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
+      version_number: versionNumber,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function getPackageScanResult(
+  this: DapperTsInterface,
+  namespaceId: string,
+  packageName: string,
+  versionNumber?: string
+) {
+  const data = await fetchPackageScanResult({
     config: this.config,
     params: {
       namespace_id: namespaceId,

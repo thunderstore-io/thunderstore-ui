@@ -284,6 +284,21 @@ export const packageSourceSchema = z.object({
 
 export type PackageSource = z.infer<typeof packageSourceSchema>;
 
+export const versionScanResultSchema = z.object({
+  version_number: z.string().min(1),
+  datetime_created: z.string().datetime(),
+  context: z.string().array(),
+  findings: z.record(z.string(), z.string().array()),
+});
+
+export const packageScanResultSchema = z.object({
+  namespace: z.string().min(1),
+  package_name: z.string().min(1),
+  scan_result: versionScanResultSchema.nullable(),
+});
+
+export type PackageScanResult = z.infer<typeof packageScanResultSchema>;
+
 export type PackageVersion = z.infer<typeof packageVersionSchema>;
 
 export const packageVersionExperimentalSchema = z.object({

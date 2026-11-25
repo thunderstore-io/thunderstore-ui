@@ -14,6 +14,7 @@ export interface DapperInterface {
   getPackageListings: methods.GetPackageListings;
   getPackageReadme: methods.GetPackageReadme;
   getPackagePermissions: methods.GetPackagePermissions;
+  getPackageScanResult: methods.GetPackageScanResult;
   getPackageSource: methods.GetPackageSource;
   getPackageSubmissionStatus: methods.GetPackageSubmissionStatus;
   getPackageVersions: methods.GetPackageVersions;

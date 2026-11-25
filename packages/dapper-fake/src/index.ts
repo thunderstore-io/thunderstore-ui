@@ -16,6 +16,7 @@ import {
   getFakePackageListingStatus,
   getFakePackageListings,
   getFakePackagePermissions,
+  getFakePackageScanResult,
   getFakePackageSource,
   getFakePackageVersionDependencies,
   getFakePackageVersionDetails,
@@ -54,6 +55,7 @@ export class DapperFake implements DapperInterface {
   public getPackageVersionDetails = getFakePackageVersionDetails;
   public getPackageVersions = getFakePackageVersions;
   public getPackageSource = getFakePackageSource;
+  public getPackageScanResult = getFakePackageScanResult;
   public getPackageVersionDependencies = getFakePackageVersionDependencies;
   public getPackageWiki = getFakePackageWiki;
   public getPackageWikiPage = getFakePackageWikiPage;

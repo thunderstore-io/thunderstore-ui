@@ -11,6 +11,7 @@ import {
   packageListingSchema,
   packageListingStatusSchema,
   packagePermissionsSchema,
+  packageScanResultSchema,
   packageSourceSchema,
   packageSubmissionStatusSchema,
   packageTeamSchema,
@@ -174,6 +175,13 @@ export const packageSourceResponseDataSchema = packageSourceSchema;
 
 export type PackageSourceResponseData = z.infer<
   typeof packageSourceResponseDataSchema
+>;
+
+// PackageScanResultResponse
+export const packageScanResultResponseDataSchema = packageScanResultSchema;
+
+export type PackageScanResultResponseData = z.infer<
+  typeof packageScanResultResponseDataSchema
 >;
 
 // PackageReadmeResponse

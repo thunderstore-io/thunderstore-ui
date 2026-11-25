@@ -66,12 +66,10 @@ import {
   PackageMeta,
   getPackageListingMetaItems,
 } from "./components/PackageListing/PackageListingSidebar";
-import {
-  InternalNotes,
-  RejectionReason,
-} from "./components/PackageListing/ReviewInformation";
+import { ReviewBanners } from "./components/PackageListing/ReviewInformation";
 import {
   getPackageListingStatusWhenNeeded,
+  getPackageScanResultWhenNeeded,
   getPrivateListing,
   getPublicListing,
   getUserPermissions,
@@ -173,6 +171,7 @@ export const loader = ssrLoader(
         community,
         listing: undefined,
         listingStatus: undefined,
+        scanResult: undefined,
         team,
         permissions: undefined,
         community_identifier: communityId,
@@ -191,6 +190,7 @@ export const loader = ssrLoader(
       community,
       listing: listing,
       listingStatus: undefined,
+      scanResult: undefined,
       team,
       permissions: undefined,
       community_identifier: communityId,
@@ -243,6 +243,9 @@ export async function clientLoader({
         resolvedPermissions
       )
     ),
+    scanResult: permissions.then((resolvedPermissions) =>
+      getPackageScanResultWhenNeeded(dapper, listingIds, resolvedPermissions)
+    ),
     team: dapper.getTeamDetails(namespaceId),
     permissions,
     community_identifier: communityId,
@@ -262,6 +265,7 @@ export default function PackageListing() {
     community,
     listing,
     listingStatus,
+    scanResult,
     team,
     permissions,
     community_identifier,
@@ -459,18 +463,12 @@ export default function PackageListing() {
           </NewAlert>
         ) : null}
 
-        {/* Rejection reason and mods-only internal notes, shown above the page
-            header alongside the deprecation notice. */}
-        <Suspense fallback={null}>
-          <Await resolve={listingStatus}>
-            {(resolvedListingStatus) => (
-              <div className="package-listing__banner-notes">
-                <RejectionReason status={resolvedListingStatus} />
-                <InternalNotes status={resolvedListingStatus} />
-              </div>
-            )}
-          </Await>
-        </Suspense>
+        <ReviewBanners
+          listingStatus={listingStatus}
+          scanResult={scanResult}
+          pageVersion={listing.latest_version_number}
+          otherVersionNote="(not the current version)"
+        />
 
         <PageHeader
           headingLevel="1"
