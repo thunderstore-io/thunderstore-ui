@@ -107,6 +107,9 @@
 
     img {
       display: inline-block;
+
+      /* Baseline alignment leaves a gap under a full-width image. */
+      vertical-align: middle;
     }
 
     pre {
