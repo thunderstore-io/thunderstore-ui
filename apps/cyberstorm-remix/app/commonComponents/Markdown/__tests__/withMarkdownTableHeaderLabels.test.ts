@@ -33,6 +33,20 @@ describe("withMarkdownTableHeaderLabels", () => {
     expect(html).toContain('<span class="table__header-text">Name</span>');
   });
 
+  test("labels a table that contains inline code", () => {
+    const html = withMarkdownTableHeaderLabels(
+      "<table><tr><th>Use <code>npm</code></th></tr><tr><td>Run <code>pnpm</code> now</td></tr></table>"
+    );
+
+    expect(html).toContain('class="table table--flow"');
+    expect(html).toContain(
+      '<th class="table__header"><span class="table__header-text">Use <code>npm</code></span></th>'
+    );
+    expect(html).toContain(
+      '<td class="table__item">Run <code>pnpm</code> now</td>'
+    );
+  });
+
   test("leaves a table inside a code sample alone", () => {
     const html = "<pre><code><table><th>Name</th></table></code></pre>";
 

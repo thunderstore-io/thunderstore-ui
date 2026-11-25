@@ -26,7 +26,7 @@ const elements = `
     </tr>
     <tr>
       <td>Plain mod</td>
-      <td align="center">A longer note that wraps so the row grows past the minimum height.</td>
+      <td align="center">A longer note that wraps so the row grows past the minimum height. The text should continue and be visible on the next line.</td>
       <td align="right">80</td>
     </tr>
   </tbody>

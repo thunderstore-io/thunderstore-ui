@@ -141,6 +141,13 @@
         vertical-align: middle;
       }
 
+      .table__header-text {
+        /* Inline flex drops a space that sits between two elements. */
+        display: inline-block;
+        line-height: var(--table-header-label-height);
+        vertical-align: middle;
+      }
+
       .table__item {
         /* Table cells treat height as a minimum and ignore min-height. */
         height: var(--table-cell-min-height);

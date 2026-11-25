@@ -150,7 +150,7 @@ describe("Markdown sanitizes embedded HTML", () => {
 
     expect(html).toContain('<span class="table__header-text">Name</span>');
     expect(html).toContain('<span class="table__header-text">Notes</span>');
-    expect(html).toContain("<td>Cool</td>");
+    expect(html).toContain('<td class="table__item">Cool</td>');
   });
 
   test("keeps http(s) links intact", async () => {

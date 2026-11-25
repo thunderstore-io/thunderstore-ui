@@ -31,18 +31,23 @@ function labelTables(html: string): string {
   return html.replace(/<table\b[\s\S]*?<\/table>/gi, labelTable);
 }
 
-/** Gives markdown tables the Table classes, and header text the sort-button label box. */
+/**
+ * Gives markdown tables the Table classes, and header text the sort-button label box.
+ * Code regions are masked first. Slicing them out would split a table that contains
+ * inline code, and the table regex would no longer match.
+ */
 export function withMarkdownTableHeaderLabels(html: string): string {
-  const pieces: string[] = [];
-  let last = 0;
-
-  for (const match of html.matchAll(/<(pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi)) {
-    const start = match.index ?? 0;
-    pieces.push(labelTables(html.slice(last, start)));
-    pieces.push(match[0]);
-    last = start + match[0].length;
-  }
-
-  pieces.push(labelTables(html.slice(last)));
-  return pieces.join("");
+  const regions: string[] = [];
+  const masked = html.replace(
+    /<(pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi,
+    (region) => {
+      const token = `%%TS_MD_CODE_${regions.length}%%`;
+      regions.push(region);
+      return token;
+    }
+  );
+  return labelTables(masked).replace(
+    /%%TS_MD_CODE_(\d+)%%/g,
+    (_token, index: string) => regions[Number(index)]
+  );
 }
