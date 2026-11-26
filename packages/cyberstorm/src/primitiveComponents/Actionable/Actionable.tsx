@@ -28,6 +28,7 @@ export interface ActionableLinkProps
   href: string;
   disabled?: boolean;
   ref?: React.Ref<HTMLAnchorElement>;
+  preventScrollReset?: boolean;
 }
 
 export interface ActionableCyberstormLinkProps
@@ -39,6 +40,7 @@ export interface ActionableCyberstormLinkProps
   queryParams?: string;
   disabled?: boolean;
   ref?: React.Ref<HTMLAnchorElement>;
+  preventScrollReset?: boolean;
 }
 
 /** An anchor with no href cannot be opened, including via middle-click.

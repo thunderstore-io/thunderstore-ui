@@ -294,6 +294,7 @@ export default function PackageVersion() {
                         package={resolvedValue.name}
                         version={resolvedValue.version_number}
                         aria-current={currentTab === "details"}
+                        preventScrollReset={true}
                         rootClasses={`tabs-item${
                           currentTab === "details" ? " tabs-item--current" : ""
                         }`}
@@ -308,6 +309,7 @@ export default function PackageVersion() {
                         package={resolvedValue.name}
                         version={resolvedValue.version_number}
                         aria-current={currentTab === "required"}
+                        preventScrollReset={true}
                         rootClasses={`tabs-item${
                           currentTab === "required" ? " tabs-item--current" : ""
                         }`}
@@ -322,6 +324,7 @@ export default function PackageVersion() {
                         package={resolvedValue.name}
                         version={resolvedValue.version_number}
                         aria-current={currentTab === "versions"}
+                        preventScrollReset={true}
                         rootClasses={`tabs-item${
                           currentTab === "versions" ? " tabs-item--current" : ""
                         }`}
