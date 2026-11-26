@@ -143,6 +143,16 @@ describe("Markdown sanitizes embedded HTML", () => {
     expect(html).not.toContain("color:red");
   });
 
+  test("gives table header text the shared table label", async () => {
+    const html = await renderMarkdown(
+      "| Name | Notes |\n| --- | --- |\n| Cool | Short |"
+    );
+
+    expect(html).toContain('<span class="table__header-text">Name</span>');
+    expect(html).toContain('<span class="table__header-text">Notes</span>');
+    expect(html).toContain('<td class="table__item">Cool</td>');
+  });
+
   test("keeps http(s) links intact", async () => {
     const html = await renderMarkdown('<a href="https://ok.example">ok</a>');
 

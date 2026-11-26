@@ -1,4 +1,5 @@
 import { FetchErrorState } from "app/commonComponents/FetchErrorState/FetchErrorState";
+import { withMarkdownTableHeaderLabels } from "app/commonComponents/Markdown/withMarkdownTableHeaderLabels";
 import { MarkdownEditedNote } from "app/p/components/MarkdownEditedNote/MarkdownEditedNote";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
@@ -91,7 +92,9 @@ export default function Readme() {
             <div className="markdown-wrapper">
               <MarkdownEditedNote doc={resolvedValue} label="README" />
               <div
-                dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
+                dangerouslySetInnerHTML={{
+                  __html: withMarkdownTableHeaderLabels(resolvedValue.html),
+                }}
                 className="markdown"
               />
             </div>

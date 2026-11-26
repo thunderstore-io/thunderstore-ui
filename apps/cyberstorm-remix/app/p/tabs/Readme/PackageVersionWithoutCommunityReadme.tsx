@@ -1,3 +1,4 @@
+import { withMarkdownTableHeaderLabels } from "app/commonComponents/Markdown/withMarkdownTableHeaderLabels";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -97,7 +98,9 @@ export default function PackageVersionReadme() {
           resolvedValue && resolvedValue.html ? (
             <div className="markdown-wrapper">
               <div
-                dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
+                dangerouslySetInnerHTML={{
+                  __html: withMarkdownTableHeaderLabels(resolvedValue.html),
+                }}
                 className="markdown"
               />
             </div>
