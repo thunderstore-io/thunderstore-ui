@@ -14,16 +14,14 @@
     grid-template-columns: var(--grid-template-columns);
     width: 100%;
     max-width: 100%;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
 
     thead,
     tbody,
     .table__row {
       display: contents;
-    }
-
-    .table__row {
-      font-size: var(--font-size-body-md);
-      line-height: 150%;
     }
 
     .table__caption {
@@ -37,35 +35,38 @@
       text-align: left;
     }
 
-    .table__header {
+    .table__header,
+    .table__item {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0.5rem 0.25rem;
-      font-weight: 700;
-      font-size: var(--font-size-body-sm);
-      line-height: 125%;
-      text-wrap: nowrap;
-      background: var(--color-surface-a4);
+      align-items: center;
+    }
+
+    .table__header--capped,
+    .table__item--capped {
+      min-width: 0;
+    }
+
+    .table__header {
+      padding-block: 0.5rem;
+      padding-inline: 0.25rem;
+      font-weight: var(--font-weight-bold);
+      white-space: nowrap;
+      background-color: var(--color-surface-a4);
     }
 
     .table__header-text {
       margin: 0;
-      padding: 0.25rem 0.75rem;
-      font-weight: 700;
-      font-size: var(--font-size-body-md);
-      line-height: 150%;
+      padding-inline: 0.75rem;
     }
 
     .table__item {
-      align-content: center;
+      min-height: 60px;
       padding: 8px 16px;
-      background-color: var(--table-row-background-color);
+      overflow-wrap: anywhere;
     }
 
     tr > th,
     tr > td {
-      padding: 8px 16px;
       border-bottom: var(--table-border);
     }
 
@@ -107,28 +108,31 @@
     }
 
     .table__sortbutton {
-      display: flex;
-      gap: 1rem;
+      display: inline-flex;
+      gap: 0.75rem;
       align-items: center;
-      height: 2rem;
-      padding: 0 0.75rem;
-      border-radius: var(--radius-md);
+      height: 2.25rem;
+      margin: 0;
+      padding-block: 0;
+      padding-inline: 0.75rem;
+      border: 0;
+      border-radius: var(--radius-sm);
+      color: inherit;
+      font: inherit;
+      line-height: inherit;
+      text-align: inherit;
       background: transparent;
-    }
+      cursor: pointer;
 
-    &.table--alignLastColumnRight .table__row {
-      :last-child {
-        text-align: right;
-
-        > .table__sortbutton {
-          float: right;
-          text-align: right;
-        }
+      &:hover,
+      &.table__sortbutton--active {
+        background-color: var(--color-surface-8);
       }
     }
-  }
 
-  :root {
-    --table-border: 1px solid var(--color-surface-a8);
+    &.table--alignLastColumnRight .table__row > :last-child {
+      justify-content: flex-end;
+      text-align: right;
+    }
   }
 }
