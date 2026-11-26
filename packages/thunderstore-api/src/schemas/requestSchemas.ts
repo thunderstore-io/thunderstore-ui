@@ -718,3 +718,14 @@ export const packageSourceRequestParamsSchema = z.object({
 export type PackageSourceRequestParams = z.infer<
   typeof packageSourceRequestParamsSchema
 >;
+
+// PackageScanResultRequest
+export const packageScanResultRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+  version_number: z.string().optional(),
+});
+
+export type PackageScanResultRequestParams = z.infer<
+  typeof packageScanResultRequestParamsSchema
+>;

@@ -49,7 +49,10 @@ import { EditMarkdownButton } from "./components/EditMarkdownButton/EditMarkdown
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageDependencyString } from "./components/PackageListing/PackageDependencyString";
 import { PackageMeta } from "./components/PackageListing/PackageListingSidebar";
+import { ReviewBanners } from "./components/PackageListing/ReviewInformation";
 import {
+  getPackageListingStatusWhenNeeded,
+  getPackageScanResultWhenNeeded,
   getPrivateListing,
   getPublicListing,
   getUserPermissions,
@@ -149,6 +152,8 @@ export const loader = ssrLoader(
       return gatedSsr404({
         community,
         listing: undefined,
+        listingStatus: undefined,
+        scanResult: undefined,
         permissions: undefined,
         packageVersion,
         team,
@@ -164,6 +169,8 @@ export const loader = ssrLoader(
     return {
       community,
       listing,
+      listingStatus: undefined,
+      scanResult: undefined,
       permissions: undefined,
       packageVersion,
       team,
@@ -194,18 +201,31 @@ export async function clientLoader({
     packageVersion,
   });
 
+  const tools = getSessionTools();
+  const listingIds = { communityId, namespaceId, packageId, packageVersion };
+  const permissions = getUserPermissions(
+    tools,
+    dapper,
+    communityId,
+    namespaceId,
+    packageId
+  );
+
   return {
     community: dapper.getCommunity(communityId),
     listing,
-    permissions: isMarkdownEditingEnabled()
-      ? getUserPermissions(
-          getSessionTools(),
-          dapper,
-          communityId,
-          namespaceId,
-          packageId
-        )
-      : undefined,
+    listingStatus: permissions.then((resolvedPermissions) =>
+      getPackageListingStatusWhenNeeded(
+        tools,
+        dapper,
+        listingIds,
+        resolvedPermissions
+      )
+    ),
+    scanResult: permissions.then((resolvedPermissions) =>
+      getPackageScanResultWhenNeeded(dapper, listingIds, resolvedPermissions)
+    ),
+    permissions: isMarkdownEditingEnabled() ? permissions : undefined,
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
     // Match the SSR title so hydration doesn't drop it (see packageVersionSeo).
@@ -231,8 +251,15 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 export default function PackageListingVersion() {
-  const { community, listing, permissions, packageVersion, team } =
-    useLoaderData<typeof loader | typeof clientLoader>();
+  const {
+    community,
+    listing,
+    listingStatus,
+    scanResult,
+    permissions,
+    packageVersion,
+    team,
+  } = useLoaderData<typeof loader | typeof clientLoader>();
 
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
@@ -283,6 +310,13 @@ export default function PackageListingVersion() {
             View Latest Version
           </NewLink>
         </NewAlert>
+
+        <ReviewBanners
+          listingStatus={listingStatus}
+          scanResult={scanResult}
+          pageVersion={packageVersion}
+          otherVersionNote="(not this version)"
+        />
 
         <PageHeader
           headingLevel="1"

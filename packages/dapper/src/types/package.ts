@@ -131,6 +131,19 @@ export interface PackageSource {
   decompilations: Decompilation[];
 }
 
+export interface VersionScanResult {
+  version_number: string;
+  datetime_created: string;
+  context: string[];
+  findings: Record<string, string[]>;
+}
+
+export interface PackageScanResult {
+  namespace: string;
+  package_name: string;
+  scan_result: VersionScanResult | null;
+}
+
 interface Decompilation {
   source_file_name: string;
   url: string;

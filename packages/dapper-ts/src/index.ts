@@ -13,6 +13,7 @@ import {
   getPackageChangelog,
   getPackagePermissions,
   getPackageReadme,
+  getPackageScanResult,
   getPackageSource,
   getPackageSubmissionStatus,
   getPackageVersionDependencies,
@@ -47,6 +48,7 @@ export {
   getPackageChangelog,
   getPackagePermissions,
   getPackageReadme,
+  getPackageScanResult,
   getPackageSource,
   getPackageSubmissionStatus,
   getPackageVersionDependencies,
@@ -100,6 +102,7 @@ export class DapperTs implements DapperTsInterface {
     this.getPackageWikiPage = this.getPackageWikiPage.bind(this);
     this.getPackagePermissions = this.getPackagePermissions.bind(this);
     this.getPackageSource = this.getPackageSource.bind(this);
+    this.getPackageScanResult = this.getPackageScanResult.bind(this);
     this.getPrivateTeamDetails = this.getPrivateTeamDetails.bind(this);
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
@@ -131,6 +134,7 @@ export class DapperTs implements DapperTsInterface {
   public getPackageWikiPage = getPackageWikiPage;
   public getPackagePermissions = getPackagePermissions;
   public getPackageSource = getPackageSource;
+  public getPackageScanResult = getPackageScanResult;
   public getPrivateTeamDetails = getPrivateTeamDetails;
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;

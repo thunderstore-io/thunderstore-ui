@@ -9,6 +9,7 @@ import {
   type PackageListingStatus,
   type PackageListings,
   type PackagePermissions,
+  type PackageScanResult,
   type PackageSource,
   type PackageSubmissionResponse,
   type PackageVersion,
@@ -99,6 +100,12 @@ export type GetPackageSource = (
   name: string,
   version?: string
 ) => Promise<PackageSource>;
+
+export type GetPackageScanResult = (
+  namespace: string,
+  name: string,
+  version?: string
+) => Promise<PackageScanResult>;
 
 export type PostPackageSubmissionMetadata = (
   author_name: string,

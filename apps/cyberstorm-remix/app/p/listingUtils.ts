@@ -145,6 +145,35 @@ export async function getPackageListingStatusWhenNeeded(
 }
 
 /**
+ * Resolves the newest scan result for moderators only: that of
+ * `ids.packageVersion` when it has one, otherwise the package's.
+ */
+export async function getPackageScanResultWhenNeeded(
+  dapper: DapperTs,
+  ids: ListingIdentifiers,
+  permissions: PackagePermissions | undefined
+) {
+  if (!permissions?.permissions.can_moderate) {
+    return undefined;
+  }
+
+  try {
+    return await dapper.getPackageScanResult(
+      ids.namespaceId,
+      ids.packageId,
+      ids.packageVersion
+    );
+  } catch (error: unknown) {
+    // 404 covers a backend without the endpoint.
+    if (isApiError(error) && [403, 404].includes(error.response.status)) {
+      return undefined;
+    }
+
+    throw error;
+  }
+}
+
+/**
  * Fetches the package listing status for the current user.
  * If the user is not logged in or does not have permission, returns undefined.
  */

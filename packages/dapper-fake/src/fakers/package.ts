@@ -347,6 +347,26 @@ export const getFakePackageSource = async (namespace: string, name: string) => {
   };
 };
 
+export const getFakePackageScanResult = async (
+  namespace: string,
+  name: string,
+  version?: string
+) => {
+  const versionNumber = version ?? getVersionNumber();
+  return {
+    namespace,
+    package_name: name,
+    scan_result: {
+      version_number: versionNumber,
+      datetime_created: faker.date.recent().toISOString(),
+      context: [faker.lorem.sentence()],
+      findings: {
+        [faker.system.fileName()]: range(3).map(() => faker.lorem.sentence()),
+      },
+    },
+  };
+};
+
 const getFakeDecompilations = () => {
   return range(50).map(() => {
     return {
