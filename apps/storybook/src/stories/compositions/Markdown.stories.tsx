@@ -4,7 +4,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import "../../../../cyberstorm-remix/app/commonComponents/Markdown/Markdown.css";
 import { withMarkdownTableHeaderLabels } from "../../../../cyberstorm-remix/app/commonComponents/Markdown/withMarkdownTableHeaderLabels";
 import "../../../../cyberstorm-remix/app/styles/markdown.css";
-import packageIcon from "../assets/goblin.png";
+import squareImage from "../assets/256x256.png";
+import wideImage from "../assets/wide_image.png";
 import { SideBySide, compositionParameters } from "./compare";
 
 const elements = `
@@ -57,7 +58,14 @@ const elements = `
   <summary>Install notes</summary>
   <p>Drop the files in the plugins folder.</p>
 </details>
-<p><img alt="Package icon" src="${packageIcon}"></p>
+<p>Two images together within the same paragraph (no gap):</p>
+<p><img alt="256 by 256 image" src="${squareImage}"><img alt="256 by 256 image" src="${squareImage}"></p>
+<p>Two images together within the same paragraph, with a line break between them (gap) and another image within a new paragraph after those two (creates a gap):</p>
+<p><img alt="256 by 256 image" src="${squareImage}"><br/><img alt="256 by 256 image" src="${squareImage}"></p>
+<p><img alt="256 by 256 image" src="${squareImage}"></p>
+<p>Two wide images in one paragraph (with no gap between them) and another one within a new paragraph (creates a gap):</p>
+<p><img alt="Wide screenshot" src="${wideImage}"><img alt="Wide screenshot" src="${wideImage}"></p>
+<p><img alt="Wide screenshot" src="${wideImage}"></p>
 <p>Inline <code>code</code> and a block:</p>
 <pre><code>npm install</code></pre>
 `;
@@ -76,7 +84,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Package markdown as rendered on a readme, changelog, or wiki page: headings, a table, lists, quotes, a collapsible, an image, and code. The table uses the same cell and header styles as the Table component, which is featured in Compositions/Listings.",
+          "Package markdown as rendered on a readme, changelog, or wiki page: headings, a table, lists, quotes, a collapsible, images, and code. Images in one paragraph sit together, and a blank line separates them. The table uses the same cell and header styles as the Table component, which is featured in Compositions/Listings.",
       },
     },
   },
