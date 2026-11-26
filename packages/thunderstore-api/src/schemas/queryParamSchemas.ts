@@ -65,7 +65,9 @@ export const qQueryParam = z.object({
 export enum PackageListingsOrderingEnum {
   Created = "newest",
   Downloaded = "most-downloaded",
+  NewAndTrending = "new-and-trending",
   Rated = "top-rated",
+  Trending = "trending",
   Updated = "last-updated",
 }
 

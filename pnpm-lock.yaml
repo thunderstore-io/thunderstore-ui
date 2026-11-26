@@ -144,23 +144,23 @@ importers:
   apps/cyberstorm-remix:
     dependencies:
       '@fortawesome/fontawesome-svg-core':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/free-brands-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/pro-light-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/pro-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
-        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
+        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.2.3)
       '@radix-ui/react-radio-group':
         specifier: 1.3.8
         version: 1.3.8(@types/react-dom@19.1.9(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -322,14 +322,14 @@ importers:
         specifier: 9.39.2
         version: 9.39.2
       '@fortawesome/fontawesome-svg-core':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
-        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
+        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.2.3)
       '@radix-ui/react-tooltip':
         specifier: 1.2.8
         version: 1.2.8(@types/react-dom@19.1.9(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -398,20 +398,20 @@ importers:
         specifier: 9.9.0
         version: 9.9.0
       '@fortawesome/fontawesome-svg-core':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/free-brands-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/pro-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
-        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
+        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.2.3)
       '@radix-ui/react-checkbox':
         specifier: 1.3.3
         version: 1.3.3(@types/react-dom@19.1.9(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -501,14 +501,14 @@ importers:
         specifier: 7.28.6
         version: 7.28.6
       '@fortawesome/fontawesome-svg-core':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/free-solid-svg-icons':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.3.1
+        version: 7.3.1
       '@fortawesome/react-fontawesome':
         specifier: 3.1.0
-        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
+        version: 3.1.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.2.3)
       '@radix-ui/react-select':
         specifier: 2.2.6
         version: 2.2.6(@types/react-dom@19.1.9(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -1782,28 +1782,28 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@fortawesome/fontawesome-common-types@7.1.0':
-    resolution: {integrity: sha512-l/BQM7fYntsCI//du+6sEnHOP6a74UixFyOYUyz2DLMXKx+6DEhfR3F2NYGE45XH1JJuIamacb4IZs9S0ZOWLA==}
+  '@fortawesome/fontawesome-common-types@7.3.1':
+    resolution: {integrity: sha512-k0C0sdHmZtAo6dRDtd1Z/qcpyHbL0CKsjV8seMY/21xGhY5Wsv0XRmiI/xEEH4y2c9b1+jvgNs/3EqhV27yUEA==}
     engines: {node: '>=6'}
 
-  '@fortawesome/fontawesome-svg-core@7.1.0':
-    resolution: {integrity: sha512-fNxRUk1KhjSbnbuBxlWSnBLKLBNun52ZBTcs22H/xEEzM6Ap81ZFTQ4bZBxVQGQgVY0xugKGoRcCbaKjLQ3XZA==}
+  '@fortawesome/fontawesome-svg-core@7.3.1':
+    resolution: {integrity: sha512-BoxVN3PKnMbgStHhjoaky/oWdxHomDqmBVA24IA3KEmssFGeI7u9YT/BJceOjIum/t6TpPa/vcMKaVYQeIQ/3Q==}
     engines: {node: '>=6'}
 
-  '@fortawesome/free-brands-svg-icons@7.1.0':
-    resolution: {integrity: sha512-9byUd9bgNfthsZAjBl6GxOu1VPHgBuRUP9juI7ZoM98h8xNPTCTagfwUFyYscdZq4Hr7gD1azMfM9s5tIWKZZA==}
+  '@fortawesome/free-brands-svg-icons@7.3.1':
+    resolution: {integrity: sha512-8eiNzycuFhy3mZsi5EVO8JpO3H8l7/kSCl4Gk4iUew9hJuzYFqAAD6kqgeEup3+YZ9hL+5cjjorGzrRLkYuURg==}
     engines: {node: '>=6'}
 
-  '@fortawesome/free-solid-svg-icons@7.1.0':
-    resolution: {integrity: sha512-Udu3K7SzAo9N013qt7qmm22/wo2hADdheXtBfxFTecp+ogsc0caQNRKEb7pkvvagUGOpG9wJC1ViH6WXs8oXIA==}
+  '@fortawesome/free-solid-svg-icons@7.3.1':
+    resolution: {integrity: sha512-v0BLa0eqg7ubvVWeNSHVBs8fWH/GJicERZoJaxJ3FE/lj67VSqzoMg9pzfZVOfLMX10y0pGwQAuxoRVVH2patg==}
     engines: {node: '>=6'}
 
-  '@fortawesome/pro-light-svg-icons@7.1.0':
-    resolution: {integrity: sha512-K2xEoP/GrYQoFvPoBBO5qT+vSM66KKWUMOlkNqv9hU+6c/I+b8NyhpmuMKTlKUzcLFTbb6Byded0hGMbpTYh8g==}
+  '@fortawesome/pro-light-svg-icons@7.3.1':
+    resolution: {integrity: sha512-NwexkEyu5WPQQkxk+dmuq0sKtFEB0Ge80DGBA+b6tcIsaAMJFGdC9oUWwWBVHAW6xGjArZ+v9I8rzUp8E7CI6g==}
     engines: {node: '>=6'}
 
-  '@fortawesome/pro-solid-svg-icons@7.1.0':
-    resolution: {integrity: sha512-0rbSgBRWnArZ5LJWSHKvXZdRNCeA1opSODBL/lGP70Kog4WBEUqBjnqoEjBfu5lIzGLk8XCygDqMlIvz2kNIVQ==}
+  '@fortawesome/pro-solid-svg-icons@7.3.1':
+    resolution: {integrity: sha512-GIpB5nFXFtHJwMSRfNPOP0HekDAUdMi0RgKmMIebXtB8bcPA+vpLmzEryYhdnEpnMRp099u44ewLZ8IIIy9Psw==}
     engines: {node: '>=6'}
 
   '@fortawesome/react-fontawesome@3.1.0':
@@ -1983,6 +1983,7 @@ packages:
   '@opentelemetry/sdk-trace-base@2.7.1':
     resolution: {integrity: sha512-NAYIlsF8MPUsKqJMiDQJTMPOmlbawC1Iz/omMLygZ1C9am8fTKYjTaI+OZM+WTY3t3Glo0wnOg/6/pac6RGPPw==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
@@ -8523,31 +8524,31 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@fortawesome/fontawesome-common-types@7.1.0': {}
+  '@fortawesome/fontawesome-common-types@7.3.1': {}
 
-  '@fortawesome/fontawesome-svg-core@7.1.0':
+  '@fortawesome/fontawesome-svg-core@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 7.1.0
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
-  '@fortawesome/free-brands-svg-icons@7.1.0':
+  '@fortawesome/free-brands-svg-icons@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 7.1.0
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
-  '@fortawesome/free-solid-svg-icons@7.1.0':
+  '@fortawesome/free-solid-svg-icons@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 7.1.0
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
-  '@fortawesome/pro-light-svg-icons@7.1.0':
+  '@fortawesome/pro-light-svg-icons@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 7.1.0
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
-  '@fortawesome/pro-solid-svg-icons@7.1.0':
+  '@fortawesome/pro-solid-svg-icons@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 7.1.0
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
-  '@fortawesome/react-fontawesome@3.1.0(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)':
+  '@fortawesome/react-fontawesome@3.1.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.2.3)':
     dependencies:
-      '@fortawesome/fontawesome-svg-core': 7.1.0
+      '@fortawesome/fontawesome-svg-core': 7.3.1
       react: 19.2.3
 
   '@hookform/resolvers@3.10.0(react-hook-form@7.71.1(react@19.2.3))':

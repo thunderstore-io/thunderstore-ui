@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { type Section } from "@thunderstore/dapper/types";
 
@@ -13,6 +13,7 @@ import {
   setParamsBlobCategories,
   synchronizeSearchParams,
 } from "../PackageSearchLogic";
+import { getPackageOrder } from "../components/packageOrderOptions";
 
 describe("searchParamsToBlob", () => {
   const sections: Section[] = [
@@ -549,5 +550,48 @@ describe("resetParams", () => {
         section: "all",
       })
     );
+  });
+});
+
+describe("trending sort", () => {
+  const blob: SearchParamsType = {
+    search: "",
+    order: undefined,
+    section: "",
+    deprecated: false,
+    nsfw: false,
+    page: 1,
+    includedCategories: "",
+    excludedCategories: "",
+  };
+
+  afterEach(() => {
+    window.NIMBUS_PUBLIC_ENV = {};
+  });
+
+  test("is ignored unless enabled", () => {
+    const params = new URLSearchParams("ordering=trending");
+
+    expect(searchParamsToBlob(params).order).toBeUndefined();
+    expect(getPackageOrder(params)).toBe("last-updated");
+  });
+
+  test("is the default ordering when enabled", () => {
+    window.NIMBUS_PUBLIC_ENV = { VITE_ENABLE_TRENDING_SORT: "true" };
+    const params = new URLSearchParams("ordering=new-and-trending");
+
+    expect(getPackageOrder(new URLSearchParams())).toBe("trending");
+    expect(getPackageOrder(params)).toBe("new-and-trending");
+
+    synchronizeSearchParams(params, { ...blob, order: "trending" }, blob, []);
+    expect(params.has("ordering")).toBe(false);
+
+    synchronizeSearchParams(
+      params,
+      { ...blob, order: "last-updated" },
+      blob,
+      []
+    );
+    expect(params.get("ordering")).toBe("last-updated");
   });
 });
